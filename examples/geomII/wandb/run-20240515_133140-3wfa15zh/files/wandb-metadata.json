@@ -1,0 +1,202 @@
+{
+    "os": "Linux-6.5.0-27-generic-x86_64-with-glibc2.35",
+    "python": "3.11.0rc1",
+    "heartbeatAt": "2024-05-15T13:31:41.377541",
+    "startedAt": "2024-05-15T13:31:40.769572",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/pedro/PINN/jaxpi/examples/geomII/main.py",
+    "codePathLocal": "main.py",
+    "codePath": "main.py",
+    "host": "8b460e7a0fb5",
+    "username": "root",
+    "executable": "/bin/python3.11",
+    "cpu_count": 24,
+    "cpu_count_logical": 32,
+    "cpu_freq": {
+        "current": 1866.5409375,
+        "min": 800.0,
+        "max": 4937.5
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2733.001,
+            "min": 800.0,
+            "max": 5500.0
+        },
+        {
+            "current": 2858.25,
+            "min": 800.0,
+            "max": 5500.0
+        },
+        {
+            "current": 2147.258,
+            "min": 800.0,
+            "max": 5500.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5500.0
+        },
+        {
+            "current": 3523.539,
+            "min": 800.0,
+            "max": 5500.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5500.0
+        },
+        {
+            "current": 2665.536,
+            "min": 800.0,
+            "max": 5500.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5500.0
+        },
+        {
+            "current": 1738.652,
+            "min": 800.0,
+            "max": 5800.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5800.0
+        },
+        {
+            "current": 2887.938,
+            "min": 800.0,
+            "max": 5800.0
+        },
+        {
+            "current": 1995.671,
+            "min": 800.0,
+            "max": 5800.0
+        },
+        {
+            "current": 1883.558,
+            "min": 800.0,
+            "max": 5500.0
+        },
+        {
+            "current": 2874.769,
+            "min": 800.0,
+            "max": 5500.0
+        },
+        {
+            "current": 2090.905,
+            "min": 800.0,
+            "max": 5500.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5500.0
+        },
+        {
+            "current": 1764.589,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 2013.728,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 1954.11,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 1984.819,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 2120.106,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 1766.318,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 2689.178,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 1867.953,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4300.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 4300.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 365.6147689819336,
+            "used": 118.88206100463867
+        }
+    },
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 4090",
+            "memory_total": 25757220864
+        }
+    ],
+    "memory": {
+        "total": 125.61078643798828
+    }
+}

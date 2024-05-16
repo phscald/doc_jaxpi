@@ -22,9 +22,9 @@ class Advection(ForwardIVP):
         self.t0 = t_star[0]
         self.t1 = t_star[-1]
 
-        # Predictions over a grid
-        self.u_pred_fn = vmap(vmap(self.u_net, (None, None, 0)), (None, 0, None))
-        self.r_pred_fn = vmap(vmap(self.r_net, (None, None, 0)), (None, 0, None))
+        # Predictions over a grid # aparentemente 
+        self.u_pred_fn = vmap(vmap(self.u_net, (None, None, 0)), (None, 0, None)) # 
+        self.r_pred_fn = vmap(vmap(self.r_net, (None, None, 0)), (None, 0, None)) # EQUATION
 
     def u_net(self, params, t, x):
         z = jnp.stack([t, x])
@@ -35,7 +35,7 @@ class Advection(ForwardIVP):
         u = self.u_net(params, t, x)
         u_t = grad(self.u_net, argnums=1)(params, t, x)
         u_x = grad(self.u_net, argnums=2)(params, t, x)
-        return u_t + self.c * u_x
+        return u_t + self.c * u_x                                 # EQUATION
 
     @partial(jit, static_argnums=(0,))
     def res_and_w(self, params, batch):

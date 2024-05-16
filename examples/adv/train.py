@@ -48,7 +48,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Initialize model
     model = models.Advection(config, u0, t_star, x_star, c)
     # Initialize residual sampler
-    res_sampler = iter(UniformSampler(dom, config.training.batch_size_per_device))
+    res_sampler = iter(UniformSampler(dom, config.training.batch_size_per_device)) # gera amostras aleatorias no dominio
 
     evaluator = models.AdvectionEvaluator(config, model)
 

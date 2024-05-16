@@ -90,7 +90,7 @@ def _create_train_state(config):
     # Convert config dict to dict
     init_weights = dict(config.weighting.init_weights)
 
-    state = TrainState.create(
+    state = TrainState.create(  # (trainstate)create é funcao do flax, tx é o otimizador do optax
         apply_fn=arch.apply,
         params=params,
         tx=tx,

@@ -1,0 +1,1486 @@
+
+Waiting for JIT...
+[13:55:13 - main - INFO] ----------------------------
+[13:55:13 - main - INFO] Iter:   0      Time: 9.647
+[13:55:13 - main - INFO] -------------  -------------
+[13:55:13 - main - INFO] p_in_loss      6.702e-01
+[13:55:13 - main - INFO] p_out_loss     3.009e-01
+[13:55:13 - main - INFO] rc_loss        4.818e+01
+[13:55:13 - main - INFO] ru_loss        2.483e+02
+[13:55:13 - main - INFO] rv_loss        8.834e+02
+[13:55:13 - main - INFO] u_noslip_loss  1.140e-01
+[13:55:13 - main - INFO] v_noslip_loss  1.675e-01
+[13:55:13 - main - INFO] u_error        1.268e+00
+[13:55:13 - main - INFO] v_error        5.616e+00
+[13:55:14 - main - INFO] ----------------------------
+[13:55:14 - main - INFO] Iter: 100      Time: 0.007
+[13:55:14 - main - INFO] -------------  -------------
+[13:55:14 - main - INFO] p_in_loss      5.804e-04
+[13:55:14 - main - INFO] p_out_loss     3.554e-04
+[13:55:14 - main - INFO] rc_loss        1.839e-01
+[13:55:14 - main - INFO] ru_loss        4.911e-01
+[13:55:14 - main - INFO] rv_loss        4.052e-01
+[13:55:14 - main - INFO] u_noslip_loss  2.240e-04
+[13:55:14 - main - INFO] v_noslip_loss  1.896e-04
+[13:55:14 - main - INFO] u_error        9.152e-01
+[13:55:14 - main - INFO] v_error        9.959e-01
+I0515 13:55:14.878695 125093231960064 checkpoints.py:574] Saving checkpoint at step: 110
+I0515 13:55:14.879075 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+W0515 13:55:14.879308 125093231960064 type_handlers.py:302] SaveArgs.aggregate is deprecated, please use custom TypeHandler (https://orbax.readthedocs.io/en/latest/custom_handlers.html#typehandler) or contact Orbax team to migrate before May 1st, 2024. If your Pytree has empty ([], {}, None) values then use PyTreeCheckpointHandler(..., write_tree_metadata=True, ...) or use StandardCheckpointHandler to avoid TypeHandler Registry error. Please note that PyTreeCheckpointHandler.write_tree_metadata default value is already set to True.
+I0515 13:55:14.879601 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_110.
+I0515 13:55:14.903676 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_110.orbax-checkpoint-tmp-1715781314879844 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_110
+I0515 13:55:14.903861 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_110`.
+[13:55:15 - main - INFO] ----------------------------
+[13:55:15 - main - INFO] Iter: 200      Time: 0.006
+[13:55:15 - main - INFO] -------------  -------------
+[13:55:15 - main - INFO] p_in_loss      1.989e-04
+[13:55:15 - main - INFO] p_out_loss     1.584e-04
+[13:55:15 - main - INFO] rc_loss        9.243e-02
+[13:55:15 - main - INFO] ru_loss        1.977e-01
+[13:55:15 - main - INFO] rv_loss        1.590e-01
+[13:55:15 - main - INFO] u_noslip_loss  1.184e-04
+[13:55:15 - main - INFO] v_noslip_loss  9.728e-05
+[13:55:15 - main - INFO] u_error        8.710e-01
+[13:55:15 - main - INFO] v_error        9.317e-01
+-----------
+default
+-----------
+default
+-----------
+default
+I0515 13:55:15.085467 125093231960064 checkpoints.py:574] Saving checkpoint at step: 220
+I0515 13:55:15.085590 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:15.085785 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_220.
+I0515 13:55:15.090511 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_220.orbax-checkpoint-tmp-1715781315085855 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_220
+I0515 13:55:15.090618 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_220`.
+[13:55:15 - main - INFO] ----------------------------
+[13:55:15 - main - INFO] Iter: 300      Time: 0.005
+[13:55:15 - main - INFO] -------------  -------------
+[13:55:15 - main - INFO] p_in_loss      1.381e-04
+[13:55:15 - main - INFO] p_out_loss     9.478e-05
+[13:55:15 - main - INFO] rc_loss        6.049e-02
+[13:55:15 - main - INFO] ru_loss        1.268e-01
+[13:55:15 - main - INFO] rv_loss        8.083e-02
+[13:55:15 - main - INFO] u_noslip_loss  9.052e-05
+[13:55:15 - main - INFO] v_noslip_loss  7.722e-05
+[13:55:15 - main - INFO] u_error        8.462e-01
+[13:55:15 - main - INFO] v_error        8.921e-01
+I0515 13:55:15.269976 125093231960064 checkpoints.py:574] Saving checkpoint at step: 330
+I0515 13:55:15.270109 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:15.270307 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_330.
+I0515 13:55:15.275321 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_330.orbax-checkpoint-tmp-1715781315270374 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_330
+I0515 13:55:15.275449 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_330`.
+[13:55:15 - main - INFO] ----------------------------
+[13:55:15 - main - INFO] Iter: 400      Time: 0.006
+[13:55:15 - main - INFO] -------------  -------------
+[13:55:15 - main - INFO] p_in_loss      8.304e-05
+[13:55:15 - main - INFO] p_out_loss     5.498e-05
+[13:55:15 - main - INFO] rc_loss        5.144e-02
+[13:55:15 - main - INFO] ru_loss        8.706e-02
+[13:55:15 - main - INFO] rv_loss        5.211e-02
+[13:55:15 - main - INFO] u_noslip_loss  7.909e-05
+[13:55:15 - main - INFO] v_noslip_loss  6.963e-05
+[13:55:15 - main - INFO] u_error        8.246e-01
+[13:55:15 - main - INFO] v_error        8.627e-01
+I0515 13:55:15.455061 125093231960064 checkpoints.py:574] Saving checkpoint at step: 440
+I0515 13:55:15.455188 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:15.455370 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_440.
+I0515 13:55:15.460389 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_440.orbax-checkpoint-tmp-1715781315455438 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_440
+I0515 13:55:15.460511 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_440`.
+[13:55:15 - main - INFO] ----------------------------
+[13:55:15 - main - INFO] Iter: 500      Time: 0.005
+[13:55:15 - main - INFO] -------------  -------------
+[13:55:15 - main - INFO] p_in_loss      6.480e-05
+[13:55:15 - main - INFO] p_out_loss     3.695e-05
+[13:55:15 - main - INFO] rc_loss        3.480e-02
+[13:55:15 - main - INFO] ru_loss        5.686e-02
+[13:55:15 - main - INFO] rv_loss        3.771e-02
+[13:55:15 - main - INFO] u_noslip_loss  7.744e-05
+[13:55:15 - main - INFO] v_noslip_loss  7.146e-05
+[13:55:15 - main - INFO] u_error        8.072e-01
+[13:55:15 - main - INFO] v_error        8.464e-01
+I0515 13:55:15.646084 125093231960064 checkpoints.py:574] Saving checkpoint at step: 550
+I0515 13:55:15.646225 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:15.646414 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_550.
+I0515 13:55:15.651491 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_550.orbax-checkpoint-tmp-1715781315646479 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_550
+I0515 13:55:15.651623 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_550`.
+[13:55:15 - main - INFO] ----------------------------
+[13:55:15 - main - INFO] Iter: 600      Time: 0.005
+[13:55:15 - main - INFO] -------------  -------------
+[13:55:15 - main - INFO] p_in_loss      4.737e-05
+[13:55:15 - main - INFO] p_out_loss     2.699e-05
+[13:55:15 - main - INFO] rc_loss        2.514e-02
+[13:55:15 - main - INFO] ru_loss        4.264e-02
+[13:55:15 - main - INFO] rv_loss        3.095e-02
+[13:55:15 - main - INFO] u_noslip_loss  8.050e-05
+[13:55:15 - main - INFO] v_noslip_loss  7.475e-05
+[13:55:15 - main - INFO] u_error        7.977e-01
+[13:55:15 - main - INFO] v_error        8.241e-01
+I0515 13:55:15.835197 125093231960064 checkpoints.py:574] Saving checkpoint at step: 660
+I0515 13:55:15.835312 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:15.835483 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_660.
+I0515 13:55:15.840184 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_660.orbax-checkpoint-tmp-1715781315835548 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_660
+I0515 13:55:15.840292 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_660`.
+[13:55:15 - main - INFO] ----------------------------
+[13:55:15 - main - INFO] Iter: 700      Time: 0.006
+[13:55:15 - main - INFO] -------------  -------------
+[13:55:15 - main - INFO] p_in_loss      4.098e-05
+[13:55:15 - main - INFO] p_out_loss     1.907e-05
+[13:55:15 - main - INFO] rc_loss        2.441e-02
+[13:55:15 - main - INFO] ru_loss        3.449e-02
+[13:55:15 - main - INFO] rv_loss        2.437e-02
+[13:55:15 - main - INFO] u_noslip_loss  8.048e-05
+[13:55:15 - main - INFO] v_noslip_loss  7.751e-05
+[13:55:15 - main - INFO] u_error        7.891e-01
+[13:55:15 - main - INFO] v_error        8.141e-01
+I0515 13:55:16.019759 125093231960064 checkpoints.py:574] Saving checkpoint at step: 770
+I0515 13:55:16.019891 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:16.020070 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_770.
+I0515 13:55:16.025352 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_770.orbax-checkpoint-tmp-1715781316020138 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_770
+I0515 13:55:16.025473 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_770`.
+[13:55:16 - main - INFO] ----------------------------
+[13:55:16 - main - INFO] Iter: 800      Time: 0.005
+[13:55:16 - main - INFO] -------------  -------------
+[13:55:16 - main - INFO] p_in_loss      3.743e-05
+[13:55:16 - main - INFO] p_out_loss     1.348e-05
+[13:55:16 - main - INFO] rc_loss        1.905e-02
+[13:55:16 - main - INFO] ru_loss        2.979e-02
+[13:55:16 - main - INFO] rv_loss        1.975e-02
+[13:55:16 - main - INFO] u_noslip_loss  8.707e-05
+[13:55:16 - main - INFO] v_noslip_loss  7.882e-05
+[13:55:16 - main - INFO] u_error        7.840e-01
+[13:55:16 - main - INFO] v_error        8.069e-01
+I0515 13:55:16.205343 125093231960064 checkpoints.py:574] Saving checkpoint at step: 880
+I0515 13:55:16.205467 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:16.205656 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_880.
+I0515 13:55:16.210559 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_880.orbax-checkpoint-tmp-1715781316205732 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_880
+I0515 13:55:16.210676 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_880`.
+[13:55:16 - main - INFO] ----------------------------
+[13:55:16 - main - INFO] Iter: 900      Time: 0.005
+[13:55:16 - main - INFO] -------------  -------------
+[13:55:16 - main - INFO] p_in_loss      2.346e-05
+[13:55:16 - main - INFO] p_out_loss     1.432e-05
+[13:55:16 - main - INFO] rc_loss        1.752e-02
+[13:55:16 - main - INFO] ru_loss        2.558e-02
+[13:55:16 - main - INFO] rv_loss        1.707e-02
+[13:55:16 - main - INFO] u_noslip_loss  8.412e-05
+[13:55:16 - main - INFO] v_noslip_loss  7.654e-05
+[13:55:16 - main - INFO] u_error        7.794e-01
+[13:55:16 - main - INFO] v_error        8.005e-01
+I0515 13:55:16.389915 125093231960064 checkpoints.py:574] Saving checkpoint at step: 990
+I0515 13:55:16.390040 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:16.390214 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_990.
+I0515 13:55:16.394951 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_990.orbax-checkpoint-tmp-1715781316390286 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_990
+I0515 13:55:16.395084 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_990`.
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+[13:55:18 - main - INFO] ----------------------------
+[13:55:18 - main - INFO] Iter: 1000     Time: 1.973
+[13:55:18 - main - INFO] -------------  -------------
+[13:55:18 - main - INFO] p_in_loss      2.347e-05
+[13:55:18 - main - INFO] p_out_loss     1.232e-05
+[13:55:18 - main - INFO] rc_loss        1.859e-02
+[13:55:18 - main - INFO] ru_loss        2.186e-02
+[13:55:18 - main - INFO] rv_loss        1.337e-02
+[13:55:18 - main - INFO] u_noslip_loss  8.173e-05
+[13:55:18 - main - INFO] v_noslip_loss  7.872e-05
+[13:55:18 - main - INFO] u_error        7.788e-01
+[13:55:18 - main - INFO] v_error        7.955e-01
+I0515 13:55:18.552099 125093231960064 checkpoints.py:574] Saving checkpoint at step: 1100
+I0515 13:55:18.552250 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:18.552447 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1100.
+I0515 13:55:18.557749 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1100.orbax-checkpoint-tmp-1715781318552527 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1100
+I0515 13:55:18.557878 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1100`.
+[13:55:18 - main - INFO] ----------------------------
+[13:55:18 - main - INFO] Iter: 1100     Time: 0.004
+[13:55:18 - main - INFO] -------------  -------------
+[13:55:18 - main - INFO] p_in_loss      1.462e-05
+[13:55:18 - main - INFO] p_out_loss     7.483e-06
+[13:55:18 - main - INFO] rc_loss        1.881e-02
+[13:55:18 - main - INFO] ru_loss        1.855e-02
+[13:55:18 - main - INFO] rv_loss        1.186e-02
+[13:55:18 - main - INFO] u_noslip_loss  8.426e-05
+[13:55:18 - main - INFO] v_noslip_loss  7.811e-05
+[13:55:18 - main - INFO] u_error        7.757e-01
+[13:55:18 - main - INFO] v_error        7.911e-01
+[13:55:18 - main - INFO] ----------------------------
+[13:55:18 - main - INFO] Iter: 1200     Time: 0.006
+[13:55:18 - main - INFO] -------------  -------------
+[13:55:18 - main - INFO] p_in_loss      1.768e-05
+[13:55:18 - main - INFO] p_out_loss     8.602e-06
+[13:55:18 - main - INFO] rc_loss        1.274e-02
+[13:55:18 - main - INFO] ru_loss        1.701e-02
+[13:55:18 - main - INFO] rv_loss        1.139e-02
+[13:55:18 - main - INFO] u_noslip_loss  8.348e-05
+[13:55:18 - main - INFO] v_noslip_loss  7.745e-05
+[13:55:18 - main - INFO] u_error        7.729e-01
+[13:55:18 - main - INFO] v_error        7.947e-01
+I0515 13:55:18.744958 125093231960064 checkpoints.py:574] Saving checkpoint at step: 1210
+I0515 13:55:18.745079 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:18.745247 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1210.
+I0515 13:55:18.750169 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1210.orbax-checkpoint-tmp-1715781318745316 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1210
+I0515 13:55:18.750280 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1210`.
+I0515 13:55:18.750867 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_110
+[13:55:18 - main - INFO] ----------------------------
+[13:55:18 - main - INFO] Iter: 1300     Time: 0.005
+[13:55:18 - main - INFO] -------------  -------------
+[13:55:18 - main - INFO] p_in_loss      1.589e-05
+[13:55:18 - main - INFO] p_out_loss     5.174e-06
+[13:55:18 - main - INFO] rc_loss        1.430e-02
+[13:55:18 - main - INFO] ru_loss        1.467e-02
+[13:55:18 - main - INFO] rv_loss        1.015e-02
+[13:55:18 - main - INFO] u_noslip_loss  8.378e-05
+[13:55:18 - main - INFO] v_noslip_loss  7.677e-05
+[13:55:18 - main - INFO] u_error        7.705e-01
+[13:55:18 - main - INFO] v_error        7.886e-01
+I0515 13:55:18.929790 125093231960064 checkpoints.py:574] Saving checkpoint at step: 1320
+I0515 13:55:18.929909 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:18.930079 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1320.
+I0515 13:55:18.935132 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1320.orbax-checkpoint-tmp-1715781318930145 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1320
+I0515 13:55:18.935244 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1320`.
+I0515 13:55:18.935839 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_220
+[13:55:19 - main - INFO] ----------------------------
+[13:55:19 - main - INFO] Iter: 1400     Time: 0.005
+[13:55:19 - main - INFO] -------------  -------------
+[13:55:19 - main - INFO] p_in_loss      1.132e-05
+[13:55:19 - main - INFO] p_out_loss     8.659e-06
+[13:55:19 - main - INFO] rc_loss        1.539e-02
+[13:55:19 - main - INFO] ru_loss        1.379e-02
+[13:55:19 - main - INFO] rv_loss        8.701e-03
+[13:55:19 - main - INFO] u_noslip_loss  8.163e-05
+[13:55:19 - main - INFO] v_noslip_loss  7.596e-05
+[13:55:19 - main - INFO] u_error        7.698e-01
+[13:55:19 - main - INFO] v_error        7.830e-01
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+I0515 13:55:19.118936 125093231960064 checkpoints.py:574] Saving checkpoint at step: 1430
+I0515 13:55:19.119066 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:19.119242 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1430.
+I0515 13:55:19.124436 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1430.orbax-checkpoint-tmp-1715781319119307 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1430
+I0515 13:55:19.124558 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1430`.
+I0515 13:55:19.125188 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_330
+[13:55:19 - main - INFO] ----------------------------
+[13:55:19 - main - INFO] Iter: 1500     Time: 0.006
+[13:55:19 - main - INFO] -------------  -------------
+[13:55:19 - main - INFO] p_in_loss      6.994e-06
+[13:55:19 - main - INFO] p_out_loss     5.987e-06
+[13:55:19 - main - INFO] rc_loss        1.086e-02
+[13:55:19 - main - INFO] ru_loss        1.286e-02
+[13:55:19 - main - INFO] rv_loss        7.771e-03
+[13:55:19 - main - INFO] u_noslip_loss  7.605e-05
+[13:55:19 - main - INFO] v_noslip_loss  7.369e-05
+[13:55:19 - main - INFO] u_error        7.685e-01
+[13:55:19 - main - INFO] v_error        7.906e-01
+I0515 13:55:19.309556 125093231960064 checkpoints.py:574] Saving checkpoint at step: 1540
+I0515 13:55:19.309679 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:19.309858 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1540.
+I0515 13:55:19.314742 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1540.orbax-checkpoint-tmp-1715781319309924 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1540
+I0515 13:55:19.314859 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1540`.
+I0515 13:55:19.315372 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_440
+[13:55:19 - main - INFO] ----------------------------
+[13:55:19 - main - INFO] Iter: 1600     Time: 0.005
+[13:55:19 - main - INFO] -------------  -------------
+[13:55:19 - main - INFO] p_in_loss      6.996e-06
+[13:55:19 - main - INFO] p_out_loss     4.623e-06
+[13:55:19 - main - INFO] rc_loss        1.227e-02
+[13:55:19 - main - INFO] ru_loss        1.235e-02
+[13:55:19 - main - INFO] rv_loss        7.284e-03
+[13:55:19 - main - INFO] u_noslip_loss  7.708e-05
+[13:55:19 - main - INFO] v_noslip_loss  7.448e-05
+[13:55:19 - main - INFO] u_error        7.691e-01
+[13:55:19 - main - INFO] v_error        7.853e-01
+I0515 13:55:19.498685 125093231960064 checkpoints.py:574] Saving checkpoint at step: 1650
+I0515 13:55:19.498810 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:19.498995 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1650.
+I0515 13:55:19.503986 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1650.orbax-checkpoint-tmp-1715781319499061 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1650
+I0515 13:55:19.504106 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1650`.
+I0515 13:55:19.504657 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_550
+[13:55:19 - main - INFO] ----------------------------
+[13:55:19 - main - INFO] Iter: 1700     Time: 0.005
+[13:55:19 - main - INFO] -------------  -------------
+[13:55:19 - main - INFO] p_in_loss      7.602e-06
+[13:55:19 - main - INFO] p_out_loss     3.150e-06
+[13:55:19 - main - INFO] rc_loss        1.065e-02
+[13:55:19 - main - INFO] ru_loss        1.073e-02
+[13:55:19 - main - INFO] rv_loss        7.139e-03
+[13:55:19 - main - INFO] u_noslip_loss  7.146e-05
+[13:55:19 - main - INFO] v_noslip_loss  7.034e-05
+[13:55:19 - main - INFO] u_error        7.692e-01
+[13:55:19 - main - INFO] v_error        7.867e-01
+I0515 13:55:19.685964 125093231960064 checkpoints.py:574] Saving checkpoint at step: 1760
+I0515 13:55:19.686081 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:19.686250 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1760.
+I0515 13:55:19.691424 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1760.orbax-checkpoint-tmp-1715781319686315 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1760
+I0515 13:55:19.691534 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1760`.
+I0515 13:55:19.692113 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_660
+[13:55:19 - main - INFO] ----------------------------
+[13:55:19 - main - INFO] Iter: 1800     Time: 0.005
+[13:55:19 - main - INFO] -------------  -------------
+[13:55:19 - main - INFO] p_in_loss      5.684e-06
+[13:55:19 - main - INFO] p_out_loss     8.210e-06
+[13:55:19 - main - INFO] rc_loss        1.053e-02
+[13:55:19 - main - INFO] ru_loss        1.069e-02
+[13:55:19 - main - INFO] rv_loss        6.788e-03
+[13:55:19 - main - INFO] u_noslip_loss  7.252e-05
+[13:55:19 - main - INFO] v_noslip_loss  6.811e-05
+[13:55:19 - main - INFO] u_error        7.695e-01
+[13:55:19 - main - INFO] v_error        7.841e-01
+I0515 13:55:19.879872 125093231960064 checkpoints.py:574] Saving checkpoint at step: 1870
+I0515 13:55:19.879993 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:19.880193 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1870.
+I0515 13:55:19.885071 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1870.orbax-checkpoint-tmp-1715781319880265 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1870
+I0515 13:55:19.885183 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1870`.
+I0515 13:55:19.885750 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_770
+[13:55:19 - main - INFO] ----------------------------
+[13:55:19 - main - INFO] Iter: 1900     Time: 0.005
+[13:55:19 - main - INFO] -------------  -------------
+[13:55:19 - main - INFO] p_in_loss      5.478e-06
+[13:55:19 - main - INFO] p_out_loss     3.297e-06
+[13:55:19 - main - INFO] rc_loss        1.040e-02
+[13:55:19 - main - INFO] ru_loss        9.230e-03
+[13:55:19 - main - INFO] rv_loss        6.151e-03
+[13:55:19 - main - INFO] u_noslip_loss  6.919e-05
+[13:55:19 - main - INFO] v_noslip_loss  6.891e-05
+[13:55:19 - main - INFO] u_error        7.673e-01
+[13:55:19 - main - INFO] v_error        7.808e-01
+I0515 13:55:20.068184 125093231960064 checkpoints.py:574] Saving checkpoint at step: 1980
+I0515 13:55:20.068307 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:20.068476 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1980.
+I0515 13:55:20.073479 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1980.orbax-checkpoint-tmp-1715781320068540 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1980
+I0515 13:55:20.073600 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1980`.
+I0515 13:55:20.074145 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_880
+[13:55:20 - main - INFO] ----------------------------
+[13:55:20 - main - INFO] Iter: 2000     Time: 0.009
+[13:55:20 - main - INFO] -------------  -------------
+[13:55:20 - main - INFO] p_in_loss      7.385e-06
+[13:55:20 - main - INFO] p_out_loss     3.048e-06
+[13:55:20 - main - INFO] rc_loss        8.575e-03
+[13:55:20 - main - INFO] ru_loss        8.917e-03
+[13:55:20 - main - INFO] rv_loss        6.038e-03
+[13:55:20 - main - INFO] u_noslip_loss  6.879e-05
+[13:55:20 - main - INFO] v_noslip_loss  6.606e-05
+[13:55:20 - main - INFO] u_error        7.668e-01
+[13:55:20 - main - INFO] v_error        7.803e-01
+I0515 13:55:20.260960 125093231960064 checkpoints.py:574] Saving checkpoint at step: 2090
+I0515 13:55:20.261087 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:20.261309 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2090.
+I0515 13:55:20.266182 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2090.orbax-checkpoint-tmp-1715781320261398 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2090
+I0515 13:55:20.266300 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2090`.
+I0515 13:55:20.266953 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_990
+[13:55:20 - main - INFO] ----------------------------
+[13:55:20 - main - INFO] Iter: 2100     Time: 0.007
+[13:55:20 - main - INFO] -------------  -------------
+[13:55:20 - main - INFO] p_in_loss      3.955e-06
+[13:55:20 - main - INFO] p_out_loss     3.008e-06
+[13:55:20 - main - INFO] rc_loss        9.757e-03
+[13:55:20 - main - INFO] ru_loss        8.689e-03
+[13:55:20 - main - INFO] rv_loss        5.490e-03
+[13:55:20 - main - INFO] u_noslip_loss  6.472e-05
+[13:55:20 - main - INFO] v_noslip_loss  6.443e-05
+[13:55:20 - main - INFO] u_error        7.654e-01
+[13:55:20 - main - INFO] v_error        7.842e-01
+I0515 13:55:20.450550 125093231960064 checkpoints.py:574] Saving checkpoint at step: 2200
+I0515 13:55:20.450675 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:20.450858 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2200.
+I0515 13:55:20.455648 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2200.orbax-checkpoint-tmp-1715781320450922 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2200
+I0515 13:55:20.455764 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2200`.
+I0515 13:55:20.456299 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1100
+[13:55:20 - main - INFO] ----------------------------
+[13:55:20 - main - INFO] Iter: 2200     Time: 0.005
+[13:55:20 - main - INFO] -------------  -------------
+[13:55:20 - main - INFO] p_in_loss      4.476e-06
+[13:55:20 - main - INFO] p_out_loss     3.995e-06
+[13:55:20 - main - INFO] rc_loss        9.710e-03
+[13:55:20 - main - INFO] ru_loss        8.660e-03
+[13:55:20 - main - INFO] rv_loss        4.930e-03
+[13:55:20 - main - INFO] u_noslip_loss  6.218e-05
+[13:55:20 - main - INFO] v_noslip_loss  6.107e-05
+[13:55:20 - main - INFO] u_error        7.663e-01
+[13:55:20 - main - INFO] v_error        7.832e-01
+[13:55:20 - main - INFO] ----------------------------
+[13:55:20 - main - INFO] Iter: 2300     Time: 0.006
+[13:55:20 - main - INFO] -------------  -------------
+[13:55:20 - main - INFO] p_in_loss      4.221e-06
+[13:55:20 - main - INFO] p_out_loss     3.332e-06
+[13:55:20 - main - INFO] rc_loss        8.001e-03
+[13:55:20 - main - INFO] ru_loss        8.688e-03
+[13:55:20 - main - INFO] rv_loss        4.986e-03
+[13:55:20 - main - INFO] u_noslip_loss  5.808e-05
+[13:55:20 - main - INFO] v_noslip_loss  5.858e-05
+[13:55:20 - main - INFO] u_error        7.657e-01
+[13:55:20 - main - INFO] v_error        7.812e-01
+I0515 13:55:20.648633 125093231960064 checkpoints.py:574] Saving checkpoint at step: 2310
+I0515 13:55:20.648881 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:20.649262 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2310.
+I0515 13:55:20.662300 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2310.orbax-checkpoint-tmp-1715781320649430 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2310
+I0515 13:55:20.662652 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2310`.
+I0515 13:55:20.664222 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1210
+[13:55:20 - main - INFO] ----------------------------
+[13:55:20 - main - INFO] Iter: 2400     Time: 0.005
+[13:55:20 - main - INFO] -------------  -------------
+[13:55:20 - main - INFO] p_in_loss      5.402e-06
+[13:55:20 - main - INFO] p_out_loss     2.112e-06
+[13:55:20 - main - INFO] rc_loss        8.504e-03
+[13:55:20 - main - INFO] ru_loss        7.328e-03
+[13:55:20 - main - INFO] rv_loss        5.335e-03
+[13:55:20 - main - INFO] u_noslip_loss  5.581e-05
+[13:55:20 - main - INFO] v_noslip_loss  5.876e-05
+[13:55:20 - main - INFO] u_error        7.661e-01
+[13:55:20 - main - INFO] v_error        7.850e-01
+I0515 13:55:20.851898 125093231960064 checkpoints.py:574] Saving checkpoint at step: 2420
+I0515 13:55:20.852013 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:20.852177 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2420.
+I0515 13:55:20.856756 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2420.orbax-checkpoint-tmp-1715781320852239 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2420
+I0515 13:55:20.856859 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2420`.
+I0515 13:55:20.857389 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1320
+[13:55:20 - main - INFO] ----------------------------
+[13:55:20 - main - INFO] Iter: 2500     Time: 0.005
+[13:55:20 - main - INFO] -------------  -------------
+[13:55:20 - main - INFO] p_in_loss      2.742e-06
+[13:55:20 - main - INFO] p_out_loss     1.782e-06
+[13:55:20 - main - INFO] rc_loss        6.846e-03
+[13:55:20 - main - INFO] ru_loss        7.427e-03
+[13:55:20 - main - INFO] rv_loss        5.258e-03
+[13:55:20 - main - INFO] u_noslip_loss  4.968e-05
+[13:55:20 - main - INFO] v_noslip_loss  4.970e-05
+[13:55:20 - main - INFO] u_error        7.646e-01
+[13:55:20 - main - INFO] v_error        7.895e-01
+I0515 13:55:21.035803 125093231960064 checkpoints.py:574] Saving checkpoint at step: 2530
+I0515 13:55:21.035919 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:21.036085 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2530.
+I0515 13:55:21.041040 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2530.orbax-checkpoint-tmp-1715781321036148 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2530
+I0515 13:55:21.041161 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2530`.
+I0515 13:55:21.041729 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1430
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+[13:55:21 - main - INFO] ----------------------------
+[13:55:21 - main - INFO] Iter: 2600     Time: 0.005
+[13:55:21 - main - INFO] -------------  -------------
+[13:55:21 - main - INFO] p_in_loss      4.719e-06
+[13:55:21 - main - INFO] p_out_loss     5.235e-06
+[13:55:21 - main - INFO] rc_loss        7.769e-03
+[13:55:21 - main - INFO] ru_loss        7.132e-03
+[13:55:21 - main - INFO] rv_loss        4.948e-03
+[13:55:21 - main - INFO] u_noslip_loss  5.048e-05
+[13:55:21 - main - INFO] v_noslip_loss  5.271e-05
+[13:55:21 - main - INFO] u_error        7.667e-01
+[13:55:21 - main - INFO] v_error        7.875e-01
+I0515 13:55:21.223266 125093231960064 checkpoints.py:574] Saving checkpoint at step: 2640
+I0515 13:55:21.223388 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:21.223554 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2640.
+I0515 13:55:21.228215 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2640.orbax-checkpoint-tmp-1715781321223623 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2640
+I0515 13:55:21.228329 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2640`.
+I0515 13:55:21.228860 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1540
+[13:55:21 - main - INFO] ----------------------------
+[13:55:21 - main - INFO] Iter: 2700     Time: 0.005
+[13:55:21 - main - INFO] -------------  -------------
+[13:55:21 - main - INFO] p_in_loss      2.171e-06
+[13:55:21 - main - INFO] p_out_loss     1.498e-06
+[13:55:21 - main - INFO] rc_loss        6.856e-03
+[13:55:21 - main - INFO] ru_loss        6.969e-03
+[13:55:21 - main - INFO] rv_loss        4.234e-03
+[13:55:21 - main - INFO] u_noslip_loss  4.534e-05
+[13:55:21 - main - INFO] v_noslip_loss  4.714e-05
+[13:55:21 - main - INFO] u_error        7.661e-01
+[13:55:21 - main - INFO] v_error        7.871e-01
+I0515 13:55:21.407329 125093231960064 checkpoints.py:574] Saving checkpoint at step: 2750
+I0515 13:55:21.407456 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:21.407647 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2750.
+I0515 13:55:21.412573 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2750.orbax-checkpoint-tmp-1715781321407719 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2750
+I0515 13:55:21.412695 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2750`.
+I0515 13:55:21.413346 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1650
+[13:55:21 - main - INFO] ----------------------------
+[13:55:21 - main - INFO] Iter: 2800     Time: 0.005
+[13:55:21 - main - INFO] -------------  -------------
+[13:55:21 - main - INFO] p_in_loss      4.384e-06
+[13:55:21 - main - INFO] p_out_loss     1.913e-06
+[13:55:21 - main - INFO] rc_loss        6.730e-03
+[13:55:21 - main - INFO] ru_loss        6.577e-03
+[13:55:21 - main - INFO] rv_loss        4.532e-03
+[13:55:21 - main - INFO] u_noslip_loss  4.938e-05
+[13:55:21 - main - INFO] v_noslip_loss  5.184e-05
+[13:55:21 - main - INFO] u_error        7.644e-01
+[13:55:21 - main - INFO] v_error        7.783e-01
+I0515 13:55:21.612794 125093231960064 checkpoints.py:574] Saving checkpoint at step: 2860
+I0515 13:55:21.612957 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:21.613177 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2860.
+I0515 13:55:21.619271 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2860.orbax-checkpoint-tmp-1715781321613262 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2860
+I0515 13:55:21.619428 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2860`.
+I0515 13:55:21.620212 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1760
+[13:55:21 - main - INFO] ----------------------------
+[13:55:21 - main - INFO] Iter: 2900     Time: 0.005
+[13:55:21 - main - INFO] -------------  -------------
+[13:55:21 - main - INFO] p_in_loss      4.363e-06
+[13:55:21 - main - INFO] p_out_loss     3.933e-06
+[13:55:21 - main - INFO] rc_loss        5.398e-03
+[13:55:21 - main - INFO] ru_loss        6.105e-03
+[13:55:21 - main - INFO] rv_loss        4.002e-03
+[13:55:21 - main - INFO] u_noslip_loss  4.138e-05
+[13:55:21 - main - INFO] v_noslip_loss  4.550e-05
+[13:55:21 - main - INFO] u_error        7.645e-01
+[13:55:21 - main - INFO] v_error        7.861e-01
+I0515 13:55:21.802938 125093231960064 checkpoints.py:574] Saving checkpoint at step: 2970
+I0515 13:55:21.803068 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:21.803236 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2970.
+I0515 13:55:21.808204 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2970.orbax-checkpoint-tmp-1715781321803308 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2970
+I0515 13:55:21.808329 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2970`.
+I0515 13:55:21.808925 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1870
+[13:55:21 - main - INFO] ----------------------------
+[13:55:21 - main - INFO] Iter: 3000     Time: 0.009
+[13:55:21 - main - INFO] -------------  -------------
+[13:55:21 - main - INFO] p_in_loss      3.481e-06
+[13:55:21 - main - INFO] p_out_loss     1.562e-06
+[13:55:21 - main - INFO] rc_loss        5.269e-03
+[13:55:21 - main - INFO] ru_loss        6.106e-03
+[13:55:21 - main - INFO] rv_loss        3.869e-03
+[13:55:21 - main - INFO] u_noslip_loss  4.026e-05
+[13:55:21 - main - INFO] v_noslip_loss  4.296e-05
+[13:55:21 - main - INFO] u_error        7.631e-01
+[13:55:21 - main - INFO] v_error        7.879e-01
+I0515 13:55:21.998495 125093231960064 checkpoints.py:574] Saving checkpoint at step: 3080
+I0515 13:55:21.998617 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:21.998799 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3080.
+I0515 13:55:22.003856 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3080.orbax-checkpoint-tmp-1715781321998876 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3080
+I0515 13:55:22.003975 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3080`.
+I0515 13:55:22.004674 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_1980
+[13:55:22 - main - INFO] ----------------------------
+[13:55:22 - main - INFO] Iter: 3100     Time: 0.005
+[13:55:22 - main - INFO] -------------  -------------
+[13:55:22 - main - INFO] p_in_loss      5.013e-06
+[13:55:22 - main - INFO] p_out_loss     2.025e-06
+[13:55:22 - main - INFO] rc_loss        6.056e-03
+[13:55:22 - main - INFO] ru_loss        6.536e-03
+[13:55:22 - main - INFO] rv_loss        4.281e-03
+[13:55:22 - main - INFO] u_noslip_loss  3.792e-05
+[13:55:22 - main - INFO] v_noslip_loss  4.284e-05
+[13:55:22 - main - INFO] u_error        7.646e-01
+[13:55:22 - main - INFO] v_error        7.872e-01
+I0515 13:55:22.193888 125093231960064 checkpoints.py:574] Saving checkpoint at step: 3190
+I0515 13:55:22.194069 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:22.194368 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3190.
+I0515 13:55:22.200373 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3190.orbax-checkpoint-tmp-1715781322194479 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3190
+I0515 13:55:22.200504 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3190`.
+I0515 13:55:22.201162 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2090
+[13:55:22 - main - INFO] ----------------------------
+[13:55:22 - main - INFO] Iter: 3200     Time: 0.005
+[13:55:22 - main - INFO] -------------  -------------
+[13:55:22 - main - INFO] p_in_loss      3.168e-06
+[13:55:22 - main - INFO] p_out_loss     2.548e-06
+[13:55:22 - main - INFO] rc_loss        5.110e-03
+[13:55:22 - main - INFO] ru_loss        6.450e-03
+[13:55:22 - main - INFO] rv_loss        3.667e-03
+[13:55:22 - main - INFO] u_noslip_loss  3.508e-05
+[13:55:22 - main - INFO] v_noslip_loss  3.677e-05
+[13:55:22 - main - INFO] u_error        7.665e-01
+[13:55:22 - main - INFO] v_error        7.915e-01
+I0515 13:55:22.380950 125093231960064 checkpoints.py:574] Saving checkpoint at step: 3300
+I0515 13:55:22.381072 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:22.381255 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3300.
+I0515 13:55:22.386264 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3300.orbax-checkpoint-tmp-1715781322381325 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3300
+I0515 13:55:22.386385 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3300`.
+I0515 13:55:22.387051 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2200
+[13:55:22 - main - INFO] ----------------------------
+[13:55:22 - main - INFO] Iter: 3300     Time: 0.005
+[13:55:22 - main - INFO] -------------  -------------
+[13:55:22 - main - INFO] p_in_loss      4.867e-06
+[13:55:22 - main - INFO] p_out_loss     4.974e-06
+[13:55:22 - main - INFO] rc_loss        5.908e-03
+[13:55:22 - main - INFO] ru_loss        6.021e-03
+[13:55:22 - main - INFO] rv_loss        3.623e-03
+[13:55:22 - main - INFO] u_noslip_loss  3.506e-05
+[13:55:22 - main - INFO] v_noslip_loss  3.712e-05
+[13:55:22 - main - INFO] u_error        7.640e-01
+[13:55:22 - main - INFO] v_error        7.864e-01
+[13:55:22 - main - INFO] ----------------------------
+[13:55:22 - main - INFO] Iter: 3400     Time: 0.005
+[13:55:22 - main - INFO] -------------  -------------
+[13:55:22 - main - INFO] p_in_loss      7.827e-06
+[13:55:22 - main - INFO] p_out_loss     2.718e-06
+[13:55:22 - main - INFO] rc_loss        3.153e-03
+[13:55:22 - main - INFO] ru_loss        4.572e-03
+[13:55:22 - main - INFO] rv_loss        4.040e-03
+[13:55:22 - main - INFO] u_noslip_loss  3.005e-05
+[13:55:22 - main - INFO] v_noslip_loss  3.221e-05
+[13:55:22 - main - INFO] u_error        7.663e-01
+[13:55:22 - main - INFO] v_error        7.897e-01
+I0515 13:55:22.571418 125093231960064 checkpoints.py:574] Saving checkpoint at step: 3410
+I0515 13:55:22.571528 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:22.571707 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3410.
+I0515 13:55:22.576457 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3410.orbax-checkpoint-tmp-1715781322571772 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3410
+I0515 13:55:22.576569 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3410`.
+I0515 13:55:22.577108 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2310
+[13:55:22 - main - INFO] ----------------------------
+[13:55:22 - main - INFO] Iter: 3500     Time: 0.006
+[13:55:22 - main - INFO] -------------  -------------
+[13:55:22 - main - INFO] p_in_loss      4.400e-06
+[13:55:22 - main - INFO] p_out_loss     7.865e-06
+[13:55:22 - main - INFO] rc_loss        5.347e-03
+[13:55:22 - main - INFO] ru_loss        5.998e-03
+[13:55:22 - main - INFO] rv_loss        4.868e-03
+[13:55:22 - main - INFO] u_noslip_loss  3.167e-05
+[13:55:22 - main - INFO] v_noslip_loss  3.149e-05
+[13:55:22 - main - INFO] u_error        7.664e-01
+[13:55:22 - main - INFO] v_error        7.924e-01
+I0515 13:55:22.756057 125093231960064 checkpoints.py:574] Saving checkpoint at step: 3520
+I0515 13:55:22.756175 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:22.756346 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3520.
+I0515 13:55:22.761265 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3520.orbax-checkpoint-tmp-1715781322756414 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3520
+I0515 13:55:22.761391 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3520`.
+I0515 13:55:22.762029 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2420
+[13:55:22 - main - INFO] ----------------------------
+[13:55:22 - main - INFO] Iter: 3600     Time: 0.005
+[13:55:22 - main - INFO] -------------  -------------
+[13:55:22 - main - INFO] p_in_loss      4.946e-06
+[13:55:22 - main - INFO] p_out_loss     1.334e-06
+[13:55:22 - main - INFO] rc_loss        4.293e-03
+[13:55:22 - main - INFO] ru_loss        5.788e-03
+[13:55:22 - main - INFO] rv_loss        4.703e-03
+[13:55:22 - main - INFO] u_noslip_loss  2.711e-05
+[13:55:22 - main - INFO] v_noslip_loss  2.846e-05
+[13:55:22 - main - INFO] u_error        7.651e-01
+[13:55:22 - main - INFO] v_error        7.928e-01
+I0515 13:55:22.943293 125093231960064 checkpoints.py:574] Saving checkpoint at step: 3630
+I0515 13:55:22.943416 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:22.943603 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3630.
+I0515 13:55:22.948224 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3630.orbax-checkpoint-tmp-1715781322943675 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3630
+I0515 13:55:22.948338 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3630`.
+I0515 13:55:22.948879 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2530
+[13:55:23 - main - INFO] ----------------------------
+[13:55:23 - main - INFO] Iter: 3700     Time: 0.005
+[13:55:23 - main - INFO] -------------  -------------
+[13:55:23 - main - INFO] p_in_loss      4.863e-06
+[13:55:23 - main - INFO] p_out_loss     5.742e-06
+[13:55:23 - main - INFO] rc_loss        6.096e-03
+[13:55:23 - main - INFO] ru_loss        5.162e-03
+[13:55:23 - main - INFO] rv_loss        5.878e-03
+[13:55:23 - main - INFO] u_noslip_loss  2.513e-05
+[13:55:23 - main - INFO] v_noslip_loss  3.020e-05
+[13:55:23 - main - INFO] u_error        7.669e-01
+[13:55:23 - main - INFO] v_error        7.861e-01
+I0515 13:55:23.127557 125093231960064 checkpoints.py:574] Saving checkpoint at step: 3740
+I0515 13:55:23.127687 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:23.127887 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3740.
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+I0515 13:55:23.132791 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3740.orbax-checkpoint-tmp-1715781323127952 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3740
+I0515 13:55:23.132919 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3740`.
+I0515 13:55:23.144219 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2640
+[13:55:23 - main - INFO] ----------------------------
+[13:55:23 - main - INFO] Iter: 3800     Time: 0.005
+[13:55:23 - main - INFO] -------------  -------------
+[13:55:23 - main - INFO] p_in_loss      1.123e-05
+[13:55:23 - main - INFO] p_out_loss     1.971e-06
+[13:55:23 - main - INFO] rc_loss        5.093e-03
+[13:55:23 - main - INFO] ru_loss        6.700e-03
+[13:55:23 - main - INFO] rv_loss        5.721e-03
+[13:55:23 - main - INFO] u_noslip_loss  2.379e-05
+[13:55:23 - main - INFO] v_noslip_loss  2.773e-05
+[13:55:23 - main - INFO] u_error        7.628e-01
+[13:55:23 - main - INFO] v_error        7.867e-01
+I0515 13:55:23.323767 125093231960064 checkpoints.py:574] Saving checkpoint at step: 3850
+I0515 13:55:23.323911 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:23.324126 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3850.
+I0515 13:55:23.329803 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3850.orbax-checkpoint-tmp-1715781323324218 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3850
+I0515 13:55:23.329939 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3850`.
+I0515 13:55:23.330639 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2750
+[13:55:23 - main - INFO] ----------------------------
+[13:55:23 - main - INFO] Iter: 3900     Time: 0.005
+[13:55:23 - main - INFO] -------------  -------------
+[13:55:23 - main - INFO] p_in_loss      5.809e-06
+[13:55:23 - main - INFO] p_out_loss     4.488e-06
+[13:55:23 - main - INFO] rc_loss        3.569e-03
+[13:55:23 - main - INFO] ru_loss        4.844e-03
+[13:55:23 - main - INFO] rv_loss        3.610e-03
+[13:55:23 - main - INFO] u_noslip_loss  1.801e-05
+[13:55:23 - main - INFO] v_noslip_loss  2.609e-05
+[13:55:23 - main - INFO] u_error        7.638e-01
+[13:55:23 - main - INFO] v_error        7.916e-01
+I0515 13:55:23.513394 125093231960064 checkpoints.py:574] Saving checkpoint at step: 3960
+I0515 13:55:23.513560 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:23.513830 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3960.
+I0515 13:55:23.519900 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3960.orbax-checkpoint-tmp-1715781323513931 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3960
+I0515 13:55:23.520063 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3960`.
+I0515 13:55:23.520957 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2860
+[13:55:23 - main - INFO] ----------------------------
+[13:55:23 - main - INFO] Iter: 4000     Time: 0.009
+[13:55:23 - main - INFO] -------------  -------------
+[13:55:23 - main - INFO] p_in_loss      1.592e-06
+[13:55:23 - main - INFO] p_out_loss     7.225e-06
+[13:55:23 - main - INFO] rc_loss        4.081e-03
+[13:55:23 - main - INFO] ru_loss        6.469e-03
+[13:55:23 - main - INFO] rv_loss        4.765e-03
+[13:55:23 - main - INFO] u_noslip_loss  2.121e-05
+[13:55:23 - main - INFO] v_noslip_loss  2.291e-05
+[13:55:23 - main - INFO] u_error        7.627e-01
+[13:55:23 - main - INFO] v_error        7.871e-01
+I0515 13:55:23.710732 125093231960064 checkpoints.py:574] Saving checkpoint at step: 4070
+I0515 13:55:23.710912 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:23.711219 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4070.
+I0515 13:55:23.716453 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4070.orbax-checkpoint-tmp-1715781323711336 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4070
+I0515 13:55:23.716573 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4070`.
+I0515 13:55:23.717174 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_2970
+[13:55:23 - main - INFO] ----------------------------
+[13:55:23 - main - INFO] Iter: 4100     Time: 0.005
+[13:55:23 - main - INFO] -------------  -------------
+[13:55:23 - main - INFO] p_in_loss      2.695e-06
+[13:55:23 - main - INFO] p_out_loss     6.907e-06
+[13:55:23 - main - INFO] rc_loss        3.027e-03
+[13:55:23 - main - INFO] ru_loss        5.501e-03
+[13:55:23 - main - INFO] rv_loss        8.025e-03
+[13:55:23 - main - INFO] u_noslip_loss  1.551e-05
+[13:55:23 - main - INFO] v_noslip_loss  2.374e-05
+[13:55:23 - main - INFO] u_error        7.629e-01
+[13:55:23 - main - INFO] v_error        7.773e-01
+I0515 13:55:23.908430 125093231960064 checkpoints.py:574] Saving checkpoint at step: 4180
+I0515 13:55:23.908550 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:23.908716 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4180.
+I0515 13:55:23.913424 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4180.orbax-checkpoint-tmp-1715781323908787 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4180
+I0515 13:55:23.913542 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4180`.
+I0515 13:55:23.914103 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3080
+[13:55:23 - main - INFO] ----------------------------
+[13:55:23 - main - INFO] Iter: 4200     Time: 0.005
+[13:55:23 - main - INFO] -------------  -------------
+[13:55:23 - main - INFO] p_in_loss      1.274e-06
+[13:55:23 - main - INFO] p_out_loss     8.165e-06
+[13:55:23 - main - INFO] rc_loss        3.847e-03
+[13:55:23 - main - INFO] ru_loss        5.407e-03
+[13:55:23 - main - INFO] rv_loss        4.605e-03
+[13:55:23 - main - INFO] u_noslip_loss  1.434e-05
+[13:55:23 - main - INFO] v_noslip_loss  2.023e-05
+[13:55:23 - main - INFO] u_error        7.626e-01
+[13:55:23 - main - INFO] v_error        7.854e-01
+I0515 13:55:24.092900 125093231960064 checkpoints.py:574] Saving checkpoint at step: 4290
+I0515 13:55:24.093029 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:24.093198 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4290.
+I0515 13:55:24.098165 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4290.orbax-checkpoint-tmp-1715781324093261 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4290
+I0515 13:55:24.098298 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4290`.
+I0515 13:55:24.098913 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3190
+[13:55:24 - main - INFO] ----------------------------
+[13:55:24 - main - INFO] Iter: 4300     Time: 0.005
+[13:55:24 - main - INFO] -------------  -------------
+[13:55:24 - main - INFO] p_in_loss      3.452e-06
+[13:55:24 - main - INFO] p_out_loss     2.086e-06
+[13:55:24 - main - INFO] rc_loss        2.555e-03
+[13:55:24 - main - INFO] ru_loss        6.924e-03
+[13:55:24 - main - INFO] rv_loss        5.550e-03
+[13:55:24 - main - INFO] u_noslip_loss  1.191e-05
+[13:55:24 - main - INFO] v_noslip_loss  1.562e-05
+[13:55:24 - main - INFO] u_error        7.611e-01
+[13:55:24 - main - INFO] v_error        7.904e-01
+I0515 13:55:24.277414 125093231960064 checkpoints.py:574] Saving checkpoint at step: 4400
+I0515 13:55:24.277551 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:24.277736 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4400.
+I0515 13:55:24.282467 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4400.orbax-checkpoint-tmp-1715781324277815 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4400
+I0515 13:55:24.282584 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4400`.
+I0515 13:55:24.283117 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3300
+[13:55:24 - main - INFO] ----------------------------
+[13:55:24 - main - INFO] Iter: 4400     Time: 0.004
+[13:55:24 - main - INFO] -------------  -------------
+[13:55:24 - main - INFO] p_in_loss      3.928e-06
+[13:55:24 - main - INFO] p_out_loss     2.773e-06
+[13:55:24 - main - INFO] rc_loss        3.062e-03
+[13:55:24 - main - INFO] ru_loss        7.901e-03
+[13:55:24 - main - INFO] rv_loss        5.753e-03
+[13:55:24 - main - INFO] u_noslip_loss  1.446e-05
+[13:55:24 - main - INFO] v_noslip_loss  1.337e-05
+[13:55:24 - main - INFO] u_error        7.614e-01
+[13:55:24 - main - INFO] v_error        7.982e-01
+[13:55:24 - main - INFO] ----------------------------
+[13:55:24 - main - INFO] Iter: 4500     Time: 0.005
+[13:55:24 - main - INFO] -------------  -------------
+[13:55:24 - main - INFO] p_in_loss      8.355e-06
+[13:55:24 - main - INFO] p_out_loss     3.614e-06
+[13:55:24 - main - INFO] rc_loss        3.371e-03
+[13:55:24 - main - INFO] ru_loss        6.325e-03
+[13:55:24 - main - INFO] rv_loss        9.501e-03
+[13:55:24 - main - INFO] u_noslip_loss  1.007e-05
+[13:55:24 - main - INFO] v_noslip_loss  1.514e-05
+[13:55:24 - main - INFO] u_error        7.592e-01
+[13:55:24 - main - INFO] v_error        8.028e-01
+I0515 13:55:24.464220 125093231960064 checkpoints.py:574] Saving checkpoint at step: 4510
+I0515 13:55:24.464345 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:24.464535 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4510.
+I0515 13:55:24.469458 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4510.orbax-checkpoint-tmp-1715781324464607 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4510
+I0515 13:55:24.469567 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4510`.
+I0515 13:55:24.470155 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3410
+[13:55:24 - main - INFO] ----------------------------
+[13:55:24 - main - INFO] Iter: 4600     Time: 0.006
+[13:55:24 - main - INFO] -------------  -------------
+[13:55:24 - main - INFO] p_in_loss      2.730e-05
+[13:55:24 - main - INFO] p_out_loss     3.058e-05
+[13:55:24 - main - INFO] rc_loss        2.988e-03
+[13:55:24 - main - INFO] ru_loss        1.279e-02
+[13:55:24 - main - INFO] rv_loss        9.974e-03
+[13:55:24 - main - INFO] u_noslip_loss  1.924e-05
+[13:55:24 - main - INFO] v_noslip_loss  1.561e-05
+[13:55:24 - main - INFO] u_error        7.584e-01
+[13:55:24 - main - INFO] v_error        7.888e-01
+I0515 13:55:24.650165 125093231960064 checkpoints.py:574] Saving checkpoint at step: 4620
+I0515 13:55:24.650286 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:24.650460 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4620.
+I0515 13:55:24.655375 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4620.orbax-checkpoint-tmp-1715781324650527 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4620
+I0515 13:55:24.655482 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4620`.
+I0515 13:55:24.656027 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3520
+[13:55:24 - main - INFO] ----------------------------
+[13:55:24 - main - INFO] Iter: 4700     Time: 0.007
+[13:55:24 - main - INFO] -------------  -------------
+[13:55:24 - main - INFO] p_in_loss      1.643e-05
+[13:55:24 - main - INFO] p_out_loss     6.884e-06
+[13:55:24 - main - INFO] rc_loss        4.356e-03
+[13:55:24 - main - INFO] ru_loss        8.545e-03
+[13:55:24 - main - INFO] rv_loss        1.682e-02
+[13:55:24 - main - INFO] u_noslip_loss  1.377e-05
+[13:55:24 - main - INFO] v_noslip_loss  1.730e-05
+[13:55:24 - main - INFO] u_error        7.576e-01
+[13:55:24 - main - INFO] v_error        7.872e-01
+I0515 13:55:24.845527 125093231960064 checkpoints.py:574] Saving checkpoint at step: 4730
+I0515 13:55:24.845642 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:24.845804 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4730.
+I0515 13:55:24.850789 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4730.orbax-checkpoint-tmp-1715781324845868 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4730
+I0515 13:55:24.850909 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4730`.
+I0515 13:55:24.851562 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3630
+[13:55:24 - main - INFO] ----------------------------
+[13:55:24 - main - INFO] Iter: 4800     Time: 0.005
+[13:55:24 - main - INFO] -------------  -------------
+[13:55:24 - main - INFO] p_in_loss      1.543e-05
+[13:55:24 - main - INFO] p_out_loss     5.806e-06
+[13:55:24 - main - INFO] rc_loss        2.689e-03
+[13:55:24 - main - INFO] ru_loss        8.074e-03
+[13:55:24 - main - INFO] rv_loss        7.954e-03
+[13:55:24 - main - INFO] u_noslip_loss  1.046e-05
+[13:55:24 - main - INFO] v_noslip_loss  1.061e-05
+[13:55:24 - main - INFO] u_error        7.615e-01
+[13:55:24 - main - INFO] v_error        8.057e-01
+I0515 13:55:25.033960 125093231960064 checkpoints.py:574] Saving checkpoint at step: 4840
+I0515 13:55:25.034089 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:25.034265 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4840.
+I0515 13:55:25.039210 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4840.orbax-checkpoint-tmp-1715781325034333 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4840
+I0515 13:55:25.039317 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4840`.
+I0515 13:55:25.039883 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3740
+[13:55:25 - main - INFO] ----------------------------
+[13:55:25 - main - INFO] Iter: 4900     Time: 0.005
+[13:55:25 - main - INFO] -------------  -------------
+[13:55:25 - main - INFO] p_in_loss      8.794e-06
+[13:55:25 - main - INFO] p_out_loss     5.168e-05
+[13:55:25 - main - INFO] rc_loss        3.422e-03
+[13:55:25 - main - INFO] ru_loss        7.409e-03
+[13:55:25 - main - INFO] rv_loss        1.349e-02
+[13:55:25 - main - INFO] u_noslip_loss  1.015e-05
+[13:55:25 - main - INFO] v_noslip_loss  1.433e-05
+[13:55:25 - main - INFO] u_error        7.602e-01
+[13:55:25 - main - INFO] v_error        8.029e-01
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+I0515 13:55:25.226810 125093231960064 checkpoints.py:574] Saving checkpoint at step: 4950
+I0515 13:55:25.227037 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:25.227366 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4950.
+I0515 13:55:25.238958 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4950.orbax-checkpoint-tmp-1715781325227492 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4950
+I0515 13:55:25.239381 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4950`.
+I0515 13:55:25.241412 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3850
+[13:55:25 - main - INFO] ----------------------------
+[13:55:25 - main - INFO] Iter: 5000     Time: 0.008
+[13:55:25 - main - INFO] -------------  -------------
+[13:55:25 - main - INFO] p_in_loss      2.839e-05
+[13:55:25 - main - INFO] p_out_loss     2.186e-05
+[13:55:25 - main - INFO] rc_loss        3.449e-03
+[13:55:25 - main - INFO] ru_loss        1.342e-02
+[13:55:25 - main - INFO] rv_loss        1.731e-02
+[13:55:25 - main - INFO] u_noslip_loss  1.727e-05
+[13:55:25 - main - INFO] v_noslip_loss  2.100e-05
+[13:55:25 - main - INFO] u_error        7.511e-01
+[13:55:25 - main - INFO] v_error        8.003e-01
+I0515 13:55:25.426655 125093231960064 checkpoints.py:574] Saving checkpoint at step: 5060
+I0515 13:55:25.426771 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:25.426934 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5060.
+I0515 13:55:25.431619 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5060.orbax-checkpoint-tmp-1715781325427000 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5060
+I0515 13:55:25.431725 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5060`.
+I0515 13:55:25.432251 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_3960
+[13:55:25 - main - INFO] ----------------------------
+[13:55:25 - main - INFO] Iter: 5100     Time: 0.004
+[13:55:25 - main - INFO] -------------  -------------
+[13:55:25 - main - INFO] p_in_loss      2.871e-05
+[13:55:25 - main - INFO] p_out_loss     3.195e-05
+[13:55:25 - main - INFO] rc_loss        3.188e-03
+[13:55:25 - main - INFO] ru_loss        1.292e-02
+[13:55:25 - main - INFO] rv_loss        8.559e-03
+[13:55:25 - main - INFO] u_noslip_loss  1.342e-05
+[13:55:25 - main - INFO] v_noslip_loss  9.933e-06
+[13:55:25 - main - INFO] u_error        7.574e-01
+[13:55:25 - main - INFO] v_error        7.962e-01
+I0515 13:55:25.610104 125093231960064 checkpoints.py:574] Saving checkpoint at step: 5170
+I0515 13:55:25.610225 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:25.610385 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5170.
+I0515 13:55:25.615098 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5170.orbax-checkpoint-tmp-1715781325610447 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5170
+I0515 13:55:25.615209 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5170`.
+I0515 13:55:25.615733 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4070
+[13:55:25 - main - INFO] ----------------------------
+[13:55:25 - main - INFO] Iter: 5200     Time: 0.005
+[13:55:25 - main - INFO] -------------  -------------
+[13:55:25 - main - INFO] p_in_loss      4.146e-06
+[13:55:25 - main - INFO] p_out_loss     2.906e-05
+[13:55:25 - main - INFO] rc_loss        2.881e-03
+[13:55:25 - main - INFO] ru_loss        8.411e-03
+[13:55:25 - main - INFO] rv_loss        1.332e-02
+[13:55:25 - main - INFO] u_noslip_loss  7.884e-06
+[13:55:25 - main - INFO] v_noslip_loss  1.619e-05
+[13:55:25 - main - INFO] u_error        7.610e-01
+[13:55:25 - main - INFO] v_error        7.910e-01
+I0515 13:55:25.797533 125093231960064 checkpoints.py:574] Saving checkpoint at step: 5280
+I0515 13:55:25.797671 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:25.797871 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5280.
+I0515 13:55:25.802914 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5280.orbax-checkpoint-tmp-1715781325797951 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5280
+I0515 13:55:25.803034 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5280`.
+I0515 13:55:25.803612 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4180
+[13:55:25 - main - INFO] ----------------------------
+[13:55:25 - main - INFO] Iter: 5300     Time: 0.005
+[13:55:25 - main - INFO] -------------  -------------
+[13:55:25 - main - INFO] p_in_loss      1.103e-05
+[13:55:25 - main - INFO] p_out_loss     4.003e-05
+[13:55:25 - main - INFO] rc_loss        2.742e-03
+[13:55:25 - main - INFO] ru_loss        9.140e-03
+[13:55:25 - main - INFO] rv_loss        1.896e-02
+[13:55:25 - main - INFO] u_noslip_loss  1.163e-05
+[13:55:25 - main - INFO] v_noslip_loss  8.034e-06
+[13:55:25 - main - INFO] u_error        7.627e-01
+[13:55:25 - main - INFO] v_error        8.119e-01
+I0515 13:55:25.987278 125093231960064 checkpoints.py:574] Saving checkpoint at step: 5390
+I0515 13:55:25.987420 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:25.987628 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5390.
+I0515 13:55:25.992439 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5390.orbax-checkpoint-tmp-1715781325987719 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5390
+I0515 13:55:25.992561 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5390`.
+I0515 13:55:25.993074 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4290
+[13:55:26 - main - INFO] ----------------------------
+[13:55:26 - main - INFO] Iter: 5400     Time: 0.005
+[13:55:26 - main - INFO] -------------  -------------
+[13:55:26 - main - INFO] p_in_loss      4.252e-05
+[13:55:26 - main - INFO] p_out_loss     2.031e-05
+[13:55:26 - main - INFO] rc_loss        3.262e-03
+[13:55:26 - main - INFO] ru_loss        1.292e-02
+[13:55:26 - main - INFO] rv_loss        1.311e-02
+[13:55:26 - main - INFO] u_noslip_loss  1.171e-05
+[13:55:26 - main - INFO] v_noslip_loss  1.435e-05
+[13:55:26 - main - INFO] u_error        7.568e-01
+[13:55:26 - main - INFO] v_error        7.830e-01
+I0515 13:55:26.179594 125093231960064 checkpoints.py:574] Saving checkpoint at step: 5500
+I0515 13:55:26.179723 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:26.179903 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5500.
+I0515 13:55:26.184660 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5500.orbax-checkpoint-tmp-1715781326179970 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5500
+I0515 13:55:26.184769 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5500`.
+I0515 13:55:26.185292 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4400
+[13:55:26 - main - INFO] ----------------------------
+[13:55:26 - main - INFO] Iter: 5500     Time: 0.004
+[13:55:26 - main - INFO] -------------  -------------
+[13:55:26 - main - INFO] p_in_loss      1.143e-05
+[13:55:26 - main - INFO] p_out_loss     6.850e-05
+[13:55:26 - main - INFO] rc_loss        4.061e-03
+[13:55:26 - main - INFO] ru_loss        2.177e-02
+[13:55:26 - main - INFO] rv_loss        2.267e-02
+[13:55:26 - main - INFO] u_noslip_loss  1.088e-05
+[13:55:26 - main - INFO] v_noslip_loss  1.857e-05
+[13:55:26 - main - INFO] u_error        7.578e-01
+[13:55:26 - main - INFO] v_error        8.022e-01
+[13:55:26 - main - INFO] ----------------------------
+[13:55:26 - main - INFO] Iter: 5600     Time: 0.005
+[13:55:26 - main - INFO] -------------  -------------
+[13:55:26 - main - INFO] p_in_loss      4.566e-06
+[13:55:26 - main - INFO] p_out_loss     4.386e-06
+[13:55:26 - main - INFO] rc_loss        2.045e-03
+[13:55:26 - main - INFO] ru_loss        6.143e-03
+[13:55:26 - main - INFO] rv_loss        6.040e-03
+[13:55:26 - main - INFO] u_noslip_loss  9.789e-06
+[13:55:26 - main - INFO] v_noslip_loss  7.396e-06
+[13:55:26 - main - INFO] u_error        7.515e-01
+[13:55:26 - main - INFO] v_error        7.970e-01
+I0515 13:55:26.369493 125093231960064 checkpoints.py:574] Saving checkpoint at step: 5610
+I0515 13:55:26.369610 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:26.369797 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5610.
+I0515 13:55:26.374563 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5610.orbax-checkpoint-tmp-1715781326369865 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5610
+I0515 13:55:26.374678 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5610`.
+I0515 13:55:26.375303 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4510
+[13:55:26 - main - INFO] ----------------------------
+[13:55:26 - main - INFO] Iter: 5700     Time: 0.005
+[13:55:26 - main - INFO] -------------  -------------
+[13:55:26 - main - INFO] p_in_loss      4.946e-06
+[13:55:26 - main - INFO] p_out_loss     6.413e-06
+[13:55:26 - main - INFO] rc_loss        2.076e-03
+[13:55:26 - main - INFO] ru_loss        6.360e-03
+[13:55:26 - main - INFO] rv_loss        6.948e-03
+[13:55:26 - main - INFO] u_noslip_loss  9.340e-06
+[13:55:26 - main - INFO] v_noslip_loss  7.809e-06
+[13:55:26 - main - INFO] u_error        7.590e-01
+[13:55:26 - main - INFO] v_error        7.874e-01
+I0515 13:55:26.579185 125093231960064 checkpoints.py:574] Saving checkpoint at step: 5720
+I0515 13:55:26.579300 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:26.579470 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5720.
+I0515 13:55:26.584470 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5720.orbax-checkpoint-tmp-1715781326579533 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5720
+I0515 13:55:26.584582 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5720`.
+I0515 13:55:26.585198 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4620
+[13:55:26 - main - INFO] ----------------------------
+[13:55:26 - main - INFO] Iter: 5800     Time: 0.005
+[13:55:26 - main - INFO] -------------  -------------
+[13:55:26 - main - INFO] p_in_loss      5.945e-06
+[13:55:26 - main - INFO] p_out_loss     2.925e-05
+[13:55:26 - main - INFO] rc_loss        2.327e-03
+[13:55:26 - main - INFO] ru_loss        1.472e-02
+[13:55:26 - main - INFO] rv_loss        1.240e-02
+[13:55:26 - main - INFO] u_noslip_loss  8.175e-06
+[13:55:26 - main - INFO] v_noslip_loss  9.956e-06
+[13:55:26 - main - INFO] u_error        7.574e-01
+[13:55:26 - main - INFO] v_error        7.947e-01
+I0515 13:55:26.763828 125093231960064 checkpoints.py:574] Saving checkpoint at step: 5830
+I0515 13:55:26.763948 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:26.764120 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5830.
+I0515 13:55:26.769068 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5830.orbax-checkpoint-tmp-1715781326764183 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5830
+I0515 13:55:26.769181 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5830`.
+I0515 13:55:26.769714 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4730
+[13:55:26 - main - INFO] ----------------------------
+[13:55:26 - main - INFO] Iter: 5900     Time: 0.005
+[13:55:26 - main - INFO] -------------  -------------
+[13:55:26 - main - INFO] p_in_loss      3.424e-05
+[13:55:26 - main - INFO] p_out_loss     5.568e-05
+[13:55:26 - main - INFO] rc_loss        2.907e-03
+[13:55:26 - main - INFO] ru_loss        1.387e-02
+[13:55:26 - main - INFO] rv_loss        2.280e-02
+[13:55:26 - main - INFO] u_noslip_loss  1.651e-05
+[13:55:26 - main - INFO] v_noslip_loss  1.832e-05
+[13:55:26 - main - INFO] u_error        7.526e-01
+[13:55:26 - main - INFO] v_error        7.744e-01
+I0515 13:55:26.952427 125093231960064 checkpoints.py:574] Saving checkpoint at step: 5940
+I0515 13:55:26.952554 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:26.952723 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5940.
+I0515 13:55:26.957537 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5940.orbax-checkpoint-tmp-1715781326952788 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5940
+I0515 13:55:26.957652 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5940`.
+I0515 13:55:26.958239 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4840
+[13:55:27 - main - INFO] ----------------------------
+[13:55:27 - main - INFO] Iter: 6000     Time: 0.009
+[13:55:27 - main - INFO] -------------  -------------
+[13:55:27 - main - INFO] p_in_loss      3.462e-05
+[13:55:27 - main - INFO] p_out_loss     2.957e-05
+[13:55:27 - main - INFO] rc_loss        2.402e-03
+[13:55:27 - main - INFO] ru_loss        5.664e-03
+[13:55:27 - main - INFO] rv_loss        1.747e-02
+[13:55:27 - main - INFO] u_noslip_loss  3.576e-06
+[13:55:27 - main - INFO] v_noslip_loss  1.644e-05
+[13:55:27 - main - INFO] u_error        7.550e-01
+[13:55:27 - main - INFO] v_error        8.009e-01
+I0515 13:55:27.141069 125093231960064 checkpoints.py:574] Saving checkpoint at step: 6050
+I0515 13:55:27.141196 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:27.141371 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6050.
+I0515 13:55:27.146211 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6050.orbax-checkpoint-tmp-1715781327141437 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6050
+I0515 13:55:27.146321 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6050`.
+I0515 13:55:27.146907 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_4950
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+[13:55:27 - main - INFO] ----------------------------
+[13:55:27 - main - INFO] Iter: 6100     Time: 0.005
+[13:55:27 - main - INFO] -------------  -------------
+[13:55:27 - main - INFO] p_in_loss      8.809e-06
+[13:55:27 - main - INFO] p_out_loss     2.858e-05
+[13:55:27 - main - INFO] rc_loss        1.844e-03
+[13:55:27 - main - INFO] ru_loss        6.914e-03
+[13:55:27 - main - INFO] rv_loss        7.281e-03
+[13:55:27 - main - INFO] u_noslip_loss  5.368e-06
+[13:55:27 - main - INFO] v_noslip_loss  8.580e-06
+[13:55:27 - main - INFO] u_error        7.530e-01
+[13:55:27 - main - INFO] v_error        7.849e-01
+I0515 13:55:27.333614 125093231960064 checkpoints.py:574] Saving checkpoint at step: 6160
+I0515 13:55:27.333735 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:27.333901 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6160.
+I0515 13:55:27.338703 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6160.orbax-checkpoint-tmp-1715781327333967 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6160
+I0515 13:55:27.338811 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6160`.
+I0515 13:55:27.339341 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5060
+[13:55:27 - main - INFO] ----------------------------
+[13:55:27 - main - INFO] Iter: 6200     Time: 0.005
+[13:55:27 - main - INFO] -------------  -------------
+[13:55:27 - main - INFO] p_in_loss      3.322e-06
+[13:55:27 - main - INFO] p_out_loss     7.843e-06
+[13:55:27 - main - INFO] rc_loss        1.435e-03
+[13:55:27 - main - INFO] ru_loss        6.766e-03
+[13:55:27 - main - INFO] rv_loss        5.245e-03
+[13:55:27 - main - INFO] u_noslip_loss  4.042e-06
+[13:55:27 - main - INFO] v_noslip_loss  5.294e-06
+[13:55:27 - main - INFO] u_error        7.518e-01
+[13:55:27 - main - INFO] v_error        7.897e-01
+I0515 13:55:27.525266 125093231960064 checkpoints.py:574] Saving checkpoint at step: 6270
+I0515 13:55:27.525395 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:27.525568 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6270.
+I0515 13:55:27.530242 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6270.orbax-checkpoint-tmp-1715781327525633 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6270
+I0515 13:55:27.530347 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6270`.
+I0515 13:55:27.530865 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5170
+[13:55:27 - main - INFO] ----------------------------
+[13:55:27 - main - INFO] Iter: 6300     Time: 0.005
+[13:55:27 - main - INFO] -------------  -------------
+[13:55:27 - main - INFO] p_in_loss      1.159e-05
+[13:55:27 - main - INFO] p_out_loss     3.112e-06
+[13:55:27 - main - INFO] rc_loss        2.728e-03
+[13:55:27 - main - INFO] ru_loss        1.097e-02
+[13:55:27 - main - INFO] rv_loss        9.646e-03
+[13:55:27 - main - INFO] u_noslip_loss  1.110e-05
+[13:55:27 - main - INFO] v_noslip_loss  1.961e-05
+[13:55:27 - main - INFO] u_error        7.483e-01
+[13:55:27 - main - INFO] v_error        7.563e-01
+I0515 13:55:27.710378 125093231960064 checkpoints.py:574] Saving checkpoint at step: 6380
+I0515 13:55:27.710509 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:27.710702 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6380.
+I0515 13:55:27.715435 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6380.orbax-checkpoint-tmp-1715781327710778 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6380
+I0515 13:55:27.715545 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6380`.
+I0515 13:55:27.716071 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5280
+[13:55:27 - main - INFO] ----------------------------
+[13:55:27 - main - INFO] Iter: 6400     Time: 0.009
+[13:55:27 - main - INFO] -------------  -------------
+[13:55:27 - main - INFO] p_in_loss      5.374e-05
+[13:55:27 - main - INFO] p_out_loss     9.942e-05
+[13:55:27 - main - INFO] rc_loss        2.288e-03
+[13:55:27 - main - INFO] ru_loss        8.957e-03
+[13:55:27 - main - INFO] rv_loss        1.606e-02
+[13:55:27 - main - INFO] u_noslip_loss  9.373e-06
+[13:55:27 - main - INFO] v_noslip_loss  1.111e-05
+[13:55:27 - main - INFO] u_error        7.532e-01
+[13:55:27 - main - INFO] v_error        7.958e-01
+I0515 13:55:27.906624 125093231960064 checkpoints.py:574] Saving checkpoint at step: 6490
+I0515 13:55:27.906750 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:27.906919 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6490.
+I0515 13:55:27.911644 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6490.orbax-checkpoint-tmp-1715781327906984 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6490
+I0515 13:55:27.911752 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6490`.
+I0515 13:55:27.912272 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5390
+[13:55:27 - main - INFO] ----------------------------
+[13:55:27 - main - INFO] Iter: 6500     Time: 0.005
+[13:55:27 - main - INFO] -------------  -------------
+[13:55:27 - main - INFO] p_in_loss      6.784e-05
+[13:55:27 - main - INFO] p_out_loss     3.932e-05
+[13:55:27 - main - INFO] rc_loss        2.073e-03
+[13:55:27 - main - INFO] ru_loss        1.266e-02
+[13:55:27 - main - INFO] rv_loss        1.677e-02
+[13:55:27 - main - INFO] u_noslip_loss  2.373e-05
+[13:55:27 - main - INFO] v_noslip_loss  3.172e-05
+[13:55:27 - main - INFO] u_error        7.452e-01
+[13:55:27 - main - INFO] v_error        7.677e-01
+I0515 13:55:28.090605 125093231960064 checkpoints.py:574] Saving checkpoint at step: 6600
+I0515 13:55:28.090724 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:28.090886 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6600.
+I0515 13:55:28.095927 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6600.orbax-checkpoint-tmp-1715781328090949 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6600
+I0515 13:55:28.096085 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6600`.
+I0515 13:55:28.096927 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5500
+[13:55:28 - main - INFO] ----------------------------
+[13:55:28 - main - INFO] Iter: 6600     Time: 0.005
+[13:55:28 - main - INFO] -------------  -------------
+[13:55:28 - main - INFO] p_in_loss      7.619e-06
+[13:55:28 - main - INFO] p_out_loss     9.025e-06
+[13:55:28 - main - INFO] rc_loss        1.672e-03
+[13:55:28 - main - INFO] ru_loss        5.325e-03
+[13:55:28 - main - INFO] rv_loss        6.720e-03
+[13:55:28 - main - INFO] u_noslip_loss  4.012e-06
+[13:55:28 - main - INFO] v_noslip_loss  6.632e-06
+[13:55:28 - main - INFO] u_error        7.499e-01
+[13:55:28 - main - INFO] v_error        7.882e-01
+[13:55:28 - main - INFO] ----------------------------
+[13:55:28 - main - INFO] Iter: 6700     Time: 0.005
+[13:55:28 - main - INFO] -------------  -------------
+[13:55:28 - main - INFO] p_in_loss      1.170e-05
+[13:55:28 - main - INFO] p_out_loss     4.276e-05
+[13:55:28 - main - INFO] rc_loss        3.490e-03
+[13:55:28 - main - INFO] ru_loss        1.487e-02
+[13:55:28 - main - INFO] rv_loss        3.038e-02
+[13:55:28 - main - INFO] u_noslip_loss  9.306e-06
+[13:55:28 - main - INFO] v_noslip_loss  2.992e-05
+[13:55:28 - main - INFO] u_error        7.544e-01
+[13:55:28 - main - INFO] v_error        8.051e-01
+I0515 13:55:28.309329 125093231960064 checkpoints.py:574] Saving checkpoint at step: 6710
+I0515 13:55:28.309439 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:28.309617 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6710.
+I0515 13:55:28.314503 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6710.orbax-checkpoint-tmp-1715781328309683 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6710
+I0515 13:55:28.314620 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6710`.
+I0515 13:55:28.315185 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5610
+[13:55:28 - main - INFO] ----------------------------
+[13:55:28 - main - INFO] Iter: 6800     Time: 0.005
+[13:55:28 - main - INFO] -------------  -------------
+[13:55:28 - main - INFO] p_in_loss      3.969e-06
+[13:55:28 - main - INFO] p_out_loss     4.983e-06
+[13:55:28 - main - INFO] rc_loss        2.121e-03
+[13:55:28 - main - INFO] ru_loss        1.002e-02
+[13:55:28 - main - INFO] rv_loss        7.045e-03
+[13:55:28 - main - INFO] u_noslip_loss  1.005e-05
+[13:55:28 - main - INFO] v_noslip_loss  4.497e-06
+[13:55:28 - main - INFO] u_error        7.532e-01
+[13:55:28 - main - INFO] v_error        7.995e-01
+I0515 13:55:28.498046 125093231960064 checkpoints.py:574] Saving checkpoint at step: 6820
+I0515 13:55:28.498181 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:28.498373 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6820.
+I0515 13:55:28.504127 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6820.orbax-checkpoint-tmp-1715781328498441 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6820
+I0515 13:55:28.504283 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6820`.
+I0515 13:55:28.505119 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5720
+[13:55:28 - main - INFO] ----------------------------
+[13:55:28 - main - INFO] Iter: 6900     Time: 0.005
+[13:55:28 - main - INFO] -------------  -------------
+[13:55:28 - main - INFO] p_in_loss      4.239e-06
+[13:55:28 - main - INFO] p_out_loss     2.843e-05
+[13:55:28 - main - INFO] rc_loss        2.134e-03
+[13:55:28 - main - INFO] ru_loss        7.207e-03
+[13:55:28 - main - INFO] rv_loss        1.408e-02
+[13:55:28 - main - INFO] u_noslip_loss  9.999e-06
+[13:55:28 - main - INFO] v_noslip_loss  1.261e-05
+[13:55:28 - main - INFO] u_error        7.504e-01
+[13:55:28 - main - INFO] v_error        7.687e-01
+I0515 13:55:28.687170 125093231960064 checkpoints.py:574] Saving checkpoint at step: 6930
+I0515 13:55:28.687290 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:28.687495 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6930.
+I0515 13:55:28.692579 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6930.orbax-checkpoint-tmp-1715781328687568 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6930
+I0515 13:55:28.692696 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6930`.
+I0515 13:55:28.693265 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5830
+[13:55:28 - main - INFO] ----------------------------
+[13:55:28 - main - INFO] Iter: 7000     Time: 0.009
+[13:55:28 - main - INFO] -------------  -------------
+[13:55:28 - main - INFO] p_in_loss      2.530e-05
+[13:55:28 - main - INFO] p_out_loss     2.526e-05
+[13:55:28 - main - INFO] rc_loss        1.964e-03
+[13:55:28 - main - INFO] ru_loss        4.788e-03
+[13:55:28 - main - INFO] rv_loss        9.981e-03
+[13:55:28 - main - INFO] u_noslip_loss  3.476e-06
+[13:55:28 - main - INFO] v_noslip_loss  1.036e-05
+[13:55:28 - main - INFO] u_error        7.502e-01
+[13:55:28 - main - INFO] v_error        7.963e-01
+I0515 13:55:28.891472 125093231960064 checkpoints.py:574] Saving checkpoint at step: 7040
+I0515 13:55:28.891590 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:28.891759 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7040.
+I0515 13:55:28.896615 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7040.orbax-checkpoint-tmp-1715781328891825 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7040
+I0515 13:55:28.896727 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7040`.
+I0515 13:55:28.897262 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_5940
+[13:55:28 - main - INFO] ----------------------------
+[13:55:28 - main - INFO] Iter: 7100     Time: 0.005
+[13:55:28 - main - INFO] -------------  -------------
+[13:55:28 - main - INFO] p_in_loss      1.291e-05
+[13:55:28 - main - INFO] p_out_loss     4.188e-06
+[13:55:28 - main - INFO] rc_loss        1.065e-03
+[13:55:28 - main - INFO] ru_loss        3.926e-03
+[13:55:28 - main - INFO] rv_loss        4.851e-03
+[13:55:28 - main - INFO] u_noslip_loss  1.849e-06
+[13:55:28 - main - INFO] v_noslip_loss  3.413e-06
+[13:55:28 - main - INFO] u_error        7.497e-01
+[13:55:28 - main - INFO] v_error        7.880e-01
+I0515 13:55:29.078842 125093231960064 checkpoints.py:574] Saving checkpoint at step: 7150
+I0515 13:55:29.078965 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:29.079138 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7150.
+I0515 13:55:29.083868 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7150.orbax-checkpoint-tmp-1715781329079206 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7150
+I0515 13:55:29.083988 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7150`.
+I0515 13:55:29.084603 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6050
+[13:55:29 - main - INFO] ----------------------------
+[13:55:29 - main - INFO] Iter: 7200     Time: 0.005
+[13:55:29 - main - INFO] -------------  -------------
+[13:55:29 - main - INFO] p_in_loss      6.105e-06
+[13:55:29 - main - INFO] p_out_loss     1.281e-05
+[13:55:29 - main - INFO] rc_loss        2.596e-03
+[13:55:29 - main - INFO] ru_loss        1.166e-02
+[13:55:29 - main - INFO] rv_loss        1.722e-02
+[13:55:29 - main - INFO] u_noslip_loss  1.657e-05
+[13:55:29 - main - INFO] v_noslip_loss  2.788e-05
+[13:55:29 - main - INFO] u_error        7.449e-01
+[13:55:29 - main - INFO] v_error        7.548e-01
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+-----------
+default
+I0515 13:55:29.268897 125093231960064 checkpoints.py:574] Saving checkpoint at step: 7260
+I0515 13:55:29.269030 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:29.269205 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7260.
+I0515 13:55:29.273858 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7260.orbax-checkpoint-tmp-1715781329269273 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7260
+I0515 13:55:29.273966 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7260`.
+I0515 13:55:29.274504 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6160
+[13:55:29 - main - INFO] ----------------------------
+[13:55:29 - main - INFO] Iter: 7300     Time: 0.006
+[13:55:29 - main - INFO] -------------  -------------
+[13:55:29 - main - INFO] p_in_loss      2.244e-05
+[13:55:29 - main - INFO] p_out_loss     1.859e-05
+[13:55:29 - main - INFO] rc_loss        1.927e-03
+[13:55:29 - main - INFO] ru_loss        1.496e-02
+[13:55:29 - main - INFO] rv_loss        1.047e-02
+[13:55:29 - main - INFO] u_noslip_loss  9.230e-06
+[13:55:29 - main - INFO] v_noslip_loss  8.594e-06
+[13:55:29 - main - INFO] u_error        7.482e-01
+[13:55:29 - main - INFO] v_error        7.806e-01
+I0515 13:55:29.453677 125093231960064 checkpoints.py:574] Saving checkpoint at step: 7370
+I0515 13:55:29.453804 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:29.453983 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7370.
+I0515 13:55:29.458638 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7370.orbax-checkpoint-tmp-1715781329454059 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7370
+I0515 13:55:29.458753 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7370`.
+I0515 13:55:29.459290 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6270
+[13:55:29 - main - INFO] ----------------------------
+[13:55:29 - main - INFO] Iter: 7400     Time: 0.005
+[13:55:29 - main - INFO] -------------  -------------
+[13:55:29 - main - INFO] p_in_loss      5.921e-06
+[13:55:29 - main - INFO] p_out_loss     1.963e-05
+[13:55:29 - main - INFO] rc_loss        1.591e-03
+[13:55:29 - main - INFO] ru_loss        9.652e-03
+[13:55:29 - main - INFO] rv_loss        9.539e-03
+[13:55:29 - main - INFO] u_noslip_loss  9.421e-06
+[13:55:29 - main - INFO] v_noslip_loss  6.187e-06
+[13:55:29 - main - INFO] u_error        7.516e-01
+[13:55:29 - main - INFO] v_error        7.924e-01
+I0515 13:55:29.653992 125093231960064 checkpoints.py:574] Saving checkpoint at step: 7480
+I0515 13:55:29.654202 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:29.654501 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7480.
+I0515 13:55:29.660821 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7480.orbax-checkpoint-tmp-1715781329654603 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7480
+I0515 13:55:29.660941 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7480`.
+I0515 13:55:29.661542 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6380
+[13:55:29 - main - INFO] ----------------------------
+[13:55:29 - main - INFO] Iter: 7500     Time: 0.005
+[13:55:29 - main - INFO] -------------  -------------
+[13:55:29 - main - INFO] p_in_loss      4.971e-06
+[13:55:29 - main - INFO] p_out_loss     8.160e-06
+[13:55:29 - main - INFO] rc_loss        1.511e-03
+[13:55:29 - main - INFO] ru_loss        5.016e-03
+[13:55:29 - main - INFO] rv_loss        7.502e-03
+[13:55:29 - main - INFO] u_noslip_loss  5.270e-06
+[13:55:29 - main - INFO] v_noslip_loss  1.226e-05
+[13:55:29 - main - INFO] u_error        7.455e-01
+[13:55:29 - main - INFO] v_error        7.907e-01
+I0515 13:55:29.843830 125093231960064 checkpoints.py:574] Saving checkpoint at step: 7590
+I0515 13:55:29.843994 125093231960064 checkpoints.py:662] Using Orbax as backend to save Flax checkpoints. For potential troubleshooting see: https://flax.readthedocs.io/en/latest/guides/training_techniques/use_checkpointing.html#orbax-as-backend-troubleshooting
+I0515 13:55:29.844280 125093231960064 checkpointer.py:137] Saving item to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7590.
+I0515 13:55:29.849635 125093231960064 utils.py:560] Renaming /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7590.orbax-checkpoint-tmp-1715781329844382 to /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7590
+I0515 13:55:29.849745 125093231960064 utils.py:613] Finished saving checkpoint to `/home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_7590`.
+I0515 13:55:29.850306 125093231960064 checkpoints.py:439] Removing checkpoint at /home/pedro/PINN/jaxpi/examples/geomII/ckpt/default/checkpoint_6490
+[13:55:29 - main - INFO] ----------------------------
+[13:55:29 - main - INFO] Iter: 7600     Time: 0.006
+[13:55:29 - main - INFO] -------------  -------------
+[13:55:29 - main - INFO] p_in_loss      9.952e-06
+[13:55:29 - main - INFO] p_out_loss     3.501e-05
+[13:55:29 - main - INFO] rc_loss        1.696e-03
+[13:55:29 - main - INFO] ru_loss        7.525e-03
+[13:55:29 - main - INFO] rv_loss        1.221e-02
+[13:55:29 - main - INFO] u_noslip_loss  5.087e-06
+[13:55:29 - main - INFO] v_noslip_loss  8.376e-06
+[13:55:29 - main - INFO] u_error        7.444e-01
+[13:55:29 - main - INFO] v_error        7.794e-01
+Traceback (most recent call last):
+  File "/home/pedro/PINN/jaxpi/examples/geomII/main.py", line 39, in <module>
+    app.run(main)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 308, in run
+    _run_main(main, args)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 254, in _run_main
+    sys.exit(main(argv))
+             ^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII/main.py", line 31, in main
+    train.train_and_evaluate(FLAGS.config, FLAGS.workdir)
+  File "/home/pedro/PINN/jaxpi/examples/geomII/train.py", line 108, in train_and_evaluate
+    batch = next(res_sampler)
+            ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/jaxpi/samplers.py", line 20, in __getitem__
+    batch = self.data_generation(keys)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+-----------
+default
+-----------
+default
+-----------
+default

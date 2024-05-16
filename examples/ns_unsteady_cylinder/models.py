@@ -40,7 +40,7 @@ class NavierStokes2D(ForwardIVP):
         self.u_pred_fn = vmap(self.u_net, (None, 0, 0, 0))
         self.v_pred_fn = vmap(self.v_net, (None, 0, 0, 0))
         self.p_pred_fn = vmap(self.p_net, (None, 0, 0, 0))
-        self.w_pred_fn = vmap(self.w_net, (None, 0, 0, 0))
+        self.w_pred_fn = vmap(self.w_net, (None, 0, 0, 0)) # nao foi usado nesse script, e nao entendi a eq. também
         self.r_pred_fn = vmap(self.r_net, (None, 0, 0, 0))
 
     def neural_net(self, params, t, x, y):
@@ -69,7 +69,7 @@ class NavierStokes2D(ForwardIVP):
         _, _, p = self.neural_net(params, t, x, y)
         return p
 
-    def w_net(self, params, t, x, y):
+    def w_net(self, params, t, x, y): # nao foi usado nesse script, e nao entendi a eq. também
         u, v, _ = self.neural_net(params, t, x, y)
         u_y = grad(self.u_net, argnums=3)(params, t, x, y)
         v_x = grad(self.v_net, argnums=2)(params, t, x, y)

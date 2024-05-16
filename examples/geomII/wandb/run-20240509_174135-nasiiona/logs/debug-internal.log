@@ -1,0 +1,45 @@
+2024-05-09 17:41:35,669 INFO    StreamThr :3703848 [internal.py:wandb_internal():86] W&B internal server running at pid: 3703848, started at: 2024-05-09 17:41:35.668606
+2024-05-09 17:41:35,671 DEBUG   HandlerThread:3703848 [handler.py:handle_request():146] handle_request: status
+2024-05-09 17:41:35,674 INFO    WriterThread:3703848 [datastore.py:open_for_write():87] open: /home/pedro/PINN/jaxpi/examples/ns_steady_cylinder/wandb/run-20240509_174135-nasiiona/run-nasiiona.wandb
+2024-05-09 17:41:35,675 DEBUG   SenderThread:3703848 [sender.py:send():379] send: header
+2024-05-09 17:41:35,675 DEBUG   SenderThread:3703848 [sender.py:send():379] send: run
+2024-05-09 17:41:36,132 INFO    SenderThread:3703848 [dir_watcher.py:__init__():211] watching files in: /home/pedro/PINN/jaxpi/examples/ns_steady_cylinder/wandb/run-20240509_174135-nasiiona/files
+2024-05-09 17:41:36,133 INFO    SenderThread:3703848 [sender.py:_start_run_threads():1124] run started: nasiiona with start time 1715276495.668097
+2024-05-09 17:41:36,140 DEBUG   HandlerThread:3703848 [handler.py:handle_request():146] handle_request: check_version
+2024-05-09 17:41:36,140 DEBUG   SenderThread:3703848 [sender.py:send_request():406] send_request: check_version
+2024-05-09 17:41:36,215 DEBUG   HandlerThread:3703848 [handler.py:handle_request():146] handle_request: run_start
+2024-05-09 17:41:36,230 DEBUG   HandlerThread:3703848 [system_info.py:__init__():26] System info init
+2024-05-09 17:41:36,230 DEBUG   HandlerThread:3703848 [system_info.py:__init__():41] System info init done
+2024-05-09 17:41:36,230 INFO    HandlerThread:3703848 [system_monitor.py:start():194] Starting system monitor
+2024-05-09 17:41:36,231 INFO    HandlerThread:3703848 [system_monitor.py:probe():214] Collecting system info
+2024-05-09 17:41:36,232 INFO    SystemMonitor:3703848 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-05-09 17:41:36,235 INFO    SystemMonitor:3703848 [interfaces.py:start():190] Started cpu monitoring
+2024-05-09 17:41:36,238 INFO    SystemMonitor:3703848 [interfaces.py:start():190] Started disk monitoring
+2024-05-09 17:41:36,242 INFO    SystemMonitor:3703848 [interfaces.py:start():190] Started gpu monitoring
+2024-05-09 17:41:36,244 INFO    SystemMonitor:3703848 [interfaces.py:start():190] Started memory monitoring
+2024-05-09 17:41:36,246 INFO    SystemMonitor:3703848 [interfaces.py:start():190] Started network monitoring
+2024-05-09 17:41:36,268 DEBUG   HandlerThread:3703848 [system_info.py:probe():150] Probing system
+2024-05-09 17:41:36,268 DEBUG   HandlerThread:3703848 [system_info.py:probe():198] Probing system done
+2024-05-09 17:41:36,268 DEBUG   HandlerThread:3703848 [system_monitor.py:probe():223] {'os': 'Linux-6.5.0-27-generic-x86_64-with-glibc2.35', 'python': '3.11.0rc1', 'heartbeatAt': '2024-05-09T17:41:36.268467', 'startedAt': '2024-05-09T17:41:35.664623', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/home/pedro/PINN/jaxpi/examples/ns_steady_cylinder/main.py', 'codePathLocal': 'main.py', 'codePath': 'main.py', 'host': '8b460e7a0fb5', 'username': 'root', 'executable': '/bin/python3.11', 'cpu_count': 24, 'cpu_count_logical': 32, 'cpu_freq': {'current': 1080.685, 'min': 800.0, 'max': 4937.5}, 'cpu_freq_per_core': [{'current': 1100.0, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1191.845, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1126.09, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1478.454, 'min': 800.0, 'max': 5500.0}, {'current': 1214.367, 'min': 800.0, 'max': 5500.0}, {'current': 1142.498, 'min': 800.0, 'max': 5800.0}, {'current': 1185.332, 'min': 800.0, 'max': 5800.0}, {'current': 1100.0, 'min': 800.0, 'max': 5800.0}, {'current': 1237.331, 'min': 800.0, 'max': 5800.0}, {'current': 1126.612, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1159.54, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 1467.937, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}], 'disk': {'/': {'total': 365.6147689819336, 'used': 117.7229118347168}}, 'gpu': 'NVIDIA GeForce RTX 4090', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce RTX 4090', 'memory_total': 25757220864}], 'memory': {'total': 125.61078643798828}}
+2024-05-09 17:41:36,268 INFO    HandlerThread:3703848 [system_monitor.py:probe():224] Finished collecting system info
+2024-05-09 17:41:36,268 INFO    HandlerThread:3703848 [system_monitor.py:probe():227] Publishing system info
+2024-05-09 17:41:36,270 INFO    HandlerThread:3703848 [system_monitor.py:probe():229] Finished publishing system info
+2024-05-09 17:41:36,274 DEBUG   SenderThread:3703848 [sender.py:send():379] send: files
+2024-05-09 17:41:36,274 INFO    SenderThread:3703848 [sender.py:_save_file():1390] saving file wandb-metadata.json with policy now
+2024-05-09 17:41:36,378 DEBUG   HandlerThread:3703848 [handler.py:handle_request():146] handle_request: python_packages
+2024-05-09 17:41:36,378 DEBUG   SenderThread:3703848 [sender.py:send_request():406] send_request: python_packages
+2024-05-09 17:41:36,379 DEBUG   HandlerThread:3703848 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-09 17:41:36,379 DEBUG   SenderThread:3703848 [sender.py:send_request():406] send_request: stop_status
+2024-05-09 17:41:36,381 DEBUG   HandlerThread:3703848 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-09 17:41:36,698 DEBUG   SenderThread:3703848 [sender.py:send():379] send: telemetry
+2024-05-09 17:41:37,035 INFO    wandb-upload_0:3703848 [upload_job.py:push():131] Uploaded file /tmp/tmpzfiu4ffywandb/419nwz2q-wandb-metadata.json
+2024-05-09 17:41:37,139 INFO    Thread-17 :3703848 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/ns_steady_cylinder/wandb/run-20240509_174135-nasiiona/files/wandb-metadata.json
+2024-05-09 17:41:37,140 INFO    Thread-17 :3703848 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/ns_steady_cylinder/wandb/run-20240509_174135-nasiiona/files/requirements.txt
+2024-05-09 17:41:40,700 DEBUG   HandlerThread:3703848 [handler.py:handle_request():146] handle_request: status_report
+2024-05-09 17:41:45,701 DEBUG   HandlerThread:3703848 [handler.py:handle_request():146] handle_request: status_report
+2024-05-09 17:41:50,703 DEBUG   HandlerThread:3703848 [handler.py:handle_request():146] handle_request: status_report
+2024-05-09 17:41:51,380 DEBUG   HandlerThread:3703848 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-09 17:41:51,381 DEBUG   SenderThread:3703848 [sender.py:send_request():406] send_request: stop_status
+2024-05-09 17:41:51,422 DEBUG   HandlerThread:3703848 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-09 17:41:56,659 DEBUG   HandlerThread:3703848 [handler.py:handle_request():146] handle_request: status_report
+2024-05-09 17:42:01,660 DEBUG   HandlerThread:3703848 [handler.py:handle_request():146] handle_request: status_report
