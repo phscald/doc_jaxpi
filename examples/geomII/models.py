@@ -85,8 +85,8 @@ class NavierStokes2D(ForwardBVP):
         # PDE residual
         # ru = u * u_x + v * u_y + p_x - (u_xx + u_yy) / self.Re
         # rv = u * v_x + v * v_y + p_y - (v_xx + v_yy) / self.Re
-        ru = p_x - self.mu*(u_xx + u_yy)
-        rv = p_y - self.mu*(v_xx + v_yy)
+        ru = p_x - (u_xx + u_yy)
+        rv = p_y - (v_xx + v_yy)
         rc = u_x + v_y
 
         # outflow boundary residual

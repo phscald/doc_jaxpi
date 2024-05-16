@@ -45,10 +45,10 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         mu,
     ) = get_dataset()
 
-    U_max = 1#.25/3#visc .1
-    pmax = 15
+    U_max = .10#17#.25/3#visc .1
 
     L_max = .021
+    pmax = mu*U_max/L_max
 
     # # Inflow boundary conditions
     # U_max = 0.3  # maximum velocity

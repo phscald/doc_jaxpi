@@ -44,10 +44,11 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # U_max = 0.3  # maximum velocity
     # u_inflow, _ = parabolic_inflow(inflow_coords[:, 1], U_max)
 
-    U_max = .1 #.25/3#visc .1
-    pmax = 15
+    U_max = .10#17#.25/3#visc .1
+    # pmax = 15
 
     L_max = .021
+    pmax = mu*U_max/L_max
 
     # Nondimensionalization
     if config.nondim == True:

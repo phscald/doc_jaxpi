@@ -20,7 +20,7 @@ from jaxpi.logging import Logger
 from jaxpi.utils import save_checkpoint
 
 import models
-from utils import get_dataset, parabolic_inflow
+from utils import get_dataset
 
 
 def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
@@ -33,7 +33,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # Get dataset
     (
-        u_fem, v_fem, p_fem, coords_fem,
+
         # u_ref,
         # v_ref,
         # p_ref,
@@ -41,14 +41,14 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         inflow_coords,
         outflow_coords,
         wall_coords,
-        cylinder_coords,
         mu,
     ) = get_dataset()
 
-    U_max = 1#.25/3#visc .1
-    pmax = 15
+    U_max = .15#.25/3#visc .1
+    # pmax = 15
 
     L_max = .021
+    pmax = mu*U_max/L_max
 
     # # Inflow boundary conditions
     # U_max = 0.3  # maximum velocity
@@ -65,15 +65,12 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         inflow_coords = inflow_coords / L_star
         outflow_coords = outflow_coords / L_star
         wall_coords = wall_coords / L_star
-        cylinder_coords = cylinder_coords / L_star
         coords = coords / L_star
-        coords_fem = coords_fem / L_star
+
 
         # Nondimensionalize flow field
         # u_inflow = u_inflow / U_star
-        u_ref = u_fem / U_star
-        v_ref = v_fem / U_star
-        p_ref = p_fem / pmax
+
         p_inflow = 10 / pmax
 
     else:
@@ -89,7 +86,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         inflow_coords,
         outflow_coords,
         wall_coords,
-        cylinder_coords,
         mu, U_max, pmax
         # Re,
     )
@@ -104,7 +100,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     print("Waiting for JIT...")
     for step in range(config.training.max_steps):
         start_time = time.time()
-
+    
         batch = next(res_sampler)
         model.state = model.step(model.state, batch)
 
@@ -115,16 +111,16 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
         # Log training metrics, only use host 0 to record results
         if jax.process_index() == 0:
-            if step % config.logging.log_every_steps == 0:
-                # Get the first replica of the state and batch
-                state = jax.device_get(tree_map(lambda x: x[0], model.state))
-                batch = jax.device_get(tree_map(lambda x: x[0], batch))
-                log_dict = evaluator(state, batch, coords_fem, u_ref, v_ref)
-                wandb.log(log_dict, step)
+            if step % config.logging.log_every_steps == 0: print(f'step: {step}')
+        #         # Get the first replica of the state and batch
+        #         state = jax.device_get(tree_map(lambda x: x[0], model.state))
+        #         batch = jax.device_get(tree_map(lambda x: x[0], batch))
+        #         log_dict = evaluator(state, batch, coords_fem, u_ref, v_ref)
+        #         wandb.log(log_dict, step)
 
-                end_time = time.time()
-                # Report training metrics
-                logger.log_iter(step, start_time, end_time, log_dict)
+        #         end_time = time.time()
+        #         # Report training metrics
+        #         logger.log_iter(step, start_time, end_time, log_dict)
 
         # Save checkpoint
         if config.saving.save_every_steps is not None:

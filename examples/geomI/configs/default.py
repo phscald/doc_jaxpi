@@ -12,7 +12,7 @@ def get_config():
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
-    wandb.project = "PINN-geomII"
+    wandb.project = "PINN-geomI"
     wandb.name = "default"
     wandb.tag = None
 
@@ -83,7 +83,7 @@ def get_config():
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()
-    saving.save_every_steps =  99999#None
+    saving.save_every_steps =  999999#None
     saving.num_keep_ckpts = 10
 
     # Input shape for initializing Flax models

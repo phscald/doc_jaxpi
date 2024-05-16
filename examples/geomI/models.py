@@ -19,7 +19,6 @@ class NavierStokes2D(ForwardBVP):
         inflow_coords,
         outflow_coords,
         wall_coords,
-        cylinder_coords,
         mu, U_max, pmax
         # Re,
     ):
@@ -28,14 +27,14 @@ class NavierStokes2D(ForwardBVP):
         # self.u_in = u_inflow  # inflow profile
         self.p_in = p_inflow * jnp.ones((inflow_coords.shape[0]))
         # self.Re = Re  # Reynolds number
-        self.mu = mu; self.U_max = 1/U_max; self.pmax = pmax
+        self.mu = mu; self.U_max = U_max; self.pmax = pmax
 
         # Initialize coordinates
         self.inflow_coords = inflow_coords
         self.outflow_coords = outflow_coords
         self.wall_coords = wall_coords
-        self.cylinder_coords = cylinder_coords
-        self.noslip_coords = jnp.vstack((self.wall_coords, self.cylinder_coords))
+        self.noslip_coords = self.wall_coords
+        # self.noslip_coords = jnp.vstack((self.wall_coords, self.cylinder_coords))
 
         # Non-dimensionalized domain length and width
         self.L, self.W = self.noslip_coords.max(axis=0) - self.noslip_coords.min(axis=0)
@@ -85,8 +84,8 @@ class NavierStokes2D(ForwardBVP):
         # PDE residual
         # ru = u * u_x + v * u_y + p_x - (u_xx + u_yy) / self.Re
         # rv = u * v_x + v * v_y + p_y - (v_xx + v_yy) / self.Re
-        ru = p_x - self.mu*(u_xx + u_yy)
-        rv = p_y - self.mu*(v_xx + v_yy)
+        ru = p_x - (u_xx + u_yy)
+        rv = p_y - (v_xx + v_yy)
         rc = u_x + v_y
 
         # outflow boundary residual
@@ -266,74 +265,7 @@ class NavierStokes2D(ForwardBVP):
 
         return u_x, v_x, u_y, v_y
 
-    def compute_drag_lift(self, params, U_star, L_star):
-        nu = 0.001  # Dimensional viscosity
-        radius = 0.05  # radius of cylinder
-        center = (0.2, 0.2)  # center of cylinder
-        num_theta = 256  # number of points on cylinder for evaluation
-
-        # Discretize cylinder into points
-        theta = jnp.linspace(0.0, 2 * jnp.pi, num_theta)
-        d_theta = theta[1] - theta[0]
-        ds = radius * d_theta
-
-        # Cylinder coordinates
-        x_cyl = radius * jnp.cos(theta) + center[0]
-        y_cyl = radius * jnp.sin(theta) + center[1]
-
-        # Out normals of cylinder
-        n_x = jnp.cos(theta)
-        n_y = jnp.sin(theta)
-
-        # Nondimensionalize input cylinder coordinates
-        x_cyl = x_cyl / L_star
-        y_cyl = y_cyl / L_star
-
-        # Nondimensionalize fonrt and back points
-        front = jnp.array([center[0] - radius, center[1]]) / L_star
-        back = jnp.array([center[0] + radius, center[1]]) / L_star
-
-        # Predictions
-        u_x_pred, v_x_pred, u_y_pred, v_y_pred = vmap(self.u_v_grads, (None, 0, 0))(
-            params, x_cyl, y_cyl
-        )
-        p_pred = vmap(self.p_net, (None, 0, 0))(params, x_cyl, y_cyl)
-
-        p_front_pred = self.p_net(params, front[0], front[1])
-        p_back_pred = self.p_net(params, back[0], back[1])
-        p_diff = p_front_pred - p_back_pred
-
-        # Dimensionalize velocity gradients and pressure
-        u_x_pred = u_x_pred * U_star / L_star
-        v_x_pred = v_x_pred * U_star / L_star
-        u_y_pred = u_y_pred * U_star / L_star
-        v_y_pred = v_y_pred * U_star / L_star
-        p_pred = p_pred * U_star**2
-        p_diff = p_diff * U_star**2
-
-        I0 = (-p_pred[:-1] + 2 * nu * u_x_pred[:-1]) * n_x[:-1] + nu * (
-            u_y_pred[:-1] + v_x_pred[:-1]
-        ) * n_y[:-1]
-        I1 = (-p_pred[1:] + 2 * nu * u_x_pred[1:]) * n_x[1:] + nu * (
-            u_y_pred[1:] + v_x_pred[1:]
-        ) * n_y[1:]
-
-        F_D = 0.5 * jnp.sum(I0 + I1) * ds
-
-        I0 = (-p_pred[:-1] + 2 * nu * v_y_pred[:-1]) * n_y[:-1] + nu * (
-            u_y_pred[:-1] + v_x_pred[:-1]
-        ) * n_x[:-1]
-        I1 = (-p_pred[1:] + 2 * nu * v_y_pred[1:]) * n_y[1:] + nu * (
-            u_y_pred[1:] + v_x_pred[1:]
-        ) * n_x[1:]
-
-        F_L = 0.5 * jnp.sum(I0 + I1) * ds
-
-        # Nondimensionalized drag and lift and pressure difference
-        C_D = 2 / (U_star**2 * L_star) * F_D
-        C_L = 2 / (U_star**2 * L_star) * F_L
-
-        return C_D, C_L, p_diff
+   
 
 
 class NavierStokesEvaluator(BaseEvaluator):
