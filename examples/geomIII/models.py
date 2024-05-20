@@ -28,7 +28,7 @@ class NavierStokes2D(ForwardBVP):
         # self.u_in = u_inflow  # inflow profile
         self.p_in = p_inflow * jnp.ones((inflow_coords.shape[0]))
         # self.Re = Re  # Reynolds number
-        self.mu = mu; self.U_max = 1/U_max; self.pmax = pmax
+        self.mu = mu; 
 
         # Initialize coordinates
         self.inflow_coords = inflow_coords

@@ -1,0 +1,141 @@
+
+Waiting for JIT...
+[21:23:23 - main - INFO] -----------------------------
+[21:23:23 - main - INFO] Iter:   0      Time: 21.011
+[21:23:23 - main - INFO] -------------  --------------
+[21:23:23 - main - INFO] p_in_loss      1.082e+00
+[21:23:23 - main - INFO] p_out_loss     2.344e-05
+[21:23:23 - main - INFO] rc_loss        2.281e-03
+[21:23:23 - main - INFO] ru_loss        1.684e+00
+[21:23:23 - main - INFO] rv_loss        1.977e+00
+[21:23:23 - main - INFO] u_noslip_loss  1.502e-05
+[21:23:23 - main - INFO] v_in_loss      9.621e-06
+[21:23:23 - main - INFO] v_noslip_loss  1.154e-05
+[21:23:23 - main - INFO] v_out_loss     1.179e-05
+[21:23:23 - main - INFO] u_error        1.012e+00
+[21:23:23 - main - INFO] v_error        9.914e-01
+[21:23:27 - main - INFO] ----------------------------
+[21:23:27 - main - INFO] Iter: 100      Time: 0.015
+[21:23:27 - main - INFO] -------------  -------------
+[21:23:27 - main - INFO] p_in_loss      2.057e-05
+[21:23:27 - main - INFO] p_out_loss     8.786e-06
+[21:23:27 - main - INFO] rc_loss        3.881e-03
+[21:23:27 - main - INFO] ru_loss        1.185e-01
+[21:23:27 - main - INFO] rv_loss        1.198e-02
+[21:23:27 - main - INFO] u_noslip_loss  1.280e-05
+[21:23:27 - main - INFO] v_in_loss      5.015e-07
+[21:23:27 - main - INFO] v_noslip_loss  5.987e-07
+[21:23:27 - main - INFO] v_out_loss     2.825e-07
+[21:23:27 - main - INFO] u_error        9.985e-01
+[21:23:27 - main - INFO] v_error        1.001e+00
+[21:23:28 - main - INFO] ----------------------------
+[21:23:28 - main - INFO] Iter: 200      Time: 0.012
+[21:23:28 - main - INFO] -------------  -------------
+[21:23:28 - main - INFO] p_in_loss      7.079e-06
+[21:23:28 - main - INFO] p_out_loss     4.538e-06
+[21:23:28 - main - INFO] rc_loss        2.726e-03
+[21:23:28 - main - INFO] ru_loss        3.265e-02
+[21:23:28 - main - INFO] rv_loss        4.482e-03
+[21:23:28 - main - INFO] u_noslip_loss  5.606e-05
+[21:23:28 - main - INFO] v_in_loss      3.892e-06
+[21:23:28 - main - INFO] v_noslip_loss  1.428e-06
+[21:23:28 - main - INFO] v_out_loss     9.562e-07
+[21:23:28 - main - INFO] u_error        1.008e+00
+[21:23:28 - main - INFO] v_error        1.001e+00
+[21:23:28 - main - INFO] ----------------------------
+[21:23:28 - main - INFO] Iter: 300      Time: 0.013
+[21:23:28 - main - INFO] -------------  -------------
+[21:23:28 - main - INFO] p_in_loss      3.820e-06
+[21:23:28 - main - INFO] p_out_loss     1.208e-06
+[21:23:28 - main - INFO] rc_loss        7.289e-04
+[21:23:28 - main - INFO] ru_loss        1.414e-02
+[21:23:28 - main - INFO] rv_loss        2.680e-03
+[21:23:28 - main - INFO] u_noslip_loss  9.959e-05
+[21:23:28 - main - INFO] v_in_loss      5.096e-06
+[21:23:28 - main - INFO] v_noslip_loss  1.836e-06
+[21:23:28 - main - INFO] v_out_loss     1.785e-06
+[21:23:28 - main - INFO] u_error        1.017e+00
+[21:23:28 - main - INFO] v_error        1.000e+00
+[21:23:29 - main - INFO] ----------------------------
+[21:23:29 - main - INFO] Iter: 400      Time: 0.013
+[21:23:29 - main - INFO] -------------  -------------
+[21:23:29 - main - INFO] p_in_loss      2.300e-06
+[21:23:29 - main - INFO] p_out_loss     4.989e-07
+[21:23:29 - main - INFO] rc_loss        5.276e-04
+[21:23:29 - main - INFO] ru_loss        7.914e-03
+[21:23:29 - main - INFO] rv_loss        1.763e-03
+[21:23:29 - main - INFO] u_noslip_loss  1.221e-04
+[21:23:29 - main - INFO] v_in_loss      3.919e-06
+[21:23:29 - main - INFO] v_noslip_loss  1.421e-06
+[21:23:29 - main - INFO] v_out_loss     1.405e-06
+[21:23:29 - main - INFO] u_error        1.022e+00
+[21:23:29 - main - INFO] v_error        1.000e+00
+[21:23:29 - main - INFO] ----------------------------
+[21:23:29 - main - INFO] Iter: 500      Time: 0.012
+[21:23:29 - main - INFO] -------------  -------------
+[21:23:29 - main - INFO] p_in_loss      1.649e-06
+[21:23:29 - main - INFO] p_out_loss     2.758e-07
+[21:23:29 - main - INFO] rc_loss        4.023e-04
+[21:23:29 - main - INFO] ru_loss        4.586e-03
+[21:23:29 - main - INFO] rv_loss        9.579e-04
+[21:23:29 - main - INFO] u_noslip_loss  1.330e-04
+[21:23:29 - main - INFO] v_in_loss      2.307e-06
+[21:23:29 - main - INFO] v_noslip_loss  8.978e-07
+[21:23:29 - main - INFO] v_out_loss     1.036e-06
+[21:23:29 - main - INFO] u_error        1.025e+00
+[21:23:29 - main - INFO] v_error        9.999e-01
+[21:23:30 - main - INFO] ----------------------------
+[21:23:30 - main - INFO] Iter: 600      Time: 0.013
+[21:23:30 - main - INFO] -------------  -------------
+[21:23:30 - main - INFO] p_in_loss      1.184e-06
+[21:23:30 - main - INFO] p_out_loss     1.994e-07
+[21:23:30 - main - INFO] rc_loss        2.454e-04
+[21:23:30 - main - INFO] ru_loss        4.517e-03
+[21:23:30 - main - INFO] rv_loss        8.646e-04
+[21:23:30 - main - INFO] u_noslip_loss  1.369e-04
+[21:23:30 - main - INFO] v_in_loss      1.649e-06
+[21:23:30 - main - INFO] v_noslip_loss  5.910e-07
+[21:23:30 - main - INFO] v_out_loss     8.169e-07
+[21:23:30 - main - INFO] u_error        1.028e+00
+[21:23:30 - main - INFO] v_error        9.999e-01
+[21:23:30 - main - INFO] ----------------------------
+[21:23:30 - main - INFO] Iter: 700      Time: 0.012
+[21:23:30 - main - INFO] -------------  -------------
+[21:23:30 - main - INFO] p_in_loss      9.443e-07
+[21:23:30 - main - INFO] p_out_loss     9.229e-07
+[21:23:30 - main - INFO] rc_loss        2.745e-04
+[21:23:30 - main - INFO] ru_loss        4.268e-03
+[21:23:30 - main - INFO] rv_loss        7.113e-04
+[21:23:30 - main - INFO] u_noslip_loss  1.384e-04
+[21:23:30 - main - INFO] v_in_loss      1.361e-06
+[21:23:30 - main - INFO] v_noslip_loss  4.343e-07
+[21:23:30 - main - INFO] v_out_loss     8.105e-07
+[21:23:30 - main - INFO] u_error        1.030e+00
+[21:23:30 - main - INFO] v_error        9.999e-01
+[21:23:31 - main - INFO] ----------------------------
+[21:23:31 - main - INFO] Iter: 800      Time: 0.013
+[21:23:31 - main - INFO] -------------  -------------
+[21:23:31 - main - INFO] p_in_loss      5.288e-07
+[21:23:31 - main - INFO] p_out_loss     1.926e-07
+[21:23:31 - main - INFO] rc_loss        1.969e-04
+[21:23:31 - main - INFO] ru_loss        3.654e-03
+[21:23:31 - main - INFO] rv_loss        5.225e-04
+[21:23:31 - main - INFO] u_noslip_loss  1.396e-04
+[21:23:31 - main - INFO] v_in_loss      1.158e-06
+[21:23:31 - main - INFO] v_noslip_loss  3.706e-07
+[21:23:31 - main - INFO] v_out_loss     8.275e-07
+[21:23:31 - main - INFO] u_error        1.030e+00
+[21:23:31 - main - INFO] v_error        9.999e-01
+[21:23:31 - main - INFO] ----------------------------
+[21:23:31 - main - INFO] Iter: 900      Time: 0.013
+[21:23:31 - main - INFO] -------------  -------------
+[21:23:31 - main - INFO] p_in_loss      3.736e-07
+[21:23:31 - main - INFO] p_out_loss     3.959e-07
+[21:23:31 - main - INFO] rc_loss        1.685e-04
+[21:23:31 - main - INFO] ru_loss        3.412e-03
+[21:23:31 - main - INFO] rv_loss        4.510e-04
+[21:23:31 - main - INFO] u_noslip_loss  1.381e-04
+[21:23:31 - main - INFO] v_in_loss      1.062e-06
+[21:23:31 - main - INFO] v_noslip_loss  3.430e-07
+[21:23:31 - main - INFO] v_out_loss     8.246e-07
+[21:23:31 - main - INFO] u_error        1.031e+00

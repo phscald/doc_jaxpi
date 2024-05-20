@@ -44,7 +44,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # U_max = 0.3  # maximum velocity
     # u_inflow, _ = parabolic_inflow(inflow_coords[:, 1], U_max)
 
-    U_max = .10#17#.25/3#visc .1
+    U_max = .05#17#.25/3#visc .1
     # pmax = 15
 
     L_max = .021
@@ -136,6 +136,10 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         # print(f'U_star = {U_star}')
         print(jnp.max(u_ref))
         print(jnp.max(u_pred))
+        print(jnp.max(v_pred))
+        print(jnp.max(p_pred))
+
+
         # print(jnp.min(v_ref))
         # print(jnp.min(v_pred))
         # u_ref = u_ref #* U_star

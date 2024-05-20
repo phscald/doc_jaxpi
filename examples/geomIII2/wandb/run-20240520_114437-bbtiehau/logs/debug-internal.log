@@ -1,0 +1,72 @@
+2024-05-20 11:44:37,132 INFO    StreamThr :1332208 [internal.py:wandb_internal():86] W&B internal server running at pid: 1332208, started at: 2024-05-20 11:44:37.131906
+2024-05-20 11:44:37,133 DEBUG   HandlerThread:1332208 [handler.py:handle_request():146] handle_request: status
+2024-05-20 11:44:37,136 INFO    WriterThread:1332208 [datastore.py:open_for_write():87] open: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/run-bbtiehau.wandb
+2024-05-20 11:44:37,137 DEBUG   SenderThread:1332208 [sender.py:send():379] send: header
+2024-05-20 11:44:37,138 DEBUG   SenderThread:1332208 [sender.py:send():379] send: run
+2024-05-20 11:44:37,633 INFO    SenderThread:1332208 [dir_watcher.py:__init__():211] watching files in: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/files
+2024-05-20 11:44:37,633 INFO    SenderThread:1332208 [sender.py:_start_run_threads():1124] run started: bbtiehau with start time 1716205477.131863
+2024-05-20 11:44:37,642 DEBUG   HandlerThread:1332208 [handler.py:handle_request():146] handle_request: check_version
+2024-05-20 11:44:37,642 DEBUG   SenderThread:1332208 [sender.py:send_request():406] send_request: check_version
+2024-05-20 11:44:37,837 DEBUG   HandlerThread:1332208 [handler.py:handle_request():146] handle_request: run_start
+2024-05-20 11:44:37,847 DEBUG   HandlerThread:1332208 [system_info.py:__init__():26] System info init
+2024-05-20 11:44:37,847 DEBUG   HandlerThread:1332208 [system_info.py:__init__():41] System info init done
+2024-05-20 11:44:37,847 INFO    HandlerThread:1332208 [system_monitor.py:start():194] Starting system monitor
+2024-05-20 11:44:37,847 INFO    SystemMonitor:1332208 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-05-20 11:44:37,847 INFO    HandlerThread:1332208 [system_monitor.py:probe():214] Collecting system info
+2024-05-20 11:44:37,847 INFO    SystemMonitor:1332208 [interfaces.py:start():190] Started cpu monitoring
+2024-05-20 11:44:37,848 INFO    SystemMonitor:1332208 [interfaces.py:start():190] Started disk monitoring
+2024-05-20 11:44:37,848 INFO    SystemMonitor:1332208 [interfaces.py:start():190] Started gpu monitoring
+2024-05-20 11:44:37,848 INFO    SystemMonitor:1332208 [interfaces.py:start():190] Started memory monitoring
+2024-05-20 11:44:37,849 INFO    SystemMonitor:1332208 [interfaces.py:start():190] Started network monitoring
+2024-05-20 11:44:37,856 DEBUG   HandlerThread:1332208 [system_info.py:probe():150] Probing system
+2024-05-20 11:44:37,856 DEBUG   HandlerThread:1332208 [system_info.py:probe():198] Probing system done
+2024-05-20 11:44:37,856 DEBUG   HandlerThread:1332208 [system_monitor.py:probe():223] {'os': 'Linux-6.5.0-27-generic-x86_64-with-glibc2.35', 'python': '3.11.0rc1', 'heartbeatAt': '2024-05-20T11:44:37.856533', 'startedAt': '2024-05-20T11:44:37.125814', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/home/pedro/PINN/jaxpi/examples/geomIII2/main.py', 'codePathLocal': 'main.py', 'codePath': 'main.py', 'host': '8b460e7a0fb5', 'username': 'root', 'executable': '/usr/bin/python3', 'cpu_count': 24, 'cpu_count_logical': 32, 'cpu_freq': {'current': 1861.2139999999997, 'min': 800.0, 'max': 4937.5}, 'cpu_freq_per_core': [{'current': 2628.485, 'min': 800.0, 'max': 5500.0}, {'current': 2308.541, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 2868.842, 'min': 800.0, 'max': 5500.0}, {'current': 3768.575, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 4533.473, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 4151.336, 'min': 800.0, 'max': 5800.0}, {'current': 800.0, 'min': 800.0, 'max': 5800.0}, {'current': 2866.919, 'min': 800.0, 'max': 5800.0}, {'current': 800.0, 'min': 800.0, 'max': 5800.0}, {'current': 3310.742, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 2508.932, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 3708.601, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}], 'disk': {'/': {'total': 365.6147689819336, 'used': 118.32092666625977}}, 'gpu': 'NVIDIA GeForce RTX 4090', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce RTX 4090', 'memory_total': 25757220864}], 'memory': {'total': 125.61078643798828}}
+2024-05-20 11:44:37,856 INFO    HandlerThread:1332208 [system_monitor.py:probe():224] Finished collecting system info
+2024-05-20 11:44:37,856 INFO    HandlerThread:1332208 [system_monitor.py:probe():227] Publishing system info
+2024-05-20 11:44:37,856 INFO    HandlerThread:1332208 [system_monitor.py:probe():229] Finished publishing system info
+2024-05-20 11:44:37,859 DEBUG   SenderThread:1332208 [sender.py:send():379] send: files
+2024-05-20 11:44:37,859 INFO    SenderThread:1332208 [sender.py:_save_file():1390] saving file wandb-metadata.json with policy now
+2024-05-20 11:44:37,898 DEBUG   HandlerThread:1332208 [handler.py:handle_request():146] handle_request: python_packages
+2024-05-20 11:44:37,898 DEBUG   SenderThread:1332208 [sender.py:send_request():406] send_request: python_packages
+2024-05-20 11:44:37,941 DEBUG   HandlerThread:1332208 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-20 11:44:37,941 DEBUG   HandlerThread:1332208 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-20 11:44:37,941 DEBUG   SenderThread:1332208 [sender.py:send_request():406] send_request: stop_status
+2024-05-20 11:44:38,242 DEBUG   SenderThread:1332208 [sender.py:send():379] send: telemetry
+2024-05-20 11:44:38,626 INFO    wandb-upload_0:1332208 [upload_job.py:push():131] Uploaded file /tmp/tmpn6fh21lowandb/x2b3zzqu-wandb-metadata.json
+2024-05-20 11:44:38,633 INFO    Thread-12 :1332208 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/files/requirements.txt
+2024-05-20 11:44:38,633 INFO    Thread-12 :1332208 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/files/wandb-metadata.json
+2024-05-20 11:44:39,633 INFO    Thread-12 :1332208 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/files/output.log
+2024-05-20 11:44:41,633 INFO    Thread-12 :1332208 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/files/output.log
+2024-05-20 11:44:42,918 DEBUG   HandlerThread:1332208 [handler.py:handle_request():146] handle_request: status_report
+2024-05-20 11:44:47,918 DEBUG   HandlerThread:1332208 [handler.py:handle_request():146] handle_request: status_report
+2024-05-20 11:44:52,919 DEBUG   HandlerThread:1332208 [handler.py:handle_request():146] handle_request: status_report
+2024-05-20 11:44:52,942 DEBUG   HandlerThread:1332208 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-20 11:44:52,942 DEBUG   SenderThread:1332208 [sender.py:send_request():406] send_request: stop_status
+2024-05-20 11:44:53,043 DEBUG   HandlerThread:1332208 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-20 11:44:54,135 WARNING StreamThr :1332208 [internal.py:is_dead():414] Internal process exiting, parent pid 1332007 disappeared
+2024-05-20 11:44:54,135 ERROR   StreamThr :1332208 [internal.py:wandb_internal():152] Internal process shutdown.
+2024-05-20 11:44:54,187 INFO    SenderThread:1332208 [sender.py:finish():1546] shutting down sender
+2024-05-20 11:44:54,878 INFO    SenderThread:1332208 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-05-20 11:44:55,029 INFO    WriterThread:1332208 [datastore.py:close():296] close: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/run-bbtiehau.wandb
+2024-05-20 11:44:55,044 INFO    HandlerThread:1332208 [handler.py:finish():866] shutting down handler
+2024-05-20 11:44:55,044 INFO    HandlerThread:1332208 [system_monitor.py:finish():203] Stopping system monitor
+2024-05-20 11:44:55,044 DEBUG   SystemMonitor:1332208 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-05-20 11:44:55,044 DEBUG   SystemMonitor:1332208 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-05-20 11:44:55,044 DEBUG   SystemMonitor:1332208 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-05-20 11:44:55,045 INFO    HandlerThread:1332208 [interfaces.py:finish():202] Joined cpu monitor
+2024-05-20 11:44:55,046 INFO    HandlerThread:1332208 [interfaces.py:finish():202] Joined disk monitor
+2024-05-20 11:44:55,047 INFO    HandlerThread:1332208 [interfaces.py:finish():202] Joined gpu monitor
+2024-05-20 11:44:55,047 INFO    HandlerThread:1332208 [interfaces.py:finish():202] Joined memory monitor
+2024-05-20 11:44:55,048 INFO    HandlerThread:1332208 [interfaces.py:finish():202] Joined network monitor
+2024-05-20 11:44:55,636 INFO    SenderThread:1332208 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/files/output.log
+2024-05-20 11:44:55,636 INFO    SenderThread:1332208 [dir_watcher.py:finish():388] scan: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/files
+2024-05-20 11:44:55,637 INFO    SenderThread:1332208 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/files/output.log output.log
+2024-05-20 11:44:55,637 INFO    SenderThread:1332208 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/files/config.yaml config.yaml
+2024-05-20 11:44:55,640 INFO    SenderThread:1332208 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/files/requirements.txt requirements.txt
+2024-05-20 11:44:55,644 INFO    SenderThread:1332208 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/files/wandb-metadata.json wandb-metadata.json
+2024-05-20 11:44:55,644 INFO    SenderThread:1332208 [file_pusher.py:finish():172] shutting down file pusher
+2024-05-20 11:44:55,644 INFO    SenderThread:1332208 [file_pusher.py:join():178] waiting for file pusher
+2024-05-20 11:44:56,058 INFO    wandb-upload_0:1332208 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/files/output.log
+2024-05-20 11:44:56,167 INFO    wandb-upload_1:1332208 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/files/config.yaml
+2024-05-20 11:44:56,297 INFO    wandb-upload_2:1332208 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240520_114437-bbtiehau/files/requirements.txt
+2024-05-20 11:44:56,297 INFO    MainThread:1332208 [internal.py:handle_exit():76] Internal process exited

@@ -8,11 +8,11 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     # config.mode = "train""eval"
-    config.mode = "eval"
+    config.mode = "train"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
-    wandb.project = "PINN-geomII"
+    wandb.project = "PINN-geomIII"
     wandb.name = "default"
     wandb.tag = None
 
@@ -22,10 +22,10 @@ def get_config():
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "Mlp"
-    arch.num_layers = 4
-    arch.hidden_dim = 128
+    arch.num_layers = 10
+    arch.hidden_dim = 260
     arch.out_dim = 3
-    arch.activation = "tanh"  # gelu works better than tanh
+    arch.activation = "gelu"  # gelu works better than tanh
     arch.periodicity = False
     arch.fourier_emb = ml_collections.ConfigDict(
         {"embed_scale": 10.0, "embed_dim": 128}
@@ -47,12 +47,12 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 100000
+    training.max_steps = 80000
     training.batch_size_per_device = 1024
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
-    weighting.scheme = "grad_norm"
+    weighting.scheme = "ntk"#"ntk""grad_norm"
     weighting.init_weights = ml_collections.ConfigDict(
         {
             # "u_in": 1.0,
@@ -83,7 +83,7 @@ def get_config():
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()
-    saving.save_every_steps =  99999#None
+    saving.save_every_steps =  999999#None
     saving.num_keep_ckpts = 10
 
     # Input shape for initializing Flax models
