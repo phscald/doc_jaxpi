@@ -34,15 +34,15 @@ class NavierStokes2DwSat(ForwardIVP):
             self.L_star = 1.0
 
         # Predict functions over batch
-        # self.u0_pred_fn = vmap(self.u_net, (None, None, 0, 0))
-        # self.v0_pred_fn = vmap(self.v_net, (None, None, 0, 0))
-        # self.p0_pred_fn = vmap(self.p_net, (None, None, 0, 0))
+        self.u0_pred_fn = vmap(self.u_net, (None, None, 0, 0))
+        self.v0_pred_fn = vmap(self.v_net, (None, None, 0, 0))
+        self.p0_pred_fn = vmap(self.p_net, (None, None, 0, 0))
         self.s0_pred_fn = vmap(self.s_net, (None, None, 0, 0))
 
         self.u_pred_fn = vmap(self.u_net, (None, 0, 0, 0))
         self.v_pred_fn = vmap(self.v_net, (None, 0, 0, 0))
         self.p_pred_fn = vmap(self.p_net, (None, 0, 0, 0))
-        self.s_pred_fn = vmap(self.s_net, (None, None, 0, 0))
+        self.s_pred_fn = vmap(self.s_net, (None, 0, 0, 0))
         # self.w_pred_fn = vmap(self.w_net, (None, 0, 0, 0)) # nao foi usado nesse script, e nao entendi a eq. também
         self.r_pred_fn = vmap(self.r_net, (None, 0, 0, 0))
 
@@ -115,62 +115,54 @@ class NavierStokes2DwSat(ForwardIVP):
         rc = u_x + v_y
         rs = s_t + u * s_x + v * s_y - self.D*(s_xx + s_yy) 
 
-        # outflow boundary residual
-        # u_out = u_x / self.Re - p
-        # v_out = v_x
-        v_out = v
-
-        return ru, rv, rc, rs, v_out
+        return ru, rv, rc, rs
 
     def ru_net(self, params, t, x, y):
-        ru, _, _, _, _ = self.r_net(params, t, x, y)
+        ru, _, _, _ = self.r_net(params, t, x, y)
         return ru
 
     def rv_net(self, params, t, x, y):
-        _, rv, _, _, _ = self.r_net(params, t, x, y)
+        _, rv, _, _ = self.r_net(params, t, x, y)
         return rv
 
     def rc_net(self, params, t, x, y):
-        _, _, rc, _, _ = self.r_net(params, t, x, y)
+        _, _, rc, _ = self.r_net(params, t, x, y)
         return rc
 
     def rs_net(self, params, t, x, y):
-        _, _, _, rs, _ = self.r_net(params, t, x, y)
+        _, _, _, rs = self.r_net(params, t, x, y)
         return rs
 
-    # def u_out_net(self, params, t, x, y):
-    #     _, _, _, u_out, _ = self.r_net(params, t, x, y)
-    #     return u_out
 
-    def v_out_net(self, params, t, x, y):
-        _, _, _, _, v_out = self.r_net(params, t, x, y)
-        return v_out
 
     @partial(jit, static_argnums=(0,))
     def res_and_w(self, params, batch):
         # Sort temporal coordinates
         t_sorted = batch[:, 0].sort()
-        ru_pred, rv_pred, rc_pred, _, _ = self.r_pred_fn(
+        ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn(
             params, t_sorted, batch[:, 1], batch[:, 2]
         )
 
         ru_pred = ru_pred.reshape(self.num_chunks, -1)
         rv_pred = rv_pred.reshape(self.num_chunks, -1)
         rc_pred = rc_pred.reshape(self.num_chunks, -1)
+        rs_pred = rs_pred.reshape(self.num_chunks, -1)
 
         ru_l = jnp.mean(ru_pred**2, axis=1)
         rv_l = jnp.mean(rv_pred**2, axis=1)
         rc_l = jnp.mean(rc_pred**2, axis=1)
+        rs_l = jnp.mean(rs_pred**2, axis=1)
 
         ru_gamma = lax.stop_gradient(jnp.exp(-self.tol * (self.M @ ru_l)))
         rv_gamma = lax.stop_gradient(jnp.exp(-self.tol * (self.M @ rv_l)))
         rc_gamma = lax.stop_gradient(jnp.exp(-self.tol * (self.M @ rc_l)))
+        rs_gamma = lax.stop_gradient(jnp.exp(-self.tol * (self.M @ rs_l)))
 
         # Take minimum of the causal weights
-        gamma = jnp.vstack([ru_gamma, rv_gamma, rc_gamma])
+        gamma = jnp.vstack([ru_gamma, rv_gamma, rc_gamma, rs_gamma])
         gamma = gamma.min(0)
 
-        return ru_l, rv_l, rc_l, gamma
+        return ru_l, rv_l, rc_l, rs_l, gamma
 
     @partial(jit, static_argnums=(0,))
     def compute_diag_ntk(self, params, batch):
@@ -181,7 +173,7 @@ class NavierStokes2DwSat(ForwardIVP):
         noslip_batch = batch["noslip"]
         res_batch = batch["res"]
 
-        coords_batch, u_batch, v_batch, p_batch = ic_batch
+        coords_batch, u_batch, v_batch, p_batch, s_batch = ic_batch
 
         u_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0))(
             self.u_net, params, 0.0, coords_batch[:, 0], coords_batch[:, 1]
@@ -192,9 +184,12 @@ class NavierStokes2DwSat(ForwardIVP):
         p_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0))(
             self.p_net, params, 0.0, coords_batch[:, 0], coords_batch[:, 1]
         )
+        s_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0))(
+            self.s_net, params, 0.0, coords_batch[:, 0], coords_batch[:, 1]
+        )
 
-        u_in_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
-            self.u_net,
+        p_in_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
+            self.p_net,
             params,
             inflow_batch[:, 0],
             inflow_batch[:, 1],
@@ -207,16 +202,23 @@ class NavierStokes2DwSat(ForwardIVP):
             inflow_batch[:, 1],
             inflow_batch[:, 2],
         )
+        s_in_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
+            self.s_net,
+            params,
+            inflow_batch[:, 0],
+            inflow_batch[:, 1],
+            inflow_batch[:, 2],
+        )
 
-        u_out_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
-            self.u_out_net,
+        p_out_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
+            self.p_net,
             params,
             outflow_batch[:, 0],
             outflow_batch[:, 1],
             outflow_batch[:, 2],
         )
         v_out_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
-            self.v_out_net,
+            self.v_net,
             params,
             outflow_batch[:, 0],
             outflow_batch[:, 1],
@@ -252,21 +254,27 @@ class NavierStokes2DwSat(ForwardIVP):
             rc_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
                 self.rc_net, params, res_batch[:, 0], res_batch[:, 1], res_batch[:, 2]
             )
+            rs_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
+                self.rs_net, params, res_batch[:, 0], res_batch[:, 1], res_batch[:, 2]
+            )
 
             ru_ntk = ru_ntk.reshape(self.num_chunks, -1)  # shape: (num_chunks, -1)
             rv_ntk = rv_ntk.reshape(self.num_chunks, -1)
             rc_ntk = rc_ntk.reshape(self.num_chunks, -1)
+            rs_ntk = rs_ntk.reshape(self.num_chunks, -1)
 
             ru_ntk = jnp.mean(
                 ru_ntk, axis=1
             )  # average convergence rate over each chunk
             rv_ntk = jnp.mean(rv_ntk, axis=1)
             rc_ntk = jnp.mean(rc_ntk, axis=1)
+            rs_ntk = jnp.mean(rs_ntk, axis=1)
 
-            _, _, _, causal_weights = self.res_and_w(params, res_batch)
+            _, _, _, _, causal_weights = self.res_and_w(params, res_batch)
             ru_ntk = ru_ntk * causal_weights  # multiply by causal weights
             rv_ntk = rv_ntk * causal_weights
             rc_ntk = rc_ntk * causal_weights
+            rs_ntk = rs_ntk * causal_weights
         else:
             ru_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
                 self.ru_net, params, res_batch[:, 0], res_batch[:, 1], res_batch[:, 2]
@@ -277,20 +285,26 @@ class NavierStokes2DwSat(ForwardIVP):
             rc_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
                 self.rc_net, params, res_batch[:, 0], res_batch[:, 1], res_batch[:, 2]
             )
+            rs_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
+                self.rs_net, params, res_batch[:, 0], res_batch[:, 1], res_batch[:, 2]
+            )
 
         ntk_dict = {
             "u_ic": u_ic_ntk,
             "v_ic": v_ic_ntk,
             "p_ic": p_ic_ntk,
-            "u_in": u_in_ntk,
+            "s_ic": s_ic_ntk,
+            "p_in": p_in_ntk,
+            "p_out": p_out_ntk,
+            "s_in": s_in_ntk,
             "v_in": v_in_ntk,
-            "u_out": u_out_ntk,
             "v_out": v_out_ntk,
             "u_noslip": u_noslip_ntk,
             "v_noslip": v_noslip_ntk,
             "ru": ru_ntk,
             "rv": rv_ntk,
             "rc": rc_ntk,
+            "rs": rs_ntk,
         }
 
         return ntk_dict
@@ -305,7 +319,8 @@ class NavierStokes2DwSat(ForwardIVP):
         res_batch = batch["res"]
 
         # Initial condition loss
-        coords_batch, u_batch, v_batch, p_batch = ic_batch
+        # coords_batch, u_batch, v_batch, p_batch = ic_batch
+        s_batch = ic_batch
 
         u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1])
         v_ic_pred = self.v0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1])
@@ -315,27 +330,33 @@ class NavierStokes2DwSat(ForwardIVP):
         v_ic_loss = jnp.mean((v_ic_pred - v_batch) ** 2)
         p_ic_loss = jnp.mean((p_ic_pred - p_batch) ** 2)
 
-        # inflow loss
-        u_in, _ = self.inflow_fn(inflow_batch[:, 2])
-
-        u_in_pred = self.u_pred_fn(
-            params, inflow_batch[:, 0], inflow_batch[:, 1], inflow_batch[:, 2]
+        # inflow outflow loss
+        #
+        p_in_pred = self.p_pred_fn(
+            params, self.inflow_coords[:, 0], self.inflow_coords[:, 1]
         )
+        p_in_loss = jnp.mean((p_in_pred - self.p_in) ** 2)
+        #
+        p_out_pred = self.p_pred_fn(
+            params, self.outflow_coords[:, 0], self.outflow_coords[:, 1]
+        )
+        p_out_loss = jnp.mean((p_out_pred) ** 2)
+        #
+        s_in_pred = self.s_pred_fn(
+            params, self.inflow_coords[:, 0], self.inflow_coords[:, 1]
+        )
+        s_in_pred = jnp.mean((s_in_pred - 1.0) ** 2)
+        #
         v_in_pred = self.v_pred_fn(
-            params, inflow_batch[:, 0], inflow_batch[:, 1], inflow_batch[:, 2]
+            params, self.inflow_coords[:, 0], self.inflow_coords[:, 1]
         )
-
-        u_in_loss = jnp.mean((u_in_pred - u_in) ** 2)
-        v_in_loss = jnp.mean(v_in_pred**2)
-
-        # outflow loss
-        _, _, _, u_out_pred, v_out_pred = self.r_pred_fn(
-            params, outflow_batch[:, 0], outflow_batch[:, 1], outflow_batch[:, 2]
+        v_in_loss = jnp.mean((v_in_pred) ** 2)
+        #
+        v_out_pred = self.v_pred_fn(
+            params, self.outflow_coords[:, 0], self.outflow_coords[:, 1]
         )
-
-        u_out_loss = jnp.mean(u_out_pred**2)
-        v_out_loss = jnp.mean(v_out_pred**2)
-
+        v_out_loss = jnp.mean((v_out_pred) ** 2)
+        #
         # noslip loss
         u_noslip_pred = self.u_pred_fn(
             params, noslip_batch[:, 0], noslip_batch[:, 1], noslip_batch[:, 2]
@@ -349,32 +370,37 @@ class NavierStokes2DwSat(ForwardIVP):
 
         # residual loss
         if self.config.weighting.use_causal == True:
-            ru_l, rv_l, rc_l, gamma = self.res_and_w(params, res_batch)
+            ru_l, rv_l, rc_l, rs_l, gamma = self.res_and_w(params, res_batch)
             ru_loss = jnp.mean(gamma * ru_l)
             rv_loss = jnp.mean(gamma * rv_l)
             rc_loss = jnp.mean(gamma * rc_l)
+            rs_loss = jnp.mean(gamma * rs_l)
 
         else:
-            ru_pred, rv_pred, rc_pred, _, _ = self.r_pred_fn(
+            ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn(
                 params, res_batch[:, 0], res_batch[:, 1], res_batch[:, 2]
             )
             ru_loss = jnp.mean(ru_pred**2)
             rv_loss = jnp.mean(rv_pred**2)
             rc_loss = jnp.mean(rc_pred**2)
+            rs_loss = jnp.mean(rc_pred**2)
 
         loss_dict = {
             "u_ic": u_ic_loss,
             "v_ic": v_ic_loss,
             "p_ic": p_ic_loss,
-            "u_in": u_in_loss,
+            "s_ic": s_ic_loss,
+            "p_in": p_in_loss,
+            "p_out": p_out_loss,
+            "s_in": s_in_loss,
             "v_in": v_in_loss,
-            "u_out": u_out_loss,
             "v_out": v_out_loss,
             "u_noslip": u_noslip_loss,
             "v_noslip": v_noslip_loss,
             "ru": ru_loss,
             "rv": rv_loss,
             "rc": rc_loss,
+            "rs": rs_loss,
         }
 
         return loss_dict
@@ -388,84 +414,7 @@ class NavierStokes2DwSat(ForwardIVP):
 
         return u_x, v_x, u_y, v_y
 
-    # @partial(jit, static_argnums=(0,))
-    # def compute_drag_lift(self, params, t, U_star, L_star):
-    #     nu = 0.001  # Dimensional viscosity
-    #     radius = 0.05  # radius of cylinder
-    #     center = (0.2, 0.2)  # center of cylinder
-    #     num_theta = 256  # number of points on cylinder for evaluation
-
-    #     # Discretize cylinder into points
-    #     theta = jnp.linspace(0.0, 2 * jnp.pi, num_theta)
-    #     d_theta = theta[1] - theta[0]
-    #     ds = radius * d_theta
-
-    #     # Cylinder coordinates
-    #     x_cyl = radius * jnp.cos(theta) + center[0]
-    #     y_cyl = radius * jnp.sin(theta) + center[1]
-
-    #     # Out normals of cylinder
-    #     n_x = jnp.cos(theta)
-    #     n_y = jnp.sin(theta)
-
-    #     # Nondimensionalize input cylinder coordinates
-    #     x_cyl = x_cyl / L_star
-    #     y_cyl = y_cyl / L_star
-
-    #     # Nondimensionalize fonrt and back points
-    #     front = jnp.array([center[0] - radius, center[1]]) / L_star
-    #     back = jnp.array([center[0] + radius, center[1]]) / L_star
-
-    #     # Predictions
-    #     u_x_pred, v_x_pred, u_y_pred, v_y_pred = vmap(
-    #         vmap(self.u_v_grads, (None, None, 0, 0)), (None, 0, None, None)
-    #     )(params, t, x_cyl, y_cyl)
-
-    #     p_pred = vmap(vmap(self.p_net, (None, None, 0, 0)), (None, 0, None, None))(
-    #         params, t, x_cyl, y_cyl
-    #     )
-
-    #     p_pred = p_pred - jnp.mean(p_pred, axis=1, keepdims=True)
-
-    #     p_front_pred = vmap(self.p_net, (None, 0, None, None))(
-    #         params, t, front[0], front[1]
-    #     )
-    #     p_back_pred = vmap(self.p_net, (None, 0, None, None))(
-    #         params, t, back[0], back[1]
-    #     )
-    #     p_diff = p_front_pred - p_back_pred
-
-    #     # Dimensionalize velocity gradients and pressure
-    #     u_x_pred = u_x_pred * U_star / L_star
-    #     v_x_pred = v_x_pred * U_star / L_star
-    #     u_y_pred = u_y_pred * U_star / L_star
-    #     v_y_pred = v_y_pred * U_star / L_star
-    #     p_pred = p_pred * U_star**2
-    #     p_diff = p_diff * U_star**2
-
-    #     I0 = (-p_pred[:, :-1] + 2 * nu * u_x_pred[:, :-1]) * n_x[:-1] + nu * (
-    #         u_y_pred[:, :-1] + v_x_pred[:, :-1]
-    #     ) * n_y[:-1]
-    #     I1 = (-p_pred[:, 1:] + 2 * nu * u_x_pred[:, 1:]) * n_x[1:] + nu * (
-    #         u_y_pred[:, 1:] + v_x_pred[:, 1:]
-    #     ) * n_y[1:]
-
-    #     F_D = 0.5 * jnp.sum(I0 + I1, axis=1) * ds
-
-    #     I0 = (-p_pred[:, :-1] + 2 * nu * v_y_pred[:, :-1]) * n_y[:-1] + nu * (
-    #         u_y_pred[:, :-1] + v_x_pred[:, :-1]
-    #     ) * n_x[:-1]
-    #     I1 = (-p_pred[:, 1:] + 2 * nu * v_y_pred[:, 1:]) * n_y[1:] + nu * (
-    #         u_y_pred[:, 1:] + v_x_pred[:, 1:]
-    #     ) * n_x[1:]
-
-    #     F_L = 0.5 * jnp.sum(I0 + I1, axis=1) * ds
-
-    #     # Nondimensionalized drag and lift and pressure difference
-    #     C_D = 2 / (U_star**2 * L_star) * F_D
-    #     C_L = 2 / (U_star**2 * L_star) * F_L
-
-    #     return C_D, C_L, p_diff
+    
 
 
 class NavierStokesEvaluator(BaseEvaluator):
