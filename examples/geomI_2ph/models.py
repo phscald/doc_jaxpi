@@ -13,14 +13,15 @@ from jaxpi.utils import ntk_fn
 from jaxpi.evaluator import BaseEvaluator
 
 
-class NavierStokes2D(ForwardIVP):
-    def __init__(self, config, inflow_fn, temporal_dom, coords, Re):
+class NavierStokes2DwSat(ForwardIVP):
+    def __init__(self, config, inflow_fn, temporal_dom, coords, Re, D):
         super().__init__(config)
 
         self.inflow_fn = inflow_fn
         self.temporal_dom = temporal_dom
         self.coords = coords
         self.Re = Re  # Reynolds number
+        self.D = D
 
         # Non-dimensionalized domain length and width
         self.L, self.W = self.coords.max(axis=0) - self.coords.min(axis=0)
@@ -33,14 +34,16 @@ class NavierStokes2D(ForwardIVP):
             self.L_star = 1.0
 
         # Predict functions over batch
-        self.u0_pred_fn = vmap(self.u_net, (None, None, 0, 0))
-        self.v0_pred_fn = vmap(self.v_net, (None, None, 0, 0))
-        self.p0_pred_fn = vmap(self.p_net, (None, None, 0, 0))
+        # self.u0_pred_fn = vmap(self.u_net, (None, None, 0, 0))
+        # self.v0_pred_fn = vmap(self.v_net, (None, None, 0, 0))
+        # self.p0_pred_fn = vmap(self.p_net, (None, None, 0, 0))
+        self.s0_pred_fn = vmap(self.s_net, (None, None, 0, 0))
 
         self.u_pred_fn = vmap(self.u_net, (None, 0, 0, 0))
         self.v_pred_fn = vmap(self.v_net, (None, 0, 0, 0))
         self.p_pred_fn = vmap(self.p_net, (None, 0, 0, 0))
-        self.w_pred_fn = vmap(self.w_net, (None, 0, 0, 0)) # nao foi usado nesse script, e nao entendi a eq. também
+        self.s_pred_fn = vmap(self.s_net, (None, None, 0, 0))
+        # self.w_pred_fn = vmap(self.w_net, (None, 0, 0, 0)) # nao foi usado nesse script, e nao entendi a eq. também
         self.r_pred_fn = vmap(self.r_net, (None, 0, 0, 0))
 
     def neural_net(self, params, t, x, y):
@@ -52,60 +55,72 @@ class NavierStokes2D(ForwardIVP):
 
         # Start with an initial state of the channel flow
         y_hat = y * self.L_star * self.W
-        u = outputs[0] + 4 * 1.5 * y_hat * (0.41 - y_hat) / (0.41**2)
+        u = outputs[0]
         v = outputs[1]
         p = outputs[2]
-        return u, v, p
+        s = outputs[3]
+        return u, v, p, s
 
     def u_net(self, params, t, x, y):
-        u, _, _ = self.neural_net(params, t, x, y)
+        u, _, _, _ = self.neural_net(params, t, x, y)
         return u
 
     def v_net(self, params, t, x, y):
-        _, v, _ = self.neural_net(params, t, x, y)
+        _, v, _, _ = self.neural_net(params, t, x, y)
         return v
 
     def p_net(self, params, t, x, y):
-        _, _, p = self.neural_net(params, t, x, y)
+        _, _, p, _ = self.neural_net(params, t, x, y)
         return p
 
-    def w_net(self, params, t, x, y): # nao foi usado nesse script, e nao entendi a eq. também
-        u, v, _ = self.neural_net(params, t, x, y)
-        u_y = grad(self.u_net, argnums=3)(params, t, x, y)
-        v_x = grad(self.v_net, argnums=2)(params, t, x, y)
-        w = v_x - u_y
-        return w
+    def s_net(self, params, t, x, y):
+        _, _, _, s = self.neural_net(params, t, x, y)
+        return p
+
+    # def w_net(self, params, t, x, y): # nao foi usado nesse script, e nao entendi a eq. também
+    #     u, v, _ = self.neural_net(params, t, x, y)
+    #     u_y = grad(self.u_net, argnums=3)(params, t, x, y)
+    #     v_x = grad(self.v_net, argnums=2)(params, t, x, y)
+    #     w = v_x - u_y
+    #     return w
 
     def r_net(self, params, t, x, y):
-        u, v, p = self.neural_net(params, t, x, y)
+        u, v, p, s = self.neural_net(params, t, x, y)
 
         u_t = grad(self.u_net, argnums=1)(params, t, x, y)
         v_t = grad(self.v_net, argnums=1)(params, t, x, y)
+        s_t = grad(self.s_net, argnums=1)(params, t, x, y)
 
         u_x = grad(self.u_net, argnums=2)(params, t, x, y)
         v_x = grad(self.v_net, argnums=2)(params, t, x, y)
         p_x = grad(self.p_net, argnums=2)(params, t, x, y)
+        s_x = grad(self.s_net, argnums=2)(params, t, x, y)
 
         u_y = grad(self.u_net, argnums=3)(params, t, x, y)
         v_y = grad(self.v_net, argnums=3)(params, t, x, y)
         p_y = grad(self.p_net, argnums=3)(params, t, x, y)
+        s_y = grad(self.s_net, argnums=3)(params, t, x, y)
 
         u_xx = grad(grad(self.u_net, argnums=2), argnums=2)(params, t, x, y)
         v_xx = grad(grad(self.v_net, argnums=2), argnums=2)(params, t, x, y)
+        s_xx = grad(grad(self.s_net, argnums=2), argnums=2)(params, t, x, y)
 
         u_yy = grad(grad(self.u_net, argnums=3), argnums=3)(params, t, x, y)
         v_yy = grad(grad(self.v_net, argnums=3), argnums=3)(params, t, x, y)
+        s_yy = grad(grad(self.s_net, argnums=3), argnums=3)(params, t, x, y)
 
         # PDE residual
-        ru = u_t + u * u_x + v * u_y + p_x - (u_xx + u_yy) / self.Re
-        rv = v_t + u * v_x + v * v_y + p_y - (v_xx + v_yy) / self.Re
+        ru = u_t + u * u_x + v * u_y + (p_x - (u_xx + u_yy)) / self.Re
+        rv = v_t + u * v_x + v * v_y + (p_y - (v_xx + v_yy)) / self.Re
         rc = u_x + v_y
+        rs = s_t + u * s_x + v * s_y - self.D*(s_xx + s_yy) 
 
         # outflow boundary residual
-        u_out = u_x / self.Re - p
-        v_out = v_x
+        # u_out = u_x / self.Re - p
+        # v_out = v_x
+        v_out = v
 
-        return ru, rv, rc, u_out, v_out
+        return ru, rv, rc, rs, v_out
 
     def ru_net(self, params, t, x, y):
         ru, _, _, _, _ = self.r_net(params, t, x, y)
@@ -119,9 +134,13 @@ class NavierStokes2D(ForwardIVP):
         _, _, rc, _, _ = self.r_net(params, t, x, y)
         return rc
 
-    def u_out_net(self, params, t, x, y):
-        _, _, _, u_out, _ = self.r_net(params, t, x, y)
-        return u_out
+    def rs_net(self, params, t, x, y):
+        _, _, _, rs, _ = self.r_net(params, t, x, y)
+        return rs
+
+    # def u_out_net(self, params, t, x, y):
+    #     _, _, _, u_out, _ = self.r_net(params, t, x, y)
+    #     return u_out
 
     def v_out_net(self, params, t, x, y):
         _, _, _, _, v_out = self.r_net(params, t, x, y)
@@ -369,84 +388,84 @@ class NavierStokes2D(ForwardIVP):
 
         return u_x, v_x, u_y, v_y
 
-    @partial(jit, static_argnums=(0,))
-    def compute_drag_lift(self, params, t, U_star, L_star):
-        nu = 0.001  # Dimensional viscosity
-        radius = 0.05  # radius of cylinder
-        center = (0.2, 0.2)  # center of cylinder
-        num_theta = 256  # number of points on cylinder for evaluation
+    # @partial(jit, static_argnums=(0,))
+    # def compute_drag_lift(self, params, t, U_star, L_star):
+    #     nu = 0.001  # Dimensional viscosity
+    #     radius = 0.05  # radius of cylinder
+    #     center = (0.2, 0.2)  # center of cylinder
+    #     num_theta = 256  # number of points on cylinder for evaluation
 
-        # Discretize cylinder into points
-        theta = jnp.linspace(0.0, 2 * jnp.pi, num_theta)
-        d_theta = theta[1] - theta[0]
-        ds = radius * d_theta
+    #     # Discretize cylinder into points
+    #     theta = jnp.linspace(0.0, 2 * jnp.pi, num_theta)
+    #     d_theta = theta[1] - theta[0]
+    #     ds = radius * d_theta
 
-        # Cylinder coordinates
-        x_cyl = radius * jnp.cos(theta) + center[0]
-        y_cyl = radius * jnp.sin(theta) + center[1]
+    #     # Cylinder coordinates
+    #     x_cyl = radius * jnp.cos(theta) + center[0]
+    #     y_cyl = radius * jnp.sin(theta) + center[1]
 
-        # Out normals of cylinder
-        n_x = jnp.cos(theta)
-        n_y = jnp.sin(theta)
+    #     # Out normals of cylinder
+    #     n_x = jnp.cos(theta)
+    #     n_y = jnp.sin(theta)
 
-        # Nondimensionalize input cylinder coordinates
-        x_cyl = x_cyl / L_star
-        y_cyl = y_cyl / L_star
+    #     # Nondimensionalize input cylinder coordinates
+    #     x_cyl = x_cyl / L_star
+    #     y_cyl = y_cyl / L_star
 
-        # Nondimensionalize fonrt and back points
-        front = jnp.array([center[0] - radius, center[1]]) / L_star
-        back = jnp.array([center[0] + radius, center[1]]) / L_star
+    #     # Nondimensionalize fonrt and back points
+    #     front = jnp.array([center[0] - radius, center[1]]) / L_star
+    #     back = jnp.array([center[0] + radius, center[1]]) / L_star
 
-        # Predictions
-        u_x_pred, v_x_pred, u_y_pred, v_y_pred = vmap(
-            vmap(self.u_v_grads, (None, None, 0, 0)), (None, 0, None, None)
-        )(params, t, x_cyl, y_cyl)
+    #     # Predictions
+    #     u_x_pred, v_x_pred, u_y_pred, v_y_pred = vmap(
+    #         vmap(self.u_v_grads, (None, None, 0, 0)), (None, 0, None, None)
+    #     )(params, t, x_cyl, y_cyl)
 
-        p_pred = vmap(vmap(self.p_net, (None, None, 0, 0)), (None, 0, None, None))(
-            params, t, x_cyl, y_cyl
-        )
+    #     p_pred = vmap(vmap(self.p_net, (None, None, 0, 0)), (None, 0, None, None))(
+    #         params, t, x_cyl, y_cyl
+    #     )
 
-        p_pred = p_pred - jnp.mean(p_pred, axis=1, keepdims=True)
+    #     p_pred = p_pred - jnp.mean(p_pred, axis=1, keepdims=True)
 
-        p_front_pred = vmap(self.p_net, (None, 0, None, None))(
-            params, t, front[0], front[1]
-        )
-        p_back_pred = vmap(self.p_net, (None, 0, None, None))(
-            params, t, back[0], back[1]
-        )
-        p_diff = p_front_pred - p_back_pred
+    #     p_front_pred = vmap(self.p_net, (None, 0, None, None))(
+    #         params, t, front[0], front[1]
+    #     )
+    #     p_back_pred = vmap(self.p_net, (None, 0, None, None))(
+    #         params, t, back[0], back[1]
+    #     )
+    #     p_diff = p_front_pred - p_back_pred
 
-        # Dimensionalize velocity gradients and pressure
-        u_x_pred = u_x_pred * U_star / L_star
-        v_x_pred = v_x_pred * U_star / L_star
-        u_y_pred = u_y_pred * U_star / L_star
-        v_y_pred = v_y_pred * U_star / L_star
-        p_pred = p_pred * U_star**2
-        p_diff = p_diff * U_star**2
+    #     # Dimensionalize velocity gradients and pressure
+    #     u_x_pred = u_x_pred * U_star / L_star
+    #     v_x_pred = v_x_pred * U_star / L_star
+    #     u_y_pred = u_y_pred * U_star / L_star
+    #     v_y_pred = v_y_pred * U_star / L_star
+    #     p_pred = p_pred * U_star**2
+    #     p_diff = p_diff * U_star**2
 
-        I0 = (-p_pred[:, :-1] + 2 * nu * u_x_pred[:, :-1]) * n_x[:-1] + nu * (
-            u_y_pred[:, :-1] + v_x_pred[:, :-1]
-        ) * n_y[:-1]
-        I1 = (-p_pred[:, 1:] + 2 * nu * u_x_pred[:, 1:]) * n_x[1:] + nu * (
-            u_y_pred[:, 1:] + v_x_pred[:, 1:]
-        ) * n_y[1:]
+    #     I0 = (-p_pred[:, :-1] + 2 * nu * u_x_pred[:, :-1]) * n_x[:-1] + nu * (
+    #         u_y_pred[:, :-1] + v_x_pred[:, :-1]
+    #     ) * n_y[:-1]
+    #     I1 = (-p_pred[:, 1:] + 2 * nu * u_x_pred[:, 1:]) * n_x[1:] + nu * (
+    #         u_y_pred[:, 1:] + v_x_pred[:, 1:]
+    #     ) * n_y[1:]
 
-        F_D = 0.5 * jnp.sum(I0 + I1, axis=1) * ds
+    #     F_D = 0.5 * jnp.sum(I0 + I1, axis=1) * ds
 
-        I0 = (-p_pred[:, :-1] + 2 * nu * v_y_pred[:, :-1]) * n_y[:-1] + nu * (
-            u_y_pred[:, :-1] + v_x_pred[:, :-1]
-        ) * n_x[:-1]
-        I1 = (-p_pred[:, 1:] + 2 * nu * v_y_pred[:, 1:]) * n_y[1:] + nu * (
-            u_y_pred[:, 1:] + v_x_pred[:, 1:]
-        ) * n_x[1:]
+    #     I0 = (-p_pred[:, :-1] + 2 * nu * v_y_pred[:, :-1]) * n_y[:-1] + nu * (
+    #         u_y_pred[:, :-1] + v_x_pred[:, :-1]
+    #     ) * n_x[:-1]
+    #     I1 = (-p_pred[:, 1:] + 2 * nu * v_y_pred[:, 1:]) * n_y[1:] + nu * (
+    #         u_y_pred[:, 1:] + v_x_pred[:, 1:]
+    #     ) * n_x[1:]
 
-        F_L = 0.5 * jnp.sum(I0 + I1, axis=1) * ds
+    #     F_L = 0.5 * jnp.sum(I0 + I1, axis=1) * ds
 
-        # Nondimensionalized drag and lift and pressure difference
-        C_D = 2 / (U_star**2 * L_star) * F_D
-        C_L = 2 / (U_star**2 * L_star) * F_L
+    #     # Nondimensionalized drag and lift and pressure difference
+    #     C_D = 2 / (U_star**2 * L_star) * F_D
+    #     C_L = 2 / (U_star**2 * L_star) * F_L
 
-        return C_D, C_L, p_diff
+    #     return C_D, C_L, p_diff
 
 
 class NavierStokesEvaluator(BaseEvaluator):

@@ -29,12 +29,13 @@ from utils import get_dataset, get_fine_mesh, parabolic_inflow
 
 
 class ICSampler(SpaceSampler):
-    def __init__(self, u, v, p, coords, batch_size, rng_key=random.PRNGKey(1234)):
+    def __init__(self, u, v, p, s, coords, batch_size, rng_key=random.PRNGKey(1234)):
         super().__init__(coords, batch_size, rng_key)
 
         self.u = u
         self.v = v
         self.p = p
+        self.s = s
 
     @partial(pmap, static_broadcasted_argnums=(0,))
     def data_generation(self, key):
@@ -46,8 +47,9 @@ class ICSampler(SpaceSampler):
         u_batch = self.u[idx]
         v_batch = self.v[idx]
         p_batch = self.p[idx]
+        s_batch = self.s[idx]
 
-        batch = (coords_batch, u_batch, v_batch, p_batch)
+        batch = (coords_batch, u_batch, v_batch, p_batch, s_batch)
 
         return batch
 
@@ -163,50 +165,88 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     wandb.init(project=wandb_config.project, name=wandb_config.name)
 
     # Get dataset
+    # (
+    #     u_ref,
+    #     v_ref,
+    #     p_ref,
+    #     coords,
+    #     inflow_coords,
+    #     outflow_coords,
+    #     wall_coords,
+    #     cyl_coords,
+    #     nu,
+    # ) = get_dataset()
+
     (
-        u_ref,
-        v_ref,
-        p_ref,
+        # u_ref,
+        # v_ref,
+        # p_ref,
         coords,
         inflow_coords,
         outflow_coords,
         wall_coords,
-        cyl_coords,
-        nu,
+        mu, rho
     ) = get_dataset()
 
-    (
-        fine_coords,
-        fine_coords_near_cyl,
-    ) = get_fine_mesh()  # finer mesh for evaluating PDE residuals
+    U_max = .15#.25/3#visc .1
+    # pmax = 15
 
-    noslip_coords = jnp.vstack((wall_coords, cyl_coords))
+    L_max = .021
+    pmax = mu*U_max/L_max
+    Re = rho*U_max*L_max/mu
+
+    # (
+    #     fine_coords,
+    #     fine_coords_near_cyl,
+    # ) = get_fine_mesh()  # finer mesh for evaluating PDE residuals
+
+    # noslip_coords = jnp.vstack((wall_coords, cyl_coords))
+    noslip_coords = wall_coords
 
     # T = 1.0  # final time of simulation
 
     # Nondimensionalization
     if config.nondim == True:
         # Nondimensionalization parameters
-        U_star = 1.0  # characteristic velocity
-        L_star = 0.1  # characteristic length
-        T_star = L_star / U_star  # characteristic time
-        Re = U_star * L_star / nu
+        U_star = U_max # 0.2  # characteristic velocity
+        L_star = L_max #0.1  # characteristic length
+        # Re = U_star * L_star / nu
 
         # Nondimensionalize coordinates and inflow velocity
-        # T = T / T_star
         inflow_coords = inflow_coords / L_star
         outflow_coords = outflow_coords / L_star
         noslip_coords = noslip_coords / L_star
-
         coords = coords / L_star
-        fine_coords = fine_coords / L_star
-        fine_coords_near_cyl = fine_coords_near_cyl / L_star
+
+        T_star = L_star/U_star
+
 
         # Nondimensionalize flow field
         # u_inflow = u_inflow / U_star
-        u_ref = u_ref / U_star
-        v_ref = v_ref / U_star
-        p_ref = p_ref / U_star**2
+
+        p_inflow = 10 / pmax
+       
+        # # Nondimensionalization parameters
+        # U_star = 1.0  # characteristic velocity
+        # L_star = 0.1  # characteristic length
+        # T_star = L_star / U_star  # characteristic time
+        # Re = U_star * L_star / nu
+
+        # # Nondimensionalize coordinates and inflow velocity
+        # # T = T / T_star
+        # inflow_coords = inflow_coords / L_star
+        # outflow_coords = outflow_coords / L_star
+        # noslip_coords = noslip_coords / L_star
+
+        # coords = coords / L_star
+        # fine_coords = fine_coords / L_star
+        # fine_coords_near_cyl = fine_coords_near_cyl / L_star
+
+        # # Nondimensionalize flow field
+        # # u_inflow = u_inflow / U_star
+        # u_ref = u_ref / U_star
+        # v_ref = v_ref / U_star
+        # p_ref = p_ref / U_star**2
 
     else:
         U_star = 1.0
@@ -222,13 +262,14 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # Inflow boundary conditions
     U_max = 1.5  # maximum velocity
-    inflow_fn = lambda y: parabolic_inflow(y * L_star, U_max)
+    # inflow_fn = lambda y: parabolic_inflow(y * L_star, U_max)
 
     # Set initial condition
     # Use the last time step of a coarse numerical solution as the initial condition
-    u0 = u_ref[-1, :]
-    v0 = v_ref[-1, :]
-    p0 = p_ref[-1, :]
+    # u0 = u_ref[-1, :]
+    # v0 = v_ref[-1, :]
+    # p0 = p_ref[-1, :]
+    s0 = s_ref[-1, :]
 
     for idx in range(config.training.num_time_windows):
         logging.info("Training time window {}".format(idx + 1))
@@ -237,7 +278,8 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         keys = random.split(random.PRNGKey(0), 5)
         ic_sampler = iter(
             ICSampler(
-                u0, v0, p0, coords, config.training.ic_batch_size, rng_key=keys[0]
+                s0, coords, config.training.ic_batch_size, rng_key=keys[0]
+                # u0, v0, p0, s0, coords, config.training.ic_batch_size, rng_key=keys[0]
             )
         )
         inflow_sampler = iter(
@@ -284,7 +326,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         }
 
         # Initialize model
-        model = models.NavierStokes2D(config, inflow_fn, temporal_dom, coords, Re)
+        model = models.NavierStokes2DwSat(config, inflow_fn, temporal_dom, coords, Re)
 
         # Train model for the current time window
         model = train_one_window(config, workdir, model, samplers, idx)
@@ -293,13 +335,16 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         if config.training.num_time_windows > 1:
             state = jax.device_get(jax.tree_util.tree_map(lambda x: x[0], model.state))
             params = state.params
-            u0 = vmap(model.u_net, (None, None, 0, 0))(
-                params, t1, coords[:, 0], coords[:, 1]
-            )
-            v0 = vmap(model.v_net, (None, None, 0, 0))(
-                params, t1, coords[:, 0], coords[:, 1]
-            )
-            p0 = vmap(model.p_net, (None, None, 0, 0))(
+            # u0 = vmap(model.u_net, (None, None, 0, 0))(
+            #     params, t1, coords[:, 0], coords[:, 1]
+            # )
+            # v0 = vmap(model.v_net, (None, None, 0, 0))(
+            #     params, t1, coords[:, 0], coords[:, 1]
+            # )
+            # p0 = vmap(model.p_net, (None, None, 0, 0))(
+            #     params, t1, coords[:, 0], coords[:, 1]
+            # )
+            s0 = vmap(model.s_net, (None, None, 0, 0))(
                 params, t1, coords[:, 0], coords[:, 1]
             )
 
