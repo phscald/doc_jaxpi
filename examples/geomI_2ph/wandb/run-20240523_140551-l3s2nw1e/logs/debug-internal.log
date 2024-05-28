@@ -1,0 +1,198 @@
+2024-05-23 14:05:51,403 INFO    StreamThr :9431 [internal.py:wandb_internal():86] W&B internal server running at pid: 9431, started at: 2024-05-23 14:05:51.402840
+2024-05-23 14:05:51,404 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: status
+2024-05-23 14:05:51,404 INFO    WriterThread:9431 [datastore.py:open_for_write():87] open: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/run-l3s2nw1e.wandb
+2024-05-23 14:05:51,405 DEBUG   SenderThread:9431 [sender.py:send():379] send: header
+2024-05-23 14:05:51,405 DEBUG   SenderThread:9431 [sender.py:send():379] send: run
+2024-05-23 14:05:51,888 INFO    SenderThread:9431 [dir_watcher.py:__init__():211] watching files in: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files
+2024-05-23 14:05:51,888 INFO    SenderThread:9431 [sender.py:_start_run_threads():1124] run started: l3s2nw1e with start time 1716473151.402758
+2024-05-23 14:05:51,891 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: check_version
+2024-05-23 14:05:51,891 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: check_version
+2024-05-23 14:05:51,968 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: run_start
+2024-05-23 14:05:51,983 DEBUG   HandlerThread:9431 [system_info.py:__init__():26] System info init
+2024-05-23 14:05:51,983 DEBUG   HandlerThread:9431 [system_info.py:__init__():41] System info init done
+2024-05-23 14:05:51,983 INFO    HandlerThread:9431 [system_monitor.py:start():194] Starting system monitor
+2024-05-23 14:05:51,983 INFO    SystemMonitor:9431 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-05-23 14:05:51,983 INFO    HandlerThread:9431 [system_monitor.py:probe():214] Collecting system info
+2024-05-23 14:05:51,984 INFO    SystemMonitor:9431 [interfaces.py:start():190] Started cpu monitoring
+2024-05-23 14:05:51,984 INFO    SystemMonitor:9431 [interfaces.py:start():190] Started disk monitoring
+2024-05-23 14:05:51,985 INFO    SystemMonitor:9431 [interfaces.py:start():190] Started gpu monitoring
+2024-05-23 14:05:51,985 INFO    SystemMonitor:9431 [interfaces.py:start():190] Started memory monitoring
+2024-05-23 14:05:51,986 INFO    SystemMonitor:9431 [interfaces.py:start():190] Started network monitoring
+2024-05-23 14:05:52,003 DEBUG   HandlerThread:9431 [system_info.py:probe():150] Probing system
+2024-05-23 14:05:52,003 DEBUG   HandlerThread:9431 [system_info.py:probe():198] Probing system done
+2024-05-23 14:05:52,003 DEBUG   HandlerThread:9431 [system_monitor.py:probe():223] {'os': 'Linux-6.5.0-35-generic-x86_64-with-glibc2.35', 'python': '3.11.0rc1', 'heartbeatAt': '2024-05-23T14:05:52.003632', 'startedAt': '2024-05-23T14:05:51.397947', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/main.py', 'codePathLocal': 'main.py', 'codePath': 'main.py', 'host': '8b460e7a0fb5', 'username': 'root', 'executable': '/usr/bin/python3', 'cpu_count': 24, 'cpu_count_logical': 32, 'cpu_freq': {'current': 1117.6098124999999, 'min': 800.0, 'max': 4937.5}, 'cpu_freq_per_core': [{'current': 1382.35, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1174.357, 'min': 800.0, 'max': 5500.0}, {'current': 1323.342, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1234.875, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1099.659, 'min': 800.0, 'max': 5800.0}, {'current': 1320.809, 'min': 800.0, 'max': 5800.0}, {'current': 1303.219, 'min': 800.0, 'max': 5800.0}, {'current': 1346.077, 'min': 800.0, 'max': 5800.0}, {'current': 1312.721, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1309.577, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1275.794, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}], 'disk': {'/': {'total': 365.6147689819336, 'used': 118.30643081665039}}, 'gpu': 'NVIDIA GeForce RTX 4090', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce RTX 4090', 'memory_total': 25757220864}], 'memory': {'total': 125.61077499389648}}
+2024-05-23 14:05:52,003 INFO    HandlerThread:9431 [system_monitor.py:probe():224] Finished collecting system info
+2024-05-23 14:05:52,003 INFO    HandlerThread:9431 [system_monitor.py:probe():227] Publishing system info
+2024-05-23 14:05:52,004 INFO    HandlerThread:9431 [system_monitor.py:probe():229] Finished publishing system info
+2024-05-23 14:05:52,009 DEBUG   SenderThread:9431 [sender.py:send():379] send: files
+2024-05-23 14:05:52,010 INFO    SenderThread:9431 [sender.py:_save_file():1390] saving file wandb-metadata.json with policy now
+2024-05-23 14:05:52,049 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: python_packages
+2024-05-23 14:05:52,049 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: python_packages
+2024-05-23 14:05:52,049 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-23 14:05:52,049 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: stop_status
+2024-05-23 14:05:52,050 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-23 14:05:52,344 DEBUG   SenderThread:9431 [sender.py:send():379] send: telemetry
+2024-05-23 14:05:52,727 INFO    wandb-upload_0:9431 [upload_job.py:push():131] Uploaded file /tmp/tmp7pxzcjskwandb/9j46sbwp-wandb-metadata.json
+2024-05-23 14:05:52,888 INFO    Thread-12 :9431 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/requirements.txt
+2024-05-23 14:05:52,888 INFO    Thread-12 :9431 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/wandb-metadata.json
+2024-05-23 14:05:52,888 INFO    Thread-12 :9431 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/output.log
+2024-05-23 14:05:54,888 INFO    Thread-12 :9431 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/output.log
+2024-05-23 14:05:55,888 INFO    Thread-12 :9431 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/output.log
+2024-05-23 14:05:57,081 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 14:06:02,082 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 14:06:07,049 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-23 14:06:07,049 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: stop_status
+2024-05-23 14:06:07,050 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-23 14:06:07,237 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 14:06:12,238 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 14:06:17,239 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 14:06:22,049 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-23 14:06:22,049 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: stop_status
+2024-05-23 14:06:22,093 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-23 14:06:22,268 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 14:06:22,901 INFO    Thread-12 :9431 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/config.yaml
+2024-05-23 14:06:27,441 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 14:06:32,442 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 14:06:37,049 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-23 14:06:37,050 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: stop_status
+2024-05-23 14:06:37,093 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-23 14:06:38,325 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 14:06:43,325 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 14:06:43,455 DEBUG   SenderThread:9431 [sender.py:send():379] send: exit
+2024-05-23 14:06:43,455 INFO    SenderThread:9431 [sender.py:send_exit():586] handling exit code: 255
+2024-05-23 14:06:43,455 INFO    SenderThread:9431 [sender.py:send_exit():588] handling runtime: 51
+2024-05-23 14:06:43,457 INFO    SenderThread:9431 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-23 14:06:43,458 INFO    SenderThread:9431 [sender.py:send_exit():594] send defer
+2024-05-23 14:06:43,458 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:43,458 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 0
+2024-05-23 14:06:43,459 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:43,459 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 0
+2024-05-23 14:06:43,459 INFO    SenderThread:9431 [sender.py:transition_state():614] send defer: 1
+2024-05-23 14:06:43,459 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:43,460 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 1
+2024-05-23 14:06:43,460 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:43,460 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 1
+2024-05-23 14:06:43,460 INFO    SenderThread:9431 [sender.py:transition_state():614] send defer: 2
+2024-05-23 14:06:43,461 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:43,461 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 2
+2024-05-23 14:06:43,461 INFO    HandlerThread:9431 [system_monitor.py:finish():203] Stopping system monitor
+2024-05-23 14:06:43,461 INFO    HandlerThread:9431 [interfaces.py:finish():202] Joined cpu monitor
+2024-05-23 14:06:43,462 INFO    HandlerThread:9431 [interfaces.py:finish():202] Joined disk monitor
+2024-05-23 14:06:43,463 DEBUG   SystemMonitor:9431 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-05-23 14:06:43,463 DEBUG   SystemMonitor:9431 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-05-23 14:06:43,463 DEBUG   SystemMonitor:9431 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-05-23 14:06:43,474 INFO    HandlerThread:9431 [interfaces.py:finish():202] Joined gpu monitor
+2024-05-23 14:06:43,474 INFO    HandlerThread:9431 [interfaces.py:finish():202] Joined memory monitor
+2024-05-23 14:06:43,474 INFO    HandlerThread:9431 [interfaces.py:finish():202] Joined network monitor
+2024-05-23 14:06:43,475 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:43,475 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 2
+2024-05-23 14:06:43,475 INFO    SenderThread:9431 [sender.py:transition_state():614] send defer: 3
+2024-05-23 14:06:43,476 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:43,476 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 3
+2024-05-23 14:06:43,476 DEBUG   SenderThread:9431 [sender.py:send():379] send: stats
+2024-05-23 14:06:43,477 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:43,477 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 3
+2024-05-23 14:06:43,477 INFO    SenderThread:9431 [sender.py:transition_state():614] send defer: 4
+2024-05-23 14:06:43,477 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:43,478 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 4
+2024-05-23 14:06:43,478 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:43,478 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 4
+2024-05-23 14:06:43,478 INFO    SenderThread:9431 [sender.py:transition_state():614] send defer: 5
+2024-05-23 14:06:43,479 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:43,479 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 5
+2024-05-23 14:06:43,479 DEBUG   SenderThread:9431 [sender.py:send():379] send: summary
+2024-05-23 14:06:43,480 INFO    SenderThread:9431 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-23 14:06:43,480 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:43,480 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 5
+2024-05-23 14:06:43,480 INFO    SenderThread:9431 [sender.py:transition_state():614] send defer: 6
+2024-05-23 14:06:43,481 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:43,481 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 6
+2024-05-23 14:06:43,481 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:43,481 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 6
+2024-05-23 14:06:43,481 INFO    SenderThread:9431 [sender.py:transition_state():614] send defer: 7
+2024-05-23 14:06:43,482 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 14:06:43,482 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:43,482 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 7
+2024-05-23 14:06:43,482 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:43,483 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 7
+2024-05-23 14:06:43,906 INFO    Thread-12 :9431 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/wandb-summary.json
+2024-05-23 14:06:44,452 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: poll_exit
+2024-05-23 14:06:44,906 INFO    Thread-12 :9431 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/output.log
+2024-05-23 14:06:45,085 INFO    SenderThread:9431 [sender.py:transition_state():614] send defer: 8
+2024-05-23 14:06:45,086 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: poll_exit
+2024-05-23 14:06:45,086 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:45,086 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 8
+2024-05-23 14:06:45,087 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:45,087 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 8
+2024-05-23 14:06:45,087 INFO    SenderThread:9431 [job_builder.py:build():318] Attempting to build job artifact
+2024-05-23 14:06:45,087 INFO    SenderThread:9431 [job_builder.py:_get_source_type():466] no source found
+2024-05-23 14:06:45,087 INFO    SenderThread:9431 [sender.py:transition_state():614] send defer: 9
+2024-05-23 14:06:45,088 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:45,088 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 9
+2024-05-23 14:06:45,088 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:45,088 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 9
+2024-05-23 14:06:45,088 INFO    SenderThread:9431 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-05-23 14:06:45,452 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: poll_exit
+2024-05-23 14:06:45,907 INFO    Thread-12 :9431 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/output.log
+2024-05-23 14:06:45,908 INFO    SenderThread:9431 [dir_watcher.py:finish():388] scan: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files
+2024-05-23 14:06:45,908 INFO    SenderThread:9431 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/output.log output.log
+2024-05-23 14:06:45,908 INFO    SenderThread:9431 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/config.yaml config.yaml
+2024-05-23 14:06:45,908 INFO    SenderThread:9431 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/wandb-summary.json wandb-summary.json
+2024-05-23 14:06:45,909 INFO    SenderThread:9431 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/requirements.txt requirements.txt
+2024-05-23 14:06:45,909 INFO    SenderThread:9431 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/wandb-metadata.json wandb-metadata.json
+2024-05-23 14:06:45,909 INFO    SenderThread:9431 [sender.py:transition_state():614] send defer: 10
+2024-05-23 14:06:45,909 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: poll_exit
+2024-05-23 14:06:45,910 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:45,910 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 10
+2024-05-23 14:06:45,916 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:45,920 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 10
+2024-05-23 14:06:45,924 INFO    SenderThread:9431 [file_pusher.py:finish():172] shutting down file pusher
+2024-05-23 14:06:46,349 INFO    wandb-upload_0:9431 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/config.yaml
+2024-05-23 14:06:46,431 INFO    wandb-upload_1:9431 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/output.log
+2024-05-23 14:06:46,454 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: poll_exit
+2024-05-23 14:06:46,454 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: poll_exit
+2024-05-23 14:06:46,578 INFO    wandb-upload_3:9431 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/requirements.txt
+2024-05-23 14:06:46,596 INFO    wandb-upload_2:9431 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/files/wandb-summary.json
+2024-05-23 14:06:46,796 INFO    Thread-11 (_thread_body):9431 [sender.py:transition_state():614] send defer: 11
+2024-05-23 14:06:46,797 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:46,798 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 11
+2024-05-23 14:06:46,798 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:46,798 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 11
+2024-05-23 14:06:46,798 INFO    SenderThread:9431 [file_pusher.py:join():178] waiting for file pusher
+2024-05-23 14:06:46,799 INFO    SenderThread:9431 [sender.py:transition_state():614] send defer: 12
+2024-05-23 14:06:46,799 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:46,799 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 12
+2024-05-23 14:06:46,799 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:46,800 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 12
+2024-05-23 14:06:46,800 INFO    SenderThread:9431 [file_stream.py:finish():614] file stream finish called
+2024-05-23 14:06:46,969 INFO    SenderThread:9431 [file_stream.py:finish():618] file stream finish is done
+2024-05-23 14:06:46,970 INFO    SenderThread:9431 [sender.py:transition_state():614] send defer: 13
+2024-05-23 14:06:46,970 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:46,970 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 13
+2024-05-23 14:06:46,970 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:46,971 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 13
+2024-05-23 14:06:46,971 INFO    SenderThread:9431 [sender.py:transition_state():614] send defer: 14
+2024-05-23 14:06:46,971 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: defer
+2024-05-23 14:06:46,971 INFO    HandlerThread:9431 [handler.py:handle_request_defer():172] handle defer: 14
+2024-05-23 14:06:46,972 DEBUG   SenderThread:9431 [sender.py:send():379] send: final
+2024-05-23 14:06:46,972 DEBUG   SenderThread:9431 [sender.py:send():379] send: footer
+2024-05-23 14:06:46,972 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: defer
+2024-05-23 14:06:46,972 INFO    SenderThread:9431 [sender.py:send_request_defer():610] handle sender defer: 14
+2024-05-23 14:06:46,973 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: poll_exit
+2024-05-23 14:06:46,974 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: poll_exit
+2024-05-23 14:06:46,975 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: server_info
+2024-05-23 14:06:46,976 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: get_summary
+2024-05-23 14:06:46,976 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: sampled_history
+2024-05-23 14:06:46,976 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: poll_exit
+2024-05-23 14:06:46,977 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: poll_exit
+2024-05-23 14:06:46,977 DEBUG   SenderThread:9431 [sender.py:send_request():406] send_request: server_info
+2024-05-23 14:06:46,979 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-23 14:06:47,149 INFO    MainThread:9431 [wandb_run.py:_footer_history_summary_info():3936] rendering history
+2024-05-23 14:06:47,149 INFO    MainThread:9431 [wandb_run.py:_footer_history_summary_info():3968] rendering summary
+2024-05-23 14:06:47,149 INFO    MainThread:9431 [wandb_run.py:_footer_sync_info():3895] logging synced files
+2024-05-23 14:06:47,150 DEBUG   HandlerThread:9431 [handler.py:handle_request():146] handle_request: shutdown
+2024-05-23 14:06:47,150 INFO    HandlerThread:9431 [handler.py:finish():866] shutting down handler
+2024-05-23 14:06:47,975 INFO    WriterThread:9431 [datastore.py:close():296] close: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_140551-l3s2nw1e/run-l3s2nw1e.wandb
+2024-05-23 14:06:48,149 INFO    SenderThread:9431 [sender.py:finish():1546] shutting down sender
+2024-05-23 14:06:48,149 INFO    SenderThread:9431 [file_pusher.py:finish():172] shutting down file pusher
+2024-05-23 14:06:48,149 INFO    SenderThread:9431 [file_pusher.py:join():178] waiting for file pusher

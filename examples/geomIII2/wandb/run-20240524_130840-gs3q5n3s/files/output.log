@@ -1,0 +1,129 @@
+
+Waiting for JIT...
+[13:09:02 - main - INFO] -----------------------------
+[13:09:02 - main - INFO] Iter:   0      Time: 19.967
+[13:09:02 - main - INFO] -------------  --------------
+[13:09:02 - main - INFO] p_in_loss      1.588e-01
+[13:09:02 - main - INFO] p_out_loss     5.704e-01
+[13:09:02 - main - INFO] rc_loss        2.577e+01
+[13:09:02 - main - INFO] ru_loss        1.897e+07
+[13:09:02 - main - INFO] rv_loss        1.772e+07
+[13:09:02 - main - INFO] u_noslip_loss  1.978e-01
+[13:09:02 - main - INFO] v_in_loss      1.153e-01
+[13:09:02 - main - INFO] v_noslip_loss  9.100e-02
+[13:09:02 - main - INFO] v_out_loss     1.446e-01
+[13:09:02 - main - INFO] u_error        4.287e+00
+[13:09:02 - main - INFO] v_error        5.757e+00
+[13:09:05 - main - INFO] ----------------------------
+[13:09:05 - main - INFO] Iter: 100      Time: 0.031
+[13:09:05 - main - INFO] -------------  -------------
+[13:09:05 - main - INFO] p_in_loss      4.572e-02
+[13:09:05 - main - INFO] p_out_loss     4.395e-02
+[13:09:05 - main - INFO] rc_loss        6.992e-02
+[13:09:05 - main - INFO] ru_loss        1.524e+05
+[13:09:05 - main - INFO] rv_loss        5.856e+03
+[13:09:05 - main - INFO] u_noslip_loss  1.736e-04
+[13:09:05 - main - INFO] v_in_loss      7.740e-05
+[13:09:05 - main - INFO] v_noslip_loss  2.163e-04
+[13:09:05 - main - INFO] v_out_loss     1.227e-04
+[13:09:05 - main - INFO] u_error        1.019e+00
+[13:09:05 - main - INFO] v_error        1.021e+00
+[13:09:07 - main - INFO] ----------------------------
+[13:09:07 - main - INFO] Iter: 200      Time: 0.031
+[13:09:07 - main - INFO] -------------  -------------
+[13:09:07 - main - INFO] p_in_loss      4.103e-02
+[13:09:07 - main - INFO] p_out_loss     4.455e-02
+[13:09:07 - main - INFO] rc_loss        4.289e-02
+[13:09:07 - main - INFO] ru_loss        1.481e+05
+[13:09:07 - main - INFO] rv_loss        3.375e+03
+[13:09:07 - main - INFO] u_noslip_loss  1.525e-04
+[13:09:07 - main - INFO] v_in_loss      6.874e-05
+[13:09:07 - main - INFO] v_noslip_loss  1.254e-04
+[13:09:07 - main - INFO] v_out_loss     3.616e-05
+[13:09:07 - main - INFO] u_error        9.939e-01
+[13:09:07 - main - INFO] v_error        1.009e+00
+[13:09:08 - main - INFO] ----------------------------
+[13:09:08 - main - INFO] Iter: 300      Time: 0.032
+[13:09:08 - main - INFO] -------------  -------------
+[13:09:08 - main - INFO] p_in_loss      4.489e-02
+[13:09:08 - main - INFO] p_out_loss     3.826e-02
+[13:09:08 - main - INFO] rc_loss        3.677e-02
+[13:09:08 - main - INFO] ru_loss        1.512e+05
+[13:09:08 - main - INFO] rv_loss        4.074e+03
+[13:09:08 - main - INFO] u_noslip_loss  2.171e-04
+[13:09:08 - main - INFO] v_in_loss      2.062e-04
+[13:09:08 - main - INFO] v_noslip_loss  4.221e-04
+[13:09:08 - main - INFO] v_out_loss     3.848e-04
+[13:09:08 - main - INFO] u_error        1.011e+00
+[13:09:08 - main - INFO] v_error        1.020e+00
+[13:09:09 - main - INFO] ----------------------------
+[13:09:09 - main - INFO] Iter: 400      Time: 0.031
+[13:09:09 - main - INFO] -------------  -------------
+[13:09:09 - main - INFO] p_in_loss      4.727e-02
+[13:09:09 - main - INFO] p_out_loss     3.731e-02
+[13:09:09 - main - INFO] rc_loss        4.523e-02
+[13:09:09 - main - INFO] ru_loss        1.436e+05
+[13:09:09 - main - INFO] rv_loss        4.530e+03
+[13:09:09 - main - INFO] u_noslip_loss  2.547e-04
+[13:09:09 - main - INFO] v_in_loss      2.369e-05
+[13:09:09 - main - INFO] v_noslip_loss  4.826e-05
+[13:09:09 - main - INFO] v_out_loss     1.736e-05
+[13:09:09 - main - INFO] u_error        9.766e-01
+[13:09:09 - main - INFO] v_error        1.002e+00
+[13:09:10 - main - INFO] ----------------------------
+[13:09:10 - main - INFO] Iter: 500      Time: 0.029
+[13:09:10 - main - INFO] -------------  -------------
+[13:09:10 - main - INFO] p_in_loss      4.355e-02
+[13:09:10 - main - INFO] p_out_loss     3.851e-02
+[13:09:10 - main - INFO] rc_loss        5.416e-02
+[13:09:10 - main - INFO] ru_loss        1.430e+05
+[13:09:10 - main - INFO] rv_loss        6.114e+03
+[13:09:10 - main - INFO] u_noslip_loss  5.271e-04
+[13:09:10 - main - INFO] v_in_loss      3.649e-05
+[13:09:10 - main - INFO] v_noslip_loss  4.760e-05
+[13:09:10 - main - INFO] v_out_loss     1.863e-05
+[13:09:10 - main - INFO] u_error        1.037e+00
+[13:09:10 - main - INFO] v_error        9.951e-01
+[13:09:11 - main - INFO] ----------------------------
+[13:09:11 - main - INFO] Iter: 600      Time: 0.029
+[13:09:11 - main - INFO] -------------  -------------
+[13:09:11 - main - INFO] p_in_loss      3.827e-02
+[13:09:11 - main - INFO] p_out_loss     3.828e-02
+[13:09:11 - main - INFO] rc_loss        6.695e-02
+[13:09:11 - main - INFO] ru_loss        1.517e+05
+[13:09:11 - main - INFO] rv_loss        6.553e+03
+[13:09:11 - main - INFO] u_noslip_loss  2.039e-03
+[13:09:11 - main - INFO] v_in_loss      1.133e-04
+[13:09:11 - main - INFO] v_noslip_loss  9.935e-05
+[13:09:11 - main - INFO] v_out_loss     6.755e-05
+[13:09:11 - main - INFO] u_error        8.795e-01
+[13:09:11 - main - INFO] v_error        9.850e-01
+[13:09:12 - main - INFO] ----------------------------
+[13:09:12 - main - INFO] Iter: 700      Time: 0.029
+[13:09:12 - main - INFO] -------------  -------------
+[13:09:12 - main - INFO] p_in_loss      3.592e-02
+[13:09:12 - main - INFO] p_out_loss     3.487e-02
+[13:09:12 - main - INFO] rc_loss        8.220e-02
+[13:09:12 - main - INFO] ru_loss        1.491e+05
+[13:09:12 - main - INFO] rv_loss        5.089e+03
+[13:09:12 - main - INFO] u_noslip_loss  1.130e-03
+[13:09:12 - main - INFO] v_in_loss      3.064e-03
+[13:09:12 - main - INFO] v_noslip_loss  3.710e-03
+[13:09:12 - main - INFO] v_out_loss     4.259e-03
+[13:09:12 - main - INFO] u_error        9.109e-01
+[13:09:12 - main - INFO] v_error        1.387e+00
+Traceback (most recent call last):
+  File "/home/pedro/PINN/jaxpi/examples/geomIII2/main.py", line 39, in <module>
+    app.run(main)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 308, in run
+    _run_main(main, args)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 254, in _run_main
+    sys.exit(main(argv))
+             ^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomIII2/main.py", line 31, in main
+    train.train_and_evaluate(FLAGS.config, FLAGS.workdir)
+  File "/home/pedro/PINN/jaxpi/examples/geomIII2/train.py", line 109, in train_and_evaluate
+    model.state = model.step(model.state, batch)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 1, in <lambda>
+KeyboardInterrupt

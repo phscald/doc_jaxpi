@@ -8,7 +8,7 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     # config.mode = "train""eval"
-    config.mode = "eval"
+    config.mode = "train"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -28,7 +28,7 @@ def get_config():
     arch.activation = "tanh"  # gelu works better than tanh
     arch.periodicity = False
     arch.fourier_emb = ml_collections.ConfigDict(
-        {"embed_scale": 10.0, "embed_dim": 128}
+        {"embed_scale": 10.0, "embed_dim": 260} # 128
     )
     arch.reparam = ml_collections.ConfigDict(
         {"type": "weight_fact", "mean": 0.5, "stddev": 0.1}
@@ -83,7 +83,7 @@ def get_config():
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()
-    saving.save_every_steps =  999999#None
+    saving.save_every_steps =  training.max_steps#None
     saving.num_keep_ckpts = 10
 
     # Input shape for initializing Flax models

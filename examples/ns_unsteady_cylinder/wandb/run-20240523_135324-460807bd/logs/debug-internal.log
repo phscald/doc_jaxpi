@@ -1,0 +1,91 @@
+2024-05-23 13:53:24,036 INFO    StreamThr :1510417 [internal.py:wandb_internal():86] W&B internal server running at pid: 1510417, started at: 2024-05-23 13:53:24.036540
+2024-05-23 13:53:24,037 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status
+2024-05-23 13:53:24,038 INFO    WriterThread:1510417 [datastore.py:open_for_write():87] open: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_135324-460807bd/run-460807bd.wandb
+2024-05-23 13:53:24,038 DEBUG   SenderThread:1510417 [sender.py:send():379] send: header
+2024-05-23 13:53:24,038 DEBUG   SenderThread:1510417 [sender.py:send():379] send: run
+2024-05-23 13:53:24,539 INFO    SenderThread:1510417 [dir_watcher.py:__init__():211] watching files in: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_135324-460807bd/files
+2024-05-23 13:53:24,540 INFO    SenderThread:1510417 [sender.py:_start_run_threads():1124] run started: 460807bd with start time 1716472404.036416
+2024-05-23 13:53:24,544 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: check_version
+2024-05-23 13:53:24,545 DEBUG   SenderThread:1510417 [sender.py:send_request():406] send_request: check_version
+2024-05-23 13:53:24,665 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: run_start
+2024-05-23 13:53:24,674 ERROR   HandlerThread:1510417 [gpu.py:is_available():381] Error initializing NVML: Unknown Error
+2024-05-23 13:53:24,674 DEBUG   HandlerThread:1510417 [system_info.py:__init__():26] System info init
+2024-05-23 13:53:24,674 DEBUG   HandlerThread:1510417 [system_info.py:__init__():41] System info init done
+2024-05-23 13:53:24,674 INFO    HandlerThread:1510417 [system_monitor.py:start():194] Starting system monitor
+2024-05-23 13:53:24,674 INFO    SystemMonitor:1510417 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-05-23 13:53:24,674 INFO    HandlerThread:1510417 [system_monitor.py:probe():214] Collecting system info
+2024-05-23 13:53:24,675 INFO    SystemMonitor:1510417 [interfaces.py:start():190] Started cpu monitoring
+2024-05-23 13:53:24,675 INFO    SystemMonitor:1510417 [interfaces.py:start():190] Started disk monitoring
+2024-05-23 13:53:24,676 INFO    SystemMonitor:1510417 [interfaces.py:start():190] Started memory monitoring
+2024-05-23 13:53:24,676 INFO    SystemMonitor:1510417 [interfaces.py:start():190] Started network monitoring
+2024-05-23 13:53:24,683 DEBUG   HandlerThread:1510417 [system_info.py:probe():150] Probing system
+2024-05-23 13:53:24,683 DEBUG   HandlerThread:1510417 [system_info.py:probe():198] Probing system done
+2024-05-23 13:53:24,683 DEBUG   HandlerThread:1510417 [system_monitor.py:probe():223] {'os': 'Linux-6.5.0-35-generic-x86_64-with-glibc2.35', 'python': '3.11.0rc1', 'heartbeatAt': '2024-05-23T13:53:24.683077', 'startedAt': '2024-05-23T13:53:24.031521', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/main.py', 'codePathLocal': 'main.py', 'codePath': 'main.py', 'host': '8b460e7a0fb5', 'username': 'root', 'executable': '/usr/bin/python3', 'cpu_count': 24, 'cpu_count_logical': 32, 'cpu_freq': {'current': 1477.25196875, 'min': 800.0, 'max': 4937.5}, 'cpu_freq_per_core': [{'current': 1506.729, 'min': 800.0, 'max': 5500.0}, {'current': 1111.64, 'min': 800.0, 'max': 5500.0}, {'current': 1522.121, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 3017.548, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 3007.315, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 3054.751, 'min': 800.0, 'max': 5800.0}, {'current': 800.0, 'min': 800.0, 'max': 5800.0}, {'current': 3126.468, 'min': 800.0, 'max': 5800.0}, {'current': 800.0, 'min': 800.0, 'max': 5800.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 3160.625, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 3102.359, 'min': 800.0, 'max': 5500.0}, {'current': 1599.721, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 2736.834, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 1509.388, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 1876.145, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}], 'disk': {'/': {'total': 365.6147689819336, 'used': 118.3931884765625}}, 'memory': {'total': 125.61077499389648}}
+2024-05-23 13:53:24,683 INFO    HandlerThread:1510417 [system_monitor.py:probe():224] Finished collecting system info
+2024-05-23 13:53:24,683 INFO    HandlerThread:1510417 [system_monitor.py:probe():227] Publishing system info
+2024-05-23 13:53:24,683 INFO    HandlerThread:1510417 [system_monitor.py:probe():229] Finished publishing system info
+2024-05-23 13:53:24,684 DEBUG   SenderThread:1510417 [sender.py:send():379] send: files
+2024-05-23 13:53:24,685 INFO    SenderThread:1510417 [sender.py:_save_file():1390] saving file wandb-metadata.json with policy now
+2024-05-23 13:53:24,720 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: python_packages
+2024-05-23 13:53:24,720 DEBUG   SenderThread:1510417 [sender.py:send_request():406] send_request: python_packages
+2024-05-23 13:53:24,761 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-23 13:53:24,761 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-23 13:53:24,761 DEBUG   SenderThread:1510417 [sender.py:send():379] send: telemetry
+2024-05-23 13:53:24,761 DEBUG   SenderThread:1510417 [sender.py:send_request():406] send_request: stop_status
+2024-05-23 13:53:25,407 INFO    wandb-upload_0:1510417 [upload_job.py:push():131] Uploaded file /tmp/tmpt4plwzrmwandb/n2dg8ucq-wandb-metadata.json
+2024-05-23 13:53:25,539 INFO    Thread-12 :1510417 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_135324-460807bd/files/requirements.txt
+2024-05-23 13:53:25,540 INFO    Thread-12 :1510417 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_135324-460807bd/files/output.log
+2024-05-23 13:53:25,540 INFO    Thread-12 :1510417 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_135324-460807bd/files/wandb-metadata.json
+2024-05-23 13:53:27,539 INFO    Thread-12 :1510417 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_135324-460807bd/files/output.log
+2024-05-23 13:53:28,540 INFO    Thread-12 :1510417 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_135324-460807bd/files/output.log
+2024-05-23 13:53:29,601 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:53:34,601 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:53:39,602 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:53:39,721 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-23 13:53:39,721 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-23 13:53:39,721 DEBUG   SenderThread:1510417 [sender.py:send_request():406] send_request: stop_status
+2024-05-23 13:53:44,998 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:53:49,998 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:53:54,721 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-23 13:53:54,721 DEBUG   SenderThread:1510417 [sender.py:send_request():406] send_request: stop_status
+2024-05-23 13:53:54,761 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-23 13:53:55,902 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:53:56,545 INFO    Thread-12 :1510417 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/wandb/run-20240523_135324-460807bd/files/config.yaml
+2024-05-23 13:54:01,098 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:54:06,098 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:54:09,722 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-23 13:54:09,722 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-23 13:54:09,722 DEBUG   SenderThread:1510417 [sender.py:send_request():406] send_request: stop_status
+2024-05-23 13:54:11,927 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:54:16,927 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:54:21,928 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:54:24,676 DEBUG   SystemMonitor:1510417 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-05-23 13:54:24,677 DEBUG   SenderThread:1510417 [sender.py:send():379] send: stats
+2024-05-23 13:54:24,721 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-23 13:54:24,721 DEBUG   SenderThread:1510417 [sender.py:send_request():406] send_request: stop_status
+2024-05-23 13:54:24,765 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-23 13:54:26,985 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:54:31,986 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:54:36,987 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:54:39,721 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-23 13:54:39,721 DEBUG   SenderThread:1510417 [sender.py:send_request():406] send_request: stop_status
+2024-05-23 13:54:39,765 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-23 13:54:41,990 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:54:46,991 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:54:51,992 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:54:54,677 DEBUG   SenderThread:1510417 [sender.py:send():379] send: stats
+2024-05-23 13:54:54,721 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-23 13:54:54,722 DEBUG   SenderThread:1510417 [sender.py:send_request():406] send_request: stop_status
+2024-05-23 13:54:54,765 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-23 13:54:57,929 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:55:02,930 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:55:07,931 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:55:09,722 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-23 13:55:09,722 DEBUG   SenderThread:1510417 [sender.py:send_request():406] send_request: stop_status
+2024-05-23 13:55:09,765 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-23 13:55:12,696 INFO    memory    :1510417 [interfaces.py:monitor():140] Process proc.memory.rssMB has exited.
+2024-05-23 13:55:12,697 DEBUG   SystemMonitor:1510417 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-05-23 13:55:12,698 DEBUG   SystemMonitor:1510417 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-05-23 13:55:12,699 DEBUG   SenderThread:1510417 [sender.py:send():379] send: stats
+2024-05-23 13:55:13,700 DEBUG   HandlerThread:1510417 [handler.py:handle_request():146] handle_request: status_report
+2024-05-23 13:55:14,686 INFO    MainThread:1510417 [internal.py:handle_exit():76] Internal process exited

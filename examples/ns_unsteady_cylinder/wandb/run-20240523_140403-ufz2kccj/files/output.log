@@ -1,0 +1,122 @@
+
+I0523 14:04:04.384442 129383746060288 train.py:234] Training time window 1
+Waiting for JIT...
+Traceback (most recent call last):
+  File "/home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/main.py", line 39, in <module>
+    app.run(main)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 308, in run
+    _run_main(main, args)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 254, in _run_main
+    sys.exit(main(argv))
+             ^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/main.py", line 31, in main
+    train.train_and_evaluate(FLAGS.config, FLAGS.workdir)
+  File "/home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/train.py", line 290, in train_and_evaluate
+    model = train_one_window(config, workdir, model, samplers, idx)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/ns_unsteady_cylinder/train.py", line 132, in train_one_window
+    model.state = model.update_weights(model.state, batch)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+jaxlib.xla_extension.XlaRuntimeError: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 27627513640 bytes.
+BufferAssignment OOM Debugging.
+BufferAssignment stats:
+             parameter allocation:    3.83MiB
+              constant allocation:     1.1KiB
+        maybe_live_out allocation:    3.63MiB
+     preallocated temp allocation:   25.73GiB
+  preallocated temp fragmentation:   60.63MiB (0.23%)
+                 total allocation:   25.74GiB
+              total fragmentation:   60.74MiB (0.23%)
+Peak buffers:
+	Buffer 1:
+		Size: 96.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(transpose(vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))))/Dense_0/dot_general[dimension_numbers=(((2,), (1,)), ((), ())) precision=None preferred_element_type=float32]" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=121 deduplicated_name="gemm_fusion_dot.3898.0"
+		XLA Label: fusion
+		Shape: f32[98304,256]
+		==========================
+	Buffer 2:
+		Size: 96.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(transpose(vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))))/Dense_0/dot_general[dimension_numbers=(((2,), (1,)), ((), ())) precision=None preferred_element_type=float32]" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=121 deduplicated_name="gemm_fusion_dot.3898.0"
+		XLA Label: fusion
+		Shape: f32[98304,256]
+		==========================
+	Buffer 3:
+		Size: 96.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(transpose(vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))))/Dense_1/dot_general[dimension_numbers=(((2,), (1,)), ((), ())) precision=None preferred_element_type=float32]" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=121 deduplicated_name="gemm_fusion_dot.3898.0"
+		XLA Label: fusion
+		Shape: f32[98304,256]
+		==========================
+	Buffer 4:
+		Size: 96.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(transpose(vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))))/Dense_0/dot_general[dimension_numbers=(((2,), (1,)), ((), ())) precision=None preferred_element_type=float32]" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=121 deduplicated_name="gemm_fusion_dot.3898.0"
+		XLA Label: fusion
+		Shape: f32[98304,256]
+		==========================
+	Buffer 5:
+		Size: 96.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(transpose(vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))))/Dense_1/dot_general[dimension_numbers=(((2,), (1,)), ((), ())) precision=None preferred_element_type=float32]" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=121 deduplicated_name="gemm_fusion_dot.3898.0"
+		XLA Label: fusion
+		Shape: f32[98304,256]
+		==========================
+	Buffer 6:
+		Size: 96.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(transpose(vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))))/Dense_2/dot_general[dimension_numbers=(((2,), (1,)), ((), ())) precision=None preferred_element_type=float32]" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=121 deduplicated_name="gemm_fusion_dot.3898.0"
+		XLA Label: fusion
+		Shape: f32[98304,256]
+		==========================
+	Buffer 7:
+		Size: 96.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(transpose(vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))))/Dense_0/dot_general[dimension_numbers=(((2,), (1,)), ((), ())) precision=None preferred_element_type=float32]" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=121 deduplicated_name="gemm_fusion_dot.3898.0"
+		XLA Label: fusion
+		Shape: f32[98304,256]
+		==========================
+	Buffer 8:
+		Size: 75.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))/add_any" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=188
+		XLA Label: fusion
+		Shape: f32[12,200,8192]
+		==========================
+	Buffer 9:
+		Size: 75.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))/add_any" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=188
+		XLA Label: fusion
+		Shape: f32[12,200,8192]
+		==========================
+	Buffer 10:
+		Size: 75.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))/add_any" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=188
+		XLA Label: fusion
+		Shape: f32[12,200,8192]
+		==========================
+	Buffer 11:
+		Size: 75.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))/add_any" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=188
+		XLA Label: fusion
+		Shape: f32[12,200,8192]
+		==========================
+	Buffer 12:
+		Size: 75.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))/add_any" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=188
+		XLA Label: fusion
+		Shape: f32[12,200,8192]
+		==========================
+	Buffer 13:
+		Size: 75.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))/add_any" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=188
+		XLA Label: fusion
+		Shape: f32[12,200,8192]
+		==========================
+	Buffer 14:
+		Size: 75.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))/add_any" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=188
+		XLA Label: fusion
+		Shape: f32[12,200,8192]
+		==========================
+	Buffer 15:
+		Size: 75.00MiB
+		Operator: op_name="pmap(update_weights)/jit(main)/jit(compute_weights)/vmap(transpose(jvp(jit(losses))))/jit(res_and_w)/vmap(jvp(transpose(vmap(jvp(jvp(ModifiedMlp))))))/add_any" source_file="/usr/local/lib/python3.11/dist-packages/jaxpi/archs.py" source_line=188
+		XLA Label: fusion
+		Shape: f32[12,200,8192]
+		==========================
+--------------------
+For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
