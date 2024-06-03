@@ -177,23 +177,37 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     #     nu,
     # ) = get_dataset()
 
+    # (
+    #     u_ref,
+    #     v_ref,
+    #     p_ref,
+    #     s_ref,
+    #     coords,
+    #     inflow_coords,
+    #     outflow_coords,
+    #     wall_coords,
+    #     mu, rho
+    # ) = get_dataset()
+
+    pin =10
     (
-        # u_ref,
-        # v_ref,
-        # p_ref,
         coords,
         inflow_coords,
         outflow_coords,
         wall_coords,
-        mu, rho
-    ) = get_dataset()
+        #time,
+        u0, v0, p0, s0,
+        mu0, mu1, rho0, rho1
+    ) = get_dataset(pin=pin)
 
-    U_max = .15#.25/3#visc .1
+    fluid_params = (mu0, mu1, rho0, rho1)
+    U_max = .1#.25/3#visc .1
     # pmax = 15
 
     L_max = .021
-    pmax = mu*U_max/L_max
-    Re = rho*U_max*L_max/mu
+    pmax = mu0*U_max/L_max
+    # Re = rho0*U_max*L_max/mu0
+    D = 10**(-9)
 
     # (
     #     fine_coords,
@@ -224,7 +238,8 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         # Nondimensionalize flow field
         # u_inflow = u_inflow / U_star
 
-        p_inflow = 10 / pmax
+        p_inflow = (pin / pmax) * jnp.ones((inflow_coords.shape[0]))
+        u0, v0, p0 = u0/U_max, v0/U_max, p0/pmax
        
         # # Nondimensionalization parameters
         # U_star = 1.0  # characteristic velocity
@@ -252,7 +267,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         U_star = 1.0
         L_star = 1.0
         T_star = 1.0
-        Re = 1 / nu
+        # Re = 1 / nu
 
     # Temporal domain of each time window
     t0 = 0.0
@@ -269,7 +284,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     # u0 = u_ref[-1, :]
     # v0 = v_ref[-1, :]
     # p0 = p_ref[-1, :]
-    s0 = s_ref[-1, :]
+    # s0 = s_ref[-1, :]
 
     for idx in range(config.training.num_time_windows):
         logging.info("Training time window {}".format(idx + 1))
@@ -278,8 +293,8 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         keys = random.split(random.PRNGKey(0), 5)
         ic_sampler = iter(
             ICSampler(
-                s0, coords, config.training.ic_batch_size, rng_key=keys[0]
-                # u0, v0, p0, s0, coords, config.training.ic_batch_size, rng_key=keys[0]
+                # s0, coords, config.training.ic_batch_size, rng_key=keys[0]
+                u0, v0, p0, s0, coords, config.training.ic_batch_size, rng_key=keys[0]
             )
         )
         inflow_sampler = iter(
@@ -308,14 +323,23 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         )
 
         res_sampler = iter(
-            ResSampler(
+            TimeSpaceSampler(
                 temporal_dom,
-                fine_coords,
-                fine_coords,
+                coords,
                 config.training.res_batch_size,
                 rng_key=keys[4],
             )
         )
+
+        # res_sampler = iter(
+        #     ResSampler(
+        #         temporal_dom,
+        #         fine_coords,
+        #         fine_coords,
+        #         config.training.res_batch_size,
+        #         rng_key=keys[4],
+        #     )
+        # )
 
         samplers = {
             "ic": ic_sampler,
@@ -325,8 +349,21 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
             "res": res_sampler,
         }
 
+
+    # model = models.NavierStokes2D(
+    #     config,
+    #     # u_inflow,
+    #     p_inflow,
+    #     inflow_coords,
+    #     outflow_coords,
+    #     wall_coords,
+    #     cylinder_coords,
+    #     mu, U_max, pmax
+    #     # Re,
+    # )
+
         # Initialize model
-        model = models.NavierStokes2DwSat(config, inflow_fn, temporal_dom, coords, Re)
+        model = models.NavierStokes2DwSat(config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, D)
 
         # Train model for the current time window
         model = train_one_window(config, workdir, model, samplers, idx)
@@ -335,15 +372,15 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         if config.training.num_time_windows > 1:
             state = jax.device_get(jax.tree_util.tree_map(lambda x: x[0], model.state))
             params = state.params
-            # u0 = vmap(model.u_net, (None, None, 0, 0))(
-            #     params, t1, coords[:, 0], coords[:, 1]
-            # )
-            # v0 = vmap(model.v_net, (None, None, 0, 0))(
-            #     params, t1, coords[:, 0], coords[:, 1]
-            # )
-            # p0 = vmap(model.p_net, (None, None, 0, 0))(
-            #     params, t1, coords[:, 0], coords[:, 1]
-            # )
+            u0 = vmap(model.u_net, (None, None, 0, 0))(
+                params, t1, coords[:, 0], coords[:, 1]
+            )
+            v0 = vmap(model.v_net, (None, None, 0, 0))(
+                params, t1, coords[:, 0], coords[:, 1]
+            )
+            p0 = vmap(model.p_net, (None, None, 0, 0))(
+                params, t1, coords[:, 0], coords[:, 1]
+            )
             s0 = vmap(model.s_net, (None, None, 0, 0))(
                 params, t1, coords[:, 0], coords[:, 1]
             )

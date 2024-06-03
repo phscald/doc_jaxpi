@@ -14,13 +14,31 @@ from jaxpi.evaluator import BaseEvaluator
 
 
 class NavierStokes2DwSat(ForwardIVP):
-    def __init__(self, config, inflow_fn, temporal_dom, coords, Re, D):
+
+    # def __init__(
+    #     self,
+    #     config,
+    #     # u_inflow,
+    #     p_inflow,
+    #     inflow_coords,
+    #     outflow_coords,
+    #     wall_coords,
+    #     mu, U_max, pmax
+    #     # Re,
+    # ):
+
+    # def __init__(self, config, inflow_fn, temporal_dom, coords, Re, D):
+    def __init__(self, config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, D):   
         super().__init__(config)
 
-        self.inflow_fn = inflow_fn
+        # self.inflow_fn = inflow_fn
+        self.p_in = p_inflow 
         self.temporal_dom = temporal_dom
         self.coords = coords
-        self.Re = Re  # Reynolds number
+        self.U_max = U_max
+        self.L_max = L_max
+        # self.Re = Re  # Reynolds number
+        self.fluid_params = fluid_params
         self.D = D
 
         # Non-dimensionalized domain length and width
@@ -75,7 +93,7 @@ class NavierStokes2DwSat(ForwardIVP):
 
     def s_net(self, params, t, x, y):
         _, _, _, s = self.neural_net(params, t, x, y)
-        return p
+        return s
 
     # def w_net(self, params, t, x, y): # nao foi usado nesse script, e nao entendi a eq. também
     #     u, v, _ = self.neural_net(params, t, x, y)
@@ -85,6 +103,9 @@ class NavierStokes2DwSat(ForwardIVP):
     #     return w
 
     def r_net(self, params, t, x, y):
+        Re = jnp.ones(x.shape)
+        (mu0, mu1, rho0, rho1) = self.fluid_params
+
         u, v, p, s = self.neural_net(params, t, x, y)
 
         u_t = grad(self.u_net, argnums=1)(params, t, x, y)
@@ -109,9 +130,14 @@ class NavierStokes2DwSat(ForwardIVP):
         v_yy = grad(grad(self.v_net, argnums=3), argnums=3)(params, t, x, y)
         s_yy = grad(grad(self.s_net, argnums=3), argnums=3)(params, t, x, y)
 
+        # compute Reynolds, initialized as Re=1
+        mu = (1-s)*mu0+s*mu1
+        rho = (1-s)*rho0+s*rho1
+        Re = Re*rho*self.U_max*self.L_max/mu
+
         # PDE residual
-        ru = u_t + u * u_x + v * u_y + (p_x - (u_xx + u_yy)) / self.Re
-        rv = v_t + u * v_x + v * v_y + (p_y - (v_xx + v_yy)) / self.Re
+        ru = u_t + u * u_x + v * u_y + (p_x - (u_xx + u_yy)) / Re
+        rv = v_t + u * v_x + v * v_y + (p_y - (v_xx + v_yy)) / Re
         rc = u_x + v_y
         rs = s_t + u * s_x + v * s_y - self.D*(s_xx + s_yy) 
 
@@ -319,16 +345,18 @@ class NavierStokes2DwSat(ForwardIVP):
         res_batch = batch["res"]
 
         # Initial condition loss
-        # coords_batch, u_batch, v_batch, p_batch = ic_batch
-        s_batch = ic_batch
+        coords_batch, u_batch, v_batch, p_batch, s_batch = ic_batch
+        # s_batch = ic_batch
 
         u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1])
         v_ic_pred = self.v0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1])
         p_ic_pred = self.p0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1])
+        s_ic_pred = self.s0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1])
 
         u_ic_loss = jnp.mean((u_ic_pred - u_batch) ** 2)
         v_ic_loss = jnp.mean((v_ic_pred - v_batch) ** 2)
         p_ic_loss = jnp.mean((p_ic_pred - p_batch) ** 2)
+        s_ic_loss = jnp.mean((s_ic_pred - s_batch) ** 2)
 
         # inflow outflow loss
         #
@@ -345,7 +373,7 @@ class NavierStokes2DwSat(ForwardIVP):
         s_in_pred = self.s_pred_fn(
             params, self.inflow_coords[:, 0], self.inflow_coords[:, 1]
         )
-        s_in_pred = jnp.mean((s_in_pred - 1.0) ** 2)
+        s_in_loss = jnp.mean((s_in_pred - 1.0) ** 2)
         #
         v_in_pred = self.v_pred_fn(
             params, self.inflow_coords[:, 0], self.inflow_coords[:, 1]
@@ -383,7 +411,7 @@ class NavierStokes2DwSat(ForwardIVP):
             ru_loss = jnp.mean(ru_pred**2)
             rv_loss = jnp.mean(rv_pred**2)
             rc_loss = jnp.mean(rc_pred**2)
-            rs_loss = jnp.mean(rc_pred**2)
+            rs_loss = jnp.mean(rs_pred**2)
 
         loss_dict = {
             "u_ic": u_ic_loss,
@@ -405,14 +433,14 @@ class NavierStokes2DwSat(ForwardIVP):
 
         return loss_dict
 
-    def u_v_grads(self, params, t, x, y):
-        u_x = grad(self.u_net, argnums=2)(params, t, x, y)
-        v_x = grad(self.v_net, argnums=2)(params, t, x, y)
+    # def u_v_grads(self, params, t, x, y):
+    #     u_x = grad(self.u_net, argnums=2)(params, t, x, y)
+    #     v_x = grad(self.v_net, argnums=2)(params, t, x, y)
 
-        u_y = grad(self.u_net, argnums=3)(params, t, x, y)
-        v_y = grad(self.v_net, argnums=3)(params, t, x, y)
+    #     u_y = grad(self.u_net, argnums=3)(params, t, x, y)
+    #     v_y = grad(self.v_net, argnums=3)(params, t, x, y)
 
-        return u_x, v_x, u_y, v_y
+    #     return u_x, v_x, u_y, v_y
 
     
 

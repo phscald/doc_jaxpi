@@ -11,7 +11,7 @@ def get_config():
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
-    wandb.project = "PINN-NS_unsteady_cylinder"
+    wandb.project = "geomI-unsteady"
     wandb.name = "default"
     wandb.tag = None
 
@@ -20,11 +20,11 @@ def get_config():
 
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
-    arch.arch_name = "ModifiedMlp"
-    arch.num_layers = 4
-    arch.hidden_dim = 256
-    arch.out_dim = 3
-    arch.activation = "gelu"  # gelu works better than tanh for this problem
+    arch.arch_name = "Mlp"
+    arch.num_layers = 6
+    arch.hidden_dim = 128
+    arch.out_dim = 4
+    arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
     arch.fourier_emb = ml_collections.ConfigDict({"embed_scale": 1.0, "embed_dim": 256})
     arch.reparam = ml_collections.ConfigDict(
@@ -45,7 +45,7 @@ def get_config():
     # Training
     config.training = training = ml_collections.ConfigDict()
     training.max_steps = 200000
-    training.num_time_windows = 10
+    training.num_time_windows = 1# 10
 
     training.inflow_batch_size = 2048
     training.outflow_batch_size = 2048
@@ -60,15 +60,18 @@ def get_config():
         "u_ic": 1.0,
         "v_ic": 1.0,
         "p_ic": 1.0,
-        "u_in": 1.0,
+        "s_ic": 1.0,
+        "p_in": 1.0,
+        "p_out": 1.0,
+        "s_in": 1.0,
         "v_in": 1.0,
-        "u_out": 1.0,
         "v_out": 1.0,
         "u_noslip": 1.0,
         "v_noslip": 1.0,
         "ru": 1.0,
         "rv": 1.0,
         "rc": 1.0,
+        "rs": 1.0,
     }
 
     weighting.momentum = 0.9
