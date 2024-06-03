@@ -25,7 +25,7 @@ from jaxpi.samplers import BaseSampler, SpaceSampler, TimeSpaceSampler
 from jaxpi.logging import Logger
 from jaxpi.utils import save_checkpoint
 
-from utils import get_dataset, get_fine_mesh, parabolic_inflow
+from utils import get_dataset#, get_fine_mesh, parabolic_inflow
 
 
 class ICSampler(SpaceSampler):

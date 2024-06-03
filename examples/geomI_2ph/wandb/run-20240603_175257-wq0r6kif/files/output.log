@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "/home/pedro/PINN/jaxpi/examples/geomI_2ph/main.py", line 39, in <module>
+    app.run(main)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 308, in run
+    _run_main(main, args)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 254, in _run_main
+    sys.exit(main(argv))
+             ^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomI_2ph/main.py", line 31, in main
+    train.train_and_evaluate(FLAGS.config, FLAGS.workdir)
+  File "/home/pedro/PINN/jaxpi/examples/geomI_2ph/train.py", line 201, in train_and_evaluate
+    ) = get_dataset(pin=pin)
+        ^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomI_2ph/utils.py", line 71, in get_dataset
+    u0, v0, p0, s0 = initial_fields(coords, mu0, pin)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomI_2ph/utils.py", line 60, in initial_fields
+    u0 = 1/(2*mu)*(pin/coords.max(axis=0))*(coords[:,1]**2-coords.max(axis=1)*coords[:,1])
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  File "/usr/local/lib/python3.11/dist-packages/jax/_src/numpy/array_methods.py", line 264, in deferring_binary_op
+    return binary_op(*args)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/jax/_src/numpy/ufuncs.py", line 100, in fn
+    return lax_fn(x1, x2) if x1.dtype != np.bool_ else bool_lax_fn(x1, x2)
+           ^^^^^^^^^^^^^^
+TypeError: mul got incompatible shapes for broadcasting: (2,), (29751,).
+--------------------
+For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.

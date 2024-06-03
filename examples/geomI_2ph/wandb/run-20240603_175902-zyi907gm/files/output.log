@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/pedro/PINN/jaxpi/examples/geomI_2ph/main.py", line 39, in <module>
+    app.run(main)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 308, in run
+    _run_main(main, args)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 254, in _run_main
+    sys.exit(main(argv))
+             ^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomI_2ph/main.py", line 31, in main
+    train.train_and_evaluate(FLAGS.config, FLAGS.workdir)
+  File "/home/pedro/PINN/jaxpi/examples/geomI_2ph/train.py", line 193, in train_and_evaluate
+    (
+ValueError: not enough values to unpack (expected 12, got 10)
