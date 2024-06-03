@@ -68,6 +68,7 @@ def get_dataset(pin):
     coords, inflow_coords, outflow_coords, wall_coords = get_coords()
     mu0 = .1
     mu1 = .15
+    rho0 = 1000; rho1 = 1000
     u0, v0, p0, s0 = initial_fields(coords, mu0, pin)
     time = jnp.arange(0, 1.001, 0.01)
     return (
@@ -77,9 +78,8 @@ def get_dataset(pin):
         wall_coords,
         #time,
         u0, v0, p0, s0,
-        mu0, mu1,
+        mu0, mu1, rho0, rho1
     )
-
 
 # def get_dataset():
 #     # data = jnp.load("data/ns_unsteady.npy", allow_pickle=True).item()
