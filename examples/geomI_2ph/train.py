@@ -207,6 +207,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     L_max = .021
     pmax = mu0*U_max/L_max
+    pin =pin/pmax
     # Re = rho0*U_max*L_max/mu0
     D = 10**(-9)
 

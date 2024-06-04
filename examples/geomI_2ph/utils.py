@@ -57,7 +57,7 @@ def get_coords():
 
 def initial_fields(coords, mu, pin):
     # self.coords.max(axis=0)
-    u0 = 1/(2*mu)*(pin/coords[:,0].max())*(coords[:,1]**2-coords[:,1].max()*coords[:,1])
+    u0 = jnp.zeros(coords.shape[0]) #1/(2*mu)*(pin/coords[:,0].max())*(coords[:,1]**2-coords[:,1].max()*coords[:,1])
     v0 = jnp.zeros(coords.shape[0])
     p0 = pin - (coords[:,0]/.021)*pin
     s0 = jnp.zeros(coords.shape[0])

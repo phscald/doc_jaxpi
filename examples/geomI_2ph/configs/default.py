@@ -44,7 +44,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 200000
+    training.max_steps = 100000
     training.num_time_windows = 1# 10
 
     training.inflow_batch_size = 2048
@@ -93,7 +93,7 @@ def get_config():
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()
-    saving.save_every_steps = 10000
+    saving.save_every_steps = training.max_steps
     saving.num_keep_ckpts = 10
 
     # Input shape for initializing Flax models
