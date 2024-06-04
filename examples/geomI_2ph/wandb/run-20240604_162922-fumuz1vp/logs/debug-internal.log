@@ -1,0 +1,47 @@
+2024-06-04 16:29:22,664 INFO    StreamThr :1411909 [internal.py:wandb_internal():86] W&B internal server running at pid: 1411909, started at: 2024-06-04 16:29:22.664516
+2024-06-04 16:29:22,665 DEBUG   HandlerThread:1411909 [handler.py:handle_request():146] handle_request: status
+2024-06-04 16:29:22,666 INFO    WriterThread:1411909 [datastore.py:open_for_write():87] open: /home/pedro/PINN/jaxpi/examples/geomI_2ph/wandb/run-20240604_162922-fumuz1vp/run-fumuz1vp.wandb
+2024-06-04 16:29:22,666 DEBUG   SenderThread:1411909 [sender.py:send():379] send: header
+2024-06-04 16:29:22,666 DEBUG   SenderThread:1411909 [sender.py:send():379] send: run
+2024-06-04 16:29:23,127 INFO    SenderThread:1411909 [dir_watcher.py:__init__():211] watching files in: /home/pedro/PINN/jaxpi/examples/geomI_2ph/wandb/run-20240604_162922-fumuz1vp/files
+2024-06-04 16:29:23,127 INFO    SenderThread:1411909 [sender.py:_start_run_threads():1124] run started: fumuz1vp with start time 1717518562.664323
+2024-06-04 16:29:23,132 DEBUG   HandlerThread:1411909 [handler.py:handle_request():146] handle_request: check_version
+2024-06-04 16:29:23,132 DEBUG   SenderThread:1411909 [sender.py:send_request():406] send_request: check_version
+2024-06-04 16:29:23,247 DEBUG   HandlerThread:1411909 [handler.py:handle_request():146] handle_request: run_start
+2024-06-04 16:29:23,255 ERROR   HandlerThread:1411909 [gpu.py:is_available():381] Error initializing NVML: Unknown Error
+2024-06-04 16:29:23,255 DEBUG   HandlerThread:1411909 [system_info.py:__init__():26] System info init
+2024-06-04 16:29:23,255 DEBUG   HandlerThread:1411909 [system_info.py:__init__():41] System info init done
+2024-06-04 16:29:23,255 INFO    HandlerThread:1411909 [system_monitor.py:start():194] Starting system monitor
+2024-06-04 16:29:23,255 INFO    SystemMonitor:1411909 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-06-04 16:29:23,255 INFO    HandlerThread:1411909 [system_monitor.py:probe():214] Collecting system info
+2024-06-04 16:29:23,255 INFO    SystemMonitor:1411909 [interfaces.py:start():190] Started cpu monitoring
+2024-06-04 16:29:23,256 INFO    SystemMonitor:1411909 [interfaces.py:start():190] Started disk monitoring
+2024-06-04 16:29:23,256 INFO    SystemMonitor:1411909 [interfaces.py:start():190] Started memory monitoring
+2024-06-04 16:29:23,257 INFO    SystemMonitor:1411909 [interfaces.py:start():190] Started network monitoring
+2024-06-04 16:29:23,267 DEBUG   HandlerThread:1411909 [system_info.py:probe():150] Probing system
+2024-06-04 16:29:23,267 DEBUG   HandlerThread:1411909 [system_info.py:probe():198] Probing system done
+2024-06-04 16:29:23,267 DEBUG   HandlerThread:1411909 [system_monitor.py:probe():223] {'os': 'Linux-6.5.0-35-generic-x86_64-with-glibc2.35', 'python': '3.11.0rc1', 'heartbeatAt': '2024-06-04T16:29:23.267373', 'startedAt': '2024-06-04T16:29:22.659882', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/home/pedro/PINN/jaxpi/examples/geomI_2ph/main.py', 'codePathLocal': 'main.py', 'codePath': 'main.py', 'host': '8b460e7a0fb5', 'username': 'root', 'executable': '/usr/bin/python3', 'cpu_count': 24, 'cpu_count_logical': 32, 'cpu_freq': {'current': 1700.25140625, 'min': 800.0, 'max': 4937.5}, 'cpu_freq_per_core': [{'current': 4901.387, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 3168.956, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 2565.481, 'min': 800.0, 'max': 5500.0}, {'current': 2978.058, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5800.0}, {'current': 4134.765, 'min': 800.0, 'max': 5800.0}, {'current': 5038.268, 'min': 800.0, 'max': 5800.0}, {'current': 800.0, 'min': 800.0, 'max': 5800.0}, {'current': 1775.3, 'min': 800.0, 'max': 5500.0}, {'current': 4456.39, 'min': 800.0, 'max': 5500.0}, {'current': 1353.11, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 2462.672, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 2081.119, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 4022.98, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 1287.455, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}], 'disk': {'/': {'total': 365.6147689819336, 'used': 118.34900283813477}}, 'memory': {'total': 125.61077117919922}}
+2024-06-04 16:29:23,267 INFO    HandlerThread:1411909 [system_monitor.py:probe():224] Finished collecting system info
+2024-06-04 16:29:23,267 INFO    HandlerThread:1411909 [system_monitor.py:probe():227] Publishing system info
+2024-06-04 16:29:23,268 INFO    HandlerThread:1411909 [system_monitor.py:probe():229] Finished publishing system info
+2024-06-04 16:29:23,272 DEBUG   SenderThread:1411909 [sender.py:send():379] send: files
+2024-06-04 16:29:23,272 INFO    SenderThread:1411909 [sender.py:_save_file():1390] saving file wandb-metadata.json with policy now
+2024-06-04 16:29:23,313 DEBUG   HandlerThread:1411909 [handler.py:handle_request():146] handle_request: python_packages
+2024-06-04 16:29:23,313 DEBUG   SenderThread:1411909 [sender.py:send_request():406] send_request: python_packages
+2024-06-04 16:29:23,353 DEBUG   HandlerThread:1411909 [handler.py:handle_request():146] handle_request: stop_status
+2024-06-04 16:29:23,353 DEBUG   HandlerThread:1411909 [handler.py:handle_request():146] handle_request: internal_messages
+2024-06-04 16:29:23,353 DEBUG   SenderThread:1411909 [sender.py:send_request():406] send_request: stop_status
+2024-06-04 16:29:23,580 DEBUG   SenderThread:1411909 [sender.py:send():379] send: telemetry
+2024-06-04 16:29:24,073 INFO    wandb-upload_0:1411909 [upload_job.py:push():131] Uploaded file /tmp/tmpjiza9gljwandb/zjyc2gys-wandb-metadata.json
+2024-06-04 16:29:24,128 INFO    Thread-12 :1411909 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/geomI_2ph/wandb/run-20240604_162922-fumuz1vp/files/output.log
+2024-06-04 16:29:24,128 INFO    Thread-12 :1411909 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/geomI_2ph/wandb/run-20240604_162922-fumuz1vp/files/wandb-metadata.json
+2024-06-04 16:29:24,128 INFO    Thread-12 :1411909 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/geomI_2ph/wandb/run-20240604_162922-fumuz1vp/files/requirements.txt
+2024-06-04 16:29:26,128 INFO    Thread-12 :1411909 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomI_2ph/wandb/run-20240604_162922-fumuz1vp/files/output.log
+2024-06-04 16:29:27,128 INFO    Thread-12 :1411909 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomI_2ph/wandb/run-20240604_162922-fumuz1vp/files/output.log
+2024-06-04 16:29:28,290 DEBUG   HandlerThread:1411909 [handler.py:handle_request():146] handle_request: status_report
+2024-06-04 16:29:33,291 DEBUG   HandlerThread:1411909 [handler.py:handle_request():146] handle_request: status_report
+2024-06-04 16:29:38,292 DEBUG   HandlerThread:1411909 [handler.py:handle_request():146] handle_request: status_report
+2024-06-04 16:29:38,313 DEBUG   HandlerThread:1411909 [handler.py:handle_request():146] handle_request: stop_status
+2024-06-04 16:29:38,313 DEBUG   SenderThread:1411909 [sender.py:send_request():406] send_request: stop_status
+2024-06-04 16:29:38,313 DEBUG   HandlerThread:1411909 [handler.py:handle_request():146] handle_request: internal_messages
+2024-06-04 16:29:41,250 INFO    MainThread:1411909 [internal.py:handle_exit():76] Internal process exited

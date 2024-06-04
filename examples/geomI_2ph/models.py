@@ -361,27 +361,29 @@ class NavierStokes2DwSat(ForwardIVP):
         # inflow outflow loss
         #
         p_in_pred = self.p_pred_fn(
-            params, self.inflow_coords[:, 0], self.inflow_coords[:, 1]
+            params, inflow_batch[:, 0], inflow_batch[:, 1], inflow_batch[:, 2]
         )
+        # print(p_in_loss.shape)
+        # print(p_in_loss.shape)
         p_in_loss = jnp.mean((p_in_pred - self.p_in) ** 2)
         #
         p_out_pred = self.p_pred_fn(
-            params, self.outflow_coords[:, 0], self.outflow_coords[:, 1]
+            params, outflow_batch[:, 0], outflow_batch[:, 1], outflow_batch[:, 2]
         )
         p_out_loss = jnp.mean((p_out_pred) ** 2)
         #
         s_in_pred = self.s_pred_fn(
-            params, self.inflow_coords[:, 0], self.inflow_coords[:, 1]
+            params, inflow_batch[:, 0], inflow_batch[:, 1], inflow_batch[:, 2]
         )
         s_in_loss = jnp.mean((s_in_pred - 1.0) ** 2)
         #
         v_in_pred = self.v_pred_fn(
-            params, self.inflow_coords[:, 0], self.inflow_coords[:, 1]
+            params, inflow_batch[:, 0], inflow_batch[:, 1], inflow_batch[:, 2]
         )
         v_in_loss = jnp.mean((v_in_pred) ** 2)
         #
         v_out_pred = self.v_pred_fn(
-            params, self.outflow_coords[:, 0], self.outflow_coords[:, 1]
+            params, outflow_batch[:, 0], outflow_batch[:, 1], outflow_batch[:, 2]
         )
         v_out_loss = jnp.mean((v_out_pred) ** 2)
         #
@@ -463,7 +465,8 @@ class NavierStokesEvaluator(BaseEvaluator):
         self.log_dict = super().__call__(state, batch)
 
         if self.config.weighting.use_causal:
-            _, _, _, causal_weight = self.model.res_and_w(state.params, batch["res"])
+            # _, _, _, causal_weight = self.model.res_and_w(state.params, batch["res"])
+            _, _, _, _, causal_weight = self.model.res_and_w(state.params, batch["res"])
             self.log_dict["cas_weight"] = causal_weight.min()
 
         # if self.config.logging.log_errors:

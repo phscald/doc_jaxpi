@@ -154,6 +154,7 @@ def train_one_window(config, workdir, model, samplers, idx):
                 path = os.path.join(
                     workdir, "ckpt", config.wandb.name, "time_window_{}".format(idx + 1)
                 )
+                path = os.path.abspath(path)
                 save_checkpoint(model.state, path, keep=config.saving.num_keep_ckpts)
 
     return model
@@ -363,7 +364,8 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     # )
 
         # Initialize model
-        model = models.NavierStokes2DwSat(config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, D)
+        # model = models.NavierStokes2DwSat(config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, D)
+        model = models.NavierStokes2DwSat(config, pin, temporal_dom, coords, U_max, L_max, fluid_params, D)
 
         # Train model for the current time window
         model = train_one_window(config, workdir, model, samplers, idx)
