@@ -1,0 +1,23 @@
+
+I0604 16:31:35.615988 135959781048320 train.py:290] Training time window 1
+Waiting for JIT...
+Traceback (most recent call last):
+  File "/home/pedro/PINN/jaxpi/examples/geomI_2ph/main.py", line 39, in <module>
+    app.run(main)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 308, in run
+    _run_main(main, args)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 254, in _run_main
+    sys.exit(main(argv))
+             ^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomI_2ph/main.py", line 31, in main
+    train.train_and_evaluate(FLAGS.config, FLAGS.workdir)
+  File "/home/pedro/PINN/jaxpi/examples/geomI_2ph/train.py", line 370, in train_and_evaluate
+    model = train_one_window(config, workdir, model, samplers, idx)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomI_2ph/train.py", line 142, in train_one_window
+    log_dict = evaluator(state, batch)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomI_2ph/models.py", line 468, in __call__
+    _, _, _, causal_weight = self.model.res_and_w(state.params, batch["res"])
+    ^^^^^^^^^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 4)
