@@ -122,7 +122,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # t_coords = jnp.linspace(0, t1, 20)[:-1]
     # t_coords = jnp.linspace(0, t1, 4)[:-1]
-    t_coords = jnp.array([.0001])
+    t_coords = jnp.array([.9])
 
     u_pred_list = []
     v_pred_list = []

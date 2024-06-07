@@ -1,0 +1,32 @@
+I0607 17:23:24.225159 135250869633024 train.py:292] Training time window 1
+Traceback (most recent call last):
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/main.py", line 39, in <module>
+    app.run(main)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 308, in run
+    _run_main(main, args)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 254, in _run_main
+    sys.exit(main(argv))
+             ^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/main.py", line 31, in main
+    train.train_and_evaluate(FLAGS.config, FLAGS.workdir)
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/train.py", line 372, in train_and_evaluate
+    model = train_one_window(config, workdir, model, samplers, idx)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/train.py", line 129, in train_one_window
+    model.state = model.step(model.state, batch)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/jaxpi/models.py", line 179, in step
+    grads = grad(self.loss)(state.params, state.weights, batch, *args)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/jaxpi/models.py", line 132, in loss
+    losses = self.losses(params, batch, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/models.py", line 363, in losses
+    p_ic_loss = jax.lax.cond(jnp.mean(p_batch)==0, true_fn(u_ic_pred), false_fn(params, coords_batch, p_batch), operand=None)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: lax.cond: true_fun and false_fun arguments should be callable.
+--------------------
+For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+Waiting for JIT...
+entrou 1
+entrou 3

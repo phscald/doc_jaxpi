@@ -7,11 +7,11 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
-    config.mode = "eval"
+    config.mode = "train"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
-    wandb.project = "geomI-unsteady"
+    wandb.project = "geomII-unsteady"
     wandb.name = "default"
     wandb.tag = None
 
@@ -44,8 +44,8 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 100000
-    training.num_time_windows = 5# 10
+    training.max_steps = 50000
+    training.num_time_windows = 2# 10
 
     training.inflow_batch_size = 2048
     training.outflow_batch_size = 2048
@@ -59,7 +59,7 @@ def get_config():
     weighting.init_weights = {
         "u_ic": 1.0,
         "v_ic": 1.0,
-        "p_ic": 1.0,
+        # "p_ic": 1.0,
         "s_ic": 1.0,
         "p_in": 1.0,
         "p_out": 1.0,

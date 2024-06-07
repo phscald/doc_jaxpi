@@ -1,0 +1,80 @@
+
+I0607 19:28:18.270713 129263339212800 train.py:292] Training time window 1
+Waiting for JIT...
+[19:28:51 - main - INFO] -----------------------------
+[19:28:51 - main - INFO] Iter:   0      Time: 32.035
+[19:28:51 - main - INFO] -------------  --------------
+[19:28:51 - main - INFO] p_ic_loss      0.000e+00
+[19:28:51 - main - INFO] p_in_loss      2.882e+02
+[19:28:51 - main - INFO] p_out_loss     9.582e+00
+[19:28:51 - main - INFO] rc_loss        2.364e-02
+[19:28:51 - main - INFO] rs_loss        2.442e-02
+[19:28:51 - main - INFO] ru_loss        3.739e-02
+[19:28:51 - main - INFO] rv_loss        3.264e-02
+[19:28:51 - main - INFO] s_ic_loss      1.533e-01
+[19:28:51 - main - INFO] s_in_loss      3.105e-01
+[19:28:51 - main - INFO] u_ic_loss      7.214e-02
+[19:28:51 - main - INFO] u_noslip_loss  7.241e-02
+[19:28:51 - main - INFO] v_ic_loss      1.436e-01
+[19:28:51 - main - INFO] v_in_loss      1.645e-01
+[19:28:51 - main - INFO] v_noslip_loss  1.467e-01
+[19:28:51 - main - INFO] v_out_loss     1.296e-01
+[19:28:58 - main - INFO] ----------------------------
+[19:28:58 - main - INFO] Iter: 100      Time: 0.035
+[19:28:58 - main - INFO] -------------  -------------
+[19:28:58 - main - INFO] p_ic_loss      nan
+[19:28:58 - main - INFO] p_in_loss      nan
+[19:28:58 - main - INFO] p_out_loss     nan
+[19:28:58 - main - INFO] rc_loss        nan
+[19:28:58 - main - INFO] rs_loss        nan
+[19:28:58 - main - INFO] ru_loss        nan
+[19:28:58 - main - INFO] rv_loss        nan
+[19:28:58 - main - INFO] s_ic_loss      nan
+[19:28:58 - main - INFO] s_in_loss      nan
+[19:28:58 - main - INFO] u_ic_loss      nan
+[19:28:58 - main - INFO] u_noslip_loss  nan
+[19:28:58 - main - INFO] v_ic_loss      nan
+[19:28:58 - main - INFO] v_in_loss      nan
+[19:28:58 - main - INFO] v_noslip_loss  nan
+[19:28:58 - main - INFO] v_out_loss     nan
+[19:28:59 - main - INFO] ----------------------------
+[19:28:59 - main - INFO] Iter: 200      Time: 0.036
+[19:28:59 - main - INFO] -------------  -------------
+[19:28:59 - main - INFO] p_ic_loss      nan
+[19:28:59 - main - INFO] p_in_loss      nan
+[19:28:59 - main - INFO] p_out_loss     nan
+[19:28:59 - main - INFO] rc_loss        nan
+[19:28:59 - main - INFO] rs_loss        nan
+[19:28:59 - main - INFO] ru_loss        nan
+[19:28:59 - main - INFO] rv_loss        nan
+[19:28:59 - main - INFO] s_ic_loss      nan
+[19:28:59 - main - INFO] s_in_loss      nan
+[19:28:59 - main - INFO] u_ic_loss      nan
+[19:28:59 - main - INFO] u_noslip_loss  nan
+[19:28:59 - main - INFO] v_ic_loss      nan
+[19:28:59 - main - INFO] v_in_loss      nan
+[19:28:59 - main - INFO] v_noslip_loss  nan
+[19:28:59 - main - INFO] v_out_loss     nan
+Traceback (most recent call last):
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/main.py", line 39, in <module>
+    app.run(main)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 308, in run
+    _run_main(main, args)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 254, in _run_main
+    sys.exit(main(argv))
+             ^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/main.py", line 31, in main
+    train.train_and_evaluate(FLAGS.config, FLAGS.workdir)
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/train.py", line 372, in train_and_evaluate
+    model = train_one_window(config, workdir, model, samplers, idx)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/train.py", line 127, in train_one_window
+    batch[key] = next(sampler)
+                 ^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/jaxpi/samplers.py", line 18, in __getitem__
+    self.key, subkey = random.split(self.key)
+    ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/jax/_src/array.py", line 356, in <genexpr>
+    return (sl for chunk in self._chunk_iter(100) for sl in chunk._unstack())  # type: ignore
+                                                            ^^^^^^^^^^^^^^^^
+KeyboardInterrupt

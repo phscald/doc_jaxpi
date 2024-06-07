@@ -318,7 +318,7 @@ class NavierStokes2DwSat(ForwardIVP):
         ntk_dict = {
             "u_ic": u_ic_ntk,
             "v_ic": v_ic_ntk,
-            "p_ic": p_ic_ntk,
+            # "p_ic": p_ic_ntk,
             "s_ic": s_ic_ntk,
             "p_in": p_in_ntk,
             "p_out": p_out_ntk,
@@ -350,12 +350,13 @@ class NavierStokes2DwSat(ForwardIVP):
 
         u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1])
         v_ic_pred = self.v0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1])
-        p_ic_pred = self.p0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1])
+        # p_ic_pred = self.p0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1])
         s_ic_pred = self.s0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1])
 
         u_ic_loss = jnp.mean((u_ic_pred - u_batch) ** 2)
         v_ic_loss = jnp.mean((v_ic_pred - v_batch) ** 2)
-        p_ic_loss = jnp.mean((p_ic_pred - p_batch) ** 2)
+        # p_ic_loss = jnp.mean((p_ic_pred - p_batch) ** 2)
+        # p_ic_loss = p_ic_loss*0
         s_ic_loss = jnp.mean((s_ic_pred - s_batch) ** 2)
 
         # inflow outflow loss
@@ -418,7 +419,7 @@ class NavierStokes2DwSat(ForwardIVP):
         loss_dict = {
             "u_ic": u_ic_loss,
             "v_ic": v_ic_loss,
-            "p_ic": p_ic_loss,
+            # "p_ic": p_ic_loss,
             "s_ic": s_ic_loss,
             "p_in": p_in_loss,
             "p_out": p_out_loss,

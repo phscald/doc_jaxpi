@@ -1,0 +1,57 @@
+
+I0607 14:43:09.746212 125536910643200 train.py:292] Training time window 1
+Waiting for JIT...
+[14:44:42 - main - INFO] -----------------------------
+[14:44:42 - main - INFO] Iter:   0      Time: 91.947
+[14:44:42 - main - INFO] -------------  --------------
+[14:44:42 - main - INFO] p_ic_loss      1.312e+01
+[14:44:42 - main - INFO] p_in_loss      2.882e+02
+[14:44:42 - main - INFO] p_out_loss     9.522e+00
+[14:44:42 - main - INFO] rc_loss        2.810e-02
+[14:44:42 - main - INFO] rs_loss        3.435e-02
+[14:44:42 - main - INFO] ru_loss        2.319e-02
+[14:44:42 - main - INFO] rv_loss        4.502e-02
+[14:44:42 - main - INFO] s_ic_loss      1.696e-01
+[14:44:42 - main - INFO] s_in_loss      2.992e-01
+[14:44:42 - main - INFO] u_ic_loss      5.355e-02
+[14:44:42 - main - INFO] u_noslip_loss  6.240e-02
+[14:44:42 - main - INFO] v_ic_loss      1.411e-01
+[14:44:42 - main - INFO] v_in_loss      1.541e-01
+[14:44:42 - main - INFO] v_noslip_loss  1.525e-01
+[14:44:42 - main - INFO] v_out_loss     1.322e-01
+[14:46:17 - main - INFO] ----------------------------
+[14:46:17 - main - INFO] Iter: 100      Time: 0.892
+[14:46:17 - main - INFO] -------------  -------------
+[14:46:17 - main - INFO] p_ic_loss      8.508e-01
+[14:46:17 - main - INFO] p_in_loss      2.603e+00
+[14:46:17 - main - INFO] p_out_loss     1.907e-02
+[14:46:17 - main - INFO] rc_loss        1.043e-01
+[14:46:17 - main - INFO] rs_loss        8.032e-02
+[14:46:17 - main - INFO] ru_loss        4.430e-02
+[14:46:17 - main - INFO] rv_loss        1.529e-02
+[14:46:17 - main - INFO] s_ic_loss      5.146e-02
+[14:46:17 - main - INFO] s_in_loss      2.110e-01
+[14:46:17 - main - INFO] u_ic_loss      1.154e-02
+[14:46:17 - main - INFO] u_noslip_loss  2.237e-02
+[14:46:17 - main - INFO] v_ic_loss      4.972e-04
+[14:46:17 - main - INFO] v_in_loss      2.729e-03
+[14:46:17 - main - INFO] v_noslip_loss  2.555e-03
+[14:46:17 - main - INFO] v_out_loss     2.056e-04
+Traceback (most recent call last):
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/main.py", line 39, in <module>
+    app.run(main)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 308, in run
+    _run_main(main, args)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 254, in _run_main
+    sys.exit(main(argv))
+             ^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/main.py", line 31, in main
+    train.train_and_evaluate(FLAGS.config, FLAGS.workdir)
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/train.py", line 372, in train_and_evaluate
+    model = train_one_window(config, workdir, model, samplers, idx)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/train.py", line 129, in train_one_window
+    model.state = model.step(model.state, batch)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 1, in <lambda>
+KeyboardInterrupt

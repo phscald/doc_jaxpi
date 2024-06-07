@@ -1,0 +1,37 @@
+I0607 17:13:28.738790 140148056752128 train.py:292] Training time window 1
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/dist-packages/jax/_src/core.py", line 789, in __getattr__
+    attr = getattr(self.aval, name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ShapedArray' object has no attribute 'numpy'
+The above exception was the direct cause of the following exception:
+Traceback (most recent call last):
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/main.py", line 39, in <module>
+    app.run(main)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 308, in run
+    _run_main(main, args)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 254, in _run_main
+    sys.exit(main(argv))
+             ^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/main.py", line 31, in main
+    train.train_and_evaluate(FLAGS.config, FLAGS.workdir)
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/train.py", line 372, in train_and_evaluate
+    model = train_one_window(config, workdir, model, samplers, idx)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/train.py", line 129, in train_one_window
+    model.state = model.step(model.state, batch)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/jaxpi/models.py", line 179, in step
+    grads = grad(self.loss)(state.params, state.weights, batch, *args)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/jaxpi/models.py", line 132, in loss
+    losses = self.losses(params, batch, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/models.py", line 354, in losses
+    print(jnp.isnan(p_batch[0]).numpy())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: DynamicJaxprTracer has no attribute numpy
+--------------------
+For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+Waiting for JIT...
+dsa

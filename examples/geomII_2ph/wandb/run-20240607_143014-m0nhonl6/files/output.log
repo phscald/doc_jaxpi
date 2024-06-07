@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/main.py", line 39, in <module>
+    app.run(main)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 308, in run
+    _run_main(main, args)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 254, in _run_main
+    sys.exit(main(argv))
+             ^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/main.py", line 31, in main
+    train.train_and_evaluate(FLAGS.config, FLAGS.workdir)
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/train.py", line 202, in train_and_evaluate
+    ) = get_dataset(pin=pin)
+        ^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/utils.py", line 89, in get_dataset
+    u0, v0, p0, s0 = initial_fields(coords, mu0, pin)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/utils.py", line 79, in initial_fields
+    p0 = jnp.full(coords.shape[0], None)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/jax/_src/numpy/lax_numpy.py", line 2302, in full
+    util.check_arraylike("full", fill_value)
+  File "/usr/local/lib/python3.11/dist-packages/jax/_src/numpy/util.py", line 335, in check_arraylike
+    raise TypeError(msg.format(fun_name, type(arg), pos))
+TypeError: full requires ndarray or scalar arguments, got <class 'NoneType'> at position 0.
