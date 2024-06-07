@@ -2312,3 +2312,2031 @@ Waiting for JIT...
 [19:34:29 - main - INFO] v_ic_loss      nan
 [19:34:29 - main - INFO] v_in_loss      nan
 [19:34:29 - main - INFO] v_noslip_loss  nan
+[19:34:29 - main - INFO] v_out_loss     nan
+[19:34:31 - main - INFO] ----------------------------
+[19:34:31 - main - INFO] Iter: 13600    Time: 0.035
+[19:34:31 - main - INFO] -------------  -------------
+[19:34:31 - main - INFO] p_in_loss      nan
+[19:34:31 - main - INFO] p_out_loss     nan
+[19:34:31 - main - INFO] rc_loss        nan
+[19:34:31 - main - INFO] rs_loss        nan
+[19:34:31 - main - INFO] ru_loss        nan
+[19:34:31 - main - INFO] rv_loss        nan
+[19:34:31 - main - INFO] s_ic_loss      nan
+[19:34:31 - main - INFO] s_in_loss      nan
+[19:34:31 - main - INFO] u_ic_loss      nan
+[19:34:31 - main - INFO] u_noslip_loss  nan
+[19:34:31 - main - INFO] v_ic_loss      nan
+[19:34:31 - main - INFO] v_in_loss      nan
+[19:34:31 - main - INFO] v_noslip_loss  nan
+[19:34:31 - main - INFO] v_out_loss     nan
+[19:34:32 - main - INFO] ----------------------------
+[19:34:32 - main - INFO] Iter: 13700    Time: 0.033
+[19:34:32 - main - INFO] -------------  -------------
+[19:34:32 - main - INFO] p_in_loss      nan
+[19:34:32 - main - INFO] p_out_loss     nan
+[19:34:32 - main - INFO] rc_loss        nan
+[19:34:32 - main - INFO] rs_loss        nan
+[19:34:32 - main - INFO] ru_loss        nan
+[19:34:32 - main - INFO] rv_loss        nan
+[19:34:32 - main - INFO] s_ic_loss      nan
+[19:34:32 - main - INFO] s_in_loss      nan
+[19:34:32 - main - INFO] u_ic_loss      nan
+[19:34:32 - main - INFO] u_noslip_loss  nan
+[19:34:32 - main - INFO] v_ic_loss      nan
+[19:34:32 - main - INFO] v_in_loss      nan
+[19:34:32 - main - INFO] v_noslip_loss  nan
+[19:34:32 - main - INFO] v_out_loss     nan
+[19:34:34 - main - INFO] ----------------------------
+[19:34:34 - main - INFO] Iter: 13800    Time: 0.032
+[19:34:34 - main - INFO] -------------  -------------
+[19:34:34 - main - INFO] p_in_loss      nan
+[19:34:34 - main - INFO] p_out_loss     nan
+[19:34:34 - main - INFO] rc_loss        nan
+[19:34:34 - main - INFO] rs_loss        nan
+[19:34:34 - main - INFO] ru_loss        nan
+[19:34:34 - main - INFO] rv_loss        nan
+[19:34:34 - main - INFO] s_ic_loss      nan
+[19:34:34 - main - INFO] s_in_loss      nan
+[19:34:34 - main - INFO] u_ic_loss      nan
+[19:34:34 - main - INFO] u_noslip_loss  nan
+[19:34:34 - main - INFO] v_ic_loss      nan
+[19:34:34 - main - INFO] v_in_loss      nan
+[19:34:34 - main - INFO] v_noslip_loss  nan
+[19:34:34 - main - INFO] v_out_loss     nan
+[19:34:35 - main - INFO] ----------------------------
+[19:34:35 - main - INFO] Iter: 13900    Time: 0.037
+[19:34:35 - main - INFO] -------------  -------------
+[19:34:35 - main - INFO] p_in_loss      nan
+[19:34:35 - main - INFO] p_out_loss     nan
+[19:34:35 - main - INFO] rc_loss        nan
+[19:34:35 - main - INFO] rs_loss        nan
+[19:34:35 - main - INFO] ru_loss        nan
+[19:34:35 - main - INFO] rv_loss        nan
+[19:34:35 - main - INFO] s_ic_loss      nan
+[19:34:35 - main - INFO] s_in_loss      nan
+[19:34:35 - main - INFO] u_ic_loss      nan
+[19:34:35 - main - INFO] u_noslip_loss  nan
+[19:34:35 - main - INFO] v_ic_loss      nan
+[19:34:35 - main - INFO] v_in_loss      nan
+[19:34:35 - main - INFO] v_noslip_loss  nan
+[19:34:35 - main - INFO] v_out_loss     nan
+[19:34:37 - main - INFO] ----------------------------
+[19:34:37 - main - INFO] Iter: 14000    Time: 0.113
+[19:34:37 - main - INFO] -------------  -------------
+[19:34:37 - main - INFO] p_in_loss      nan
+[19:34:37 - main - INFO] p_out_loss     nan
+[19:34:37 - main - INFO] rc_loss        nan
+[19:34:37 - main - INFO] rs_loss        nan
+[19:34:37 - main - INFO] ru_loss        nan
+[19:34:37 - main - INFO] rv_loss        nan
+[19:34:37 - main - INFO] s_ic_loss      nan
+[19:34:37 - main - INFO] s_in_loss      nan
+[19:34:37 - main - INFO] u_ic_loss      nan
+[19:34:37 - main - INFO] u_noslip_loss  nan
+[19:34:37 - main - INFO] v_ic_loss      nan
+[19:34:37 - main - INFO] v_in_loss      nan
+[19:34:37 - main - INFO] v_noslip_loss  nan
+[19:34:37 - main - INFO] v_out_loss     nan
+[19:34:39 - main - INFO] ----------------------------
+[19:34:39 - main - INFO] Iter: 14100    Time: 0.035
+[19:34:39 - main - INFO] -------------  -------------
+[19:34:39 - main - INFO] p_in_loss      nan
+[19:34:39 - main - INFO] p_out_loss     nan
+[19:34:39 - main - INFO] rc_loss        nan
+[19:34:39 - main - INFO] rs_loss        nan
+[19:34:39 - main - INFO] ru_loss        nan
+[19:34:39 - main - INFO] rv_loss        nan
+[19:34:39 - main - INFO] s_ic_loss      nan
+[19:34:39 - main - INFO] s_in_loss      nan
+[19:34:39 - main - INFO] u_ic_loss      nan
+[19:34:39 - main - INFO] u_noslip_loss  nan
+[19:34:39 - main - INFO] v_ic_loss      nan
+[19:34:39 - main - INFO] v_in_loss      nan
+[19:34:39 - main - INFO] v_noslip_loss  nan
+[19:34:39 - main - INFO] v_out_loss     nan
+[19:34:40 - main - INFO] ----------------------------
+[19:34:40 - main - INFO] Iter: 14200    Time: 0.037
+[19:34:40 - main - INFO] -------------  -------------
+[19:34:40 - main - INFO] p_in_loss      nan
+[19:34:40 - main - INFO] p_out_loss     nan
+[19:34:40 - main - INFO] rc_loss        nan
+[19:34:40 - main - INFO] rs_loss        nan
+[19:34:40 - main - INFO] ru_loss        nan
+[19:34:40 - main - INFO] rv_loss        nan
+[19:34:40 - main - INFO] s_ic_loss      nan
+[19:34:40 - main - INFO] s_in_loss      nan
+[19:34:40 - main - INFO] u_ic_loss      nan
+[19:34:40 - main - INFO] u_noslip_loss  nan
+[19:34:40 - main - INFO] v_ic_loss      nan
+[19:34:40 - main - INFO] v_in_loss      nan
+[19:34:40 - main - INFO] v_noslip_loss  nan
+[19:34:40 - main - INFO] v_out_loss     nan
+[19:34:42 - main - INFO] ----------------------------
+[19:34:42 - main - INFO] Iter: 14300    Time: 0.032
+[19:34:42 - main - INFO] -------------  -------------
+[19:34:42 - main - INFO] p_in_loss      nan
+[19:34:42 - main - INFO] p_out_loss     nan
+[19:34:42 - main - INFO] rc_loss        nan
+[19:34:42 - main - INFO] rs_loss        nan
+[19:34:42 - main - INFO] ru_loss        nan
+[19:34:42 - main - INFO] rv_loss        nan
+[19:34:42 - main - INFO] s_ic_loss      nan
+[19:34:42 - main - INFO] s_in_loss      nan
+[19:34:42 - main - INFO] u_ic_loss      nan
+[19:34:42 - main - INFO] u_noslip_loss  nan
+[19:34:42 - main - INFO] v_ic_loss      nan
+[19:34:42 - main - INFO] v_in_loss      nan
+[19:34:42 - main - INFO] v_noslip_loss  nan
+[19:34:42 - main - INFO] v_out_loss     nan
+[19:34:44 - main - INFO] ----------------------------
+[19:34:44 - main - INFO] Iter: 14400    Time: 0.034
+[19:34:44 - main - INFO] -------------  -------------
+[19:34:44 - main - INFO] p_in_loss      nan
+[19:34:44 - main - INFO] p_out_loss     nan
+[19:34:44 - main - INFO] rc_loss        nan
+[19:34:44 - main - INFO] rs_loss        nan
+[19:34:44 - main - INFO] ru_loss        nan
+[19:34:44 - main - INFO] rv_loss        nan
+[19:34:44 - main - INFO] s_ic_loss      nan
+[19:34:44 - main - INFO] s_in_loss      nan
+[19:34:44 - main - INFO] u_ic_loss      nan
+[19:34:44 - main - INFO] u_noslip_loss  nan
+[19:34:44 - main - INFO] v_ic_loss      nan
+[19:34:44 - main - INFO] v_in_loss      nan
+[19:34:44 - main - INFO] v_noslip_loss  nan
+[19:34:44 - main - INFO] v_out_loss     nan
+[19:34:45 - main - INFO] ----------------------------
+[19:34:45 - main - INFO] Iter: 14500    Time: 0.036
+[19:34:45 - main - INFO] -------------  -------------
+[19:34:45 - main - INFO] p_in_loss      nan
+[19:34:45 - main - INFO] p_out_loss     nan
+[19:34:45 - main - INFO] rc_loss        nan
+[19:34:45 - main - INFO] rs_loss        nan
+[19:34:45 - main - INFO] ru_loss        nan
+[19:34:45 - main - INFO] rv_loss        nan
+[19:34:45 - main - INFO] s_ic_loss      nan
+[19:34:45 - main - INFO] s_in_loss      nan
+[19:34:45 - main - INFO] u_ic_loss      nan
+[19:34:45 - main - INFO] u_noslip_loss  nan
+[19:34:45 - main - INFO] v_ic_loss      nan
+[19:34:45 - main - INFO] v_in_loss      nan
+[19:34:45 - main - INFO] v_noslip_loss  nan
+[19:34:45 - main - INFO] v_out_loss     nan
+[19:34:47 - main - INFO] ----------------------------
+[19:34:47 - main - INFO] Iter: 14600    Time: 0.034
+[19:34:47 - main - INFO] -------------  -------------
+[19:34:47 - main - INFO] p_in_loss      nan
+[19:34:47 - main - INFO] p_out_loss     nan
+[19:34:47 - main - INFO] rc_loss        nan
+[19:34:47 - main - INFO] rs_loss        nan
+[19:34:47 - main - INFO] ru_loss        nan
+[19:34:47 - main - INFO] rv_loss        nan
+[19:34:47 - main - INFO] s_ic_loss      nan
+[19:34:47 - main - INFO] s_in_loss      nan
+[19:34:47 - main - INFO] u_ic_loss      nan
+[19:34:47 - main - INFO] u_noslip_loss  nan
+[19:34:47 - main - INFO] v_ic_loss      nan
+[19:34:47 - main - INFO] v_in_loss      nan
+[19:34:47 - main - INFO] v_noslip_loss  nan
+[19:34:47 - main - INFO] v_out_loss     nan
+[19:34:49 - main - INFO] ----------------------------
+[19:34:49 - main - INFO] Iter: 14700    Time: 0.038
+[19:34:49 - main - INFO] -------------  -------------
+[19:34:49 - main - INFO] p_in_loss      nan
+[19:34:49 - main - INFO] p_out_loss     nan
+[19:34:49 - main - INFO] rc_loss        nan
+[19:34:49 - main - INFO] rs_loss        nan
+[19:34:49 - main - INFO] ru_loss        nan
+[19:34:49 - main - INFO] rv_loss        nan
+[19:34:49 - main - INFO] s_ic_loss      nan
+[19:34:49 - main - INFO] s_in_loss      nan
+[19:34:49 - main - INFO] u_ic_loss      nan
+[19:34:49 - main - INFO] u_noslip_loss  nan
+[19:34:49 - main - INFO] v_ic_loss      nan
+[19:34:49 - main - INFO] v_in_loss      nan
+[19:34:49 - main - INFO] v_noslip_loss  nan
+[19:34:49 - main - INFO] v_out_loss     nan
+[19:34:50 - main - INFO] ----------------------------
+[19:34:50 - main - INFO] Iter: 14800    Time: 0.036
+[19:34:50 - main - INFO] -------------  -------------
+[19:34:50 - main - INFO] p_in_loss      nan
+[19:34:50 - main - INFO] p_out_loss     nan
+[19:34:50 - main - INFO] rc_loss        nan
+[19:34:50 - main - INFO] rs_loss        nan
+[19:34:50 - main - INFO] ru_loss        nan
+[19:34:50 - main - INFO] rv_loss        nan
+[19:34:50 - main - INFO] s_ic_loss      nan
+[19:34:50 - main - INFO] s_in_loss      nan
+[19:34:50 - main - INFO] u_ic_loss      nan
+[19:34:50 - main - INFO] u_noslip_loss  nan
+[19:34:50 - main - INFO] v_ic_loss      nan
+[19:34:50 - main - INFO] v_in_loss      nan
+[19:34:50 - main - INFO] v_noslip_loss  nan
+[19:34:50 - main - INFO] v_out_loss     nan
+[19:34:52 - main - INFO] ----------------------------
+[19:34:52 - main - INFO] Iter: 14900    Time: 0.039
+[19:34:52 - main - INFO] -------------  -------------
+[19:34:52 - main - INFO] p_in_loss      nan
+[19:34:52 - main - INFO] p_out_loss     nan
+[19:34:52 - main - INFO] rc_loss        nan
+[19:34:52 - main - INFO] rs_loss        nan
+[19:34:52 - main - INFO] ru_loss        nan
+[19:34:52 - main - INFO] rv_loss        nan
+[19:34:52 - main - INFO] s_ic_loss      nan
+[19:34:52 - main - INFO] s_in_loss      nan
+[19:34:52 - main - INFO] u_ic_loss      nan
+[19:34:52 - main - INFO] u_noslip_loss  nan
+[19:34:52 - main - INFO] v_ic_loss      nan
+[19:34:52 - main - INFO] v_in_loss      nan
+[19:34:52 - main - INFO] v_noslip_loss  nan
+[19:34:52 - main - INFO] v_out_loss     nan
+[19:34:54 - main - INFO] ----------------------------
+[19:34:54 - main - INFO] Iter: 15000    Time: 0.114
+[19:34:54 - main - INFO] -------------  -------------
+[19:34:54 - main - INFO] p_in_loss      nan
+[19:34:54 - main - INFO] p_out_loss     nan
+[19:34:54 - main - INFO] rc_loss        nan
+[19:34:54 - main - INFO] rs_loss        nan
+[19:34:54 - main - INFO] ru_loss        nan
+[19:34:54 - main - INFO] rv_loss        nan
+[19:34:54 - main - INFO] s_ic_loss      nan
+[19:34:54 - main - INFO] s_in_loss      nan
+[19:34:54 - main - INFO] u_ic_loss      nan
+[19:34:54 - main - INFO] u_noslip_loss  nan
+[19:34:54 - main - INFO] v_ic_loss      nan
+[19:34:54 - main - INFO] v_in_loss      nan
+[19:34:54 - main - INFO] v_noslip_loss  nan
+[19:34:54 - main - INFO] v_out_loss     nan
+[19:34:55 - main - INFO] ----------------------------
+[19:34:55 - main - INFO] Iter: 15100    Time: 0.035
+[19:34:55 - main - INFO] -------------  -------------
+[19:34:55 - main - INFO] p_in_loss      nan
+[19:34:55 - main - INFO] p_out_loss     nan
+[19:34:55 - main - INFO] rc_loss        nan
+[19:34:55 - main - INFO] rs_loss        nan
+[19:34:55 - main - INFO] ru_loss        nan
+[19:34:55 - main - INFO] rv_loss        nan
+[19:34:55 - main - INFO] s_ic_loss      nan
+[19:34:55 - main - INFO] s_in_loss      nan
+[19:34:55 - main - INFO] u_ic_loss      nan
+[19:34:55 - main - INFO] u_noslip_loss  nan
+[19:34:55 - main - INFO] v_ic_loss      nan
+[19:34:55 - main - INFO] v_in_loss      nan
+[19:34:55 - main - INFO] v_noslip_loss  nan
+[19:34:55 - main - INFO] v_out_loss     nan
+[19:34:57 - main - INFO] ----------------------------
+[19:34:57 - main - INFO] Iter: 15200    Time: 0.030
+[19:34:57 - main - INFO] -------------  -------------
+[19:34:57 - main - INFO] p_in_loss      nan
+[19:34:57 - main - INFO] p_out_loss     nan
+[19:34:57 - main - INFO] rc_loss        nan
+[19:34:57 - main - INFO] rs_loss        nan
+[19:34:57 - main - INFO] ru_loss        nan
+[19:34:57 - main - INFO] rv_loss        nan
+[19:34:57 - main - INFO] s_ic_loss      nan
+[19:34:57 - main - INFO] s_in_loss      nan
+[19:34:57 - main - INFO] u_ic_loss      nan
+[19:34:57 - main - INFO] u_noslip_loss  nan
+[19:34:57 - main - INFO] v_ic_loss      nan
+[19:34:57 - main - INFO] v_in_loss      nan
+[19:34:57 - main - INFO] v_noslip_loss  nan
+[19:34:57 - main - INFO] v_out_loss     nan
+[19:34:58 - main - INFO] ----------------------------
+[19:34:58 - main - INFO] Iter: 15300    Time: 0.033
+[19:34:58 - main - INFO] -------------  -------------
+[19:34:58 - main - INFO] p_in_loss      nan
+[19:34:58 - main - INFO] p_out_loss     nan
+[19:34:58 - main - INFO] rc_loss        nan
+[19:34:58 - main - INFO] rs_loss        nan
+[19:34:58 - main - INFO] ru_loss        nan
+[19:34:58 - main - INFO] rv_loss        nan
+[19:34:58 - main - INFO] s_ic_loss      nan
+[19:34:58 - main - INFO] s_in_loss      nan
+[19:34:58 - main - INFO] u_ic_loss      nan
+[19:34:58 - main - INFO] u_noslip_loss  nan
+[19:34:58 - main - INFO] v_ic_loss      nan
+[19:34:58 - main - INFO] v_in_loss      nan
+[19:34:58 - main - INFO] v_noslip_loss  nan
+[19:34:58 - main - INFO] v_out_loss     nan
+[19:35:00 - main - INFO] ----------------------------
+[19:35:00 - main - INFO] Iter: 15400    Time: 0.035
+[19:35:00 - main - INFO] -------------  -------------
+[19:35:00 - main - INFO] p_in_loss      nan
+[19:35:00 - main - INFO] p_out_loss     nan
+[19:35:00 - main - INFO] rc_loss        nan
+[19:35:00 - main - INFO] rs_loss        nan
+[19:35:00 - main - INFO] ru_loss        nan
+[19:35:00 - main - INFO] rv_loss        nan
+[19:35:00 - main - INFO] s_ic_loss      nan
+[19:35:00 - main - INFO] s_in_loss      nan
+[19:35:00 - main - INFO] u_ic_loss      nan
+[19:35:00 - main - INFO] u_noslip_loss  nan
+[19:35:00 - main - INFO] v_ic_loss      nan
+[19:35:00 - main - INFO] v_in_loss      nan
+[19:35:00 - main - INFO] v_noslip_loss  nan
+[19:35:00 - main - INFO] v_out_loss     nan
+[19:35:02 - main - INFO] ----------------------------
+[19:35:02 - main - INFO] Iter: 15500    Time: 0.035
+[19:35:02 - main - INFO] -------------  -------------
+[19:35:02 - main - INFO] p_in_loss      nan
+[19:35:02 - main - INFO] p_out_loss     nan
+[19:35:02 - main - INFO] rc_loss        nan
+[19:35:02 - main - INFO] rs_loss        nan
+[19:35:02 - main - INFO] ru_loss        nan
+[19:35:02 - main - INFO] rv_loss        nan
+[19:35:02 - main - INFO] s_ic_loss      nan
+[19:35:02 - main - INFO] s_in_loss      nan
+[19:35:02 - main - INFO] u_ic_loss      nan
+[19:35:02 - main - INFO] u_noslip_loss  nan
+[19:35:02 - main - INFO] v_ic_loss      nan
+[19:35:02 - main - INFO] v_in_loss      nan
+[19:35:02 - main - INFO] v_noslip_loss  nan
+[19:35:02 - main - INFO] v_out_loss     nan
+[19:35:03 - main - INFO] ----------------------------
+[19:35:03 - main - INFO] Iter: 15600    Time: 0.035
+[19:35:03 - main - INFO] -------------  -------------
+[19:35:03 - main - INFO] p_in_loss      nan
+[19:35:03 - main - INFO] p_out_loss     nan
+[19:35:03 - main - INFO] rc_loss        nan
+[19:35:03 - main - INFO] rs_loss        nan
+[19:35:03 - main - INFO] ru_loss        nan
+[19:35:03 - main - INFO] rv_loss        nan
+[19:35:03 - main - INFO] s_ic_loss      nan
+[19:35:03 - main - INFO] s_in_loss      nan
+[19:35:03 - main - INFO] u_ic_loss      nan
+[19:35:03 - main - INFO] u_noslip_loss  nan
+[19:35:03 - main - INFO] v_ic_loss      nan
+[19:35:03 - main - INFO] v_in_loss      nan
+[19:35:03 - main - INFO] v_noslip_loss  nan
+[19:35:03 - main - INFO] v_out_loss     nan
+[19:35:05 - main - INFO] ----------------------------
+[19:35:05 - main - INFO] Iter: 15700    Time: 0.035
+[19:35:05 - main - INFO] -------------  -------------
+[19:35:05 - main - INFO] p_in_loss      nan
+[19:35:05 - main - INFO] p_out_loss     nan
+[19:35:05 - main - INFO] rc_loss        nan
+[19:35:05 - main - INFO] rs_loss        nan
+[19:35:05 - main - INFO] ru_loss        nan
+[19:35:05 - main - INFO] rv_loss        nan
+[19:35:05 - main - INFO] s_ic_loss      nan
+[19:35:05 - main - INFO] s_in_loss      nan
+[19:35:05 - main - INFO] u_ic_loss      nan
+[19:35:05 - main - INFO] u_noslip_loss  nan
+[19:35:05 - main - INFO] v_ic_loss      nan
+[19:35:05 - main - INFO] v_in_loss      nan
+[19:35:05 - main - INFO] v_noslip_loss  nan
+[19:35:05 - main - INFO] v_out_loss     nan
+[19:35:06 - main - INFO] ----------------------------
+[19:35:06 - main - INFO] Iter: 15800    Time: 0.035
+[19:35:06 - main - INFO] -------------  -------------
+[19:35:06 - main - INFO] p_in_loss      nan
+[19:35:06 - main - INFO] p_out_loss     nan
+[19:35:06 - main - INFO] rc_loss        nan
+[19:35:06 - main - INFO] rs_loss        nan
+[19:35:06 - main - INFO] ru_loss        nan
+[19:35:06 - main - INFO] rv_loss        nan
+[19:35:06 - main - INFO] s_ic_loss      nan
+[19:35:06 - main - INFO] s_in_loss      nan
+[19:35:06 - main - INFO] u_ic_loss      nan
+[19:35:06 - main - INFO] u_noslip_loss  nan
+[19:35:06 - main - INFO] v_ic_loss      nan
+[19:35:06 - main - INFO] v_in_loss      nan
+[19:35:06 - main - INFO] v_noslip_loss  nan
+[19:35:06 - main - INFO] v_out_loss     nan
+[19:35:08 - main - INFO] ----------------------------
+[19:35:08 - main - INFO] Iter: 15900    Time: 0.033
+[19:35:08 - main - INFO] -------------  -------------
+[19:35:08 - main - INFO] p_in_loss      nan
+[19:35:08 - main - INFO] p_out_loss     nan
+[19:35:08 - main - INFO] rc_loss        nan
+[19:35:08 - main - INFO] rs_loss        nan
+[19:35:08 - main - INFO] ru_loss        nan
+[19:35:08 - main - INFO] rv_loss        nan
+[19:35:08 - main - INFO] s_ic_loss      nan
+[19:35:08 - main - INFO] s_in_loss      nan
+[19:35:08 - main - INFO] u_ic_loss      nan
+[19:35:08 - main - INFO] u_noslip_loss  nan
+[19:35:08 - main - INFO] v_ic_loss      nan
+[19:35:08 - main - INFO] v_in_loss      nan
+[19:35:08 - main - INFO] v_noslip_loss  nan
+[19:35:08 - main - INFO] v_out_loss     nan
+[19:35:10 - main - INFO] ----------------------------
+[19:35:10 - main - INFO] Iter: 16000    Time: 0.114
+[19:35:10 - main - INFO] -------------  -------------
+[19:35:10 - main - INFO] p_in_loss      nan
+[19:35:10 - main - INFO] p_out_loss     nan
+[19:35:10 - main - INFO] rc_loss        nan
+[19:35:10 - main - INFO] rs_loss        nan
+[19:35:10 - main - INFO] ru_loss        nan
+[19:35:10 - main - INFO] rv_loss        nan
+[19:35:10 - main - INFO] s_ic_loss      nan
+[19:35:10 - main - INFO] s_in_loss      nan
+[19:35:10 - main - INFO] u_ic_loss      nan
+[19:35:10 - main - INFO] u_noslip_loss  nan
+[19:35:10 - main - INFO] v_ic_loss      nan
+[19:35:10 - main - INFO] v_in_loss      nan
+[19:35:10 - main - INFO] v_noslip_loss  nan
+[19:35:10 - main - INFO] v_out_loss     nan
+[19:35:11 - main - INFO] ----------------------------
+[19:35:11 - main - INFO] Iter: 16100    Time: 0.036
+[19:35:11 - main - INFO] -------------  -------------
+[19:35:11 - main - INFO] p_in_loss      nan
+[19:35:11 - main - INFO] p_out_loss     nan
+[19:35:11 - main - INFO] rc_loss        nan
+[19:35:11 - main - INFO] rs_loss        nan
+[19:35:11 - main - INFO] ru_loss        nan
+[19:35:11 - main - INFO] rv_loss        nan
+[19:35:11 - main - INFO] s_ic_loss      nan
+[19:35:11 - main - INFO] s_in_loss      nan
+[19:35:11 - main - INFO] u_ic_loss      nan
+[19:35:11 - main - INFO] u_noslip_loss  nan
+[19:35:11 - main - INFO] v_ic_loss      nan
+[19:35:11 - main - INFO] v_in_loss      nan
+[19:35:11 - main - INFO] v_noslip_loss  nan
+[19:35:11 - main - INFO] v_out_loss     nan
+[19:35:13 - main - INFO] ----------------------------
+[19:35:13 - main - INFO] Iter: 16200    Time: 0.036
+[19:35:13 - main - INFO] -------------  -------------
+[19:35:13 - main - INFO] p_in_loss      nan
+[19:35:13 - main - INFO] p_out_loss     nan
+[19:35:13 - main - INFO] rc_loss        nan
+[19:35:13 - main - INFO] rs_loss        nan
+[19:35:13 - main - INFO] ru_loss        nan
+[19:35:13 - main - INFO] rv_loss        nan
+[19:35:13 - main - INFO] s_ic_loss      nan
+[19:35:13 - main - INFO] s_in_loss      nan
+[19:35:13 - main - INFO] u_ic_loss      nan
+[19:35:13 - main - INFO] u_noslip_loss  nan
+[19:35:13 - main - INFO] v_ic_loss      nan
+[19:35:13 - main - INFO] v_in_loss      nan
+[19:35:13 - main - INFO] v_noslip_loss  nan
+[19:35:13 - main - INFO] v_out_loss     nan
+[19:35:15 - main - INFO] ----------------------------
+[19:35:15 - main - INFO] Iter: 16300    Time: 0.033
+[19:35:15 - main - INFO] -------------  -------------
+[19:35:15 - main - INFO] p_in_loss      nan
+[19:35:15 - main - INFO] p_out_loss     nan
+[19:35:15 - main - INFO] rc_loss        nan
+[19:35:15 - main - INFO] rs_loss        nan
+[19:35:15 - main - INFO] ru_loss        nan
+[19:35:15 - main - INFO] rv_loss        nan
+[19:35:15 - main - INFO] s_ic_loss      nan
+[19:35:15 - main - INFO] s_in_loss      nan
+[19:35:15 - main - INFO] u_ic_loss      nan
+[19:35:15 - main - INFO] u_noslip_loss  nan
+[19:35:15 - main - INFO] v_ic_loss      nan
+[19:35:15 - main - INFO] v_in_loss      nan
+[19:35:15 - main - INFO] v_noslip_loss  nan
+[19:35:15 - main - INFO] v_out_loss     nan
+[19:35:16 - main - INFO] ----------------------------
+[19:35:16 - main - INFO] Iter: 16400    Time: 0.034
+[19:35:16 - main - INFO] -------------  -------------
+[19:35:16 - main - INFO] p_in_loss      nan
+[19:35:16 - main - INFO] p_out_loss     nan
+[19:35:16 - main - INFO] rc_loss        nan
+[19:35:16 - main - INFO] rs_loss        nan
+[19:35:16 - main - INFO] ru_loss        nan
+[19:35:16 - main - INFO] rv_loss        nan
+[19:35:16 - main - INFO] s_ic_loss      nan
+[19:35:16 - main - INFO] s_in_loss      nan
+[19:35:16 - main - INFO] u_ic_loss      nan
+[19:35:16 - main - INFO] u_noslip_loss  nan
+[19:35:16 - main - INFO] v_ic_loss      nan
+[19:35:16 - main - INFO] v_in_loss      nan
+[19:35:16 - main - INFO] v_noslip_loss  nan
+[19:35:16 - main - INFO] v_out_loss     nan
+[19:35:18 - main - INFO] ----------------------------
+[19:35:18 - main - INFO] Iter: 16500    Time: 0.035
+[19:35:18 - main - INFO] -------------  -------------
+[19:35:18 - main - INFO] p_in_loss      nan
+[19:35:18 - main - INFO] p_out_loss     nan
+[19:35:18 - main - INFO] rc_loss        nan
+[19:35:18 - main - INFO] rs_loss        nan
+[19:35:18 - main - INFO] ru_loss        nan
+[19:35:18 - main - INFO] rv_loss        nan
+[19:35:18 - main - INFO] s_ic_loss      nan
+[19:35:18 - main - INFO] s_in_loss      nan
+[19:35:18 - main - INFO] u_ic_loss      nan
+[19:35:18 - main - INFO] u_noslip_loss  nan
+[19:35:18 - main - INFO] v_ic_loss      nan
+[19:35:18 - main - INFO] v_in_loss      nan
+[19:35:18 - main - INFO] v_noslip_loss  nan
+[19:35:18 - main - INFO] v_out_loss     nan
+[19:35:19 - main - INFO] ----------------------------
+[19:35:19 - main - INFO] Iter: 16600    Time: 0.032
+[19:35:19 - main - INFO] -------------  -------------
+[19:35:19 - main - INFO] p_in_loss      nan
+[19:35:19 - main - INFO] p_out_loss     nan
+[19:35:19 - main - INFO] rc_loss        nan
+[19:35:19 - main - INFO] rs_loss        nan
+[19:35:19 - main - INFO] ru_loss        nan
+[19:35:19 - main - INFO] rv_loss        nan
+[19:35:19 - main - INFO] s_ic_loss      nan
+[19:35:19 - main - INFO] s_in_loss      nan
+[19:35:19 - main - INFO] u_ic_loss      nan
+[19:35:19 - main - INFO] u_noslip_loss  nan
+[19:35:19 - main - INFO] v_ic_loss      nan
+[19:35:19 - main - INFO] v_in_loss      nan
+[19:35:19 - main - INFO] v_noslip_loss  nan
+[19:35:19 - main - INFO] v_out_loss     nan
+[19:35:21 - main - INFO] ----------------------------
+[19:35:21 - main - INFO] Iter: 16700    Time: 0.033
+[19:35:21 - main - INFO] -------------  -------------
+[19:35:21 - main - INFO] p_in_loss      nan
+[19:35:21 - main - INFO] p_out_loss     nan
+[19:35:21 - main - INFO] rc_loss        nan
+[19:35:21 - main - INFO] rs_loss        nan
+[19:35:21 - main - INFO] ru_loss        nan
+[19:35:21 - main - INFO] rv_loss        nan
+[19:35:21 - main - INFO] s_ic_loss      nan
+[19:35:21 - main - INFO] s_in_loss      nan
+[19:35:21 - main - INFO] u_ic_loss      nan
+[19:35:21 - main - INFO] u_noslip_loss  nan
+[19:35:21 - main - INFO] v_ic_loss      nan
+[19:35:21 - main - INFO] v_in_loss      nan
+[19:35:21 - main - INFO] v_noslip_loss  nan
+[19:35:21 - main - INFO] v_out_loss     nan
+[19:35:23 - main - INFO] ----------------------------
+[19:35:23 - main - INFO] Iter: 16800    Time: 0.039
+[19:35:23 - main - INFO] -------------  -------------
+[19:35:23 - main - INFO] p_in_loss      nan
+[19:35:23 - main - INFO] p_out_loss     nan
+[19:35:23 - main - INFO] rc_loss        nan
+[19:35:23 - main - INFO] rs_loss        nan
+[19:35:23 - main - INFO] ru_loss        nan
+[19:35:23 - main - INFO] rv_loss        nan
+[19:35:23 - main - INFO] s_ic_loss      nan
+[19:35:23 - main - INFO] s_in_loss      nan
+[19:35:23 - main - INFO] u_ic_loss      nan
+[19:35:23 - main - INFO] u_noslip_loss  nan
+[19:35:23 - main - INFO] v_ic_loss      nan
+[19:35:23 - main - INFO] v_in_loss      nan
+[19:35:23 - main - INFO] v_noslip_loss  nan
+[19:35:23 - main - INFO] v_out_loss     nan
+[19:35:24 - main - INFO] ----------------------------
+[19:35:24 - main - INFO] Iter: 16900    Time: 0.032
+[19:35:24 - main - INFO] -------------  -------------
+[19:35:24 - main - INFO] p_in_loss      nan
+[19:35:24 - main - INFO] p_out_loss     nan
+[19:35:24 - main - INFO] rc_loss        nan
+[19:35:24 - main - INFO] rs_loss        nan
+[19:35:24 - main - INFO] ru_loss        nan
+[19:35:24 - main - INFO] rv_loss        nan
+[19:35:24 - main - INFO] s_ic_loss      nan
+[19:35:24 - main - INFO] s_in_loss      nan
+[19:35:24 - main - INFO] u_ic_loss      nan
+[19:35:24 - main - INFO] u_noslip_loss  nan
+[19:35:24 - main - INFO] v_ic_loss      nan
+[19:35:24 - main - INFO] v_in_loss      nan
+[19:35:24 - main - INFO] v_noslip_loss  nan
+[19:35:24 - main - INFO] v_out_loss     nan
+[19:35:26 - main - INFO] ----------------------------
+[19:35:26 - main - INFO] Iter: 17000    Time: 0.115
+[19:35:26 - main - INFO] -------------  -------------
+[19:35:26 - main - INFO] p_in_loss      nan
+[19:35:26 - main - INFO] p_out_loss     nan
+[19:35:26 - main - INFO] rc_loss        nan
+[19:35:26 - main - INFO] rs_loss        nan
+[19:35:26 - main - INFO] ru_loss        nan
+[19:35:26 - main - INFO] rv_loss        nan
+[19:35:26 - main - INFO] s_ic_loss      nan
+[19:35:26 - main - INFO] s_in_loss      nan
+[19:35:26 - main - INFO] u_ic_loss      nan
+[19:35:26 - main - INFO] u_noslip_loss  nan
+[19:35:26 - main - INFO] v_ic_loss      nan
+[19:35:26 - main - INFO] v_in_loss      nan
+[19:35:26 - main - INFO] v_noslip_loss  nan
+[19:35:26 - main - INFO] v_out_loss     nan
+[19:35:28 - main - INFO] ----------------------------
+[19:35:28 - main - INFO] Iter: 17100    Time: 0.032
+[19:35:28 - main - INFO] -------------  -------------
+[19:35:28 - main - INFO] p_in_loss      nan
+[19:35:28 - main - INFO] p_out_loss     nan
+[19:35:28 - main - INFO] rc_loss        nan
+[19:35:28 - main - INFO] rs_loss        nan
+[19:35:28 - main - INFO] ru_loss        nan
+[19:35:28 - main - INFO] rv_loss        nan
+[19:35:28 - main - INFO] s_ic_loss      nan
+[19:35:28 - main - INFO] s_in_loss      nan
+[19:35:28 - main - INFO] u_ic_loss      nan
+[19:35:28 - main - INFO] u_noslip_loss  nan
+[19:35:28 - main - INFO] v_ic_loss      nan
+[19:35:28 - main - INFO] v_in_loss      nan
+[19:35:28 - main - INFO] v_noslip_loss  nan
+[19:35:28 - main - INFO] v_out_loss     nan
+[19:35:29 - main - INFO] ----------------------------
+[19:35:29 - main - INFO] Iter: 17200    Time: 0.034
+[19:35:29 - main - INFO] -------------  -------------
+[19:35:29 - main - INFO] p_in_loss      nan
+[19:35:29 - main - INFO] p_out_loss     nan
+[19:35:29 - main - INFO] rc_loss        nan
+[19:35:29 - main - INFO] rs_loss        nan
+[19:35:29 - main - INFO] ru_loss        nan
+[19:35:29 - main - INFO] rv_loss        nan
+[19:35:29 - main - INFO] s_ic_loss      nan
+[19:35:29 - main - INFO] s_in_loss      nan
+[19:35:29 - main - INFO] u_ic_loss      nan
+[19:35:29 - main - INFO] u_noslip_loss  nan
+[19:35:29 - main - INFO] v_ic_loss      nan
+[19:35:29 - main - INFO] v_in_loss      nan
+[19:35:29 - main - INFO] v_noslip_loss  nan
+[19:35:29 - main - INFO] v_out_loss     nan
+[19:35:31 - main - INFO] ----------------------------
+[19:35:31 - main - INFO] Iter: 17300    Time: 0.034
+[19:35:31 - main - INFO] -------------  -------------
+[19:35:31 - main - INFO] p_in_loss      nan
+[19:35:31 - main - INFO] p_out_loss     nan
+[19:35:31 - main - INFO] rc_loss        nan
+[19:35:31 - main - INFO] rs_loss        nan
+[19:35:31 - main - INFO] ru_loss        nan
+[19:35:31 - main - INFO] rv_loss        nan
+[19:35:31 - main - INFO] s_ic_loss      nan
+[19:35:31 - main - INFO] s_in_loss      nan
+[19:35:31 - main - INFO] u_ic_loss      nan
+[19:35:31 - main - INFO] u_noslip_loss  nan
+[19:35:31 - main - INFO] v_ic_loss      nan
+[19:35:31 - main - INFO] v_in_loss      nan
+[19:35:31 - main - INFO] v_noslip_loss  nan
+[19:35:31 - main - INFO] v_out_loss     nan
+[19:35:32 - main - INFO] ----------------------------
+[19:35:32 - main - INFO] Iter: 17400    Time: 0.035
+[19:35:32 - main - INFO] -------------  -------------
+[19:35:32 - main - INFO] p_in_loss      nan
+[19:35:32 - main - INFO] p_out_loss     nan
+[19:35:32 - main - INFO] rc_loss        nan
+[19:35:32 - main - INFO] rs_loss        nan
+[19:35:32 - main - INFO] ru_loss        nan
+[19:35:32 - main - INFO] rv_loss        nan
+[19:35:32 - main - INFO] s_ic_loss      nan
+[19:35:32 - main - INFO] s_in_loss      nan
+[19:35:32 - main - INFO] u_ic_loss      nan
+[19:35:32 - main - INFO] u_noslip_loss  nan
+[19:35:32 - main - INFO] v_ic_loss      nan
+[19:35:32 - main - INFO] v_in_loss      nan
+[19:35:32 - main - INFO] v_noslip_loss  nan
+[19:35:32 - main - INFO] v_out_loss     nan
+[19:35:34 - main - INFO] ----------------------------
+[19:35:34 - main - INFO] Iter: 17500    Time: 0.033
+[19:35:34 - main - INFO] -------------  -------------
+[19:35:34 - main - INFO] p_in_loss      nan
+[19:35:34 - main - INFO] p_out_loss     nan
+[19:35:34 - main - INFO] rc_loss        nan
+[19:35:34 - main - INFO] rs_loss        nan
+[19:35:34 - main - INFO] ru_loss        nan
+[19:35:34 - main - INFO] rv_loss        nan
+[19:35:34 - main - INFO] s_ic_loss      nan
+[19:35:34 - main - INFO] s_in_loss      nan
+[19:35:34 - main - INFO] u_ic_loss      nan
+[19:35:34 - main - INFO] u_noslip_loss  nan
+[19:35:34 - main - INFO] v_ic_loss      nan
+[19:35:34 - main - INFO] v_in_loss      nan
+[19:35:34 - main - INFO] v_noslip_loss  nan
+[19:35:34 - main - INFO] v_out_loss     nan
+[19:35:36 - main - INFO] ----------------------------
+[19:35:36 - main - INFO] Iter: 17600    Time: 0.035
+[19:35:36 - main - INFO] -------------  -------------
+[19:35:36 - main - INFO] p_in_loss      nan
+[19:35:36 - main - INFO] p_out_loss     nan
+[19:35:36 - main - INFO] rc_loss        nan
+[19:35:36 - main - INFO] rs_loss        nan
+[19:35:36 - main - INFO] ru_loss        nan
+[19:35:36 - main - INFO] rv_loss        nan
+[19:35:36 - main - INFO] s_ic_loss      nan
+[19:35:36 - main - INFO] s_in_loss      nan
+[19:35:36 - main - INFO] u_ic_loss      nan
+[19:35:36 - main - INFO] u_noslip_loss  nan
+[19:35:36 - main - INFO] v_ic_loss      nan
+[19:35:36 - main - INFO] v_in_loss      nan
+[19:35:36 - main - INFO] v_noslip_loss  nan
+[19:35:36 - main - INFO] v_out_loss     nan
+[19:35:37 - main - INFO] ----------------------------
+[19:35:37 - main - INFO] Iter: 17700    Time: 0.034
+[19:35:37 - main - INFO] -------------  -------------
+[19:35:37 - main - INFO] p_in_loss      nan
+[19:35:37 - main - INFO] p_out_loss     nan
+[19:35:37 - main - INFO] rc_loss        nan
+[19:35:37 - main - INFO] rs_loss        nan
+[19:35:37 - main - INFO] ru_loss        nan
+[19:35:37 - main - INFO] rv_loss        nan
+[19:35:37 - main - INFO] s_ic_loss      nan
+[19:35:37 - main - INFO] s_in_loss      nan
+[19:35:37 - main - INFO] u_ic_loss      nan
+[19:35:37 - main - INFO] u_noslip_loss  nan
+[19:35:37 - main - INFO] v_ic_loss      nan
+[19:35:37 - main - INFO] v_in_loss      nan
+[19:35:37 - main - INFO] v_noslip_loss  nan
+[19:35:37 - main - INFO] v_out_loss     nan
+[19:35:39 - main - INFO] ----------------------------
+[19:35:39 - main - INFO] Iter: 17800    Time: 0.034
+[19:35:39 - main - INFO] -------------  -------------
+[19:35:39 - main - INFO] p_in_loss      nan
+[19:35:39 - main - INFO] p_out_loss     nan
+[19:35:39 - main - INFO] rc_loss        nan
+[19:35:39 - main - INFO] rs_loss        nan
+[19:35:39 - main - INFO] ru_loss        nan
+[19:35:39 - main - INFO] rv_loss        nan
+[19:35:39 - main - INFO] s_ic_loss      nan
+[19:35:39 - main - INFO] s_in_loss      nan
+[19:35:39 - main - INFO] u_ic_loss      nan
+[19:35:39 - main - INFO] u_noslip_loss  nan
+[19:35:39 - main - INFO] v_ic_loss      nan
+[19:35:39 - main - INFO] v_in_loss      nan
+[19:35:39 - main - INFO] v_noslip_loss  nan
+[19:35:39 - main - INFO] v_out_loss     nan
+[19:35:41 - main - INFO] ----------------------------
+[19:35:41 - main - INFO] Iter: 17900    Time: 0.035
+[19:35:41 - main - INFO] -------------  -------------
+[19:35:41 - main - INFO] p_in_loss      nan
+[19:35:41 - main - INFO] p_out_loss     nan
+[19:35:41 - main - INFO] rc_loss        nan
+[19:35:41 - main - INFO] rs_loss        nan
+[19:35:41 - main - INFO] ru_loss        nan
+[19:35:41 - main - INFO] rv_loss        nan
+[19:35:41 - main - INFO] s_ic_loss      nan
+[19:35:41 - main - INFO] s_in_loss      nan
+[19:35:41 - main - INFO] u_ic_loss      nan
+[19:35:41 - main - INFO] u_noslip_loss  nan
+[19:35:41 - main - INFO] v_ic_loss      nan
+[19:35:41 - main - INFO] v_in_loss      nan
+[19:35:41 - main - INFO] v_noslip_loss  nan
+[19:35:41 - main - INFO] v_out_loss     nan
+[19:35:42 - main - INFO] ----------------------------
+[19:35:42 - main - INFO] Iter: 18000    Time: 0.117
+[19:35:42 - main - INFO] -------------  -------------
+[19:35:42 - main - INFO] p_in_loss      nan
+[19:35:42 - main - INFO] p_out_loss     nan
+[19:35:42 - main - INFO] rc_loss        nan
+[19:35:42 - main - INFO] rs_loss        nan
+[19:35:42 - main - INFO] ru_loss        nan
+[19:35:42 - main - INFO] rv_loss        nan
+[19:35:42 - main - INFO] s_ic_loss      nan
+[19:35:42 - main - INFO] s_in_loss      nan
+[19:35:42 - main - INFO] u_ic_loss      nan
+[19:35:42 - main - INFO] u_noslip_loss  nan
+[19:35:42 - main - INFO] v_ic_loss      nan
+[19:35:42 - main - INFO] v_in_loss      nan
+[19:35:42 - main - INFO] v_noslip_loss  nan
+[19:35:42 - main - INFO] v_out_loss     nan
+[19:35:44 - main - INFO] ----------------------------
+[19:35:44 - main - INFO] Iter: 18100    Time: 0.037
+[19:35:44 - main - INFO] -------------  -------------
+[19:35:44 - main - INFO] p_in_loss      nan
+[19:35:44 - main - INFO] p_out_loss     nan
+[19:35:44 - main - INFO] rc_loss        nan
+[19:35:44 - main - INFO] rs_loss        nan
+[19:35:44 - main - INFO] ru_loss        nan
+[19:35:44 - main - INFO] rv_loss        nan
+[19:35:44 - main - INFO] s_ic_loss      nan
+[19:35:44 - main - INFO] s_in_loss      nan
+[19:35:44 - main - INFO] u_ic_loss      nan
+[19:35:44 - main - INFO] u_noslip_loss  nan
+[19:35:44 - main - INFO] v_ic_loss      nan
+[19:35:44 - main - INFO] v_in_loss      nan
+[19:35:44 - main - INFO] v_noslip_loss  nan
+[19:35:44 - main - INFO] v_out_loss     nan
+[19:35:45 - main - INFO] ----------------------------
+[19:35:45 - main - INFO] Iter: 18200    Time: 0.034
+[19:35:45 - main - INFO] -------------  -------------
+[19:35:45 - main - INFO] p_in_loss      nan
+[19:35:45 - main - INFO] p_out_loss     nan
+[19:35:45 - main - INFO] rc_loss        nan
+[19:35:45 - main - INFO] rs_loss        nan
+[19:35:45 - main - INFO] ru_loss        nan
+[19:35:45 - main - INFO] rv_loss        nan
+[19:35:45 - main - INFO] s_ic_loss      nan
+[19:35:45 - main - INFO] s_in_loss      nan
+[19:35:45 - main - INFO] u_ic_loss      nan
+[19:35:45 - main - INFO] u_noslip_loss  nan
+[19:35:45 - main - INFO] v_ic_loss      nan
+[19:35:45 - main - INFO] v_in_loss      nan
+[19:35:45 - main - INFO] v_noslip_loss  nan
+[19:35:45 - main - INFO] v_out_loss     nan
+[19:35:47 - main - INFO] ----------------------------
+[19:35:47 - main - INFO] Iter: 18300    Time: 0.033
+[19:35:47 - main - INFO] -------------  -------------
+[19:35:47 - main - INFO] p_in_loss      nan
+[19:35:47 - main - INFO] p_out_loss     nan
+[19:35:47 - main - INFO] rc_loss        nan
+[19:35:47 - main - INFO] rs_loss        nan
+[19:35:47 - main - INFO] ru_loss        nan
+[19:35:47 - main - INFO] rv_loss        nan
+[19:35:47 - main - INFO] s_ic_loss      nan
+[19:35:47 - main - INFO] s_in_loss      nan
+[19:35:47 - main - INFO] u_ic_loss      nan
+[19:35:47 - main - INFO] u_noslip_loss  nan
+[19:35:47 - main - INFO] v_ic_loss      nan
+[19:35:47 - main - INFO] v_in_loss      nan
+[19:35:47 - main - INFO] v_noslip_loss  nan
+[19:35:47 - main - INFO] v_out_loss     nan
+[19:35:49 - main - INFO] ----------------------------
+[19:35:49 - main - INFO] Iter: 18400    Time: 0.032
+[19:35:49 - main - INFO] -------------  -------------
+[19:35:49 - main - INFO] p_in_loss      nan
+[19:35:49 - main - INFO] p_out_loss     nan
+[19:35:49 - main - INFO] rc_loss        nan
+[19:35:49 - main - INFO] rs_loss        nan
+[19:35:49 - main - INFO] ru_loss        nan
+[19:35:49 - main - INFO] rv_loss        nan
+[19:35:49 - main - INFO] s_ic_loss      nan
+[19:35:49 - main - INFO] s_in_loss      nan
+[19:35:49 - main - INFO] u_ic_loss      nan
+[19:35:49 - main - INFO] u_noslip_loss  nan
+[19:35:49 - main - INFO] v_ic_loss      nan
+[19:35:49 - main - INFO] v_in_loss      nan
+[19:35:49 - main - INFO] v_noslip_loss  nan
+[19:35:49 - main - INFO] v_out_loss     nan
+[19:35:50 - main - INFO] ----------------------------
+[19:35:50 - main - INFO] Iter: 18500    Time: 0.033
+[19:35:50 - main - INFO] -------------  -------------
+[19:35:50 - main - INFO] p_in_loss      nan
+[19:35:50 - main - INFO] p_out_loss     nan
+[19:35:50 - main - INFO] rc_loss        nan
+[19:35:50 - main - INFO] rs_loss        nan
+[19:35:50 - main - INFO] ru_loss        nan
+[19:35:50 - main - INFO] rv_loss        nan
+[19:35:50 - main - INFO] s_ic_loss      nan
+[19:35:50 - main - INFO] s_in_loss      nan
+[19:35:50 - main - INFO] u_ic_loss      nan
+[19:35:50 - main - INFO] u_noslip_loss  nan
+[19:35:50 - main - INFO] v_ic_loss      nan
+[19:35:50 - main - INFO] v_in_loss      nan
+[19:35:50 - main - INFO] v_noslip_loss  nan
+[19:35:50 - main - INFO] v_out_loss     nan
+[19:35:52 - main - INFO] ----------------------------
+[19:35:52 - main - INFO] Iter: 18600    Time: 0.034
+[19:35:52 - main - INFO] -------------  -------------
+[19:35:52 - main - INFO] p_in_loss      nan
+[19:35:52 - main - INFO] p_out_loss     nan
+[19:35:52 - main - INFO] rc_loss        nan
+[19:35:52 - main - INFO] rs_loss        nan
+[19:35:52 - main - INFO] ru_loss        nan
+[19:35:52 - main - INFO] rv_loss        nan
+[19:35:52 - main - INFO] s_ic_loss      nan
+[19:35:52 - main - INFO] s_in_loss      nan
+[19:35:52 - main - INFO] u_ic_loss      nan
+[19:35:52 - main - INFO] u_noslip_loss  nan
+[19:35:52 - main - INFO] v_ic_loss      nan
+[19:35:52 - main - INFO] v_in_loss      nan
+[19:35:52 - main - INFO] v_noslip_loss  nan
+[19:35:52 - main - INFO] v_out_loss     nan
+[19:35:53 - main - INFO] ----------------------------
+[19:35:53 - main - INFO] Iter: 18700    Time: 0.035
+[19:35:53 - main - INFO] -------------  -------------
+[19:35:53 - main - INFO] p_in_loss      nan
+[19:35:53 - main - INFO] p_out_loss     nan
+[19:35:53 - main - INFO] rc_loss        nan
+[19:35:53 - main - INFO] rs_loss        nan
+[19:35:53 - main - INFO] ru_loss        nan
+[19:35:53 - main - INFO] rv_loss        nan
+[19:35:53 - main - INFO] s_ic_loss      nan
+[19:35:53 - main - INFO] s_in_loss      nan
+[19:35:53 - main - INFO] u_ic_loss      nan
+[19:35:53 - main - INFO] u_noslip_loss  nan
+[19:35:53 - main - INFO] v_ic_loss      nan
+[19:35:53 - main - INFO] v_in_loss      nan
+[19:35:53 - main - INFO] v_noslip_loss  nan
+[19:35:53 - main - INFO] v_out_loss     nan
+[19:35:55 - main - INFO] ----------------------------
+[19:35:55 - main - INFO] Iter: 18800    Time: 0.036
+[19:35:55 - main - INFO] -------------  -------------
+[19:35:55 - main - INFO] p_in_loss      nan
+[19:35:55 - main - INFO] p_out_loss     nan
+[19:35:55 - main - INFO] rc_loss        nan
+[19:35:55 - main - INFO] rs_loss        nan
+[19:35:55 - main - INFO] ru_loss        nan
+[19:35:55 - main - INFO] rv_loss        nan
+[19:35:55 - main - INFO] s_ic_loss      nan
+[19:35:55 - main - INFO] s_in_loss      nan
+[19:35:55 - main - INFO] u_ic_loss      nan
+[19:35:55 - main - INFO] u_noslip_loss  nan
+[19:35:55 - main - INFO] v_ic_loss      nan
+[19:35:55 - main - INFO] v_in_loss      nan
+[19:35:55 - main - INFO] v_noslip_loss  nan
+[19:35:55 - main - INFO] v_out_loss     nan
+[19:35:57 - main - INFO] ----------------------------
+[19:35:57 - main - INFO] Iter: 18900    Time: 0.035
+[19:35:57 - main - INFO] -------------  -------------
+[19:35:57 - main - INFO] p_in_loss      nan
+[19:35:57 - main - INFO] p_out_loss     nan
+[19:35:57 - main - INFO] rc_loss        nan
+[19:35:57 - main - INFO] rs_loss        nan
+[19:35:57 - main - INFO] ru_loss        nan
+[19:35:57 - main - INFO] rv_loss        nan
+[19:35:57 - main - INFO] s_ic_loss      nan
+[19:35:57 - main - INFO] s_in_loss      nan
+[19:35:57 - main - INFO] u_ic_loss      nan
+[19:35:57 - main - INFO] u_noslip_loss  nan
+[19:35:57 - main - INFO] v_ic_loss      nan
+[19:35:57 - main - INFO] v_in_loss      nan
+[19:35:57 - main - INFO] v_noslip_loss  nan
+[19:35:57 - main - INFO] v_out_loss     nan
+[19:35:58 - main - INFO] ----------------------------
+[19:35:58 - main - INFO] Iter: 19000    Time: 0.117
+[19:35:58 - main - INFO] -------------  -------------
+[19:35:58 - main - INFO] p_in_loss      nan
+[19:35:58 - main - INFO] p_out_loss     nan
+[19:35:58 - main - INFO] rc_loss        nan
+[19:35:58 - main - INFO] rs_loss        nan
+[19:35:58 - main - INFO] ru_loss        nan
+[19:35:58 - main - INFO] rv_loss        nan
+[19:35:58 - main - INFO] s_ic_loss      nan
+[19:35:58 - main - INFO] s_in_loss      nan
+[19:35:58 - main - INFO] u_ic_loss      nan
+[19:35:58 - main - INFO] u_noslip_loss  nan
+[19:35:58 - main - INFO] v_ic_loss      nan
+[19:35:58 - main - INFO] v_in_loss      nan
+[19:35:58 - main - INFO] v_noslip_loss  nan
+[19:35:58 - main - INFO] v_out_loss     nan
+[19:36:00 - main - INFO] ----------------------------
+[19:36:00 - main - INFO] Iter: 19100    Time: 0.036
+[19:36:00 - main - INFO] -------------  -------------
+[19:36:00 - main - INFO] p_in_loss      nan
+[19:36:00 - main - INFO] p_out_loss     nan
+[19:36:00 - main - INFO] rc_loss        nan
+[19:36:00 - main - INFO] rs_loss        nan
+[19:36:00 - main - INFO] ru_loss        nan
+[19:36:00 - main - INFO] rv_loss        nan
+[19:36:00 - main - INFO] s_ic_loss      nan
+[19:36:00 - main - INFO] s_in_loss      nan
+[19:36:00 - main - INFO] u_ic_loss      nan
+[19:36:00 - main - INFO] u_noslip_loss  nan
+[19:36:00 - main - INFO] v_ic_loss      nan
+[19:36:00 - main - INFO] v_in_loss      nan
+[19:36:00 - main - INFO] v_noslip_loss  nan
+[19:36:00 - main - INFO] v_out_loss     nan
+[19:36:02 - main - INFO] ----------------------------
+[19:36:02 - main - INFO] Iter: 19200    Time: 0.036
+[19:36:02 - main - INFO] -------------  -------------
+[19:36:02 - main - INFO] p_in_loss      nan
+[19:36:02 - main - INFO] p_out_loss     nan
+[19:36:02 - main - INFO] rc_loss        nan
+[19:36:02 - main - INFO] rs_loss        nan
+[19:36:02 - main - INFO] ru_loss        nan
+[19:36:02 - main - INFO] rv_loss        nan
+[19:36:02 - main - INFO] s_ic_loss      nan
+[19:36:02 - main - INFO] s_in_loss      nan
+[19:36:02 - main - INFO] u_ic_loss      nan
+[19:36:02 - main - INFO] u_noslip_loss  nan
+[19:36:02 - main - INFO] v_ic_loss      nan
+[19:36:02 - main - INFO] v_in_loss      nan
+[19:36:02 - main - INFO] v_noslip_loss  nan
+[19:36:02 - main - INFO] v_out_loss     nan
+[19:36:03 - main - INFO] ----------------------------
+[19:36:03 - main - INFO] Iter: 19300    Time: 0.034
+[19:36:03 - main - INFO] -------------  -------------
+[19:36:03 - main - INFO] p_in_loss      nan
+[19:36:03 - main - INFO] p_out_loss     nan
+[19:36:03 - main - INFO] rc_loss        nan
+[19:36:03 - main - INFO] rs_loss        nan
+[19:36:03 - main - INFO] ru_loss        nan
+[19:36:03 - main - INFO] rv_loss        nan
+[19:36:03 - main - INFO] s_ic_loss      nan
+[19:36:03 - main - INFO] s_in_loss      nan
+[19:36:03 - main - INFO] u_ic_loss      nan
+[19:36:03 - main - INFO] u_noslip_loss  nan
+[19:36:03 - main - INFO] v_ic_loss      nan
+[19:36:03 - main - INFO] v_in_loss      nan
+[19:36:03 - main - INFO] v_noslip_loss  nan
+[19:36:03 - main - INFO] v_out_loss     nan
+[19:36:05 - main - INFO] ----------------------------
+[19:36:05 - main - INFO] Iter: 19400    Time: 0.030
+[19:36:05 - main - INFO] -------------  -------------
+[19:36:05 - main - INFO] p_in_loss      nan
+[19:36:05 - main - INFO] p_out_loss     nan
+[19:36:05 - main - INFO] rc_loss        nan
+[19:36:05 - main - INFO] rs_loss        nan
+[19:36:05 - main - INFO] ru_loss        nan
+[19:36:05 - main - INFO] rv_loss        nan
+[19:36:05 - main - INFO] s_ic_loss      nan
+[19:36:05 - main - INFO] s_in_loss      nan
+[19:36:05 - main - INFO] u_ic_loss      nan
+[19:36:05 - main - INFO] u_noslip_loss  nan
+[19:36:05 - main - INFO] v_ic_loss      nan
+[19:36:05 - main - INFO] v_in_loss      nan
+[19:36:05 - main - INFO] v_noslip_loss  nan
+[19:36:05 - main - INFO] v_out_loss     nan
+[19:36:07 - main - INFO] ----------------------------
+[19:36:07 - main - INFO] Iter: 19500    Time: 0.037
+[19:36:07 - main - INFO] -------------  -------------
+[19:36:07 - main - INFO] p_in_loss      nan
+[19:36:07 - main - INFO] p_out_loss     nan
+[19:36:07 - main - INFO] rc_loss        nan
+[19:36:07 - main - INFO] rs_loss        nan
+[19:36:07 - main - INFO] ru_loss        nan
+[19:36:07 - main - INFO] rv_loss        nan
+[19:36:07 - main - INFO] s_ic_loss      nan
+[19:36:07 - main - INFO] s_in_loss      nan
+[19:36:07 - main - INFO] u_ic_loss      nan
+[19:36:07 - main - INFO] u_noslip_loss  nan
+[19:36:07 - main - INFO] v_ic_loss      nan
+[19:36:07 - main - INFO] v_in_loss      nan
+[19:36:07 - main - INFO] v_noslip_loss  nan
+[19:36:07 - main - INFO] v_out_loss     nan
+[19:36:08 - main - INFO] ----------------------------
+[19:36:08 - main - INFO] Iter: 19600    Time: 0.034
+[19:36:08 - main - INFO] -------------  -------------
+[19:36:08 - main - INFO] p_in_loss      nan
+[19:36:08 - main - INFO] p_out_loss     nan
+[19:36:08 - main - INFO] rc_loss        nan
+[19:36:08 - main - INFO] rs_loss        nan
+[19:36:08 - main - INFO] ru_loss        nan
+[19:36:08 - main - INFO] rv_loss        nan
+[19:36:08 - main - INFO] s_ic_loss      nan
+[19:36:08 - main - INFO] s_in_loss      nan
+[19:36:08 - main - INFO] u_ic_loss      nan
+[19:36:08 - main - INFO] u_noslip_loss  nan
+[19:36:08 - main - INFO] v_ic_loss      nan
+[19:36:08 - main - INFO] v_in_loss      nan
+[19:36:08 - main - INFO] v_noslip_loss  nan
+[19:36:08 - main - INFO] v_out_loss     nan
+[19:36:10 - main - INFO] ----------------------------
+[19:36:10 - main - INFO] Iter: 19700    Time: 0.033
+[19:36:10 - main - INFO] -------------  -------------
+[19:36:10 - main - INFO] p_in_loss      nan
+[19:36:10 - main - INFO] p_out_loss     nan
+[19:36:10 - main - INFO] rc_loss        nan
+[19:36:10 - main - INFO] rs_loss        nan
+[19:36:10 - main - INFO] ru_loss        nan
+[19:36:10 - main - INFO] rv_loss        nan
+[19:36:10 - main - INFO] s_ic_loss      nan
+[19:36:10 - main - INFO] s_in_loss      nan
+[19:36:10 - main - INFO] u_ic_loss      nan
+[19:36:10 - main - INFO] u_noslip_loss  nan
+[19:36:10 - main - INFO] v_ic_loss      nan
+[19:36:10 - main - INFO] v_in_loss      nan
+[19:36:10 - main - INFO] v_noslip_loss  nan
+[19:36:10 - main - INFO] v_out_loss     nan
+[19:36:12 - main - INFO] ----------------------------
+[19:36:12 - main - INFO] Iter: 19800    Time: 0.036
+[19:36:12 - main - INFO] -------------  -------------
+[19:36:12 - main - INFO] p_in_loss      nan
+[19:36:12 - main - INFO] p_out_loss     nan
+[19:36:12 - main - INFO] rc_loss        nan
+[19:36:12 - main - INFO] rs_loss        nan
+[19:36:12 - main - INFO] ru_loss        nan
+[19:36:12 - main - INFO] rv_loss        nan
+[19:36:12 - main - INFO] s_ic_loss      nan
+[19:36:12 - main - INFO] s_in_loss      nan
+[19:36:12 - main - INFO] u_ic_loss      nan
+[19:36:12 - main - INFO] u_noslip_loss  nan
+[19:36:12 - main - INFO] v_ic_loss      nan
+[19:36:12 - main - INFO] v_in_loss      nan
+[19:36:12 - main - INFO] v_noslip_loss  nan
+[19:36:12 - main - INFO] v_out_loss     nan
+[19:36:13 - main - INFO] ----------------------------
+[19:36:13 - main - INFO] Iter: 19900    Time: 0.036
+[19:36:13 - main - INFO] -------------  -------------
+[19:36:13 - main - INFO] p_in_loss      nan
+[19:36:13 - main - INFO] p_out_loss     nan
+[19:36:13 - main - INFO] rc_loss        nan
+[19:36:13 - main - INFO] rs_loss        nan
+[19:36:13 - main - INFO] ru_loss        nan
+[19:36:13 - main - INFO] rv_loss        nan
+[19:36:13 - main - INFO] s_ic_loss      nan
+[19:36:13 - main - INFO] s_in_loss      nan
+[19:36:13 - main - INFO] u_ic_loss      nan
+[19:36:13 - main - INFO] u_noslip_loss  nan
+[19:36:13 - main - INFO] v_ic_loss      nan
+[19:36:13 - main - INFO] v_in_loss      nan
+[19:36:13 - main - INFO] v_noslip_loss  nan
+[19:36:13 - main - INFO] v_out_loss     nan
+[19:36:15 - main - INFO] ----------------------------
+[19:36:15 - main - INFO] Iter: 20000    Time: 0.115
+[19:36:15 - main - INFO] -------------  -------------
+[19:36:15 - main - INFO] p_in_loss      nan
+[19:36:15 - main - INFO] p_out_loss     nan
+[19:36:15 - main - INFO] rc_loss        nan
+[19:36:15 - main - INFO] rs_loss        nan
+[19:36:15 - main - INFO] ru_loss        nan
+[19:36:15 - main - INFO] rv_loss        nan
+[19:36:15 - main - INFO] s_ic_loss      nan
+[19:36:15 - main - INFO] s_in_loss      nan
+[19:36:15 - main - INFO] u_ic_loss      nan
+[19:36:15 - main - INFO] u_noslip_loss  nan
+[19:36:15 - main - INFO] v_ic_loss      nan
+[19:36:15 - main - INFO] v_in_loss      nan
+[19:36:15 - main - INFO] v_noslip_loss  nan
+[19:36:15 - main - INFO] v_out_loss     nan
+[19:36:17 - main - INFO] ----------------------------
+[19:36:17 - main - INFO] Iter: 20100    Time: 0.034
+[19:36:17 - main - INFO] -------------  -------------
+[19:36:17 - main - INFO] p_in_loss      nan
+[19:36:17 - main - INFO] p_out_loss     nan
+[19:36:17 - main - INFO] rc_loss        nan
+[19:36:17 - main - INFO] rs_loss        nan
+[19:36:17 - main - INFO] ru_loss        nan
+[19:36:17 - main - INFO] rv_loss        nan
+[19:36:17 - main - INFO] s_ic_loss      nan
+[19:36:17 - main - INFO] s_in_loss      nan
+[19:36:17 - main - INFO] u_ic_loss      nan
+[19:36:17 - main - INFO] u_noslip_loss  nan
+[19:36:17 - main - INFO] v_ic_loss      nan
+[19:36:17 - main - INFO] v_in_loss      nan
+[19:36:17 - main - INFO] v_noslip_loss  nan
+[19:36:17 - main - INFO] v_out_loss     nan
+[19:36:18 - main - INFO] ----------------------------
+[19:36:18 - main - INFO] Iter: 20200    Time: 0.034
+[19:36:18 - main - INFO] -------------  -------------
+[19:36:18 - main - INFO] p_in_loss      nan
+[19:36:18 - main - INFO] p_out_loss     nan
+[19:36:18 - main - INFO] rc_loss        nan
+[19:36:18 - main - INFO] rs_loss        nan
+[19:36:18 - main - INFO] ru_loss        nan
+[19:36:18 - main - INFO] rv_loss        nan
+[19:36:18 - main - INFO] s_ic_loss      nan
+[19:36:18 - main - INFO] s_in_loss      nan
+[19:36:18 - main - INFO] u_ic_loss      nan
+[19:36:18 - main - INFO] u_noslip_loss  nan
+[19:36:18 - main - INFO] v_ic_loss      nan
+[19:36:18 - main - INFO] v_in_loss      nan
+[19:36:18 - main - INFO] v_noslip_loss  nan
+[19:36:18 - main - INFO] v_out_loss     nan
+[19:36:20 - main - INFO] ----------------------------
+[19:36:20 - main - INFO] Iter: 20300    Time: 0.033
+[19:36:20 - main - INFO] -------------  -------------
+[19:36:20 - main - INFO] p_in_loss      nan
+[19:36:20 - main - INFO] p_out_loss     nan
+[19:36:20 - main - INFO] rc_loss        nan
+[19:36:20 - main - INFO] rs_loss        nan
+[19:36:20 - main - INFO] ru_loss        nan
+[19:36:20 - main - INFO] rv_loss        nan
+[19:36:20 - main - INFO] s_ic_loss      nan
+[19:36:20 - main - INFO] s_in_loss      nan
+[19:36:20 - main - INFO] u_ic_loss      nan
+[19:36:20 - main - INFO] u_noslip_loss  nan
+[19:36:20 - main - INFO] v_ic_loss      nan
+[19:36:20 - main - INFO] v_in_loss      nan
+[19:36:20 - main - INFO] v_noslip_loss  nan
+[19:36:20 - main - INFO] v_out_loss     nan
+[19:36:22 - main - INFO] ----------------------------
+[19:36:22 - main - INFO] Iter: 20400    Time: 0.034
+[19:36:22 - main - INFO] -------------  -------------
+[19:36:22 - main - INFO] p_in_loss      nan
+[19:36:22 - main - INFO] p_out_loss     nan
+[19:36:22 - main - INFO] rc_loss        nan
+[19:36:22 - main - INFO] rs_loss        nan
+[19:36:22 - main - INFO] ru_loss        nan
+[19:36:22 - main - INFO] rv_loss        nan
+[19:36:22 - main - INFO] s_ic_loss      nan
+[19:36:22 - main - INFO] s_in_loss      nan
+[19:36:22 - main - INFO] u_ic_loss      nan
+[19:36:22 - main - INFO] u_noslip_loss  nan
+[19:36:22 - main - INFO] v_ic_loss      nan
+[19:36:22 - main - INFO] v_in_loss      nan
+[19:36:22 - main - INFO] v_noslip_loss  nan
+[19:36:22 - main - INFO] v_out_loss     nan
+[19:36:23 - main - INFO] ----------------------------
+[19:36:23 - main - INFO] Iter: 20500    Time: 0.033
+[19:36:23 - main - INFO] -------------  -------------
+[19:36:23 - main - INFO] p_in_loss      nan
+[19:36:23 - main - INFO] p_out_loss     nan
+[19:36:23 - main - INFO] rc_loss        nan
+[19:36:23 - main - INFO] rs_loss        nan
+[19:36:23 - main - INFO] ru_loss        nan
+[19:36:23 - main - INFO] rv_loss        nan
+[19:36:23 - main - INFO] s_ic_loss      nan
+[19:36:23 - main - INFO] s_in_loss      nan
+[19:36:23 - main - INFO] u_ic_loss      nan
+[19:36:23 - main - INFO] u_noslip_loss  nan
+[19:36:23 - main - INFO] v_ic_loss      nan
+[19:36:23 - main - INFO] v_in_loss      nan
+[19:36:23 - main - INFO] v_noslip_loss  nan
+[19:36:23 - main - INFO] v_out_loss     nan
+[19:36:25 - main - INFO] ----------------------------
+[19:36:25 - main - INFO] Iter: 20600    Time: 0.034
+[19:36:25 - main - INFO] -------------  -------------
+[19:36:25 - main - INFO] p_in_loss      nan
+[19:36:25 - main - INFO] p_out_loss     nan
+[19:36:25 - main - INFO] rc_loss        nan
+[19:36:25 - main - INFO] rs_loss        nan
+[19:36:25 - main - INFO] ru_loss        nan
+[19:36:25 - main - INFO] rv_loss        nan
+[19:36:25 - main - INFO] s_ic_loss      nan
+[19:36:25 - main - INFO] s_in_loss      nan
+[19:36:25 - main - INFO] u_ic_loss      nan
+[19:36:25 - main - INFO] u_noslip_loss  nan
+[19:36:25 - main - INFO] v_ic_loss      nan
+[19:36:25 - main - INFO] v_in_loss      nan
+[19:36:25 - main - INFO] v_noslip_loss  nan
+[19:36:25 - main - INFO] v_out_loss     nan
+[19:36:26 - main - INFO] ----------------------------
+[19:36:26 - main - INFO] Iter: 20700    Time: 0.035
+[19:36:26 - main - INFO] -------------  -------------
+[19:36:26 - main - INFO] p_in_loss      nan
+[19:36:26 - main - INFO] p_out_loss     nan
+[19:36:26 - main - INFO] rc_loss        nan
+[19:36:26 - main - INFO] rs_loss        nan
+[19:36:26 - main - INFO] ru_loss        nan
+[19:36:26 - main - INFO] rv_loss        nan
+[19:36:26 - main - INFO] s_ic_loss      nan
+[19:36:26 - main - INFO] s_in_loss      nan
+[19:36:26 - main - INFO] u_ic_loss      nan
+[19:36:26 - main - INFO] u_noslip_loss  nan
+[19:36:26 - main - INFO] v_ic_loss      nan
+[19:36:26 - main - INFO] v_in_loss      nan
+[19:36:26 - main - INFO] v_noslip_loss  nan
+[19:36:26 - main - INFO] v_out_loss     nan
+[19:36:28 - main - INFO] ----------------------------
+[19:36:28 - main - INFO] Iter: 20800    Time: 0.035
+[19:36:28 - main - INFO] -------------  -------------
+[19:36:28 - main - INFO] p_in_loss      nan
+[19:36:28 - main - INFO] p_out_loss     nan
+[19:36:28 - main - INFO] rc_loss        nan
+[19:36:28 - main - INFO] rs_loss        nan
+[19:36:28 - main - INFO] ru_loss        nan
+[19:36:28 - main - INFO] rv_loss        nan
+[19:36:28 - main - INFO] s_ic_loss      nan
+[19:36:28 - main - INFO] s_in_loss      nan
+[19:36:28 - main - INFO] u_ic_loss      nan
+[19:36:28 - main - INFO] u_noslip_loss  nan
+[19:36:28 - main - INFO] v_ic_loss      nan
+[19:36:28 - main - INFO] v_in_loss      nan
+[19:36:28 - main - INFO] v_noslip_loss  nan
+[19:36:28 - main - INFO] v_out_loss     nan
+[19:36:30 - main - INFO] ----------------------------
+[19:36:30 - main - INFO] Iter: 20900    Time: 0.035
+[19:36:30 - main - INFO] -------------  -------------
+[19:36:30 - main - INFO] p_in_loss      nan
+[19:36:30 - main - INFO] p_out_loss     nan
+[19:36:30 - main - INFO] rc_loss        nan
+[19:36:30 - main - INFO] rs_loss        nan
+[19:36:30 - main - INFO] ru_loss        nan
+[19:36:30 - main - INFO] rv_loss        nan
+[19:36:30 - main - INFO] s_ic_loss      nan
+[19:36:30 - main - INFO] s_in_loss      nan
+[19:36:30 - main - INFO] u_ic_loss      nan
+[19:36:30 - main - INFO] u_noslip_loss  nan
+[19:36:30 - main - INFO] v_ic_loss      nan
+[19:36:30 - main - INFO] v_in_loss      nan
+[19:36:30 - main - INFO] v_noslip_loss  nan
+[19:36:30 - main - INFO] v_out_loss     nan
+[19:36:31 - main - INFO] ----------------------------
+[19:36:31 - main - INFO] Iter: 21000    Time: 0.118
+[19:36:31 - main - INFO] -------------  -------------
+[19:36:31 - main - INFO] p_in_loss      nan
+[19:36:31 - main - INFO] p_out_loss     nan
+[19:36:31 - main - INFO] rc_loss        nan
+[19:36:31 - main - INFO] rs_loss        nan
+[19:36:31 - main - INFO] ru_loss        nan
+[19:36:31 - main - INFO] rv_loss        nan
+[19:36:31 - main - INFO] s_ic_loss      nan
+[19:36:31 - main - INFO] s_in_loss      nan
+[19:36:31 - main - INFO] u_ic_loss      nan
+[19:36:31 - main - INFO] u_noslip_loss  nan
+[19:36:31 - main - INFO] v_ic_loss      nan
+[19:36:31 - main - INFO] v_in_loss      nan
+[19:36:31 - main - INFO] v_noslip_loss  nan
+[19:36:31 - main - INFO] v_out_loss     nan
+[19:36:33 - main - INFO] ----------------------------
+[19:36:33 - main - INFO] Iter: 21100    Time: 0.034
+[19:36:33 - main - INFO] -------------  -------------
+[19:36:33 - main - INFO] p_in_loss      nan
+[19:36:33 - main - INFO] p_out_loss     nan
+[19:36:33 - main - INFO] rc_loss        nan
+[19:36:33 - main - INFO] rs_loss        nan
+[19:36:33 - main - INFO] ru_loss        nan
+[19:36:33 - main - INFO] rv_loss        nan
+[19:36:33 - main - INFO] s_ic_loss      nan
+[19:36:33 - main - INFO] s_in_loss      nan
+[19:36:33 - main - INFO] u_ic_loss      nan
+[19:36:33 - main - INFO] u_noslip_loss  nan
+[19:36:33 - main - INFO] v_ic_loss      nan
+[19:36:33 - main - INFO] v_in_loss      nan
+[19:36:33 - main - INFO] v_noslip_loss  nan
+[19:36:33 - main - INFO] v_out_loss     nan
+[19:36:35 - main - INFO] ----------------------------
+[19:36:35 - main - INFO] Iter: 21200    Time: 0.033
+[19:36:35 - main - INFO] -------------  -------------
+[19:36:35 - main - INFO] p_in_loss      nan
+[19:36:35 - main - INFO] p_out_loss     nan
+[19:36:35 - main - INFO] rc_loss        nan
+[19:36:35 - main - INFO] rs_loss        nan
+[19:36:35 - main - INFO] ru_loss        nan
+[19:36:35 - main - INFO] rv_loss        nan
+[19:36:35 - main - INFO] s_ic_loss      nan
+[19:36:35 - main - INFO] s_in_loss      nan
+[19:36:35 - main - INFO] u_ic_loss      nan
+[19:36:35 - main - INFO] u_noslip_loss  nan
+[19:36:35 - main - INFO] v_ic_loss      nan
+[19:36:35 - main - INFO] v_in_loss      nan
+[19:36:35 - main - INFO] v_noslip_loss  nan
+[19:36:35 - main - INFO] v_out_loss     nan
+[19:36:36 - main - INFO] ----------------------------
+[19:36:36 - main - INFO] Iter: 21300    Time: 0.038
+[19:36:36 - main - INFO] -------------  -------------
+[19:36:36 - main - INFO] p_in_loss      nan
+[19:36:36 - main - INFO] p_out_loss     nan
+[19:36:36 - main - INFO] rc_loss        nan
+[19:36:36 - main - INFO] rs_loss        nan
+[19:36:36 - main - INFO] ru_loss        nan
+[19:36:36 - main - INFO] rv_loss        nan
+[19:36:36 - main - INFO] s_ic_loss      nan
+[19:36:36 - main - INFO] s_in_loss      nan
+[19:36:36 - main - INFO] u_ic_loss      nan
+[19:36:36 - main - INFO] u_noslip_loss  nan
+[19:36:36 - main - INFO] v_ic_loss      nan
+[19:36:36 - main - INFO] v_in_loss      nan
+[19:36:36 - main - INFO] v_noslip_loss  nan
+[19:36:36 - main - INFO] v_out_loss     nan
+[19:36:38 - main - INFO] ----------------------------
+[19:36:38 - main - INFO] Iter: 21400    Time: 0.034
+[19:36:38 - main - INFO] -------------  -------------
+[19:36:38 - main - INFO] p_in_loss      nan
+[19:36:38 - main - INFO] p_out_loss     nan
+[19:36:38 - main - INFO] rc_loss        nan
+[19:36:38 - main - INFO] rs_loss        nan
+[19:36:38 - main - INFO] ru_loss        nan
+[19:36:38 - main - INFO] rv_loss        nan
+[19:36:38 - main - INFO] s_ic_loss      nan
+[19:36:38 - main - INFO] s_in_loss      nan
+[19:36:38 - main - INFO] u_ic_loss      nan
+[19:36:38 - main - INFO] u_noslip_loss  nan
+[19:36:38 - main - INFO] v_ic_loss      nan
+[19:36:38 - main - INFO] v_in_loss      nan
+[19:36:38 - main - INFO] v_noslip_loss  nan
+[19:36:38 - main - INFO] v_out_loss     nan
+[19:36:40 - main - INFO] ----------------------------
+[19:36:40 - main - INFO] Iter: 21500    Time: 0.033
+[19:36:40 - main - INFO] -------------  -------------
+[19:36:40 - main - INFO] p_in_loss      nan
+[19:36:40 - main - INFO] p_out_loss     nan
+[19:36:40 - main - INFO] rc_loss        nan
+[19:36:40 - main - INFO] rs_loss        nan
+[19:36:40 - main - INFO] ru_loss        nan
+[19:36:40 - main - INFO] rv_loss        nan
+[19:36:40 - main - INFO] s_ic_loss      nan
+[19:36:40 - main - INFO] s_in_loss      nan
+[19:36:40 - main - INFO] u_ic_loss      nan
+[19:36:40 - main - INFO] u_noslip_loss  nan
+[19:36:40 - main - INFO] v_ic_loss      nan
+[19:36:40 - main - INFO] v_in_loss      nan
+[19:36:40 - main - INFO] v_noslip_loss  nan
+[19:36:40 - main - INFO] v_out_loss     nan
+[19:36:41 - main - INFO] ----------------------------
+[19:36:41 - main - INFO] Iter: 21600    Time: 0.036
+[19:36:41 - main - INFO] -------------  -------------
+[19:36:41 - main - INFO] p_in_loss      nan
+[19:36:41 - main - INFO] p_out_loss     nan
+[19:36:41 - main - INFO] rc_loss        nan
+[19:36:41 - main - INFO] rs_loss        nan
+[19:36:41 - main - INFO] ru_loss        nan
+[19:36:41 - main - INFO] rv_loss        nan
+[19:36:41 - main - INFO] s_ic_loss      nan
+[19:36:41 - main - INFO] s_in_loss      nan
+[19:36:41 - main - INFO] u_ic_loss      nan
+[19:36:41 - main - INFO] u_noslip_loss  nan
+[19:36:41 - main - INFO] v_ic_loss      nan
+[19:36:41 - main - INFO] v_in_loss      nan
+[19:36:41 - main - INFO] v_noslip_loss  nan
+[19:36:41 - main - INFO] v_out_loss     nan
+[19:36:43 - main - INFO] ----------------------------
+[19:36:43 - main - INFO] Iter: 21700    Time: 0.035
+[19:36:43 - main - INFO] -------------  -------------
+[19:36:43 - main - INFO] p_in_loss      nan
+[19:36:43 - main - INFO] p_out_loss     nan
+[19:36:43 - main - INFO] rc_loss        nan
+[19:36:43 - main - INFO] rs_loss        nan
+[19:36:43 - main - INFO] ru_loss        nan
+[19:36:43 - main - INFO] rv_loss        nan
+[19:36:43 - main - INFO] s_ic_loss      nan
+[19:36:43 - main - INFO] s_in_loss      nan
+[19:36:43 - main - INFO] u_ic_loss      nan
+[19:36:43 - main - INFO] u_noslip_loss  nan
+[19:36:43 - main - INFO] v_ic_loss      nan
+[19:36:43 - main - INFO] v_in_loss      nan
+[19:36:43 - main - INFO] v_noslip_loss  nan
+[19:36:43 - main - INFO] v_out_loss     nan
+[19:36:44 - main - INFO] ----------------------------
+[19:36:44 - main - INFO] Iter: 21800    Time: 0.034
+[19:36:44 - main - INFO] -------------  -------------
+[19:36:44 - main - INFO] p_in_loss      nan
+[19:36:44 - main - INFO] p_out_loss     nan
+[19:36:44 - main - INFO] rc_loss        nan
+[19:36:44 - main - INFO] rs_loss        nan
+[19:36:44 - main - INFO] ru_loss        nan
+[19:36:44 - main - INFO] rv_loss        nan
+[19:36:44 - main - INFO] s_ic_loss      nan
+[19:36:44 - main - INFO] s_in_loss      nan
+[19:36:44 - main - INFO] u_ic_loss      nan
+[19:36:44 - main - INFO] u_noslip_loss  nan
+[19:36:44 - main - INFO] v_ic_loss      nan
+[19:36:44 - main - INFO] v_in_loss      nan
+[19:36:44 - main - INFO] v_noslip_loss  nan
+[19:36:44 - main - INFO] v_out_loss     nan
+[19:36:45 - main - INFO] ----------------------------
+[19:36:45 - main - INFO] Iter: 21900    Time: 0.027
+[19:36:45 - main - INFO] -------------  -------------
+[19:36:45 - main - INFO] p_in_loss      nan
+[19:36:45 - main - INFO] p_out_loss     nan
+[19:36:45 - main - INFO] rc_loss        nan
+[19:36:45 - main - INFO] rs_loss        nan
+[19:36:45 - main - INFO] ru_loss        nan
+[19:36:45 - main - INFO] rv_loss        nan
+[19:36:45 - main - INFO] s_ic_loss      nan
+[19:36:45 - main - INFO] s_in_loss      nan
+[19:36:45 - main - INFO] u_ic_loss      nan
+[19:36:45 - main - INFO] u_noslip_loss  nan
+[19:36:45 - main - INFO] v_ic_loss      nan
+[19:36:45 - main - INFO] v_in_loss      nan
+[19:36:45 - main - INFO] v_noslip_loss  nan
+[19:36:45 - main - INFO] v_out_loss     nan
+[19:36:47 - main - INFO] ----------------------------
+[19:36:47 - main - INFO] Iter: 22000    Time: 0.114
+[19:36:47 - main - INFO] -------------  -------------
+[19:36:47 - main - INFO] p_in_loss      nan
+[19:36:47 - main - INFO] p_out_loss     nan
+[19:36:47 - main - INFO] rc_loss        nan
+[19:36:47 - main - INFO] rs_loss        nan
+[19:36:47 - main - INFO] ru_loss        nan
+[19:36:47 - main - INFO] rv_loss        nan
+[19:36:47 - main - INFO] s_ic_loss      nan
+[19:36:47 - main - INFO] s_in_loss      nan
+[19:36:47 - main - INFO] u_ic_loss      nan
+[19:36:47 - main - INFO] u_noslip_loss  nan
+[19:36:47 - main - INFO] v_ic_loss      nan
+[19:36:47 - main - INFO] v_in_loss      nan
+[19:36:47 - main - INFO] v_noslip_loss  nan
+[19:36:47 - main - INFO] v_out_loss     nan
+[19:36:49 - main - INFO] ----------------------------
+[19:36:49 - main - INFO] Iter: 22100    Time: 0.033
+[19:36:49 - main - INFO] -------------  -------------
+[19:36:49 - main - INFO] p_in_loss      nan
+[19:36:49 - main - INFO] p_out_loss     nan
+[19:36:49 - main - INFO] rc_loss        nan
+[19:36:49 - main - INFO] rs_loss        nan
+[19:36:49 - main - INFO] ru_loss        nan
+[19:36:49 - main - INFO] rv_loss        nan
+[19:36:49 - main - INFO] s_ic_loss      nan
+[19:36:49 - main - INFO] s_in_loss      nan
+[19:36:49 - main - INFO] u_ic_loss      nan
+[19:36:49 - main - INFO] u_noslip_loss  nan
+[19:36:49 - main - INFO] v_ic_loss      nan
+[19:36:49 - main - INFO] v_in_loss      nan
+[19:36:49 - main - INFO] v_noslip_loss  nan
+[19:36:49 - main - INFO] v_out_loss     nan
+[19:36:50 - main - INFO] ----------------------------
+[19:36:50 - main - INFO] Iter: 22200    Time: 0.032
+[19:36:50 - main - INFO] -------------  -------------
+[19:36:50 - main - INFO] p_in_loss      nan
+[19:36:50 - main - INFO] p_out_loss     nan
+[19:36:50 - main - INFO] rc_loss        nan
+[19:36:50 - main - INFO] rs_loss        nan
+[19:36:50 - main - INFO] ru_loss        nan
+[19:36:50 - main - INFO] rv_loss        nan
+[19:36:50 - main - INFO] s_ic_loss      nan
+[19:36:50 - main - INFO] s_in_loss      nan
+[19:36:50 - main - INFO] u_ic_loss      nan
+[19:36:50 - main - INFO] u_noslip_loss  nan
+[19:36:50 - main - INFO] v_ic_loss      nan
+[19:36:50 - main - INFO] v_in_loss      nan
+[19:36:50 - main - INFO] v_noslip_loss  nan
+[19:36:50 - main - INFO] v_out_loss     nan
+[19:36:52 - main - INFO] ----------------------------
+[19:36:52 - main - INFO] Iter: 22300    Time: 0.033
+[19:36:52 - main - INFO] -------------  -------------
+[19:36:52 - main - INFO] p_in_loss      nan
+[19:36:52 - main - INFO] p_out_loss     nan
+[19:36:52 - main - INFO] rc_loss        nan
+[19:36:52 - main - INFO] rs_loss        nan
+[19:36:52 - main - INFO] ru_loss        nan
+[19:36:52 - main - INFO] rv_loss        nan
+[19:36:52 - main - INFO] s_ic_loss      nan
+[19:36:52 - main - INFO] s_in_loss      nan
+[19:36:52 - main - INFO] u_ic_loss      nan
+[19:36:52 - main - INFO] u_noslip_loss  nan
+[19:36:52 - main - INFO] v_ic_loss      nan
+[19:36:52 - main - INFO] v_in_loss      nan
+[19:36:52 - main - INFO] v_noslip_loss  nan
+[19:36:52 - main - INFO] v_out_loss     nan
+[19:36:54 - main - INFO] ----------------------------
+[19:36:54 - main - INFO] Iter: 22400    Time: 0.037
+[19:36:54 - main - INFO] -------------  -------------
+[19:36:54 - main - INFO] p_in_loss      nan
+[19:36:54 - main - INFO] p_out_loss     nan
+[19:36:54 - main - INFO] rc_loss        nan
+[19:36:54 - main - INFO] rs_loss        nan
+[19:36:54 - main - INFO] ru_loss        nan
+[19:36:54 - main - INFO] rv_loss        nan
+[19:36:54 - main - INFO] s_ic_loss      nan
+[19:36:54 - main - INFO] s_in_loss      nan
+[19:36:54 - main - INFO] u_ic_loss      nan
+[19:36:54 - main - INFO] u_noslip_loss  nan
+[19:36:54 - main - INFO] v_ic_loss      nan
+[19:36:54 - main - INFO] v_in_loss      nan
+[19:36:54 - main - INFO] v_noslip_loss  nan
+[19:36:54 - main - INFO] v_out_loss     nan
+[19:36:55 - main - INFO] ----------------------------
+[19:36:55 - main - INFO] Iter: 22500    Time: 0.033
+[19:36:55 - main - INFO] -------------  -------------
+[19:36:55 - main - INFO] p_in_loss      nan
+[19:36:55 - main - INFO] p_out_loss     nan
+[19:36:55 - main - INFO] rc_loss        nan
+[19:36:55 - main - INFO] rs_loss        nan
+[19:36:55 - main - INFO] ru_loss        nan
+[19:36:55 - main - INFO] rv_loss        nan
+[19:36:55 - main - INFO] s_ic_loss      nan
+[19:36:55 - main - INFO] s_in_loss      nan
+[19:36:55 - main - INFO] u_ic_loss      nan
+[19:36:55 - main - INFO] u_noslip_loss  nan
+[19:36:55 - main - INFO] v_ic_loss      nan
+[19:36:55 - main - INFO] v_in_loss      nan
+[19:36:55 - main - INFO] v_noslip_loss  nan
+[19:36:55 - main - INFO] v_out_loss     nan
+[19:36:57 - main - INFO] ----------------------------
+[19:36:57 - main - INFO] Iter: 22600    Time: 0.032
+[19:36:57 - main - INFO] -------------  -------------
+[19:36:57 - main - INFO] p_in_loss      nan
+[19:36:57 - main - INFO] p_out_loss     nan
+[19:36:57 - main - INFO] rc_loss        nan
+[19:36:57 - main - INFO] rs_loss        nan
+[19:36:57 - main - INFO] ru_loss        nan
+[19:36:57 - main - INFO] rv_loss        nan
+[19:36:57 - main - INFO] s_ic_loss      nan
+[19:36:57 - main - INFO] s_in_loss      nan
+[19:36:57 - main - INFO] u_ic_loss      nan
+[19:36:57 - main - INFO] u_noslip_loss  nan
+[19:36:57 - main - INFO] v_ic_loss      nan
+[19:36:57 - main - INFO] v_in_loss      nan
+[19:36:57 - main - INFO] v_noslip_loss  nan
+[19:36:57 - main - INFO] v_out_loss     nan
+[19:36:58 - main - INFO] ----------------------------
+[19:36:58 - main - INFO] Iter: 22700    Time: 0.033
+[19:36:58 - main - INFO] -------------  -------------
+[19:36:58 - main - INFO] p_in_loss      nan
+[19:36:58 - main - INFO] p_out_loss     nan
+[19:36:58 - main - INFO] rc_loss        nan
+[19:36:58 - main - INFO] rs_loss        nan
+[19:36:58 - main - INFO] ru_loss        nan
+[19:36:58 - main - INFO] rv_loss        nan
+[19:36:58 - main - INFO] s_ic_loss      nan
+[19:36:58 - main - INFO] s_in_loss      nan
+[19:36:58 - main - INFO] u_ic_loss      nan
+[19:36:58 - main - INFO] u_noslip_loss  nan
+[19:36:58 - main - INFO] v_ic_loss      nan
+[19:36:58 - main - INFO] v_in_loss      nan
+[19:36:58 - main - INFO] v_noslip_loss  nan
+[19:36:58 - main - INFO] v_out_loss     nan
+[19:37:00 - main - INFO] ----------------------------
+[19:37:00 - main - INFO] Iter: 22800    Time: 0.032
+[19:37:00 - main - INFO] -------------  -------------
+[19:37:00 - main - INFO] p_in_loss      nan
+[19:37:00 - main - INFO] p_out_loss     nan
+[19:37:00 - main - INFO] rc_loss        nan
+[19:37:00 - main - INFO] rs_loss        nan
+[19:37:00 - main - INFO] ru_loss        nan
+[19:37:00 - main - INFO] rv_loss        nan
+[19:37:00 - main - INFO] s_ic_loss      nan
+[19:37:00 - main - INFO] s_in_loss      nan
+[19:37:00 - main - INFO] u_ic_loss      nan
+[19:37:00 - main - INFO] u_noslip_loss  nan
+[19:37:00 - main - INFO] v_ic_loss      nan
+[19:37:00 - main - INFO] v_in_loss      nan
+[19:37:00 - main - INFO] v_noslip_loss  nan
+[19:37:00 - main - INFO] v_out_loss     nan
+[19:37:02 - main - INFO] ----------------------------
+[19:37:02 - main - INFO] Iter: 22900    Time: 0.031
+[19:37:02 - main - INFO] -------------  -------------
+[19:37:02 - main - INFO] p_in_loss      nan
+[19:37:02 - main - INFO] p_out_loss     nan
+[19:37:02 - main - INFO] rc_loss        nan
+[19:37:02 - main - INFO] rs_loss        nan
+[19:37:02 - main - INFO] ru_loss        nan
+[19:37:02 - main - INFO] rv_loss        nan
+[19:37:02 - main - INFO] s_ic_loss      nan
+[19:37:02 - main - INFO] s_in_loss      nan
+[19:37:02 - main - INFO] u_ic_loss      nan
+[19:37:02 - main - INFO] u_noslip_loss  nan
+[19:37:02 - main - INFO] v_ic_loss      nan
+[19:37:02 - main - INFO] v_in_loss      nan
+[19:37:02 - main - INFO] v_noslip_loss  nan
+[19:37:02 - main - INFO] v_out_loss     nan
+[19:37:03 - main - INFO] ----------------------------
+[19:37:03 - main - INFO] Iter: 23000    Time: 0.117
+[19:37:03 - main - INFO] -------------  -------------
+[19:37:03 - main - INFO] p_in_loss      nan
+[19:37:03 - main - INFO] p_out_loss     nan
+[19:37:03 - main - INFO] rc_loss        nan
+[19:37:03 - main - INFO] rs_loss        nan
+[19:37:03 - main - INFO] ru_loss        nan
+[19:37:03 - main - INFO] rv_loss        nan
+[19:37:03 - main - INFO] s_ic_loss      nan
+[19:37:03 - main - INFO] s_in_loss      nan
+[19:37:03 - main - INFO] u_ic_loss      nan
+[19:37:03 - main - INFO] u_noslip_loss  nan
+[19:37:03 - main - INFO] v_ic_loss      nan
+[19:37:03 - main - INFO] v_in_loss      nan
+[19:37:03 - main - INFO] v_noslip_loss  nan
+[19:37:03 - main - INFO] v_out_loss     nan
+[19:37:05 - main - INFO] ----------------------------
+[19:37:05 - main - INFO] Iter: 23100    Time: 0.036
+[19:37:05 - main - INFO] -------------  -------------
+[19:37:05 - main - INFO] p_in_loss      nan
+[19:37:05 - main - INFO] p_out_loss     nan
+[19:37:05 - main - INFO] rc_loss        nan
+[19:37:05 - main - INFO] rs_loss        nan
+[19:37:05 - main - INFO] ru_loss        nan
+[19:37:05 - main - INFO] rv_loss        nan
+[19:37:05 - main - INFO] s_ic_loss      nan
+[19:37:05 - main - INFO] s_in_loss      nan
+[19:37:05 - main - INFO] u_ic_loss      nan
+[19:37:05 - main - INFO] u_noslip_loss  nan
+[19:37:05 - main - INFO] v_ic_loss      nan
+[19:37:05 - main - INFO] v_in_loss      nan
+[19:37:05 - main - INFO] v_noslip_loss  nan
+[19:37:05 - main - INFO] v_out_loss     nan
+[19:37:06 - main - INFO] ----------------------------
+[19:37:06 - main - INFO] Iter: 23200    Time: 0.033
+[19:37:06 - main - INFO] -------------  -------------
+[19:37:06 - main - INFO] p_in_loss      nan
+[19:37:06 - main - INFO] p_out_loss     nan
+[19:37:06 - main - INFO] rc_loss        nan
+[19:37:06 - main - INFO] rs_loss        nan
+[19:37:06 - main - INFO] ru_loss        nan
+[19:37:06 - main - INFO] rv_loss        nan
+[19:37:06 - main - INFO] s_ic_loss      nan
+[19:37:06 - main - INFO] s_in_loss      nan
+[19:37:06 - main - INFO] u_ic_loss      nan
+[19:37:06 - main - INFO] u_noslip_loss  nan
+[19:37:06 - main - INFO] v_ic_loss      nan
+[19:37:06 - main - INFO] v_in_loss      nan
+[19:37:06 - main - INFO] v_noslip_loss  nan
+[19:37:06 - main - INFO] v_out_loss     nan
+[19:37:08 - main - INFO] ----------------------------
+[19:37:08 - main - INFO] Iter: 23300    Time: 0.033
+[19:37:08 - main - INFO] -------------  -------------
+[19:37:08 - main - INFO] p_in_loss      nan
+[19:37:08 - main - INFO] p_out_loss     nan
+[19:37:08 - main - INFO] rc_loss        nan
+[19:37:08 - main - INFO] rs_loss        nan
+[19:37:08 - main - INFO] ru_loss        nan
+[19:37:08 - main - INFO] rv_loss        nan
+[19:37:08 - main - INFO] s_ic_loss      nan
+[19:37:08 - main - INFO] s_in_loss      nan
+[19:37:08 - main - INFO] u_ic_loss      nan
+[19:37:08 - main - INFO] u_noslip_loss  nan
+[19:37:08 - main - INFO] v_ic_loss      nan
+[19:37:08 - main - INFO] v_in_loss      nan
+[19:37:08 - main - INFO] v_noslip_loss  nan
+[19:37:08 - main - INFO] v_out_loss     nan
+[19:37:10 - main - INFO] ----------------------------
+[19:37:10 - main - INFO] Iter: 23400    Time: 0.035
+[19:37:10 - main - INFO] -------------  -------------
+[19:37:10 - main - INFO] p_in_loss      nan
+[19:37:10 - main - INFO] p_out_loss     nan
+[19:37:10 - main - INFO] rc_loss        nan
+[19:37:10 - main - INFO] rs_loss        nan
+[19:37:10 - main - INFO] ru_loss        nan
+[19:37:10 - main - INFO] rv_loss        nan
+[19:37:10 - main - INFO] s_ic_loss      nan
+[19:37:10 - main - INFO] s_in_loss      nan
+[19:37:10 - main - INFO] u_ic_loss      nan
+[19:37:10 - main - INFO] u_noslip_loss  nan
+[19:37:10 - main - INFO] v_ic_loss      nan
+[19:37:10 - main - INFO] v_in_loss      nan
+[19:37:10 - main - INFO] v_noslip_loss  nan
+[19:37:10 - main - INFO] v_out_loss     nan
+[19:37:11 - main - INFO] ----------------------------
+[19:37:11 - main - INFO] Iter: 23500    Time: 0.034
+[19:37:11 - main - INFO] -------------  -------------
+[19:37:11 - main - INFO] p_in_loss      nan
+[19:37:11 - main - INFO] p_out_loss     nan
+[19:37:11 - main - INFO] rc_loss        nan
+[19:37:11 - main - INFO] rs_loss        nan
+[19:37:11 - main - INFO] ru_loss        nan
+[19:37:11 - main - INFO] rv_loss        nan
+[19:37:11 - main - INFO] s_ic_loss      nan
+[19:37:11 - main - INFO] s_in_loss      nan
+[19:37:11 - main - INFO] u_ic_loss      nan
+[19:37:11 - main - INFO] u_noslip_loss  nan
+[19:37:11 - main - INFO] v_ic_loss      nan
+[19:37:11 - main - INFO] v_in_loss      nan
+[19:37:11 - main - INFO] v_noslip_loss  nan
+[19:37:11 - main - INFO] v_out_loss     nan
+[19:37:13 - main - INFO] ----------------------------
+[19:37:13 - main - INFO] Iter: 23600    Time: 0.035
+[19:37:13 - main - INFO] -------------  -------------
+[19:37:13 - main - INFO] p_in_loss      nan
+[19:37:13 - main - INFO] p_out_loss     nan
+[19:37:13 - main - INFO] rc_loss        nan
+[19:37:13 - main - INFO] rs_loss        nan
+[19:37:13 - main - INFO] ru_loss        nan
+[19:37:13 - main - INFO] rv_loss        nan
+[19:37:13 - main - INFO] s_ic_loss      nan
+[19:37:13 - main - INFO] s_in_loss      nan
+[19:37:13 - main - INFO] u_ic_loss      nan
+[19:37:13 - main - INFO] u_noslip_loss  nan
+[19:37:13 - main - INFO] v_ic_loss      nan
+[19:37:13 - main - INFO] v_in_loss      nan
+[19:37:13 - main - INFO] v_noslip_loss  nan
+[19:37:13 - main - INFO] v_out_loss     nan
+[19:37:15 - main - INFO] ----------------------------
+[19:37:15 - main - INFO] Iter: 23700    Time: 0.034
+[19:37:15 - main - INFO] -------------  -------------
+[19:37:15 - main - INFO] p_in_loss      nan
+[19:37:15 - main - INFO] p_out_loss     nan
+[19:37:15 - main - INFO] rc_loss        nan
+[19:37:15 - main - INFO] rs_loss        nan
+[19:37:15 - main - INFO] ru_loss        nan
+[19:37:15 - main - INFO] rv_loss        nan
+[19:37:15 - main - INFO] s_ic_loss      nan
+[19:37:15 - main - INFO] s_in_loss      nan
+[19:37:15 - main - INFO] u_ic_loss      nan
+[19:37:15 - main - INFO] u_noslip_loss  nan
+[19:37:15 - main - INFO] v_ic_loss      nan
+[19:37:15 - main - INFO] v_in_loss      nan
+[19:37:15 - main - INFO] v_noslip_loss  nan
+[19:37:15 - main - INFO] v_out_loss     nan
+[19:37:16 - main - INFO] ----------------------------
+[19:37:16 - main - INFO] Iter: 23800    Time: 0.030
+[19:37:16 - main - INFO] -------------  -------------
+[19:37:16 - main - INFO] p_in_loss      nan
+[19:37:16 - main - INFO] p_out_loss     nan
+[19:37:16 - main - INFO] rc_loss        nan
+[19:37:16 - main - INFO] rs_loss        nan
+[19:37:16 - main - INFO] ru_loss        nan
+[19:37:16 - main - INFO] rv_loss        nan
+[19:37:16 - main - INFO] s_ic_loss      nan
+[19:37:16 - main - INFO] s_in_loss      nan
+[19:37:16 - main - INFO] u_ic_loss      nan
+[19:37:16 - main - INFO] u_noslip_loss  nan
+[19:37:16 - main - INFO] v_ic_loss      nan
+[19:37:16 - main - INFO] v_in_loss      nan
+[19:37:16 - main - INFO] v_noslip_loss  nan
+[19:37:16 - main - INFO] v_out_loss     nan
+[19:37:18 - main - INFO] ----------------------------
+[19:37:18 - main - INFO] Iter: 23900    Time: 0.034
+[19:37:18 - main - INFO] -------------  -------------
+[19:37:18 - main - INFO] p_in_loss      nan
+[19:37:18 - main - INFO] p_out_loss     nan
+[19:37:18 - main - INFO] rc_loss        nan
+[19:37:18 - main - INFO] rs_loss        nan
+[19:37:18 - main - INFO] ru_loss        nan
+[19:37:18 - main - INFO] rv_loss        nan
+[19:37:18 - main - INFO] s_ic_loss      nan
+[19:37:18 - main - INFO] s_in_loss      nan
+[19:37:18 - main - INFO] u_ic_loss      nan
+[19:37:18 - main - INFO] u_noslip_loss  nan
+[19:37:18 - main - INFO] v_ic_loss      nan
+[19:37:18 - main - INFO] v_in_loss      nan
+[19:37:18 - main - INFO] v_noslip_loss  nan
+[19:37:18 - main - INFO] v_out_loss     nan
+[19:37:19 - main - INFO] ----------------------------
+[19:37:19 - main - INFO] Iter: 24000    Time: 0.115
+[19:37:19 - main - INFO] -------------  -------------
+[19:37:19 - main - INFO] p_in_loss      nan
+[19:37:19 - main - INFO] p_out_loss     nan
+[19:37:19 - main - INFO] rc_loss        nan
+[19:37:19 - main - INFO] rs_loss        nan
+[19:37:19 - main - INFO] ru_loss        nan
+[19:37:19 - main - INFO] rv_loss        nan
+[19:37:19 - main - INFO] s_ic_loss      nan
+[19:37:19 - main - INFO] s_in_loss      nan
+[19:37:19 - main - INFO] u_ic_loss      nan
+[19:37:19 - main - INFO] u_noslip_loss  nan
+[19:37:19 - main - INFO] v_ic_loss      nan
+[19:37:19 - main - INFO] v_in_loss      nan
+[19:37:19 - main - INFO] v_noslip_loss  nan
+[19:37:19 - main - INFO] v_out_loss     nan
+[19:37:21 - main - INFO] ----------------------------
+[19:37:21 - main - INFO] Iter: 24100    Time: 0.034
+[19:37:21 - main - INFO] -------------  -------------
+[19:37:21 - main - INFO] p_in_loss      nan
+[19:37:21 - main - INFO] p_out_loss     nan
+[19:37:21 - main - INFO] rc_loss        nan
+[19:37:21 - main - INFO] rs_loss        nan
+[19:37:21 - main - INFO] ru_loss        nan
+[19:37:21 - main - INFO] rv_loss        nan
+[19:37:21 - main - INFO] s_ic_loss      nan
+[19:37:21 - main - INFO] s_in_loss      nan
+[19:37:21 - main - INFO] u_ic_loss      nan
+[19:37:21 - main - INFO] u_noslip_loss  nan
+[19:37:21 - main - INFO] v_ic_loss      nan
+[19:37:21 - main - INFO] v_in_loss      nan
+[19:37:21 - main - INFO] v_noslip_loss  nan
+[19:37:21 - main - INFO] v_out_loss     nan
+[19:37:23 - main - INFO] ----------------------------
+[19:37:23 - main - INFO] Iter: 24200    Time: 0.031
+[19:37:23 - main - INFO] -------------  -------------
+[19:37:23 - main - INFO] p_in_loss      nan
+[19:37:23 - main - INFO] p_out_loss     nan
+[19:37:23 - main - INFO] rc_loss        nan
+[19:37:23 - main - INFO] rs_loss        nan
+[19:37:23 - main - INFO] ru_loss        nan
+[19:37:23 - main - INFO] rv_loss        nan
+[19:37:23 - main - INFO] s_ic_loss      nan
+[19:37:23 - main - INFO] s_in_loss      nan
+[19:37:23 - main - INFO] u_ic_loss      nan
+[19:37:23 - main - INFO] u_noslip_loss  nan
+[19:37:23 - main - INFO] v_ic_loss      nan
+[19:37:23 - main - INFO] v_in_loss      nan
+[19:37:23 - main - INFO] v_noslip_loss  nan
+[19:37:23 - main - INFO] v_out_loss     nan
+[19:37:24 - main - INFO] ----------------------------
+[19:37:24 - main - INFO] Iter: 24300    Time: 0.032
+[19:37:24 - main - INFO] -------------  -------------
+[19:37:24 - main - INFO] p_in_loss      nan
+[19:37:24 - main - INFO] p_out_loss     nan
+[19:37:24 - main - INFO] rc_loss        nan
+[19:37:24 - main - INFO] rs_loss        nan
+[19:37:24 - main - INFO] ru_loss        nan
+[19:37:24 - main - INFO] rv_loss        nan
+[19:37:24 - main - INFO] s_ic_loss      nan
+[19:37:24 - main - INFO] s_in_loss      nan
+[19:37:24 - main - INFO] u_ic_loss      nan
+[19:37:24 - main - INFO] u_noslip_loss  nan
+[19:37:24 - main - INFO] v_ic_loss      nan
+[19:37:24 - main - INFO] v_in_loss      nan
+[19:37:24 - main - INFO] v_noslip_loss  nan
+[19:37:24 - main - INFO] v_out_loss     nan
+[19:37:26 - main - INFO] ----------------------------
+[19:37:26 - main - INFO] Iter: 24400    Time: 0.038
+[19:37:26 - main - INFO] -------------  -------------
+[19:37:26 - main - INFO] p_in_loss      nan
+[19:37:26 - main - INFO] p_out_loss     nan
+[19:37:26 - main - INFO] rc_loss        nan
+[19:37:26 - main - INFO] rs_loss        nan
+[19:37:26 - main - INFO] ru_loss        nan
+[19:37:26 - main - INFO] rv_loss        nan
+[19:37:26 - main - INFO] s_ic_loss      nan
+[19:37:26 - main - INFO] s_in_loss      nan
+[19:37:26 - main - INFO] u_ic_loss      nan
+[19:37:26 - main - INFO] u_noslip_loss  nan
+[19:37:26 - main - INFO] v_ic_loss      nan
+[19:37:26 - main - INFO] v_in_loss      nan
+[19:37:26 - main - INFO] v_noslip_loss  nan
+[19:37:26 - main - INFO] v_out_loss     nan
+[19:37:28 - main - INFO] ----------------------------
+[19:37:28 - main - INFO] Iter: 24500    Time: 0.040
+[19:37:28 - main - INFO] -------------  -------------
+[19:37:28 - main - INFO] p_in_loss      nan
+[19:37:28 - main - INFO] p_out_loss     nan
+[19:37:28 - main - INFO] rc_loss        nan
+[19:37:28 - main - INFO] rs_loss        nan
+[19:37:28 - main - INFO] ru_loss        nan
+[19:37:28 - main - INFO] rv_loss        nan
+[19:37:28 - main - INFO] s_ic_loss      nan
+[19:37:28 - main - INFO] s_in_loss      nan
+[19:37:28 - main - INFO] u_ic_loss      nan
+[19:37:28 - main - INFO] u_noslip_loss  nan
+[19:37:28 - main - INFO] v_ic_loss      nan
+[19:37:28 - main - INFO] v_in_loss      nan
+[19:37:28 - main - INFO] v_noslip_loss  nan
+[19:37:28 - main - INFO] v_out_loss     nan
+[19:37:29 - main - INFO] ----------------------------
+[19:37:29 - main - INFO] Iter: 24600    Time: 0.036
+[19:37:29 - main - INFO] -------------  -------------
+[19:37:29 - main - INFO] p_in_loss      nan
+[19:37:29 - main - INFO] p_out_loss     nan
+[19:37:29 - main - INFO] rc_loss        nan
+[19:37:29 - main - INFO] rs_loss        nan
+[19:37:29 - main - INFO] ru_loss        nan
+[19:37:29 - main - INFO] rv_loss        nan
+[19:37:29 - main - INFO] s_ic_loss      nan
+[19:37:29 - main - INFO] s_in_loss      nan
+[19:37:29 - main - INFO] u_ic_loss      nan
+[19:37:29 - main - INFO] u_noslip_loss  nan
+[19:37:29 - main - INFO] v_ic_loss      nan
+[19:37:29 - main - INFO] v_in_loss      nan
+[19:37:29 - main - INFO] v_noslip_loss  nan
+[19:37:29 - main - INFO] v_out_loss     nan
+[19:37:31 - main - INFO] ----------------------------
+[19:37:31 - main - INFO] Iter: 24700    Time: 0.034
+[19:37:31 - main - INFO] -------------  -------------
+[19:37:31 - main - INFO] p_in_loss      nan
+[19:37:31 - main - INFO] p_out_loss     nan
+[19:37:31 - main - INFO] rc_loss        nan
+[19:37:31 - main - INFO] rs_loss        nan
+[19:37:31 - main - INFO] ru_loss        nan
+[19:37:31 - main - INFO] rv_loss        nan
+[19:37:31 - main - INFO] s_ic_loss      nan
+[19:37:31 - main - INFO] s_in_loss      nan
+[19:37:31 - main - INFO] u_ic_loss      nan
+[19:37:31 - main - INFO] u_noslip_loss  nan
+[19:37:31 - main - INFO] v_ic_loss      nan
+[19:37:31 - main - INFO] v_in_loss      nan
+[19:37:31 - main - INFO] v_noslip_loss  nan
+[19:37:31 - main - INFO] v_out_loss     nan
+[19:37:32 - main - INFO] ----------------------------
+[19:37:32 - main - INFO] Iter: 24800    Time: 0.034
+[19:37:32 - main - INFO] -------------  -------------
+[19:37:32 - main - INFO] p_in_loss      nan
+[19:37:32 - main - INFO] p_out_loss     nan
+[19:37:32 - main - INFO] rc_loss        nan
+[19:37:32 - main - INFO] rs_loss        nan
+[19:37:32 - main - INFO] ru_loss        nan
+[19:37:32 - main - INFO] rv_loss        nan
+[19:37:32 - main - INFO] s_ic_loss      nan
+[19:37:32 - main - INFO] s_in_loss      nan
+[19:37:32 - main - INFO] u_ic_loss      nan
+[19:37:32 - main - INFO] u_noslip_loss  nan
+[19:37:32 - main - INFO] v_ic_loss      nan
+[19:37:32 - main - INFO] v_in_loss      nan
+[19:37:32 - main - INFO] v_noslip_loss  nan
+[19:37:32 - main - INFO] v_out_loss     nan
+[19:37:34 - main - INFO] ----------------------------
+[19:37:34 - main - INFO] Iter: 24900    Time: 0.033
+[19:37:34 - main - INFO] -------------  -------------
+[19:37:34 - main - INFO] p_in_loss      nan
+[19:37:34 - main - INFO] p_out_loss     nan
+[19:37:34 - main - INFO] rc_loss        nan
+[19:37:34 - main - INFO] rs_loss        nan
+[19:37:34 - main - INFO] ru_loss        nan
+[19:37:34 - main - INFO] rv_loss        nan
+[19:37:34 - main - INFO] s_ic_loss      nan
+[19:37:34 - main - INFO] s_in_loss      nan
+[19:37:34 - main - INFO] u_ic_loss      nan
+[19:37:34 - main - INFO] u_noslip_loss  nan
+[19:37:34 - main - INFO] v_ic_loss      nan
+[19:37:34 - main - INFO] v_in_loss      nan
+[19:37:34 - main - INFO] v_noslip_loss  nan
+[19:37:34 - main - INFO] v_out_loss     nan
+[19:37:36 - main - INFO] ----------------------------
+[19:37:36 - main - INFO] Iter: 25000    Time: 0.116
+[19:37:36 - main - INFO] -------------  -------------
+[19:37:36 - main - INFO] p_in_loss      nan
+[19:37:36 - main - INFO] p_out_loss     nan
+[19:37:36 - main - INFO] rc_loss        nan
+[19:37:36 - main - INFO] rs_loss        nan
+[19:37:36 - main - INFO] ru_loss        nan
+[19:37:36 - main - INFO] rv_loss        nan
+[19:37:36 - main - INFO] s_ic_loss      nan
+[19:37:36 - main - INFO] s_in_loss      nan
+[19:37:36 - main - INFO] u_ic_loss      nan
+[19:37:36 - main - INFO] u_noslip_loss  nan
+[19:37:36 - main - INFO] v_ic_loss      nan
+[19:37:36 - main - INFO] v_in_loss      nan
+[19:37:36 - main - INFO] v_noslip_loss  nan
+[19:37:36 - main - INFO] v_out_loss     nan
+[19:37:37 - main - INFO] ----------------------------
+[19:37:37 - main - INFO] Iter: 25100    Time: 0.035
+[19:37:37 - main - INFO] -------------  -------------
+[19:37:37 - main - INFO] p_in_loss      nan
+[19:37:37 - main - INFO] p_out_loss     nan
+[19:37:37 - main - INFO] rc_loss        nan
+[19:37:37 - main - INFO] rs_loss        nan
+[19:37:37 - main - INFO] ru_loss        nan
+[19:37:37 - main - INFO] rv_loss        nan
+[19:37:37 - main - INFO] s_ic_loss      nan
+[19:37:37 - main - INFO] s_in_loss      nan
+[19:37:37 - main - INFO] u_ic_loss      nan
+[19:37:37 - main - INFO] u_noslip_loss  nan
+[19:37:37 - main - INFO] v_ic_loss      nan
+[19:37:37 - main - INFO] v_in_loss      nan
+[19:37:37 - main - INFO] v_noslip_loss  nan
+[19:37:37 - main - INFO] v_out_loss     nan
+[19:37:39 - main - INFO] ----------------------------
+[19:37:39 - main - INFO] Iter: 25200    Time: 0.034
+[19:37:39 - main - INFO] -------------  -------------
+[19:37:39 - main - INFO] p_in_loss      nan
+[19:37:39 - main - INFO] p_out_loss     nan
+[19:37:39 - main - INFO] rc_loss        nan
+[19:37:39 - main - INFO] rs_loss        nan
+[19:37:39 - main - INFO] ru_loss        nan
+[19:37:39 - main - INFO] rv_loss        nan
+[19:37:39 - main - INFO] s_ic_loss      nan
+[19:37:39 - main - INFO] s_in_loss      nan
+[19:37:39 - main - INFO] u_ic_loss      nan
+[19:37:39 - main - INFO] u_noslip_loss  nan
+[19:37:39 - main - INFO] v_ic_loss      nan
+[19:37:39 - main - INFO] v_in_loss      nan
+[19:37:39 - main - INFO] v_noslip_loss  nan
+[19:37:39 - main - INFO] v_out_loss     nan
+Traceback (most recent call last):
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/main.py", line 39, in <module>
+    app.run(main)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 308, in run
+    _run_main(main, args)
+  File "/usr/local/lib/python3.11/dist-packages/absl/app.py", line 254, in _run_main
+    sys.exit(main(argv))
+             ^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/main.py", line 31, in main
+    train.train_and_evaluate(FLAGS.config, FLAGS.workdir)
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/train.py", line 372, in train_and_evaluate
+    model = train_one_window(config, workdir, model, samplers, idx)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pedro/PINN/jaxpi/examples/geomII_2ph/train.py", line 140, in train_one_window
+    state = jax.device_get(tree_map(lambda x: x[0], model.state))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/jax/_src/api.py", line 2698, in device_get
+    return tree_map(_device_get, x)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/jax/_src/tree_util.py", line 321, in tree_map
+    return treedef.unflatten(f(*xs) for xs in zip(*all_leaves))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/jax/_src/tree_util.py", line 321, in <genexpr>
+    return treedef.unflatten(f(*xs) for xs in zip(*all_leaves))
+                             ^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/jax/_src/api.py", line 2659, in _device_get
+    return toarray()
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/jax/_src/array.py", line 407, in __array__
+    return np.asarray(self._value, dtype=dtype, **kwds)
+                      ^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/jax/_src/profiler.py", line 335, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/jax/_src/array.py", line 621, in _value
+    self._npy_value = self._single_device_array_to_np_array()  # type: ignore
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
