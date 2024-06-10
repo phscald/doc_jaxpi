@@ -360,12 +360,13 @@ class NavierStokes2DwSat(ForwardIVP):
         s_ic_loss = jnp.mean((s_ic_pred - s_batch) ** 2)
 
         # inflow outflow loss
-        #
         p_in_pred = self.p_pred_fn(
             params, inflow_batch[:, 0], inflow_batch[:, 1], inflow_batch[:, 2]
         )
         # print(p_in_loss.shape)
         # print(p_in_loss.shape)
+        # print(self.p_in)
+        # print(ewqeqw)
         p_in_loss = jnp.mean((p_in_pred - self.p_in) ** 2)
         #
         p_out_pred = self.p_pred_fn(

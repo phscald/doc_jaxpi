@@ -1,7 +1,7 @@
 from functools import partial
 import time
 import os
-
+import pickle
 from absl import logging
 
 from flax.training import checkpoints
@@ -247,4 +247,10 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     save_path = os.path.join('./' , save_dir, "ns_steady_p.pdf")
     fig3.savefig(save_path, bbox_inches="tight", dpi=300)
     # fig3.close()
+
+    filepath = './geomII_steady.pkl'
+    with open(filepath,"wb") as filepath:
+        pickle.dump({"u": u_pred,
+                     "v": v_pred,
+                     "p": p_pred,}, filepath)
 

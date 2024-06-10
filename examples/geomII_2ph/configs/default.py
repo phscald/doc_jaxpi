@@ -7,7 +7,7 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
-    config.mode = "train"
+    config.mode = "eval"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -44,8 +44,8 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 50000
-    training.num_time_windows = 2# 10
+    training.max_steps = 100000
+    training.num_time_windows = 1# 10
 
     training.inflow_batch_size = 2048
     training.outflow_batch_size = 2048

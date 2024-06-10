@@ -51,7 +51,8 @@ def get_coords():
     x1_rad = np.concatenate((x1_rad, x2_rad), axis = 1)
 
     X = np.concatenate((X, x1_rad), axis = 0)
-    X = np.concatenate((wall_coords, x1_rad), axis = 0)
+    wall_coords = np.concatenate((wall_coords, x1_rad), axis = 0)
+
 
     inds = np.where(X[:,1] > x2_max)
     X = np.delete(X, inds, axis = 0)
@@ -70,11 +71,18 @@ def get_coords():
 
 
 def initial_fields(coords, mu, pin):
-    # self.coords.max(axis=0)
-    u0 = jnp.zeros(coords.shape[0]) #1/(2*mu)*(pin/coords[:,0].max())*(coords[:,1]**2-coords[:,1].max()*coords[:,1])
-    v0 = jnp.zeros(coords.shape[0])
-    # p0 = jnp.zeros(coords.shape[0])
-    p0 = (pin - (coords[:,0]/.021)*pin)
+    # # self.coords.max(axis=0)
+    # u0 = jnp.zeros(coords.shape[0]) #1/(2*mu)*(pin/coords[:,0].max())*(coords[:,1]**2-coords[:,1].max()*coords[:,1])
+    # v0 = jnp.zeros(coords.shape[0])
+    # # p0 = jnp.zeros(coords.shape[0])
+    # p0 = (pin - (coords[:,0]/.021)*pin)
+    filepath = '../geomII/geomII_steady.pkl'
+    with open(filepath, 'rb') as filepath:
+        arquivos = pickle.load(filepath)
+    u0 = arquivos['u']
+    v0 = arquivos['v']
+    p0 = arquivos['p']
+    del arquivos
     s0 = jnp.zeros(coords.shape[0])
     return u0, v0, p0, s0
 
