@@ -89,7 +89,7 @@ class NavierStokes2D(ForwardBVP):
         # ru = u * u_x + v * u_y + p_x - (u_xx + u_yy) / self.Re
         # rv = u * v_x + v * v_y + p_y - (v_xx + v_yy) / self.Re
         ru = p_x - (u_xx + u_yy)
-        rv = p_y - (v_xx + v_yy)
+        rv = p_y - (v_xx + v_yy)/4
         rc = u_x + v_y
 
         # outflow boundary residual

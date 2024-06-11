@@ -248,13 +248,25 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     plt.title("Predicted p(x, y)")
     plt.tight_layout()
 
+    # plt.subplot(3, 1, 3)
+    # plt.scatter(x, y, s=1, c=jnp.abs(p_ref - p_pred), cmap="jet")#, levels=100)
+    # plt.colorbar()
+    # plt.clim(p_clim[0], p_clim[1])
+    # plt.xlabel("x")
+    # plt.ylabel("y")
+    # plt.title("Absolute error")
+    # plt.tight_layout()
+
     plt.subplot(3, 1, 3)
-    plt.scatter(x, y, s=1, c=jnp.abs(p_ref - p_pred), cmap="jet")#, levels=100)
+    ind = jnp.where(p_ref!=0)[0]
+    p_ref = p_ref[ind]
+    p_pred = p_pred[ind]
+    plt.scatter(x, y, s=1, c=jnp.abs(p_ref - p_pred)/p_ref, cmap="jet", vmin=0, vmax=.5)#, levels=100)
     plt.colorbar()
-    plt.clim(p_clim[0], p_clim[1])
+    # plt.clim(p_clim[0], p_clim[1])
     plt.xlabel("x")
     plt.ylabel("y")
-    plt.title("Absolute error")
+    plt.title("Percentual error")
     plt.tight_layout()
 
     save_path = os.path.join('./' , save_dir, "ns_steady_p.pdf")

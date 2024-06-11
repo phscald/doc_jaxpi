@@ -72,7 +72,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         # Nondimensionalize flow field
         # u_inflow = u_inflow / U_star
         u_ref = u_fem / U_star
-        v_ref = v_fem / U_star
+        v_ref = v_fem / (U_star/2)
         p_ref = p_fem / pmax
         p_inflow = 7000 / pmax
 

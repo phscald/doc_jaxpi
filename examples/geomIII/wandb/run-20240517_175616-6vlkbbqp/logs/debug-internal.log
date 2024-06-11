@@ -1,0 +1,621 @@
+2024-05-17 17:56:16,519 INFO    StreamThr :1131257 [internal.py:wandb_internal():86] W&B internal server running at pid: 1131257, started at: 2024-05-17 17:56:16.518426
+2024-05-17 17:56:16,522 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status
+2024-05-17 17:56:16,527 INFO    WriterThread:1131257 [datastore.py:open_for_write():87] open: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/run-6vlkbbqp.wandb
+2024-05-17 17:56:16,528 DEBUG   SenderThread:1131257 [sender.py:send():379] send: header
+2024-05-17 17:56:16,528 DEBUG   SenderThread:1131257 [sender.py:send():379] send: run
+2024-05-17 17:56:17,010 INFO    SenderThread:1131257 [dir_watcher.py:__init__():211] watching files in: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files
+2024-05-17 17:56:17,010 INFO    SenderThread:1131257 [sender.py:_start_run_threads():1124] run started: 6vlkbbqp with start time 1715968576.518142
+2024-05-17 17:56:17,013 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: check_version
+2024-05-17 17:56:17,014 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: check_version
+2024-05-17 17:56:17,080 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: run_start
+2024-05-17 17:56:17,092 DEBUG   HandlerThread:1131257 [system_info.py:__init__():26] System info init
+2024-05-17 17:56:17,092 DEBUG   HandlerThread:1131257 [system_info.py:__init__():41] System info init done
+2024-05-17 17:56:17,092 INFO    HandlerThread:1131257 [system_monitor.py:start():194] Starting system monitor
+2024-05-17 17:56:17,093 INFO    SystemMonitor:1131257 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-05-17 17:56:17,093 INFO    HandlerThread:1131257 [system_monitor.py:probe():214] Collecting system info
+2024-05-17 17:56:17,093 INFO    SystemMonitor:1131257 [interfaces.py:start():190] Started cpu monitoring
+2024-05-17 17:56:17,094 INFO    SystemMonitor:1131257 [interfaces.py:start():190] Started disk monitoring
+2024-05-17 17:56:17,096 INFO    SystemMonitor:1131257 [interfaces.py:start():190] Started gpu monitoring
+2024-05-17 17:56:17,096 INFO    SystemMonitor:1131257 [interfaces.py:start():190] Started memory monitoring
+2024-05-17 17:56:17,097 INFO    SystemMonitor:1131257 [interfaces.py:start():190] Started network monitoring
+2024-05-17 17:56:17,108 DEBUG   HandlerThread:1131257 [system_info.py:probe():150] Probing system
+2024-05-17 17:56:17,108 DEBUG   HandlerThread:1131257 [system_info.py:probe():198] Probing system done
+2024-05-17 17:56:17,108 DEBUG   HandlerThread:1131257 [system_monitor.py:probe():223] {'os': 'Linux-6.5.0-27-generic-x86_64-with-glibc2.35', 'python': '3.11.0rc1', 'heartbeatAt': '2024-05-17T17:56:17.108735', 'startedAt': '2024-05-17T17:56:16.511731', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/home/pedro/PINN/jaxpi/examples/geomIII/main.py', 'codePathLocal': 'main.py', 'codePath': 'main.py', 'host': '8b460e7a0fb5', 'username': 'root', 'executable': '/usr/bin/python3', 'cpu_count': 24, 'cpu_count_logical': 32, 'cpu_freq': {'current': 1068.4860625, 'min': 800.0, 'max': 4937.5}, 'cpu_freq_per_core': [{'current': 1316.207, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1406.868, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1604.584, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1464.758, 'min': 800.0, 'max': 5800.0}, {'current': 800.0, 'min': 800.0, 'max': 5800.0}, {'current': 1557.021, 'min': 800.0, 'max': 5800.0}, {'current': 800.0, 'min': 800.0, 'max': 5800.0}, {'current': 1490.272, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1597.363, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1385.563, 'min': 800.0, 'max': 4300.0}, {'current': 1173.052, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 1532.646, 'min': 800.0, 'max': 4300.0}], 'disk': {'/': {'total': 365.6147689819336, 'used': 118.32025909423828}}, 'gpu': 'NVIDIA GeForce RTX 4090', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce RTX 4090', 'memory_total': 25757220864}], 'memory': {'total': 125.61078643798828}}
+2024-05-17 17:56:17,108 INFO    HandlerThread:1131257 [system_monitor.py:probe():224] Finished collecting system info
+2024-05-17 17:56:17,108 INFO    HandlerThread:1131257 [system_monitor.py:probe():227] Publishing system info
+2024-05-17 17:56:17,108 INFO    HandlerThread:1131257 [system_monitor.py:probe():229] Finished publishing system info
+2024-05-17 17:56:17,110 DEBUG   SenderThread:1131257 [sender.py:send():379] send: files
+2024-05-17 17:56:17,110 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-metadata.json with policy now
+2024-05-17 17:56:17,150 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: python_packages
+2024-05-17 17:56:17,150 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: python_packages
+2024-05-17 17:56:17,193 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-17 17:56:17,193 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-17 17:56:17,193 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: stop_status
+2024-05-17 17:56:17,507 DEBUG   SenderThread:1131257 [sender.py:send():379] send: telemetry
+2024-05-17 17:56:17,863 INFO    wandb-upload_0:1131257 [upload_job.py:push():131] Uploaded file /tmp/tmp2zpi13zpwandb/pnen5obx-wandb-metadata.json
+2024-05-17 17:56:18,010 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-metadata.json
+2024-05-17 17:56:18,010 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/requirements.txt
+2024-05-17 17:56:19,010 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:56:21,010 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:56:22,194 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:56:27,195 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:56:32,159 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-17 17:56:32,159 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: stop_status
+2024-05-17 17:56:32,185 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-17 17:56:32,417 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:56:37,418 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:56:42,419 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:56:47,159 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-17 17:56:47,159 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: stop_status
+2024-05-17 17:56:47,165 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-17 17:56:47,984 DEBUG   SenderThread:1131257 [sender.py:send():379] send: telemetry
+2024-05-17 17:56:47,986 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:56:48,025 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:56:49,015 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/config.yaml
+2024-05-17 17:56:51,015 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:56:53,175 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:56:54,369 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:56:54,370 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:56:54,370 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:56:54,371 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:56:55,017 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:56:55,755 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:56:55,756 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:56:55,757 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:56:55,758 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:56:56,017 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:56:57,018 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:56:57,146 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:56:57,147 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:56:57,148 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:56:57,150 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:56:58,018 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:56:58,539 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:56:58,540 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:56:58,540 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:56:58,541 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:56:58,541 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:56:59,018 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:56:59,019 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:56:59,937 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:56:59,938 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:56:59,938 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:56:59,940 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:00,019 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:01,019 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:01,328 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:01,329 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:01,329 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:01,330 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:02,020 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:02,160 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-17 17:57:02,160 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: stop_status
+2024-05-17 17:57:02,165 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-17 17:57:02,721 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:02,722 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:02,722 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:02,722 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:03,020 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:03,021 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:03,767 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:57:04,114 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:04,115 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:04,115 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:04,116 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:05,021 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:05,021 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:05,513 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:05,514 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:05,515 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:05,515 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:06,021 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:07,022 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:09,516 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:57:14,413 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:14,415 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:14,415 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:14,419 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:15,024 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:15,420 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:57:15,822 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:15,823 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:15,823 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:15,824 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:16,024 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:17,025 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:17,097 DEBUG   SystemMonitor:1131257 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-05-17 17:57:17,099 DEBUG   SenderThread:1131257 [sender.py:send():379] send: stats
+2024-05-17 17:57:17,160 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-17 17:57:17,160 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: stop_status
+2024-05-17 17:57:17,165 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-17 17:57:17,217 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:17,415 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:17,415 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:17,416 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:18,025 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:18,617 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:18,617 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:18,618 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:18,618 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:19,026 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:19,026 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:20,016 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:20,018 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:20,018 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:20,020 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:20,026 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:21,021 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:57:21,027 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:21,413 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:21,414 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:21,415 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:21,416 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:22,027 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:22,810 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:22,811 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:22,811 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:22,812 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:23,028 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:23,028 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:24,209 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:24,211 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:24,212 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:24,214 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:25,028 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:25,029 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:25,610 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:25,611 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:25,611 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:25,613 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:26,029 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:26,613 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:57:27,000 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:27,001 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:27,001 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:27,002 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:27,029 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:27,030 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:28,609 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:28,610 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:28,611 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:28,612 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:29,030 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:29,030 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:30,001 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:30,002 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:30,002 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:30,003 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:30,030 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:31,031 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:31,391 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:31,392 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:31,393 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:31,393 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:32,031 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:32,160 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-17 17:57:32,160 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: stop_status
+2024-05-17 17:57:32,165 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-17 17:57:32,437 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:57:32,784 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:32,786 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:32,786 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:32,786 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:33,032 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:33,032 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:34,179 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:34,180 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:34,180 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:34,181 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:35,033 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:35,033 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:35,575 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:35,576 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:35,576 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:35,577 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:36,033 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:36,968 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:36,969 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:36,969 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:36,970 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:37,034 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:37,034 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:37,971 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:57:38,362 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:38,363 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:38,363 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:38,364 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:39,034 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:39,035 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:39,757 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:39,758 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:39,759 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:39,760 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:40,035 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:41,035 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:41,155 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:41,156 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:41,156 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:41,157 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:42,036 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:42,760 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:42,762 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:42,762 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:42,764 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:43,036 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:43,037 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:43,765 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:57:44,155 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:44,156 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:44,156 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:44,157 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:45,037 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:45,038 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:45,548 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:45,549 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:45,549 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:45,550 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:46,038 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:46,941 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:46,942 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:46,942 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:46,943 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:47,038 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:47,039 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:47,100 DEBUG   SenderThread:1131257 [sender.py:send():379] send: stats
+2024-05-17 17:57:47,160 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-17 17:57:47,161 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: stop_status
+2024-05-17 17:57:47,166 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-17 17:57:48,335 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:48,335 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:48,335 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:48,336 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:49,039 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:49,040 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:49,379 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:57:49,732 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:49,733 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:49,733 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:49,734 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:50,039 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:51,040 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:51,119 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:51,120 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:51,121 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:51,122 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:52,040 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:52,518 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:52,520 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:52,520 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:52,522 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:53,040 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:53,041 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:53,909 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:53,910 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:53,910 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:53,911 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:54,041 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:54,912 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:57:55,041 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:55,300 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:55,301 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:55,301 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:55,303 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:56,042 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:56,912 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:56,914 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:56,914 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:56,916 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:57,042 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:57,042 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:58,315 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:58,316 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:58,316 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:58,317 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:57:59,043 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:57:59,043 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:57:59,715 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:57:59,716 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:57:59,716 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:57:59,718 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:00,043 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:00,718 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:58:01,043 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:01,115 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:01,117 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:01,117 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:01,118 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:02,044 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:02,161 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-17 17:58:02,161 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: stop_status
+2024-05-17 17:58:02,166 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-17 17:58:02,508 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:02,509 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:02,509 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:02,509 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:03,044 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:03,044 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:03,907 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:03,908 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:03,909 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:03,909 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:04,045 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:05,045 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:05,313 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:05,315 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:05,316 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:05,317 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:06,045 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:06,317 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:58:06,721 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:06,723 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:06,723 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:06,724 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:07,046 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:07,046 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:08,127 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:08,128 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:08,128 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:08,129 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:09,046 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:09,047 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:09,520 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:09,521 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:09,521 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:09,521 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:10,047 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:11,047 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:11,133 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:11,136 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:11,137 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:11,139 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:12,048 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:12,170 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:58:12,564 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:12,565 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:12,565 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:12,566 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:13,048 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:13,049 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:13,951 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:13,952 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:13,953 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:13,954 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:14,049 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:15,049 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:15,352 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:15,353 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:15,354 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:15,356 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:16,049 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:16,753 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:16,754 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:16,755 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:16,755 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:17,050 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:17,050 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:17,101 DEBUG   SenderThread:1131257 [sender.py:send():379] send: stats
+2024-05-17 17:58:17,161 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-17 17:58:17,161 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: stop_status
+2024-05-17 17:58:17,166 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-17 17:58:17,394 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:58:18,142 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:18,143 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:18,143 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:18,143 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:19,051 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:19,051 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:19,535 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:19,536 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:19,537 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:19,538 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:20,051 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:20,930 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:20,931 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:20,931 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:20,933 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:21,051 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:21,052 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:22,327 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:22,328 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:22,328 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:22,329 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:23,052 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:23,052 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:23,330 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:58:23,724 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:23,725 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:23,725 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:23,726 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:24,053 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:25,053 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:25,337 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:25,339 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:25,340 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:25,341 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:26,053 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:26,740 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:26,742 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:26,742 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:26,742 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:27,054 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:27,054 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:28,146 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:28,148 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:28,149 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:28,150 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:29,054 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:29,055 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:29,151 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:58:29,563 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:29,565 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:29,566 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:29,568 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:30,055 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:30,968 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:30,969 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:30,969 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:30,970 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:31,055 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:31,055 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:32,161 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-17 17:58:32,161 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: stop_status
+2024-05-17 17:58:32,166 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-17 17:58:32,371 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:32,430 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:32,430 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:32,431 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:33,056 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:33,056 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:33,770 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:33,772 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:33,772 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:33,773 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:34,056 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:34,819 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:58:35,057 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:35,169 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-17 17:58:35,169 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:35,170 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:35,171 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:36,011 DEBUG   SenderThread:1131257 [sender.py:send():379] send: exit
+2024-05-17 17:58:36,011 INFO    SenderThread:1131257 [sender.py:send_exit():586] handling exit code: 255
+2024-05-17 17:58:36,011 INFO    SenderThread:1131257 [sender.py:send_exit():588] handling runtime: 138
+2024-05-17 17:58:36,011 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:36,011 INFO    SenderThread:1131257 [sender.py:send_exit():594] send defer
+2024-05-17 17:58:36,012 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:36,012 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 0
+2024-05-17 17:58:36,012 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:36,012 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 0
+2024-05-17 17:58:36,012 INFO    SenderThread:1131257 [sender.py:transition_state():614] send defer: 1
+2024-05-17 17:58:36,012 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:36,012 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 1
+2024-05-17 17:58:36,013 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:36,013 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 1
+2024-05-17 17:58:36,013 INFO    SenderThread:1131257 [sender.py:transition_state():614] send defer: 2
+2024-05-17 17:58:36,013 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:36,013 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 2
+2024-05-17 17:58:36,013 INFO    HandlerThread:1131257 [system_monitor.py:finish():203] Stopping system monitor
+2024-05-17 17:58:36,013 DEBUG   SystemMonitor:1131257 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-05-17 17:58:36,014 DEBUG   SystemMonitor:1131257 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-05-17 17:58:36,015 INFO    HandlerThread:1131257 [interfaces.py:finish():202] Joined cpu monitor
+2024-05-17 17:58:36,015 INFO    HandlerThread:1131257 [interfaces.py:finish():202] Joined disk monitor
+2024-05-17 17:58:36,025 INFO    HandlerThread:1131257 [interfaces.py:finish():202] Joined gpu monitor
+2024-05-17 17:58:36,025 INFO    HandlerThread:1131257 [interfaces.py:finish():202] Joined memory monitor
+2024-05-17 17:58:36,025 INFO    HandlerThread:1131257 [interfaces.py:finish():202] Joined network monitor
+2024-05-17 17:58:36,025 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:36,025 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 2
+2024-05-17 17:58:36,025 INFO    SenderThread:1131257 [sender.py:transition_state():614] send defer: 3
+2024-05-17 17:58:36,025 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:36,025 DEBUG   SenderThread:1131257 [sender.py:send():379] send: stats
+2024-05-17 17:58:36,025 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 3
+2024-05-17 17:58:36,026 DEBUG   SenderThread:1131257 [sender.py:send():379] send: history
+2024-05-17 17:58:36,026 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: summary_record
+2024-05-17 17:58:36,026 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:36,026 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:36,026 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 3
+2024-05-17 17:58:36,026 INFO    SenderThread:1131257 [sender.py:transition_state():614] send defer: 4
+2024-05-17 17:58:36,026 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:36,026 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 4
+2024-05-17 17:58:36,027 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:36,027 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 4
+2024-05-17 17:58:36,027 INFO    SenderThread:1131257 [sender.py:transition_state():614] send defer: 5
+2024-05-17 17:58:36,027 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:36,027 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 5
+2024-05-17 17:58:36,027 DEBUG   SenderThread:1131257 [sender.py:send():379] send: summary
+2024-05-17 17:58:36,027 INFO    SenderThread:1131257 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-17 17:58:36,027 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:36,027 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 5
+2024-05-17 17:58:36,027 INFO    SenderThread:1131257 [sender.py:transition_state():614] send defer: 6
+2024-05-17 17:58:36,027 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:36,027 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 6
+2024-05-17 17:58:36,027 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:36,027 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 6
+2024-05-17 17:58:36,027 INFO    SenderThread:1131257 [sender.py:transition_state():614] send defer: 7
+2024-05-17 17:58:36,027 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: status_report
+2024-05-17 17:58:36,027 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:36,027 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 7
+2024-05-17 17:58:36,028 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:36,028 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 7
+2024-05-17 17:58:36,057 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:37,010 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: poll_exit
+2024-05-17 17:58:37,058 INFO    Thread-12 :1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:38,305 INFO    SenderThread:1131257 [sender.py:transition_state():614] send defer: 8
+2024-05-17 17:58:38,305 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: poll_exit
+2024-05-17 17:58:38,306 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:38,306 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 8
+2024-05-17 17:58:38,307 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:38,307 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 8
+2024-05-17 17:58:38,307 INFO    SenderThread:1131257 [job_builder.py:build():318] Attempting to build job artifact
+2024-05-17 17:58:38,307 INFO    SenderThread:1131257 [job_builder.py:_get_source_type():466] no source found
+2024-05-17 17:58:38,308 INFO    SenderThread:1131257 [sender.py:transition_state():614] send defer: 9
+2024-05-17 17:58:38,308 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:38,308 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 9
+2024-05-17 17:58:38,308 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:38,308 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 9
+2024-05-17 17:58:38,309 INFO    SenderThread:1131257 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-05-17 17:58:39,011 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: poll_exit
+2024-05-17 17:58:39,059 INFO    SenderThread:1131257 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:39,060 INFO    SenderThread:1131257 [dir_watcher.py:finish():388] scan: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files
+2024-05-17 17:58:39,060 INFO    SenderThread:1131257 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log output.log
+2024-05-17 17:58:39,060 INFO    SenderThread:1131257 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/config.yaml config.yaml
+2024-05-17 17:58:39,061 INFO    SenderThread:1131257 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json wandb-summary.json
+2024-05-17 17:58:39,065 INFO    SenderThread:1131257 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/requirements.txt requirements.txt
+2024-05-17 17:58:39,068 INFO    SenderThread:1131257 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-metadata.json wandb-metadata.json
+2024-05-17 17:58:39,068 INFO    SenderThread:1131257 [sender.py:transition_state():614] send defer: 10
+2024-05-17 17:58:39,068 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: poll_exit
+2024-05-17 17:58:39,075 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:39,075 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 10
+2024-05-17 17:58:39,076 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:39,076 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 10
+2024-05-17 17:58:39,076 INFO    SenderThread:1131257 [file_pusher.py:finish():172] shutting down file pusher
+2024-05-17 17:58:39,636 INFO    wandb-upload_0:1131257 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/config.yaml
+2024-05-17 17:58:39,670 INFO    wandb-upload_1:1131257 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/output.log
+2024-05-17 17:58:39,862 INFO    wandb-upload_3:1131257 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/requirements.txt
+2024-05-17 17:58:39,867 INFO    wandb-upload_2:1131257 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/files/wandb-summary.json
+2024-05-17 17:58:40,013 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: poll_exit
+2024-05-17 17:58:40,014 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: poll_exit
+2024-05-17 17:58:40,067 INFO    Thread-11 (_thread_body):1131257 [sender.py:transition_state():614] send defer: 11
+2024-05-17 17:58:40,068 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:40,068 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 11
+2024-05-17 17:58:40,069 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:40,069 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 11
+2024-05-17 17:58:40,069 INFO    SenderThread:1131257 [file_pusher.py:join():178] waiting for file pusher
+2024-05-17 17:58:40,069 INFO    SenderThread:1131257 [sender.py:transition_state():614] send defer: 12
+2024-05-17 17:58:40,070 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:40,070 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 12
+2024-05-17 17:58:40,070 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:40,070 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 12
+2024-05-17 17:58:40,070 INFO    SenderThread:1131257 [file_stream.py:finish():614] file stream finish called
+2024-05-17 17:58:40,626 INFO    SenderThread:1131257 [file_stream.py:finish():618] file stream finish is done
+2024-05-17 17:58:40,626 INFO    SenderThread:1131257 [sender.py:transition_state():614] send defer: 13
+2024-05-17 17:58:40,626 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:40,627 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 13
+2024-05-17 17:58:40,627 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:40,627 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 13
+2024-05-17 17:58:40,627 INFO    SenderThread:1131257 [sender.py:transition_state():614] send defer: 14
+2024-05-17 17:58:40,628 DEBUG   SenderThread:1131257 [sender.py:send():379] send: final
+2024-05-17 17:58:40,628 DEBUG   SenderThread:1131257 [sender.py:send():379] send: footer
+2024-05-17 17:58:40,628 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: defer
+2024-05-17 17:58:40,629 INFO    HandlerThread:1131257 [handler.py:handle_request_defer():172] handle defer: 14
+2024-05-17 17:58:40,629 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: defer
+2024-05-17 17:58:40,629 INFO    SenderThread:1131257 [sender.py:send_request_defer():610] handle sender defer: 14
+2024-05-17 17:58:40,630 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: poll_exit
+2024-05-17 17:58:40,632 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: poll_exit
+2024-05-17 17:58:40,632 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: server_info
+2024-05-17 17:58:40,632 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: get_summary
+2024-05-17 17:58:40,633 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: poll_exit
+2024-05-17 17:58:40,634 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: sampled_history
+2024-05-17 17:58:40,637 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: poll_exit
+2024-05-17 17:58:40,637 DEBUG   SenderThread:1131257 [sender.py:send_request():406] send_request: server_info
+2024-05-17 17:58:40,640 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-17 17:58:40,799 INFO    MainThread:1131257 [wandb_run.py:_footer_history_summary_info():3936] rendering history
+2024-05-17 17:58:40,801 INFO    MainThread:1131257 [wandb_run.py:_footer_history_summary_info():3968] rendering summary
+2024-05-17 17:58:40,801 INFO    MainThread:1131257 [wandb_run.py:_footer_sync_info():3895] logging synced files
+2024-05-17 17:58:40,802 DEBUG   HandlerThread:1131257 [handler.py:handle_request():146] handle_request: shutdown
+2024-05-17 17:58:40,802 INFO    HandlerThread:1131257 [handler.py:finish():866] shutting down handler
+2024-05-17 17:58:41,544 WARNING StreamThr :1131257 [internal.py:is_dead():414] Internal process exiting, parent pid 1131063 disappeared
+2024-05-17 17:58:41,544 ERROR   StreamThr :1131257 [internal.py:wandb_internal():152] Internal process shutdown.
+2024-05-17 17:58:41,634 INFO    WriterThread:1131257 [datastore.py:close():296] close: /home/pedro/PINN/jaxpi/examples/geomIII/wandb/run-20240517_175616-6vlkbbqp/run-6vlkbbqp.wandb
+2024-05-17 17:58:41,799 INFO    SenderThread:1131257 [sender.py:finish():1546] shutting down sender
+2024-05-17 17:58:41,799 INFO    SenderThread:1131257 [file_pusher.py:finish():172] shutting down file pusher
+2024-05-17 17:58:41,799 INFO    SenderThread:1131257 [file_pusher.py:join():178] waiting for file pusher

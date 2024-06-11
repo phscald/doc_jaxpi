@@ -1,0 +1,194 @@
+2024-06-10 21:32:58,506 INFO    StreamThr :375529 [internal.py:wandb_internal():86] W&B internal server running at pid: 375529, started at: 2024-06-10 21:32:58.505879
+2024-06-10 21:32:58,507 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: status
+2024-06-10 21:32:58,507 INFO    WriterThread:375529 [datastore.py:open_for_write():87] open: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/run-mmmp6u42.wandb
+2024-06-10 21:32:58,508 DEBUG   SenderThread:375529 [sender.py:send():379] send: header
+2024-06-10 21:32:58,511 DEBUG   SenderThread:375529 [sender.py:send():379] send: run
+2024-06-10 21:32:59,020 INFO    SenderThread:375529 [dir_watcher.py:__init__():211] watching files in: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files
+2024-06-10 21:32:59,020 INFO    SenderThread:375529 [sender.py:_start_run_threads():1124] run started: mmmp6u42 with start time 1718055178.505693
+2024-06-10 21:32:59,029 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: check_version
+2024-06-10 21:32:59,029 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: check_version
+2024-06-10 21:32:59,115 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: run_start
+2024-06-10 21:32:59,124 DEBUG   HandlerThread:375529 [system_info.py:__init__():26] System info init
+2024-06-10 21:32:59,124 DEBUG   HandlerThread:375529 [system_info.py:__init__():41] System info init done
+2024-06-10 21:32:59,124 INFO    HandlerThread:375529 [system_monitor.py:start():194] Starting system monitor
+2024-06-10 21:32:59,124 INFO    SystemMonitor:375529 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-06-10 21:32:59,124 INFO    HandlerThread:375529 [system_monitor.py:probe():214] Collecting system info
+2024-06-10 21:32:59,125 INFO    SystemMonitor:375529 [interfaces.py:start():190] Started cpu monitoring
+2024-06-10 21:32:59,125 INFO    SystemMonitor:375529 [interfaces.py:start():190] Started disk monitoring
+2024-06-10 21:32:59,126 INFO    SystemMonitor:375529 [interfaces.py:start():190] Started gpu monitoring
+2024-06-10 21:32:59,126 INFO    SystemMonitor:375529 [interfaces.py:start():190] Started memory monitoring
+2024-06-10 21:32:59,126 INFO    SystemMonitor:375529 [interfaces.py:start():190] Started network monitoring
+2024-06-10 21:32:59,137 DEBUG   HandlerThread:375529 [system_info.py:probe():150] Probing system
+2024-06-10 21:32:59,138 DEBUG   HandlerThread:375529 [system_info.py:_probe_git():135] Probing git
+2024-06-10 21:32:59,142 ERROR   HandlerThread:375529 [gitlib.py:root():92] git root error: Cmd('git') failed due to: exit code(128)
+  cmdline: git rev-parse --show-toplevel
+  stderr: 'fatal: detected dubious ownership in repository at '/home/pedro/PINN/jaxpi'
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory /home/pedro/PINN/jaxpi'
+2024-06-10 21:32:59,142 DEBUG   HandlerThread:375529 [system_info.py:_probe_git():143] Probing git done
+2024-06-10 21:32:59,142 DEBUG   HandlerThread:375529 [system_info.py:probe():198] Probing system done
+2024-06-10 21:32:59,142 DEBUG   HandlerThread:375529 [system_monitor.py:probe():223] {'os': 'Linux-6.5.0-35-generic-x86_64-with-glibc2.35', 'python': '3.11.0rc1', 'heartbeatAt': '2024-06-10T21:32:59.137322', 'startedAt': '2024-06-10T21:32:58.500736', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/home/pedro/PINN/jaxpi/examples/geomIII2/main.py', 'codePathLocal': 'main.py', 'codePath': 'main.py', 'git': {'remote': 'git@github.com:phscald/doc_jaxpi.git', 'commit': None}, 'email': 'pedro.calderano@lmmp.mec.puc-rio.br', 'root': '/home/pedro/PINN/jaxpi/examples/geomIII2', 'host': '8b460e7a0fb5', 'username': 'root', 'executable': '/usr/bin/python3', 'cpu_count': 24, 'cpu_count_logical': 32, 'cpu_freq': {'current': 1192.10815625, 'min': 800.0, 'max': 4937.5}, 'cpu_freq_per_core': [{'current': 1410.305, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1528.305, 'min': 800.0, 'max': 5500.0}, {'current': 1534.701, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1556.17, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1410.97, 'min': 800.0, 'max': 5800.0}, {'current': 800.0, 'min': 800.0, 'max': 5800.0}, {'current': 1327.901, 'min': 800.0, 'max': 5800.0}, {'current': 2193.921, 'min': 800.0, 'max': 5800.0}, {'current': 1586.173, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 1283.462, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 5500.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 1344.351, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}, {'current': 1184.462, 'min': 800.0, 'max': 4300.0}, {'current': 800.0, 'min': 800.0, 'max': 4300.0}], 'disk': {'/': {'total': 365.6147689819336, 'used': 119.19172668457031}}, 'gpu': 'NVIDIA GeForce RTX 4090', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce RTX 4090', 'memory_total': 25757220864}], 'memory': {'total': 125.61079025268555}}
+2024-06-10 21:32:59,142 INFO    HandlerThread:375529 [system_monitor.py:probe():224] Finished collecting system info
+2024-06-10 21:32:59,142 INFO    HandlerThread:375529 [system_monitor.py:probe():227] Publishing system info
+2024-06-10 21:32:59,142 INFO    HandlerThread:375529 [system_monitor.py:probe():229] Finished publishing system info
+2024-06-10 21:32:59,147 DEBUG   SenderThread:375529 [sender.py:send():379] send: files
+2024-06-10 21:32:59,147 INFO    SenderThread:375529 [sender.py:_save_file():1390] saving file wandb-metadata.json with policy now
+2024-06-10 21:32:59,193 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: python_packages
+2024-06-10 21:32:59,193 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: python_packages
+2024-06-10 21:32:59,233 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: stop_status
+2024-06-10 21:32:59,233 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: internal_messages
+2024-06-10 21:32:59,233 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: stop_status
+2024-06-10 21:32:59,539 DEBUG   SenderThread:375529 [sender.py:send():379] send: telemetry
+2024-06-10 21:32:59,823 INFO    wandb-upload_0:375529 [upload_job.py:push():131] Uploaded file /tmp/tmpilldb9ztwandb/5g914gp9-wandb-metadata.json
+2024-06-10 21:33:00,020 INFO    Thread-12 :375529 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/requirements.txt
+2024-06-10 21:33:00,020 INFO    Thread-12 :375529 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/wandb-metadata.json
+2024-06-10 21:33:01,020 INFO    Thread-12 :375529 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/output.log
+2024-06-10 21:33:03,020 INFO    Thread-12 :375529 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/output.log
+2024-06-10 21:33:04,182 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: status_report
+2024-06-10 21:33:09,182 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: status_report
+2024-06-10 21:33:14,183 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: status_report
+2024-06-10 21:33:14,193 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: internal_messages
+2024-06-10 21:33:14,194 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: stop_status
+2024-06-10 21:33:14,194 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: stop_status
+2024-06-10 21:33:19,397 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: status_report
+2024-06-10 21:33:24,398 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: status_report
+2024-06-10 21:33:25,676 DEBUG   SenderThread:375529 [sender.py:send():379] send: exit
+2024-06-10 21:33:25,676 INFO    SenderThread:375529 [sender.py:send_exit():586] handling exit code: 1
+2024-06-10 21:33:25,677 INFO    SenderThread:375529 [sender.py:send_exit():588] handling runtime: 26
+2024-06-10 21:33:25,679 INFO    SenderThread:375529 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-06-10 21:33:25,679 INFO    SenderThread:375529 [sender.py:send_exit():594] send defer
+2024-06-10 21:33:25,679 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:25,679 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 0
+2024-06-10 21:33:25,680 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:25,680 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 0
+2024-06-10 21:33:25,680 INFO    SenderThread:375529 [sender.py:transition_state():614] send defer: 1
+2024-06-10 21:33:25,681 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:25,681 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 1
+2024-06-10 21:33:25,682 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:25,682 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 1
+2024-06-10 21:33:25,682 INFO    SenderThread:375529 [sender.py:transition_state():614] send defer: 2
+2024-06-10 21:33:25,682 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:25,682 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 2
+2024-06-10 21:33:25,682 INFO    HandlerThread:375529 [system_monitor.py:finish():203] Stopping system monitor
+2024-06-10 21:33:25,683 DEBUG   SystemMonitor:375529 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-06-10 21:33:25,683 DEBUG   SystemMonitor:375529 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-06-10 21:33:25,683 DEBUG   SystemMonitor:375529 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-06-10 21:33:25,684 INFO    HandlerThread:375529 [interfaces.py:finish():202] Joined cpu monitor
+2024-06-10 21:33:25,685 INFO    HandlerThread:375529 [interfaces.py:finish():202] Joined disk monitor
+2024-06-10 21:33:25,698 INFO    HandlerThread:375529 [interfaces.py:finish():202] Joined gpu monitor
+2024-06-10 21:33:25,698 INFO    HandlerThread:375529 [interfaces.py:finish():202] Joined memory monitor
+2024-06-10 21:33:25,698 INFO    HandlerThread:375529 [interfaces.py:finish():202] Joined network monitor
+2024-06-10 21:33:25,699 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:25,699 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 2
+2024-06-10 21:33:25,699 INFO    SenderThread:375529 [sender.py:transition_state():614] send defer: 3
+2024-06-10 21:33:25,699 DEBUG   SenderThread:375529 [sender.py:send():379] send: stats
+2024-06-10 21:33:25,700 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:25,700 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 3
+2024-06-10 21:33:25,700 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:25,700 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 3
+2024-06-10 21:33:25,700 INFO    SenderThread:375529 [sender.py:transition_state():614] send defer: 4
+2024-06-10 21:33:25,700 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:25,701 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 4
+2024-06-10 21:33:25,701 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:25,701 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 4
+2024-06-10 21:33:25,701 INFO    SenderThread:375529 [sender.py:transition_state():614] send defer: 5
+2024-06-10 21:33:25,701 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:25,701 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 5
+2024-06-10 21:33:25,702 DEBUG   SenderThread:375529 [sender.py:send():379] send: summary
+2024-06-10 21:33:25,702 INFO    SenderThread:375529 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-06-10 21:33:25,703 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:25,703 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 5
+2024-06-10 21:33:25,703 INFO    SenderThread:375529 [sender.py:transition_state():614] send defer: 6
+2024-06-10 21:33:25,703 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:25,703 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 6
+2024-06-10 21:33:25,703 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:25,703 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 6
+2024-06-10 21:33:25,708 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: status_report
+2024-06-10 21:33:26,028 INFO    Thread-12 :375529 [dir_watcher.py:_on_file_created():271] file/dir created: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/wandb-summary.json
+2024-06-10 21:33:26,391 INFO    SenderThread:375529 [sender.py:transition_state():614] send defer: 7
+2024-06-10 21:33:26,392 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:26,392 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 7
+2024-06-10 21:33:26,392 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:26,392 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 7
+2024-06-10 21:33:26,674 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: poll_exit
+2024-06-10 21:33:27,029 INFO    Thread-12 :375529 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/config.yaml
+2024-06-10 21:33:28,029 INFO    Thread-12 :375529 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/output.log
+2024-06-10 21:33:29,647 INFO    SenderThread:375529 [sender.py:transition_state():614] send defer: 8
+2024-06-10 21:33:29,647 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: poll_exit
+2024-06-10 21:33:29,648 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:29,648 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 8
+2024-06-10 21:33:29,649 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:29,649 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 8
+2024-06-10 21:33:29,649 INFO    SenderThread:375529 [job_builder.py:build():318] Attempting to build job artifact
+2024-06-10 21:33:29,650 INFO    SenderThread:375529 [job_builder.py:_get_source_type():466] no source found
+2024-06-10 21:33:29,650 INFO    SenderThread:375529 [sender.py:transition_state():614] send defer: 9
+2024-06-10 21:33:29,650 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:29,650 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 9
+2024-06-10 21:33:29,650 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:29,651 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 9
+2024-06-10 21:33:29,651 INFO    SenderThread:375529 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-06-10 21:33:29,676 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: poll_exit
+2024-06-10 21:33:30,030 INFO    Thread-12 :375529 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/output.log
+2024-06-10 21:33:30,031 INFO    SenderThread:375529 [dir_watcher.py:finish():388] scan: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files
+2024-06-10 21:33:30,032 INFO    SenderThread:375529 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/output.log output.log
+2024-06-10 21:33:30,032 INFO    SenderThread:375529 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/config.yaml config.yaml
+2024-06-10 21:33:30,032 INFO    SenderThread:375529 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/wandb-summary.json wandb-summary.json
+2024-06-10 21:33:30,032 INFO    SenderThread:375529 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/requirements.txt requirements.txt
+2024-06-10 21:33:30,032 INFO    SenderThread:375529 [dir_watcher.py:finish():402] scan save: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/wandb-metadata.json wandb-metadata.json
+2024-06-10 21:33:30,032 INFO    SenderThread:375529 [sender.py:transition_state():614] send defer: 10
+2024-06-10 21:33:30,032 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: poll_exit
+2024-06-10 21:33:30,033 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:30,033 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 10
+2024-06-10 21:33:30,037 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:30,045 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 10
+2024-06-10 21:33:30,045 INFO    SenderThread:375529 [file_pusher.py:finish():172] shutting down file pusher
+2024-06-10 21:33:30,447 INFO    wandb-upload_2:375529 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/config.yaml
+2024-06-10 21:33:30,589 INFO    wandb-upload_1:375529 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/output.log
+2024-06-10 21:33:30,677 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: poll_exit
+2024-06-10 21:33:30,678 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: poll_exit
+2024-06-10 21:33:30,809 INFO    wandb-upload_0:375529 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/wandb-summary.json
+2024-06-10 21:33:30,817 INFO    wandb-upload_3:375529 [upload_job.py:push():131] Uploaded file /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/files/requirements.txt
+2024-06-10 21:33:31,018 INFO    Thread-11 (_thread_body):375529 [sender.py:transition_state():614] send defer: 11
+2024-06-10 21:33:31,018 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:31,018 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 11
+2024-06-10 21:33:31,019 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:31,019 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 11
+2024-06-10 21:33:31,019 INFO    SenderThread:375529 [file_pusher.py:join():178] waiting for file pusher
+2024-06-10 21:33:31,020 INFO    SenderThread:375529 [sender.py:transition_state():614] send defer: 12
+2024-06-10 21:33:31,020 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:31,021 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 12
+2024-06-10 21:33:31,021 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:31,021 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 12
+2024-06-10 21:33:31,021 INFO    SenderThread:375529 [file_stream.py:finish():614] file stream finish called
+2024-06-10 21:33:31,203 INFO    SenderThread:375529 [file_stream.py:finish():618] file stream finish is done
+2024-06-10 21:33:31,203 INFO    SenderThread:375529 [sender.py:transition_state():614] send defer: 13
+2024-06-10 21:33:31,203 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:31,203 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 13
+2024-06-10 21:33:31,204 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:31,204 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 13
+2024-06-10 21:33:31,204 INFO    SenderThread:375529 [sender.py:transition_state():614] send defer: 14
+2024-06-10 21:33:31,204 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: defer
+2024-06-10 21:33:31,204 INFO    HandlerThread:375529 [handler.py:handle_request_defer():172] handle defer: 14
+2024-06-10 21:33:31,205 DEBUG   SenderThread:375529 [sender.py:send():379] send: final
+2024-06-10 21:33:31,205 DEBUG   SenderThread:375529 [sender.py:send():379] send: footer
+2024-06-10 21:33:31,205 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: defer
+2024-06-10 21:33:31,205 INFO    SenderThread:375529 [sender.py:send_request_defer():610] handle sender defer: 14
+2024-06-10 21:33:31,206 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: poll_exit
+2024-06-10 21:33:31,207 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: poll_exit
+2024-06-10 21:33:31,208 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: poll_exit
+2024-06-10 21:33:31,208 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: server_info
+2024-06-10 21:33:31,209 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: poll_exit
+2024-06-10 21:33:31,209 DEBUG   SenderThread:375529 [sender.py:send_request():406] send_request: server_info
+2024-06-10 21:33:31,211 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: get_summary
+2024-06-10 21:33:31,212 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: sampled_history
+2024-06-10 21:33:31,213 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: internal_messages
+2024-06-10 21:33:31,376 INFO    MainThread:375529 [wandb_run.py:_footer_history_summary_info():3936] rendering history
+2024-06-10 21:33:31,377 INFO    MainThread:375529 [wandb_run.py:_footer_history_summary_info():3968] rendering summary
+2024-06-10 21:33:31,377 INFO    MainThread:375529 [wandb_run.py:_footer_sync_info():3895] logging synced files
+2024-06-10 21:33:31,377 DEBUG   HandlerThread:375529 [handler.py:handle_request():146] handle_request: shutdown
+2024-06-10 21:33:31,378 INFO    HandlerThread:375529 [handler.py:finish():866] shutting down handler
+2024-06-10 21:33:32,209 INFO    WriterThread:375529 [datastore.py:close():296] close: /home/pedro/PINN/jaxpi/examples/geomIII2/wandb/run-20240610_213258-mmmp6u42/run-mmmp6u42.wandb
+2024-06-10 21:33:32,376 INFO    SenderThread:375529 [sender.py:finish():1546] shutting down sender
+2024-06-10 21:33:32,377 INFO    SenderThread:375529 [file_pusher.py:finish():172] shutting down file pusher
+2024-06-10 21:33:32,377 INFO    SenderThread:375529 [file_pusher.py:join():178] waiting for file pusher
