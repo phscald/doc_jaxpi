@@ -202,12 +202,17 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     ) = get_dataset(pin=pin)
 
     fluid_params = (mu0, mu1, rho0, rho1)
-    U_max = .1#.25/3#visc .1
+    U_max = .06#.25/3#visc .1
+
     # pmax = 15
 
     L_max = .021
-    pmax = mu0*U_max/L_max
-    pin =pin/pmax
+    pmax = mu0*U_max/L_max*36
+    # print(f'pmax:{pmax}')
+    # print(f'pin:{pin}')
+    # pin =pin/pmax
+    # print(f'pin:{pin}')
+    # print(xdsq)
     # Re = rho0*U_max*L_max/mu0
     D = 10**(-9)
 
@@ -239,9 +244,13 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
         # Nondimensionalize flow field
         # u_inflow = u_inflow / U_star
-
+        # print(f'p0_max:{jnp.max(p0)}')
         p_inflow = (pin / pmax) * jnp.ones((inflow_coords.shape[0]))
         u0, v0, p0 = u0/U_max, v0/U_max, p0/pmax
+
+        # print(f'pin:{pin}')
+        # print(f'p0_max:{jnp.max(p0)}')
+        # print(fsfd)
        
         # # Nondimensionalization parameters
         # U_star = 1.0  # characteristic velocity
@@ -273,7 +282,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # Temporal domain of each time window
     t0 = 0.0
-    t1 = 1.0
+    t1 = 5.0
 
     temporal_dom = jnp.array([t0, t1 * (1 + 0.05)])
 

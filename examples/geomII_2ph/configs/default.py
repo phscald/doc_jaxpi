@@ -11,7 +11,7 @@ def get_config():
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
-    wandb.project = "geomI-unsteady"
+    wandb.project = "geomII-unsteady"
     wandb.name = "default"
     wandb.tag = None
 
@@ -45,7 +45,7 @@ def get_config():
     # Training
     config.training = training = ml_collections.ConfigDict()
     training.max_steps = 100000
-    training.num_time_windows = 5# 10
+    training.num_time_windows = 1# 10
 
     training.inflow_batch_size = 2048
     training.outflow_batch_size = 2048
@@ -57,9 +57,9 @@ def get_config():
     config.weighting = weighting = ml_collections.ConfigDict()
     weighting.scheme = "grad_norm"
     weighting.init_weights = {
-        "u_ic": 1.0,
-        "v_ic": 1.0,
-        "p_ic": 1.0,
+        # "u_ic": 1.0,
+        # "v_ic": 1.0,
+        # "p_ic": 1.0,
         "s_ic": 1.0,
         "p_in": 1.0,
         "p_out": 1.0,
