@@ -112,8 +112,10 @@ def _create_train_state(config):
 class PINN:
     def __init__(self, config):
         self.config = config
+        # if config.optimizer == "Adam":
         self.state = _create_train_state(config)
-
+        # elif config.optimizer == "lbfgs":
+        # self.state = self._create_train_state_lbfgs(config)
     def u_net(self, params, *args):
         raise NotImplementedError("Subclasses should implement this!")
 
@@ -125,6 +127,38 @@ class PINN:
 
     def compute_diag_ntk(self, params, batch, *args):
         raise NotImplementedError("Subclasses should implement this!")
+    
+    # def _create_train_state_lbfgs(self, config):
+    # # def _create_train_state_lbfgs(self, config):
+    #     # Initialize network
+    #     arch = _create_arch(config.arch)
+    #     x = jnp.ones(config.input_dim)
+    #     params = arch.init(random.PRNGKey(config.seed), x)
+
+    #     # Initialize optax optimizer
+    #     tx = _create_optimizer(config.optim)
+    #     opt_state = tx.init(params)
+
+    #     # Convert config dict to dict
+    #     init_weights = dict(config.weighting.init_weights)
+
+    #     value_and_grad = optax.value_and_grad_from_state(value_fn=self.loss(init_weights,))
+
+    #     value, grad = value_and_grad(params, state=opt_state)
+    #     # updates, opt_state = solver.update(
+    #     # grad, opt_state, params, value=value, grad=grad, value_fn=f
+    #     # )
+
+
+    #     state = TrainState.create(  # (trainstate)create é funcao do flax, tx é o otimizador do optax
+    #         apply_fn=arch.apply,
+    #         params=params,
+    #         tx=tx(value=value, grad=grad, value_fn=self.loss), # como colocar o f aqui?
+    #         weights=init_weights,
+    #         momentum=config.weighting.momentum,
+    #     )
+
+    #     return jax_utils.replicate(state)
 
     @partial(jit, static_argnums=(0,))
     def loss(self, params, weights, batch, *args):

@@ -8,7 +8,7 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     # config.mode = "train""eval"
-    config.mode = "eval"
+    config.mode = "train"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -21,14 +21,16 @@ def get_config():
 
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
-    arch.arch_name = "Mlp"
-    arch.num_layers =7 # 7 300
+    arch.arch_name = "ModifiedMlp"
+    arch.num_layers =10 # 7 300
     arch.hidden_dim = 300
     arch.out_dim = 3
     arch.activation = "tanh"  # gelu works better than tanh
-    arch.periodicity = False
+    arch.periodicity = ml_collections.ConfigDict(
+        {"period": (1.0,1.0), "axis": (1,2), "trainable": (True,)}
+        )
     arch.fourier_emb = ml_collections.ConfigDict(
-        {"embed_scale": 10.0, "embed_dim": 240} # 128
+        {"embed_scale": 10.0, "embed_dim": 300} # 128
     )
     arch.reparam = ml_collections.ConfigDict(
         {"type": "weight_fact", "mean": 0.5, "stddev": 0.1}
@@ -41,18 +43,18 @@ def get_config():
     optim.beta2 = 0.999
     optim.eps = 1e-8
     optim.learning_rate = 1e-4
-    optim.decay_rate = 0.95
-    optim.decay_steps = 2000
+    optim.decay_rate = 0.965
+    optim.decay_steps = 5000
     optim.grad_accum_steps = 0
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 500000
+    training.max_steps = 1000000
     training.batch_size_per_device = 1024
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
-    weighting.scheme = "ntk"#"ntk""grad_norm"
+    weighting.scheme = "grad_norm"#"ntk""grad_norm"
     weighting.init_weights = ml_collections.ConfigDict(
         {
             # "u_in": 1.0,
