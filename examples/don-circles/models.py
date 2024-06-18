@@ -57,25 +57,25 @@ class NavierStokes2D(ForwardBVP):
         p = outputs[2]
         return u, v, p
 
-    def u_net(self, params, x, y):
-        u, _, _ = self.neural_net(params, x, y)
+    def u_net(self, params, x, y, cyl_X):
+        u, _, _ = self.neural_net(params, x, y, cyl_X)
         return u
 
-    def v_net(self, params, x, y):
-        _, v, _ = self.neural_net(params, x, y)
+    def v_net(self, params, x, y, cyl_X):
+        _, v, _ = self.neural_net(params, x, y, cyl_X)
         return v
 
-    def p_net(self, params, x, y):
-        _, _, p = self.neural_net(params, x, y)
+    def p_net(self, params, x, y, cyl_X):
+        _, _, p = self.neural_net(params, x, y, cyl_X)
         return p
 
-    def r_net(self, params, x, y):
-        u, v, p = self.neural_net(params, x, y)
+    def r_net(self, params, x, y, cyl_X):
+        u, v, p = self.neural_net(params, x, y, cyl_X)
 
-        (u_x, u_y), (v_x, v_y), (p_x, p_y) = jacrev(self.neural_net, argnums=(1, 2))(params, x, y)
+        (u_x, u_y), (v_x, v_y), (p_x, p_y) = jacrev(self.neural_net, argnums=(1, 2))(params, x, y, cyl_X)
 
-        u_hessian = hessian(self.u_net, argnums=(1, 2))(params, x, y)
-        v_hessian = hessian(self.v_net, argnums=(1, 2))(params, x, y)
+        u_hessian = hessian(self.u_net, argnums=(1, 2))(params, x, y, cyl_X)
+        v_hessian = hessian(self.v_net, argnums=(1, 2))(params, x, y, cyl_X)
 
         u_xx = u_hessian[0][0]
         u_yy = u_hessian[1][1]
@@ -97,24 +97,24 @@ class NavierStokes2D(ForwardBVP):
 
         return ru, rv, rc, v_out#, u_out, v_out
 
-    def ru_net(self, params, x, y):
-        ru, _, _, _ = self.r_net(params, x, y)
+    def ru_net(self, params, x, y, cyl_X):
+        ru, _, _, _ = self.r_net(params, x, y, cyl_X)
         return ru
 
-    def rv_net(self, params, x, y):
-        _, rv, _, _ = self.r_net(params, x, y)
+    def rv_net(self, params, x, y, cyl_X):
+        _, rv, _, _ = self.r_net(params, x, y, cyl_X)
         return rv
 
-    def rc_net(self, params, x, y):
-        _, _, rc, _ = self.r_net(params, x, y)
+    def rc_net(self, params, x, y, cyl_X):
+        _, _, rc, _ = self.r_net(params, x, y, cyl_X)
         return rc
 
     # def u_out_net(self, params, x, y):
     #     _, _, _, u_out, _ = self.r_net(params, x, y)
     #     return u_out
 
-    def v_out_net(self, params, x, y):
-        _, _, _, v_out = self.r_net(params, x, y)
+    def v_out_net(self, params, x, y, cyl_X):
+        _, _, _, v_out = self.r_net(params, x, y, cyl_X)
         return v_out
     
     def get_wall(cyl_X):
@@ -150,7 +150,7 @@ class NavierStokes2D(ForwardBVP):
 
 
         p_in_pred = self.p_pred_fn(
-            params, self.inflow_coords[:, 0], self.inflow_coords[:, 1]
+            params, self.inflow_coords[:, 0], self.inflow_coords[:, 1], cyl_center_X
         )
         p_in_loss = jnp.mean((p_in_pred - self.p_in) ** 2)
 
@@ -159,25 +159,25 @@ class NavierStokes2D(ForwardBVP):
         #     params, self.outflow_coords[:, 0], self.outflow_coords[:, 1]
         # )
         _, _, _, v_out_pred = self.r_pred_fn(
-            params, self.outflow_coords[:, 0], self.outflow_coords[:, 1]
+            params, self.outflow_coords[:, 0], self.outflow_coords[:, 1], cyl_center_X
         )
         _, _, _, v_in_pred = self.r_pred_fn(
-            params, self.inflow_coords[:, 0], self.inflow_coords[:, 1]
+            params, self.inflow_coords[:, 0], self.inflow_coords[:, 1], cyl_center_X
         )
         # u_out_loss = jnp.mean(u_out_pred**2)
         v_out_loss = jnp.mean(v_out_pred**2)
         v_in_loss = jnp.mean(v_in_pred**2)
         p_out_pred = self.p_pred_fn(
-            params, self.outflow_coords[:, 0], self.outflow_coords[:, 1]
+            params, self.outflow_coords[:, 0], self.outflow_coords[:, 1], cyl_center_X
         )
         p_out_loss = jnp.mean((p_out_pred) ** 2)
 
         # No-slip boundary conditions
         u_noslip_pred = self.u_pred_fn(
-            params, noslip_coords[:, 0], noslip_coords[:, 1]
+            params, noslip_coords[:, 0], noslip_coords[:, 1], cyl_center_X
         )
         v_noslip_pred = self.v_pred_fn(
-            params, noslip_coords[:, 0], noslip_coords[:, 1]
+            params, noslip_coords[:, 0], noslip_coords[:, 1], cyl_center_X
         )
 
         u_noslip_loss = jnp.mean(u_noslip_pred**2)
@@ -185,7 +185,7 @@ class NavierStokes2D(ForwardBVP):
 
         # Residual losses
         ru_pred, rv_pred, rc_pred, _  = self.r_pred_fn(
-            params, batch[:, 0], batch[:, 1]
+            params, batch[:, 0], batch[:, 1], cyl_center_X
         )
 
         ru_loss = jnp.mean(ru_pred**2)

@@ -87,8 +87,8 @@ def get_dataset():
 
     key = jax.random.PRNGKey(0)
     cylinder_center = jax.random.uniform(key, shape=(100,2))
-    minval = jnp.array([0.0045, 0.0165])
-    maxval = jnp.array([0.0095, 0.0195])
+    minval = jnp.array([0.0165, 0.0045])
+    maxval = jnp.array([0.0195, 0.0095])
     cylinder_center = minval + cylinder_center * (maxval - minval)
 
     coords, inflow_coords, outflow_coords, wall_coords = get_coords()

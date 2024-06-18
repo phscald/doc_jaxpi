@@ -22,7 +22,7 @@ def get_config():
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "DeepONet"
-    arch.num_layers = 4
+    # arch.num_layers = 4
     arch.hidden_dim = 128
     arch.out_dim = 3
     arch.activation = "tanh"  # gelu works better than tanh

@@ -90,7 +90,12 @@ def _create_train_state(config):
     # Initialize network
     arch = _create_arch(config.arch)
     x = jnp.ones(config.input_dim)
-    params = arch.init(random.PRNGKey(config.seed), x)
+    
+    if config.arch.arch_name == "DeepONet":
+        u = jnp.ones(config.input_dim)
+        params = arch.init(random.PRNGKey(config.seed), u, x)
+    else:
+        params = arch.init(random.PRNGKey(config.seed), x)
 
     # Initialize optax optimizer
     tx = _create_optimizer(config.optim)

@@ -47,14 +47,14 @@ def get_center(coords, cylinder_center, idx):
     X = coords
     cyl_center = cylinder_center[idx]
     # cylinder
-    radius = jnp.sqrt(jnp.power((X[:,0] - (cyl_center[0])) , 2) + jnp.power((X[:,1] - (cyl_center[1])) , 2))
-    inds = jnp.where(radius <= .0015)
+    radius = jnp.sqrt(jnp.power((X[:,0] - (cyl_center[0,0])) , 2) + jnp.power((X[:,1] - (cyl_center[0,1])) , 2))
+    inds = jnp.where(radius <= .0015)[0]
 
     X = jnp.delete(X, inds, axis = 0)
 
     x1_rad = jnp.array(jnp.arange(0, 2*jnp.pi, jnp.pi/35))
-    x2_rad = jnp.transpose(jnp.array([cyl_center[1] + jnp.sin(x1_rad) * .0015]))
-    x1_rad = jnp.transpose(jnp.array([cyl_center[0] + jnp.cos(x1_rad) * .0015]))
+    x2_rad = jnp.transpose(jnp.array([cyl_center[0,1] + jnp.sin(x1_rad) * .0015]))
+    x1_rad = jnp.transpose(jnp.array([cyl_center[0,0] + jnp.cos(x1_rad) * .0015]))
     x1_rad = jnp.concatenate((x1_rad, x2_rad), axis = 1)
     # cylinder_coords = x1_rad
     L_star = .021
@@ -176,20 +176,21 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     print("Waiting for JIT...")
     for step in range(config.training.max_steps):
         start_time = time.time()
-
-        subkeys = jax.random.PRNGKey(config.seed,3)
+        
+        subkeys = random.split(random.PRNGKey(0), 3)
         idx = random.choice(
             subkeys[0],
             jnp.arange(start=0, stop=cylinder_center.shape[0]),
-            shape=(num_centers),
+            shape=(num_centers,),
             replace=True,
             )
-        
+
         # X = []; cyl_center_X = []
         # for i in range(num_centers):
-        X = get_center(coords, cylinder_center, wall_coords, idx)
+        X = get_center(coords, cylinder_center, idx)
             # X.append(X_)
             # wall.append(wall_)
+            
         cyl_center_X = jnp.ones((X.shape[0],2))*cylinder_center[idx]
             # cyl_center_wall.append(jnp.ones((X_.shape[0],2))*cylinder_center[idx[i]])
 

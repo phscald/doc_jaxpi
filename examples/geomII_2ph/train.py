@@ -165,30 +165,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     wandb_config = config.wandb
     wandb.init(project=wandb_config.project, name=wandb_config.name)
 
-    # Get dataset
-    # (
-    #     u_ref,
-    #     v_ref,
-    #     p_ref,
-    #     coords,
-    #     inflow_coords,
-    #     outflow_coords,
-    #     wall_coords,
-    #     cyl_coords,
-    #     nu,
-    # ) = get_dataset()
 
-    # (
-    #     u_ref,
-    #     v_ref,
-    #     p_ref,
-    #     s_ref,
-    #     coords,
-    #     inflow_coords,
-    #     outflow_coords,
-    #     wall_coords,
-    #     mu, rho
-    # ) = get_dataset()
 
     pin =10
     (
