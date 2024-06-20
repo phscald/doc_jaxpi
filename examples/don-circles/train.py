@@ -170,7 +170,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     evaluator = models.NavierStokesEvaluator(config, model)
 
     # Initialize  residual sampler
-    res_sampler = iter(SpaceSampler(coords, config.training.batch_size_per_device))
+    # res_sampler = iter(SpaceSampler(coords, config.training.batch_size_per_device))
 
     # jit warm up
     print("Waiting for JIT...")
@@ -207,7 +207,17 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         # cyl_center_wall = cyl_center_wall[idx_w]
 
         # batch = next(res_sampler)
-        batch = (X, cyl_center_X)
+        # batch = (X, cyl_center_X)
+        # print(len(batch))
+        # print(X.shape)
+        # print(cyl_center_X.shape)
+        batch = (jnp.concatenate((X, cyl_center_X), axis=1))
+        res_sampler = iter(SpaceSampler(batch, config.training.batch_size_per_device))
+        batch = next(res_sampler)
+
+        # print(X.shape)
+        # print(cyl_center_X)
+        # print(model.state)
         model.state = model.step(model.state, batch)
 
         # Update weights if necessary

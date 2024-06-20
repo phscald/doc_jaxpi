@@ -41,41 +41,46 @@ class NavierStokes2D(ForwardBVP):
         self.L, self.W = self.wall_coords.max(axis=0) - self.wall_coords.min(axis=0)
 
         # Predict functions over batch
-        self.u_pred_fn = vmap(self.u_net, (None, 0, 0))
-        self.v_pred_fn = vmap(self.v_net, (None, 0, 0))
-        self.p_pred_fn = vmap(self.p_net, (None, 0, 0))
-        self.r_pred_fn = vmap(self.r_net, (None, 0, 0))
+        self.u_pred_fn = vmap(self.u_net, (None, 0, 0, 0, 0))
+        self.v_pred_fn = vmap(self.v_net, (None, 0, 0, 0, 0))
+        self.p_pred_fn = vmap(self.p_net, (None, 0, 0, 0, 0))
+        self.r_pred_fn = vmap(self.r_net, (None, 0, 0, 0, 0))
 
-    def neural_net(self, params, x, y, cyl_X):
+    def neural_net(self, params, x, y, cyl_X, cyl_Y):
         # x = x / self.L  # rescale x into [0, 1]
         # y = y / self.W  # rescale y into [0, 1]
-        z = jnp.stack([x, y])
+        z = jnp.stack([x, y, cyl_X, cyl_Y])
+        # print(f'x = {x.shape}')
+        # print(f'y = {y.shape}')
+        # print(f'cyl = {cyl_X.shape}')
+
+        # z = jnp.concatenate((x, y, cyl_X), axis = 1)
+
         #TODO alterar aqui 
-        outputs = self.state.apply_fn(params, z, cyl_X)
+        outputs = self.state.apply_fn(params, z)
         u = outputs[0]
         v = outputs[1]
         p = outputs[2]
         return u, v, p
 
-    def u_net(self, params, x, y, cyl_X):
-        u, _, _ = self.neural_net(params, x, y, cyl_X)
+    def u_net(self, params, x, y, cyl_X, cyl_Y):
+        u, _, _ = self.neural_net(params, x, y, cyl_X, cyl_Y)
         return u
 
-    def v_net(self, params, x, y, cyl_X):
-        _, v, _ = self.neural_net(params, x, y, cyl_X)
+    def v_net(self, params, x, y, cyl_X, cyl_Y):
+        _, v, _ = self.neural_net(params, x, y, cyl_X, cyl_Y)
         return v
 
-    def p_net(self, params, x, y, cyl_X):
-        _, _, p = self.neural_net(params, x, y, cyl_X)
+    def p_net(self, params, x, y, cyl_X, cyl_Y):
+        _, _, p = self.neural_net(params, x, y, cyl_X, cyl_Y)
         return p
 
-    def r_net(self, params, x, y, cyl_X):
-        u, v, p = self.neural_net(params, x, y, cyl_X)
+    def r_net(self, params, x, y, cyl_X, cyl_Y):
+        u, v, p = self.neural_net(params, x, y, cyl_X, cyl_Y)
+        (u_x, u_y), (v_x, v_y), (p_x, p_y) = jacrev(self.neural_net, argnums=(1, 2))(params, x, y, cyl_X, cyl_Y)
 
-        (u_x, u_y), (v_x, v_y), (p_x, p_y) = jacrev(self.neural_net, argnums=(1, 2))(params, x, y, cyl_X)
-
-        u_hessian = hessian(self.u_net, argnums=(1, 2))(params, x, y, cyl_X)
-        v_hessian = hessian(self.v_net, argnums=(1, 2))(params, x, y, cyl_X)
+        u_hessian = hessian(self.u_net, argnums=(1, 2))(params, x, y, cyl_X, cyl_Y)
+        v_hessian = hessian(self.v_net, argnums=(1, 2))(params, x, y, cyl_X, cyl_Y)
 
         u_xx = u_hessian[0][0]
         u_yy = u_hessian[1][1]
@@ -94,30 +99,30 @@ class NavierStokes2D(ForwardBVP):
         # u_out = u_x - p
         v_out = v
 
-
         return ru, rv, rc, v_out#, u_out, v_out
 
-    def ru_net(self, params, x, y, cyl_X):
-        ru, _, _, _ = self.r_net(params, x, y, cyl_X)
+    def ru_net(self, params, x, y, cyl_X, cyl_Y):
+        ru, _, _, _ = self.r_net(params, x, y, cyl_X, cyl_Y)
         return ru
 
-    def rv_net(self, params, x, y, cyl_X):
-        _, rv, _, _ = self.r_net(params, x, y, cyl_X)
+    def rv_net(self, params, x, y, cyl_X, cyl_Y):
+        _, rv, _, _ = self.r_net(params, x, y, cyl_X, cyl_Y)
         return rv
 
-    def rc_net(self, params, x, y, cyl_X):
-        _, _, rc, _ = self.r_net(params, x, y, cyl_X)
+    def rc_net(self, params, x, y, cyl_X, cyl_Y):
+        _, _, rc, _ = self.r_net(params, x, y, cyl_X, cyl_Y)
         return rc
 
     # def u_out_net(self, params, x, y):
     #     _, _, _, u_out, _ = self.r_net(params, x, y)
     #     return u_out
 
-    def v_out_net(self, params, x, y, cyl_X):
-        _, _, _, v_out = self.r_net(params, x, y, cyl_X)
+    def v_out_net(self, params, x, y, cyl_X, cyl_Y):
+        _, _, _, v_out = self.r_net(params, x, y, cyl_X, cyl_Y)
         return v_out
     
-    def get_wall(cyl_X):
+    def get_wall(self, cyl_X):
+        cyl_X = cyl_X[0]
         x1_rad = jnp.array(jnp.arange(0, 2*jnp.pi, jnp.pi/35))
         x2_rad = jnp.transpose(jnp.array([cyl_X[1] + jnp.sin(x1_rad) * .0015]))
         x1_rad = jnp.transpose(jnp.array([cyl_X[0] + jnp.cos(x1_rad) * .0015]))
@@ -131,11 +136,10 @@ class NavierStokes2D(ForwardBVP):
     @partial(jit, static_argnums=(0,))
     def losses(self, params, batch):
 
-        # (batch, cyl_center_X, wall, cyl_center_wall) = batch
-        batch, cyl_center_X = batch
+        cyl_center_X = batch[:, 2:]
+        batch = batch[:, :2]
         wall = self.get_wall(cyl_center_X)
         noslip_coords = jnp.vstack((self.wall_coords, wall))
-
 
         # Inflow boundary conditions
         # u_in_pred = self.u_pred_fn(
@@ -148,9 +152,9 @@ class NavierStokes2D(ForwardBVP):
         # u_in_loss = jnp.mean((u_in_pred - self.u_in) ** 2)
         # v_in_loss = jnp.mean(v_in_pred**2)
 
-
         p_in_pred = self.p_pred_fn(
-            params, self.inflow_coords[:, 0], self.inflow_coords[:, 1], cyl_center_X
+            params, self.inflow_coords[:, 0], self.inflow_coords[:, 1], 
+            jnp.ones(self.inflow_coords.shape[0])*cyl_center_X[0][0], jnp.ones(self.inflow_coords.shape[0])*cyl_center_X[0][1]
         )
         p_in_loss = jnp.mean((p_in_pred - self.p_in) ** 2)
 
@@ -159,25 +163,30 @@ class NavierStokes2D(ForwardBVP):
         #     params, self.outflow_coords[:, 0], self.outflow_coords[:, 1]
         # )
         _, _, _, v_out_pred = self.r_pred_fn(
-            params, self.outflow_coords[:, 0], self.outflow_coords[:, 1], cyl_center_X
+            params, self.outflow_coords[:, 0], self.outflow_coords[:, 1], 
+            jnp.ones(self.outflow_coords.shape[0])*cyl_center_X[0][0], jnp.ones(self.outflow_coords.shape[0])*cyl_center_X[0][1]
         )
         _, _, _, v_in_pred = self.r_pred_fn(
-            params, self.inflow_coords[:, 0], self.inflow_coords[:, 1], cyl_center_X
+            params, self.inflow_coords[:, 0], self.inflow_coords[:, 1], 
+            jnp.ones(self.inflow_coords.shape[0])*cyl_center_X[0][0], jnp.ones(self.inflow_coords.shape[0])*cyl_center_X[0][1]
         )
         # u_out_loss = jnp.mean(u_out_pred**2)
         v_out_loss = jnp.mean(v_out_pred**2)
         v_in_loss = jnp.mean(v_in_pred**2)
         p_out_pred = self.p_pred_fn(
-            params, self.outflow_coords[:, 0], self.outflow_coords[:, 1], cyl_center_X
+            params, self.outflow_coords[:, 0], self.outflow_coords[:, 1],
+            jnp.ones(self.outflow_coords.shape[0])*cyl_center_X[0][0], jnp.ones(self.outflow_coords.shape[0])*cyl_center_X[0][1]
         )
         p_out_loss = jnp.mean((p_out_pred) ** 2)
 
         # No-slip boundary conditions
         u_noslip_pred = self.u_pred_fn(
-            params, noslip_coords[:, 0], noslip_coords[:, 1], cyl_center_X
+            params, noslip_coords[:, 0], noslip_coords[:, 1], 
+            jnp.ones(noslip_coords.shape[0])*cyl_center_X[0][0], jnp.ones(noslip_coords.shape[0])*cyl_center_X[0][1]
         )
         v_noslip_pred = self.v_pred_fn(
-            params, noslip_coords[:, 0], noslip_coords[:, 1], cyl_center_X
+            params, noslip_coords[:, 0], noslip_coords[:, 1], 
+            jnp.ones(noslip_coords.shape[0])*cyl_center_X[0][0], jnp.ones(noslip_coords.shape[0])*cyl_center_X[0][1]
         )
 
         u_noslip_loss = jnp.mean(u_noslip_pred**2)
@@ -185,7 +194,7 @@ class NavierStokes2D(ForwardBVP):
 
         # Residual losses
         ru_pred, rv_pred, rc_pred, _  = self.r_pred_fn(
-            params, batch[:, 0], batch[:, 1], cyl_center_X
+            params, batch[:, 0], batch[:, 1], cyl_center_X[:,0], cyl_center_X[:,1]
         )
 
         ru_loss = jnp.mean(ru_pred**2)
@@ -209,7 +218,8 @@ class NavierStokes2D(ForwardBVP):
     @partial(jit, static_argnums=(0,))
     def compute_diag_ntk(self, params, batch):
 
-        batch, cyl_center_X = batch
+        cyl_center_X = batch[:, 2:]
+        batch = batch[:, :2]
         wall = self.get_wall(cyl_center_X)
         noslip_coords = jnp.vstack((self.wall_coords, wall))
 
@@ -223,36 +233,42 @@ class NavierStokes2D(ForwardBVP):
         # u_out_ntk = vmap(ntk_fn, (None, None, 0, 0))(
         #     self.u_out_net, params, self.outflow_coords[:, 0], self.outflow_coords[:, 1]
         # )
-        v_out_ntk = vmap(ntk_fn, (None, None, 0, 0))(
-            self.v_out_net, params, self.outflow_coords[:, 0], self.outflow_coords[:, 1]
+        v_out_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0))(
+            self.v_out_net, params, self.outflow_coords[:, 0], self.outflow_coords[:, 1], 
+            jnp.ones(self.outflow_coords.shape[0])*cyl_center_X[0][0], jnp.ones(self.outflow_coords.shape[0])*cyl_center_X[0][1]
         )
-        v_in_ntk = vmap(ntk_fn, (None, None, 0, 0))(
-            self.v_out_net, params, self.inflow_coords[:, 0], self.inflow_coords[:, 1]
-        )
-
-        p_in_ntk = vmap(ntk_fn, (None, None, 0, 0))(
-            self.p_net, params, self.inflow_coords[:, 0], self.inflow_coords[:, 1]
-        )
-        p_out_ntk = vmap(ntk_fn, (None, None, 0, 0))(
-            self.p_net, params, self.outflow_coords[:, 0], self.outflow_coords[:, 1]
+        v_in_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0))(
+            self.v_out_net, params, self.inflow_coords[:, 0], self.inflow_coords[:, 1], 
+            jnp.ones(self.inflow_coords.shape[0])*cyl_center_X[0][0], jnp.ones(self.inflow_coords.shape[0])*cyl_center_X[0][1]
         )
 
+        p_in_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0))(
+            self.p_net, params, self.inflow_coords[:, 0], self.inflow_coords[:, 1], 
+            jnp.ones(self.inflow_coords.shape[0])*cyl_center_X[0][0], jnp.ones(self.inflow_coords.shape[0])*cyl_center_X[0][1]
+        )
+        p_out_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0))(
+            self.p_net, params, self.outflow_coords[:, 0], self.outflow_coords[:, 1], 
+            jnp.ones(self.outflow_coords.shape[0])*cyl_center_X[0][0], jnp.ones(self.outflow_coords.shape[0])*cyl_center_X[0][1]
+        )
 
-        u_noslip_ntk = vmap(ntk_fn, (None, None, 0, 0))(
-            self.u_net, params, noslip_coords[:, 0], noslip_coords[:, 1]
+
+        u_noslip_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0))(
+            self.u_net, params, noslip_coords[:, 0], noslip_coords[:, 1], 
+            jnp.ones(noslip_coords.shape[0])*cyl_center_X[0][0], jnp.ones(noslip_coords.shape[0])*cyl_center_X[0][1]
         )
-        v_noslip_ntk = vmap(ntk_fn, (None, None, 0, 0))(
-            self.v_net, params, noslip_coords[:, 0], noslip_coords[:, 1]
+        v_noslip_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0))(
+            self.v_net, params, noslip_coords[:, 0], noslip_coords[:, 1], 
+            jnp.ones(noslip_coords.shape[0])*cyl_center_X[0][0], jnp.ones(noslip_coords.shape[0])*cyl_center_X[0][1]
         )
 
-        ru_ntk = vmap(ntk_fn, (None, None, 0, 0))(
-            self.ru_net, params, batch[:, 0], batch[:, 1]
+        ru_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0))(
+            self.ru_net, params, batch[:, 0], batch[:, 1], cyl_center_X[:,0], cyl_center_X[:,1]
         )
-        rv_ntk = vmap(ntk_fn, (None, None, 0, 0))(
-            self.rv_net, params, batch[:, 0], batch[:, 1]
+        rv_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0))(
+            self.rv_net, params, batch[:, 0], batch[:, 1], cyl_center_X[:,0], cyl_center_X[:,1]
         )
-        rc_ntk = vmap(ntk_fn, (None, None, 0, 0))(
-            self.rc_net, params, batch[:, 0], batch[:, 1]
+        rc_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0))(
+            self.rc_net, params, batch[:, 0], batch[:, 1], cyl_center_X[:,0], cyl_center_X[:,1]
         )
 
         ntk_dict = {
@@ -289,9 +305,6 @@ class NavierStokes2D(ForwardBVP):
         v_y = grad(self.v_net, argnums=2)(params, x, y)
 
         return u_x, v_x, u_y, v_y
-
-    
-
 
 class NavierStokesEvaluator(BaseEvaluator):
     def __init__(self, config, model):

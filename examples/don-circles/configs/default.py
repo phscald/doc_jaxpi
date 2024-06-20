@@ -21,8 +21,8 @@ def get_config():
 
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
-    arch.arch_name = "DeepONet"
-    # arch.num_layers = 4
+    arch.arch_name = "ModifiedMlp"
+    arch.num_layers = 8
     arch.hidden_dim = 128
     arch.out_dim = 3
     arch.activation = "tanh"  # gelu works better than tanh
@@ -47,7 +47,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 100000
+    training.max_steps = 1000000
     training.batch_size_per_device = 1024
 
     # Weighting
@@ -83,11 +83,11 @@ def get_config():
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()
-    saving.save_every_steps =  99999#None
+    saving.save_every_steps =  training.max_steps/10#None
     saving.num_keep_ckpts = 10
 
     # Input shape for initializing Flax models
-    config.input_dim = 2
+    config.input_dim = 4
 
     # Integer for PRNG random seed.
     config.seed = 42

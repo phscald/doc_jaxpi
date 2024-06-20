@@ -215,6 +215,11 @@ class PINN:
 
     @partial(pmap, axis_name="batch", static_broadcasted_argnums=(0,))
     def step(self, state, batch, *args):
+        # if self.config.arch.arch_name == "DeepONet":
+        #     grads = grad(self.loss)(state.params, state.weights, batch, batch_BC, *args)
+            # grads = lax.pmean(grads, "batch")
+            # state = state.apply_gradients(grads=grads)
+        # else:
         grads = grad(self.loss)(state.params, state.weights, batch, *args)
         grads = lax.pmean(grads, "batch")
         state = state.apply_gradients(grads=grads)
