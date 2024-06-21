@@ -49,8 +49,7 @@ class NavierStokes2D(ForwardBVP):
     def neural_net(self, params, x, y, cyl_X, cyl_Y):
         # x = x / self.L  # rescale x into [0, 1]
         # y = y / self.W  # rescale y into [0, 1]
-        z = jnp.stack([x, y])
-        z_1 = jnp.stack([cyl_X, cyl_Y])
+        z = jnp.stack([x, y, cyl_X, cyl_Y])
         # print(f'x = {x.shape}')
         # print(f'y = {y.shape}')
         # print(f'cyl = {cyl_X.shape}')
@@ -58,7 +57,7 @@ class NavierStokes2D(ForwardBVP):
         # z = jnp.concatenate((x, y, cyl_X), axis = 1)
 
         #TODO alterar aqui 
-        outputs = self.state.apply_fn(params, z, z_1)
+        outputs = self.state.apply_fn(params, z)
         u = outputs[0]
         v = outputs[1]
         p = outputs[2]

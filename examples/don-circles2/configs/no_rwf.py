@@ -7,13 +7,12 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
-    # config.mode = "train""eval"
     config.mode = "train"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
-    wandb.project = "PINN-geomII"
-    wandb.name = "default"
+    wandb.project = "PINN-NS_steady_cylinder"
+    wandb.name = "no_rwf"
     wandb.tag = None
 
     # Nondimensionalization
@@ -21,18 +20,16 @@ def get_config():
 
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
-    arch.arch_name = "DeepONet"
-    # arch.num_layers = 8
+    arch.arch_name = "Mlp"
+    arch.num_layers = 4
     arch.hidden_dim = 128
     arch.out_dim = 3
-    arch.activation = "tanh"  # gelu works better than tanh
+    arch.activation = "gelu"  # gelu works better than tanh
     arch.periodicity = False
     arch.fourier_emb = ml_collections.ConfigDict(
         {"embed_scale": 10.0, "embed_dim": 128}
     )
-    arch.reparam = ml_collections.ConfigDict(
-        {"type": "weight_fact", "mean": 0.5, "stddev": 0.1}
-    )
+    arch.reparam = None
 
     # Optim
     config.optim = optim = ml_collections.ConfigDict()
@@ -47,7 +44,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 1000000
+    training.max_steps = 100000
     training.batch_size_per_device = 1024
 
     # Weighting
@@ -55,12 +52,10 @@ def get_config():
     weighting.scheme = "grad_norm"
     weighting.init_weights = ml_collections.ConfigDict(
         {
-            # "u_in": 1.0,
+            "u_in": 1.0,
             "v_in": 1.0,
-            # "u_out": 1.0,
+            "u_out": 1.0,
             "v_out": 1.0,
-            "p_in": 1.0,
-            "p_out": 1.0,
             "u_noslip": 1.0,
             "v_noslip": 1.0,
             "ru": 1.0,
@@ -83,7 +78,7 @@ def get_config():
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()
-    saving.save_every_steps =  100000#None
+    saving.save_every_steps = None
     saving.num_keep_ckpts = 10
 
     # Input shape for initializing Flax models

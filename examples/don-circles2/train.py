@@ -226,9 +226,8 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
                 model.state = model.update_weights(model.state, batch)
 
         # Log training metrics, only use host 0 to record results
-        if jax.process_index() == 0:
-            if step % config.logging.log_every_steps == 0:
-                print(f'step: {step}')
+        # if jax.process_index() == 0:
+            # if step % config.logging.log_every_steps == 0:
             #     # Get the first replica of the state and batch
             #     state = jax.device_get(tree_map(lambda x: x[0], model.state))
             #     batch = jax.device_get(tree_map(lambda x: x[0], batch))
