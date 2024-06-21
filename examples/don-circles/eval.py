@@ -26,18 +26,36 @@ from jaxpi.utils import restore_checkpoint
 from utils import get_dataset, parabolic_inflow
 
 
+def get_center(coords, cylinder_center, idx):
+    X = coords
+
+    cyl_center = cylinder_center[idx]
+
+    # cylinder
+    radius = jnp.sqrt(jnp.power((X[:,0] - cyl_center[0]) , 2) + jnp.power((X[:,1] - (cyl_center[1])) , 2))
+    inds = jnp.where(radius <= .0015)[0]
+
+    X = jnp.delete(X, inds, axis = 0)
+
+    x1_rad = jnp.array(jnp.arange(0, 2*jnp.pi, jnp.pi/35))
+    x2_rad = jnp.transpose(jnp.array([cyl_center[1] + jnp.sin(x1_rad) * .0015]))
+    x1_rad = jnp.transpose(jnp.array([cyl_center[0] + jnp.cos(x1_rad) * .0015]))
+    x1_rad = jnp.concatenate((x1_rad, x2_rad), axis = 1)
+    L_star = .021
+
+    X = jnp.concatenate((X, x1_rad), axis = 0)/ L_star
+
+    return X
+
+
 def evaluate(config: ml_collections.ConfigDict, workdir: str):
-    # Load dataset
+    # Get dataset
     (
-        u_fem, v_fem, p_fem, coords_fem,
-        # u_ref,
-        # v_ref,
-        # p_ref,
         coords,
         inflow_coords,
         outflow_coords,
         wall_coords,
-        cylinder_coords,
+        cylinder_center,
         mu,
     ) = get_dataset()
 
@@ -45,10 +63,10 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # u_inflow, _ = parabolic_inflow(inflow_coords[:, 1], U_max)
 
     U_max = .10#17#.25/3#visc .1
-    # pmax = 15
 
     L_max = .021
     pmax = mu*U_max/L_max
+    num_centers = 1
 
     # Nondimensionalization
     if config.nondim == True:
@@ -60,19 +78,17 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         # Nondimensionalize coordinates and inflow velocity
         inflow_coords = inflow_coords / L_star
         outflow_coords = outflow_coords / L_star
-        wall_coords = wall_coords / L_star
-        cylinder_coords = cylinder_coords / L_star
-        coords = coords / L_star
-        coords_fem = coords_fem / L_star
+        # wall_coords = wall_coords / L_star
+        # cylinder_coords = cylinder_coords / L_star
+        # coords = coords / L_star
+        # coords_fem = coords_fem / L_star
 
         # Nondimensionalize flow field
         # u_inflow = u_inflow / U_star
-        u_ref = u_fem #/ U_star
-        v_ref = v_fem #/ U_star
-        p_ref = p_fem #/ pmax
+        # u_ref = u_fem / U_star
+        # v_ref = v_fem / U_star
+        # p_ref = p_fem / pmax
         p_inflow = 10 / pmax
-
-        coords = coords_fem
     else:
         U_star = 1.0
         L_star = 1.0
@@ -85,11 +101,14 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         p_inflow,
         inflow_coords,
         outflow_coords,
-        wall_coords,
-        cylinder_coords,
+        wall_coords, 
+        # cylinder_coords,
         mu, U_max, pmax
         # Re,
     )
+
+    cylinder_center = jnp.array([[.0105, .007]])
+    coords = get_center(coords, cylinder_center, idx=0)
 
     # Restore checkpoint
     ckpt_path = os.path.join(".", "ckpt", config.wandb.name)
@@ -97,31 +116,19 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     params = model.state.params
 
     # Predict
-    u_pred = model.u_pred_fn(params, coords[:, 0], coords[:, 1])
-    v_pred = model.v_pred_fn(params, coords[:, 0], coords[:, 1])
-    p_pred = model.p_pred_fn(params, coords[:, 0], coords[:, 1])
+    u_pred = model.u_pred_fn(params, coords[:, 0], coords[:, 1], 
+                             cylinder_center[0,0]*jnp.ones(coords.shape[0]), cylinder_center[0,1]*jnp.ones(coords.shape[0]))
+    v_pred = model.v_pred_fn(params, coords[:, 0], coords[:, 1],
+                              cylinder_center[0,0]*jnp.ones(coords.shape[0]), cylinder_center[0,1]*jnp.ones(coords.shape[0]))
+    p_pred = model.p_pred_fn(params, coords[:, 0], coords[:, 1],
+                              cylinder_center[0,0]*jnp.ones(coords.shape[0]), cylinder_center[0,1]*jnp.ones(coords.shape[0]))
 
-    u_error = jnp.sqrt(jnp.mean((u_ref - u_pred) ** 2)) / jnp.sqrt(jnp.mean(u_ref**2))
-    v_error = jnp.sqrt(jnp.mean((v_ref - v_pred) ** 2)) / jnp.sqrt(jnp.mean(v_ref**2))
+    # u_error = jnp.sqrt(jnp.mean((u_ref - u_pred) ** 2)) / jnp.sqrt(jnp.mean(u_ref**2))
+    # v_error = jnp.sqrt(jnp.mean((v_ref - v_pred) ** 2)) / jnp.sqrt(jnp.mean(v_ref**2))
 
-    print("l2_error of u: {:.4e}".format(u_error))
-    print("l2_error of v: {:.4e}".format(v_error))
+    # print("l2_error of u: {:.4e}".format(u_error))
+    # print("l2_error of v: {:.4e}".format(v_error))
 
-    # # Evaluate on drag, lift, and pressure drop
-    # C_D, C_L, p_diff = model.compute_drag_lift(params, U_star, L_star)
-
-    # # Reference values (Nabh, 1998)
-    # C_D_ref = 5.57953523384
-    # c_L_ref = 0.010618948146
-    # p_diff_ref = 0.11752016697
-
-    # C_D_error = jnp.abs(C_D - C_D_ref) / C_D_ref
-    # C_L_error = jnp.abs(C_L - c_L_ref) / c_L_ref
-    # p_diff_error = jnp.abs(p_diff - p_diff_ref) / p_diff_ref
-
-    # print("Relative error of drag: {:.4e}".format(C_D_error))
-    # print("Relative error of lift: {:.4e}".format(C_L_error))
-    # print("Relative error of pressure drop: {:.4e}".format(p_diff_error))
 
     # Plot
     # Save dir
@@ -132,12 +139,6 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     if config.nondim == True:
         # Dimensionalize coordinates and flow field
         coords = coords * L_star
-
-        # print(f'U_star = {U_star}')
-        print(jnp.max(u_ref))
-        print(jnp.max(u_pred))
-        # print(jnp.min(v_ref))
-        # print(jnp.min(v_pred))
         # u_ref = u_ref #* U_star
         # v_ref = v_ref #* U_star
 
@@ -145,7 +146,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         v_pred = v_pred *U_star
 
         p_pred = p_pred*pmax
-        p_ref = p_ref#*pmax
+        # p_ref = p_ref#*pmax
 
     # Triangulation
     x = coords[:, 0]
@@ -163,40 +164,11 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     fig1 = plt.figure()#(figsize=(18, 12))
     plt.subplot(3, 1, 1)
-    plt.scatter(x, y, s=1, c=u_ref, cmap="jet")#, levels=100)
-    plt.colorbar()
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.title("Exact")
-    plt.tight_layout()
-
-    plt.subplot(3, 1, 2)
     plt.scatter(x, y, s=1, c=u_pred, cmap="jet")#, levels=100)
     plt.colorbar()
     plt.xlabel("x")
     plt.ylabel("y")
-    plt.title("Predicted u(x, y)")
-    plt.tight_layout()
-
-    plt.subplot(3, 1, 3)
-    plt.scatter(x, y, s=1, c=jnp.abs(u_ref - u_pred), cmap="jet")#, levels=100)
-    plt.colorbar()
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.title("Absolute error")
-    plt.tight_layout()
-
-    save_path = os.path.join(save_dir, "ns_steady_u.pdf")
-    fig1.savefig(save_path, bbox_inches="tight", dpi=300)
-    # fig1.close()
-
-    fig2 = plt.figure()#(figsize=(18, 12))
-    plt.subplot(3, 1, 1)
-    plt.scatter(x, y, s=1, c=v_ref, cmap="jet")#, levels=100)
-    plt.colorbar()
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.title("Exact")
+    plt.title("u")
     plt.tight_layout()
 
     plt.subplot(3, 1, 2)
@@ -204,47 +176,18 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     plt.colorbar()
     plt.xlabel("x")
     plt.ylabel("y")
-    plt.title("Predicted v(x, y)")
+    plt.title("v")
     plt.tight_layout()
 
     plt.subplot(3, 1, 3)
-    plt.scatter(x, y, s=1, c=jnp.abs(v_ref - v_pred), cmap="jet")#, levels=100)
-    plt.colorbar()
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.title("Absolute error")
-    plt.tight_layout()
-
-    save_path = os.path.join(save_dir, "ns_steady_v.pdf")
-    fig2.savefig(save_path, bbox_inches="tight", dpi=300)
-    # fig2.close()
-
-    fig3 = plt.figure()#(figsize=(18, 12))
-    plt.subplot(3, 1, 1)
-    plt.scatter(x, y, s=1, c=p_ref, cmap="jet")#, levels=100)
-    plt.colorbar()
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.title("Exact")
-    plt.tight_layout()
-
-    plt.subplot(3, 1, 2)
     plt.scatter(x, y, s=1, c=p_pred, cmap="jet")#, levels=100)
     plt.colorbar()
     plt.xlabel("x")
     plt.ylabel("y")
-    plt.title("Predicted p(x, y)")
+    plt.title("p")
     plt.tight_layout()
 
-    plt.subplot(3, 1, 3)
-    plt.scatter(x, y, s=1, c=jnp.abs(p_ref - p_pred), cmap="jet")#, levels=100)
-    plt.colorbar()
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.title("Absolute error")
-    plt.tight_layout()
-
-    save_path = os.path.join('./' , save_dir, "ns_steady_p.pdf")
-    fig3.savefig(save_path, bbox_inches="tight", dpi=300)
-    # fig3.close()
+    save_path = os.path.join(save_dir, "predicted_fields.pdf")
+    fig1.savefig(save_path, bbox_inches="tight", dpi=300)
+    # fig1.close()
 

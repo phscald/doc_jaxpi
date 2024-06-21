@@ -116,6 +116,8 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         mu,
     ) = get_dataset()
 
+    cylinder_center = jnp.ones(cylinder_center.shape)*[.0105, .007]
+
     U_max = .10#17#.25/3#visc .1
 
     L_max = .021
