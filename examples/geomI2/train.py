@@ -48,9 +48,6 @@ class mpSpaceSampler(BaseSampler):
 
         mu_batch = jax.random.uniform(
             key1,
-            # size=self.batch_size,
-            # low = self.mu_dom[0],
-            # high = self.mu_dom[1],
             shape=(self.batch_size, ),
             minval=self.mu_dom[0],
             maxval=self.mu_dom[1],
@@ -58,9 +55,6 @@ class mpSpaceSampler(BaseSampler):
 
         pin_batch = jax.random.uniform(
             key2,
-            # size=self.batch_size,
-            # low = self.pin_dom[0],
-            # high = self.pin_dom[1],
             shape=(self.batch_size, ),
             minval=self.pin_dom[0],
             maxval=self.pin_dom[1],
@@ -81,7 +75,7 @@ class mpSpaceSampler(BaseSampler):
         )
         spatial_batch = self.spatial_coords[spatial_idx, :]
         # batch = jnp.concatenate([mu_batch, pin_batch, spatial_batch], axis=1)
-        batch = (jax.device_put(mu_batch), jax.device_put(pin_batch), inflow_batch, outflow_batch, spatial_batch)
+        batch = ((mu_batch), (pin_batch), inflow_batch, outflow_batch, spatial_batch)
 
         return batch
 

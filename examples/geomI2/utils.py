@@ -45,7 +45,7 @@ def get_coords():
 def get_dataset():
 
     coords, inflow_coords, outflow_coords, wall_coords = get_coords()
-    mu = [.1, .1001]
+    mu = [.1, .15]
     pin = [7, 10.001]
 
 

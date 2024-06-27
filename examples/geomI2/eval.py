@@ -69,7 +69,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         # v_ref = v_fem #/ U_star
         # p_ref = p_fem #/ pmax
         p_inflow = 7*jnp.ones(coords.shape[0]) / pmax
-        mu = .1*jnp.ones(coords.shape[0])
+        mu = .15*jnp.ones(coords.shape[0])
         # coords = coords_fem
     else:
         U_star = 1.0
@@ -89,9 +89,9 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     params = model.state.params
 
     # Predict
-    u_pred = model.u_pred_fn(params, coords[:, 0], coords[:, 1], p_inflow)
-    v_pred = model.v_pred_fn(params, coords[:, 0], coords[:, 1], p_inflow)
-    p_pred = model.p_pred_fn(params, coords[:, 0], coords[:, 1], p_inflow)
+    u_pred = model.u_pred_fn(params, coords[:, 0], coords[:, 1], p_inflow, mu)
+    v_pred = model.v_pred_fn(params, coords[:, 0], coords[:, 1], p_inflow, mu)
+    p_pred = model.p_pred_fn(params, coords[:, 0], coords[:, 1], p_inflow, mu)
 
     # Plot
     # Save dir
