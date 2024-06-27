@@ -73,10 +73,15 @@ def get_coords():
     inds = np.where(X[:,1] > x2_max)
     X = np.delete(X, inds, axis = 0)
 
-    return jax.device_put(X), \
-            jax.device_put(inflow_coords), \
-            jax.device_put(outflow_coords), \
-            jax.device_put(wall_coords)#, \
+    return (
+            jax.device_put(X), 
+            jax.device_put(inflow_coords), 
+            jax.device_put(outflow_coords), 
+            jax.device_put(wall_coords),
+    )
+
+
+#, \
             # jax.device_put(cylinder_coords)
 
 
@@ -87,11 +92,11 @@ def get_dataset():
 
     coords= []; inflow_coords= []; outflow_coords= []; wall_coords= []
 
-    key = jax.random.PRNGKey(0)
-    cylinder_center = jax.random.uniform(key, shape=(100,2))
-    minval = jnp.array([0.0165, 0.0045])
-    maxval = jnp.array([0.0195, 0.0095])
-    cylinder_center = minval + cylinder_center * (maxval - minval)
+    # key = jax.random.PRNGKey(0)
+    # cylinder_center = jax.random.uniform(key, shape=(100,2))
+    # minval = jnp.array([0.0165, 0.0045])
+    # maxval = jnp.array([0.0195, 0.0095])
+    # cylinder_center = minval + cylinder_center * (maxval - minval)
 
     coords, inflow_coords, outflow_coords, wall_coords = get_coords()
 
@@ -101,8 +106,8 @@ def get_dataset():
     #     inflow_coords.append(inflow_coords_)
     #     outflow_coords.append(outflow_coords_)
     #     wall_coords.append(wall_coords_)
-    mu = .1
-
+    mu = [.1, .1001]
+    pin = [10, 10.001]
 
     # data = jnp.load("data/ns_steady.npy", allow_pickle=True).item()
     # u_ref = jnp.array(data["u"])
@@ -124,7 +129,8 @@ def get_dataset():
         inflow_coords,
         outflow_coords,
         wall_coords,
-        cylinder_center,
+        # cylinder_center,
         # cylinder_coords,
         mu,
+        pin
     )

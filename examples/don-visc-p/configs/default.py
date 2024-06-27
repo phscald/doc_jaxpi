@@ -1,6 +1,5 @@
 import ml_collections
 
-import jax.numpy as jnp
 
 
 def get_config():
@@ -8,11 +7,11 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     # config.mode = "train""eval"
-    config.mode = "train"
+    config.mode = "eval"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
-    wandb.project = "PINN-geomII"
+    wandb.project = "don-mu-p-I"
     wandb.name = "default"
     wandb.tag = None
 
@@ -23,6 +22,8 @@ def get_config():
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "Mlp"
     arch.num_layers = 4
+    # arch.num_branch_layers = 5
+    # arch.num_trunk_layers = 5
     arch.hidden_dim = 128
     arch.out_dim = 3
     arch.activation = "tanh"  # gelu works better than tanh
@@ -47,8 +48,8 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 2000
-    training.batch_size_per_device = 1024
+    training.max_steps = 100000
+    training.batch_size_per_device = 1024*4
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
@@ -83,11 +84,11 @@ def get_config():
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()
-    saving.save_every_steps =  training.max_steps#None
+    saving.save_every_steps = training.max_steps#None
     saving.num_keep_ckpts = 10
 
     # Input shape for initializing Flax models
-    config.input_dim = 2
+    config.input_dim = 4
 
     # Integer for PRNG random seed.
     config.seed = 42

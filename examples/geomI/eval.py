@@ -47,7 +47,9 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     L_max = .021
     pmax = mu*U_max/L_max
-
+    print(mu)
+    print(pmax)
+    print(dss)
 
     # Nondimensionalization
     if config.nondim == True:

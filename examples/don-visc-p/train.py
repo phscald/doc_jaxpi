@@ -1,3 +1,6 @@
+import functools
+from functools import partial
+
 import time
 import os
 
@@ -5,6 +8,7 @@ from absl import logging
 
 import jax
 import jax.numpy as jnp
+import numpy as np
 from jax import vmap, jacrev
 from jax import random, vmap, pmap, local_device_count
 from jax.flatten_util import ravel_pytree
@@ -16,7 +20,7 @@ import wandb
 
 import matplotlib.pyplot as plt
 
-from jaxpi.samplers import SpaceSampler, BaseSampler
+from jaxpi.samplers import BaseSampler, SpaceSampler, TimeSpaceSampler
 from jaxpi.logging import Logger
 from jaxpi.utils import save_checkpoint, restore_checkpoint
 import numpy as np
@@ -25,45 +29,84 @@ from utils import get_dataset, parabolic_inflow
 
 import pickle
 
-# class ResSampler(BaseSampler):
-#     def __init__(
-#         self,
-#         coords,
-#         inflow_coords,
-#         outflow_coords,
-#         wall_coords,
-#         cylinder_center,
-#         rng_key=random.PRNGKey(1234),
-#     ):
-#         super().__init__(rng_key)
 
-#         self.coords = coords
-#         self.inflow_coords = inflow_coords
-#         self.outflow_coords = outflow_coords
-#         self.wall_coords = wall_coords
-#         self.cylinder_center = cylinder_center
-#         self.batch_size = 10
+class mpSpaceSampler(BaseSampler):
+    def __init__(
+        self, mu_dom, pin_dom, inflow_coords, outflow_coords, spatial_coords, batch_size, rng_key=random.PRNGKey(1234)
+    ):
+        super().__init__(batch_size, rng_key)
+
+        self.mu_dom = mu_dom
+        self.pin_dom = pin_dom
+        self.inflow_coords = inflow_coords
+        self.outflow_coords = outflow_coords
+        self.spatial_coords = spatial_coords
+
+
+    @partial(pmap, static_broadcasted_argnums=(0,))
+    def data_generation(self, key):
+        "Generates data containing batch_size samples"
+        key1, key2, key3, key4, key5 = random.split(key, 5)
+
+        mu_batch = np.random.uniform(
+            # key1,
+            size=self.batch_size,
+            low = self.mu_dom[0],
+            high = self.mu_dom[1],
+            #shape=(self.batch_size, 1),
+            # minval=self.mu_dom[0],
+            # maxval=self.mu_dom[1],
+        )
+
+        pin_batch = np.random.uniform(
+            # key2,
+            size=self.batch_size,
+            low = self.mu_dom[0],
+            high = self.mu_dom[1],
+            #shape=(self.batch_size, 1),
+            # minval=self.pin_dom[0],
+            # maxval=self.pin_dom[1],
+        )
+
+        inflow_idx = random.choice(
+            key3, self.inflow_coords.shape[0], shape=(self.batch_size,)
+        )
+        inflow_batch = self.inflow_coords[inflow_idx, :]
+
+        outflow_idx = random.choice(
+            key4, self.inflow_coords.shape[0], shape=(self.batch_size,)
+        )
+        outflow_batch = self.outflow_coords[outflow_idx, :]
+
+        spatial_idx = random.choice(
+            key5, self.spatial_coords.shape[0], shape=(self.batch_size,)
+        )
+        spatial_batch = self.spatial_coords[spatial_idx, :]
+        # batch = jnp.concatenate([mu_batch, pin_batch, spatial_batch], axis=1)
+        batch = (jax.device_put(mu_batch), jax.device_put(pin_batch), inflow_batch, outflow_batch, spatial_batch)
+
+        return batch
         
 
-def get_center(coords, cylinder_center, idx):
-    X = coords
-    cyl_center = cylinder_center[idx]
-    # cylinder
-    radius = jnp.sqrt(jnp.power((X[:,0] - (cyl_center[0,0])) , 2) + jnp.power((X[:,1] - (cyl_center[0,1])) , 2))
-    inds = jnp.where(radius <= .0015)[0]
+# def get_center(coords, cylinder_center, idx):
+#     X = coords
+#     cyl_center = cylinder_center[idx]
+#     # cylinder
+#     radius = jnp.sqrt(jnp.power((X[:,0] - (cyl_center[0,0])) , 2) + jnp.power((X[:,1] - (cyl_center[0,1])) , 2))
+#     inds = jnp.where(radius <= .0015)[0]
 
-    X = jnp.delete(X, inds, axis = 0)
+#     X = jnp.delete(X, inds, axis = 0)
 
-    x1_rad = jnp.array(jnp.arange(0, 2*jnp.pi, jnp.pi/35))
-    x2_rad = jnp.transpose(jnp.array([cyl_center[0,1] + jnp.sin(x1_rad) * .0015]))
-    x1_rad = jnp.transpose(jnp.array([cyl_center[0,0] + jnp.cos(x1_rad) * .0015]))
-    x1_rad = jnp.concatenate((x1_rad, x2_rad), axis = 1)
-    # cylinder_coords = x1_rad
-    L_star = .021
+#     x1_rad = jnp.array(jnp.arange(0, 2*jnp.pi, jnp.pi/35))
+#     x2_rad = jnp.transpose(jnp.array([cyl_center[0,1] + jnp.sin(x1_rad) * .0015]))
+#     x1_rad = jnp.transpose(jnp.array([cyl_center[0,0] + jnp.cos(x1_rad) * .0015]))
+#     x1_rad = jnp.concatenate((x1_rad, x2_rad), axis = 1)
+#     # cylinder_coords = x1_rad
+#     L_star = .021
 
-    X = jnp.concatenate((X, x1_rad), axis = 0)/ L_star
+#     X = jnp.concatenate((X, x1_rad), axis = 0)/ L_star
 
-    return X#, cylinder_coords
+#     return X#, cylinder_coords
 
 # def get_fem_data():
 #     filepath = '../../../pinn/compare_files/uvp_coord_hole.pkl'
@@ -130,19 +173,21 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         inflow_coords,
         outflow_coords,
         wall_coords,
-        cylinder_center,
+        # cylinder_center,
         mu,
+        p_inflow,
     ) = get_dataset()
+
     
     # u_fem, v_fem, p_fem, coords_fem=get_fem_data()
 
-    cylinder_center = jnp.ones(cylinder_center.shape)*jnp.array([.0105, .007])
+    # cylinder_center = jnp.ones(cylinder_center.shape)*jnp.array([.0105, .007])
 
     U_max = .10#17#.25/3#visc .1
 
     L_max = .021
-    pmax = mu*U_max/L_max
-    num_centers = 1
+    mu_max = 10
+    pmax = mu_max*U_max/L_max
 
     # # Inflow boundary conditions
     # U_max = 0.3  # maximum velocity
@@ -160,7 +205,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         outflow_coords = outflow_coords / L_star
         # wall_coords = wall_coords / L_star
         # cylinder_coords = cylinder_coords / L_star
-        # coords = coords / L_star
+        coords = coords / L_star
         # coords_fem = coords_fem / L_star
 
         # Nondimensionalize flow field
@@ -168,7 +213,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         # u_ref = u_fem / U_star
         # v_ref = v_fem / U_star
         # p_ref = p_fem / pmax
-        p_inflow = 10 / pmax
+        p_inflow = jnp.array(p_inflow) / pmax
 
     else:
         U_star = 1.0
@@ -179,40 +224,31 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     model = models.NavierStokes2D(
         config,
         # u_inflow,
-        p_inflow,
-        inflow_coords,
-        outflow_coords,
+        # p_inflow,
+        # inflow_coords,
+        # outflow_coords,
         wall_coords, 
         # cylinder_coords,
-        mu, U_max, pmax
+        # U_max, pmax
         # Re,
     )
-
-    # print(type(model.state))
-   
-    # Restore checkpoint
-    ckpt_path = os.path.join(".", "ckpt", "default2")
-    model.state = restore_checkpoint(model.state, ckpt_path)
-
-    # print(model.state)
-    print(dsa)
 
    # Initialize evaluator
     evaluator = models.NavierStokesEvaluator(config, model)
 
-    subkeys = random.split(random.PRNGKey(0), 3)
-    idx = random.choice(
-        subkeys[0],
-        jnp.arange(start=0, stop=cylinder_center.shape[0]),
-        shape=(num_centers,),
-        replace=True,
-        )
-    X = get_center(coords, cylinder_center, idx)
-    cyl_center_X = jnp.ones((X.shape[0],2))*cylinder_center[idx]
-    X = jnp.concatenate((X, cyl_center_X), axis=1)
-    res_sampler = iter(SpaceSampler(X, config.training.batch_size_per_device))
+    key = random.PRNGKey(1234)
+    sampler = iter(
+                mpSpaceSampler(
+                    mu,
+                    p_inflow,
+                    inflow_coords,
+                    outflow_coords,
+                    coords,
+                    config.training.batch_size_per_device,
+                    rng_key=key
+                )
+            )
     
-
 
     # Initialize  residual sampler
     # res_sampler = iter(SpaceSampler(coords, config.training.batch_size_per_device))
@@ -269,7 +305,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         #
         # batch = (jnp.concatenate((X, cyl_center_X), axis=1))
         # res_sampler = iter(SpaceSampler(batch, config.training.batch_size_per_device))
-        batch = next(res_sampler)
+        batch = next(sampler)
         #
 
         # print(X.shape)

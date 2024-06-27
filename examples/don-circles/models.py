@@ -8,6 +8,7 @@ from jax.flatten_util import ravel_pytree
 from jaxpi.models import ForwardBVP
 from jaxpi.evaluator import BaseEvaluator
 from jaxpi.utils import ntk_fn
+import numpy as np
 
 
 class NavierStokes2D(ForwardBVP):
@@ -128,10 +129,21 @@ class NavierStokes2D(ForwardBVP):
         x2_rad = jnp.transpose(jnp.array([cyl_X[1] + jnp.sin(x1_rad) * .0015]))
         x1_rad = jnp.transpose(jnp.array([cyl_X[0] + jnp.cos(x1_rad) * .0015]))
         x1_rad = jnp.concatenate((x1_rad, x2_rad), axis = 1)
+
+        dx = .00025
+        x1_max = .021
+        x2_max = .014
+
+        x1 = jnp.arange(0,x1_max+dx/2, dx)
+        bot = jnp.zeros((x1.shape[0],2))
+        bot.at[:, 0].set(x1)
+        top = jnp.ones((x1.shape[0],2))*x2_max
+        top.at[:, 0].set(x1)
+
         # cylinder_coords = x1_rad
         L_star = .021
-
-        return x1_rad/L_star
+        # return jnp.concatenate((bot/L_star, top/L_star), axis=0)
+        return jnp.concatenate((x1_rad/L_star, bot/L_star, top/L_star), axis=0)
 
 
     @partial(jit, static_argnums=(0,))
@@ -140,7 +152,11 @@ class NavierStokes2D(ForwardBVP):
         cyl_center_X = batch[:, 2:]
         batch = batch[:, :2]
         wall = self.get_wall(cyl_center_X)
-        noslip_coords = jnp.vstack((self.wall_coords, wall))
+        # noslip_coords = jnp.vstack((self.wall_coords, wall))
+        noslip_coords = wall#jnp.concatenate((jnp.array(self.wall_coords), wall), axis=0)
+        # print((wall))
+        # print(jnp.array(self.wall_coords))
+        # print(dsadsa)
 
         # Inflow boundary conditions
         # u_in_pred = self.u_pred_fn(
@@ -222,7 +238,11 @@ class NavierStokes2D(ForwardBVP):
         cyl_center_X = batch[:, 2:]
         batch = batch[:, :2]
         wall = self.get_wall(cyl_center_X)
-        noslip_coords = jnp.vstack((self.wall_coords, wall))
+        # noslip_coords = jnp.vstack((self.wall_coords, wall))
+        noslip_coords = wall#jnp.concatenate((jnp.array(self.wall_coords), wall), axis=0)
+        # print((wall))
+        # print(jnp.array(self.wall_coords))
+        # print(dsadsa)
 
         # u_in_ntk = vmap(ntk_fn, (None, None, 0, 0))(
         #     self.u_net, params, self.inflow_coords[:, 0], self.inflow_coords[:, 1]

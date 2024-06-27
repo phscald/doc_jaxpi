@@ -17,10 +17,12 @@ import matplotlib.pyplot as plt
 
 from jaxpi.samplers import SpaceSampler
 from jaxpi.logging import Logger
-from jaxpi.utils import save_checkpoint
+from jaxpi.utils import save_checkpoint, restore_checkpoint
 
 import models
 from utils import get_dataset, parabolic_inflow
+
+import pickle
 
 
 def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
@@ -93,6 +95,13 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         mu, U_max, pmax
         # Re,
     )
+
+    # # Restore checkpoint
+    # ckpt_path = os.path.join(".", "ckpt", "default")
+    # model.state = restore_checkpoint(model.state, ckpt_path)
+    # print(f'{model.state}')
+    # print(dsa)
+
 
     # Initialize evaluator
     evaluator = models.NavierStokesEvaluator(config, model)

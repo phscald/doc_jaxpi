@@ -26,28 +26,6 @@ from jaxpi.utils import restore_checkpoint
 from utils import get_dataset, parabolic_inflow
 
 
-def get_center(coords, cylinder_center, idx):
-    X = coords
-
-    cyl_center = cylinder_center[idx]
-
-    # cylinder
-    radius = jnp.sqrt(jnp.power((X[:,0] - cyl_center[0]) , 2) + jnp.power((X[:,1] - (cyl_center[1])) , 2))
-    inds = jnp.where(radius <= .0015)[0]
-
-    X = jnp.delete(X, inds, axis = 0)
-
-    x1_rad = jnp.array(jnp.arange(0, 2*jnp.pi, jnp.pi/35))
-    x2_rad = jnp.transpose(jnp.array([cyl_center[1] + jnp.sin(x1_rad) * .0015]))
-    x1_rad = jnp.transpose(jnp.array([cyl_center[0] + jnp.cos(x1_rad) * .0015]))
-    x1_rad = jnp.concatenate((x1_rad, x2_rad), axis = 1)
-    L_star = .021
-
-    X = jnp.concatenate((X, x1_rad), axis = 0)/ L_star
-
-    return X
-
-
 def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Get dataset
     (
@@ -55,18 +33,17 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         inflow_coords,
         outflow_coords,
         wall_coords,
-        cylinder_center,
+        # cylinder_center,
         mu,
+        p_inflow,
     ) = get_dataset()
-
-    # U_max = 0.3  # maximum velocity
-    # u_inflow, _ = parabolic_inflow(inflow_coords[:, 1], U_max)
+    noslip_coords = wall_coords
 
     U_max = .10#17#.25/3#visc .1
 
     L_max = .021
-    pmax = mu*U_max/L_max
-    num_centers = 1
+    mu_max = 10
+    pmax = mu_max*U_max/L_max
 
     # Nondimensionalization
     if config.nondim == True:
@@ -78,17 +55,9 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         # Nondimensionalize coordinates and inflow velocity
         inflow_coords = inflow_coords / L_star
         outflow_coords = outflow_coords / L_star
-        # wall_coords = wall_coords / L_star
-        # cylinder_coords = cylinder_coords / L_star
-        # coords = coords / L_star
-        # coords_fem = coords_fem / L_star
+        # noslip_coords = noslip_coords / L_star
+        coords = coords / L_star
 
-        # Nondimensionalize flow field
-        # u_inflow = u_inflow / U_star
-        # u_ref = u_fem / U_star
-        # v_ref = v_fem / U_star
-        # p_ref = p_fem / pmax
-        p_inflow = 10 / pmax
     else:
         U_star = 1.0
         L_star = 1.0
@@ -97,42 +66,29 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Initialize model
     model = models.NavierStokes2D(
         config,
-        # u_inflow,
-        p_inflow,
-        inflow_coords,
-        outflow_coords,
         wall_coords, 
-        # cylinder_coords,
-        mu, U_max, pmax
-        # Re,
     )
-
-    cylinder_center = jnp.array([[.0105, .007]])
-    coords = get_center(coords, cylinder_center, idx=0)
 
     # # Restore checkpoint
     # ckpt_path = os.path.join(".", "ckpt", config.wandb.name)
     # model.state = restore_checkpoint(model.state, ckpt_path)
 
     # Restore checkpoint
-    ckpt_path = os.path.join(".", "ckpt", "default2")
+    ckpt_path = os.path.join(".", "ckpt", "default")
     model.state = restore_checkpoint(model.state, ckpt_path)
 
     params = model.state.params
 
+    mu = jnp.ones(coords[:, 0].shape)*.1
+    pin = jnp.ones(coords[:, 0].shape)*10/pmax
+
     # Predict
-    u_pred = model.u_pred_fn(params, coords[:, 0], coords[:, 1], 
-                             cylinder_center[0,0]*jnp.ones(coords.shape[0]), cylinder_center[0,1]*jnp.ones(coords.shape[0]))
-    v_pred = model.v_pred_fn(params, coords[:, 0], coords[:, 1],
-                              cylinder_center[0,0]*jnp.ones(coords.shape[0]), cylinder_center[0,1]*jnp.ones(coords.shape[0]))
-    p_pred = model.p_pred_fn(params, coords[:, 0], coords[:, 1],
-                              cylinder_center[0,0]*jnp.ones(coords.shape[0]), cylinder_center[0,1]*jnp.ones(coords.shape[0]))
+    u_pred = model.u_pred_fn(params, coords[:, 0], coords[:, 1], mu, pin)
+    v_pred = model.v_pred_fn(params, coords[:, 0], coords[:, 1], mu, pin)
+    p_pred = model.p_pred_fn(params, coords[:, 0], coords[:, 1], mu, pin)
 
-    # u_error = jnp.sqrt(jnp.mean((u_ref - u_pred) ** 2)) / jnp.sqrt(jnp.mean(u_ref**2))
-    # v_error = jnp.sqrt(jnp.mean((v_ref - v_pred) ** 2)) / jnp.sqrt(jnp.mean(v_ref**2))
-
-    # print("l2_error of u: {:.4e}".format(u_error))
-    # print("l2_error of v: {:.4e}".format(v_error))
+    x = coords[:, 0]
+    y = coords[:, 1]
 
 
     # Plot
@@ -156,16 +112,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Triangulation
     x = coords[:, 0]
     y = coords[:, 1]
-    # triang = tri.Triangulation(x, y)
 
-    # Mask the triangles inside the cylinder
-    # center = (0.2, 0.2)
-    # radius = 0.05
-
-    # x_tri = x[triang.triangles].mean(axis=1)
-    # y_tri = y[triang.triangles].mean(axis=1)
-    # dist_from_center = jnp.sqrt((x_tri - center[0]) ** 2 + (y_tri - center[1]) ** 2)
-    # triang.set_mask(dist_from_center < radius)
 
     fig1 = plt.figure()#(figsize=(18, 12))
     plt.subplot(3, 1, 1)
