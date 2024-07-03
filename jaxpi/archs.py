@@ -220,7 +220,7 @@ class DeepONet(nn.Module):
     num_branch_layers: int = 4
     num_trunk_layers: int = 4
     hidden_dim: int = 256
-    out_dim: int = 3
+    out_dim: int = 1
     activation: str = "tanh"
     periodicity: Union[None, Dict] = None
     fourier_emb: Union[None, Dict] = None
