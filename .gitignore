@@ -2,3 +2,5 @@
 **/wandb/*
 **/__pycache__/*
 **/ks_chaotic/*
+**/*.gif
+**/*.png

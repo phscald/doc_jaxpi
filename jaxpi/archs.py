@@ -218,7 +218,7 @@ class MlpBlock(nn.Module):
 class DeepONet(nn.Module):
     arch_name: Optional[str] = "DeepONet"
     num_branch_layers: int = 4
-    num_trunk_layers: int = 4
+    num_trunk_layers: int = 4 # (u, x) : u é o branch, x é o trunk
     hidden_dim: int = 256
     out_dim: int = 1
     activation: str = "tanh"

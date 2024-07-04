@@ -11,7 +11,7 @@ def get_config():
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
-    wandb.project = "geomII-unsteady"
+    wandb.project = "geomII-don-unsteady"
     wandb.name = "default"
     wandb.tag = None
 
@@ -20,11 +20,13 @@ def get_config():
 
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
-    arch.arch_name = "Mlp"
-    arch.num_layers = 6
+    arch.arch_name = "DeepONet"
+    # arch.num_layers = 6
+    arch.num_branch_layers = 6 # (u, x) : u é o branch, x é o trunk
+    arch.num_trunk_layers = 4
     arch.hidden_dim = 256
     arch.out_dim = 4
-    arch.activation = "tanh"  # gelu works better than tanh for this problem
+    arch.activation = "gelu"  # gelu works better than tanh for this problem
     arch.periodicity = False
     arch.fourier_emb = ml_collections.ConfigDict({"embed_scale": 1.0, "embed_dim": 256})
     arch.reparam = ml_collections.ConfigDict(
@@ -98,6 +100,8 @@ def get_config():
 
     # Input shape for initializing Flax models
     config.input_dim = 4
+    config.input_branch = 3
+    config.input_trunk = 1
 
     # Integer for PRNG random seed.
     config.seed = 42

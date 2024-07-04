@@ -65,10 +65,11 @@ class NavierStokes2DwSat(ForwardIVP):
 
     def neural_net(self, params, t, x, y, mu):
         t = t / self.temporal_dom[1]  # rescale t into [0, 1]
-        x = x / self.L  # rescale x into [0, 1]
-        y = y / self.W  # rescale y into [0, 1]
-        inputs = jnp.stack([t, x, y, mu])
-        outputs = self.state.apply_fn(params, inputs)
+        # x = x / self.L  # rescale x into [0, 1]
+        # y = y / self.W  # rescale y into [0, 1]
+        z = jnp.stack([t, x, y])
+        z1 = jnp.stack([mu])
+        outputs = self.state.apply_fn(params, z, z1)
 
         # Start with an initial state of the channel flow
         # y_hat = y * self.L_star * self.W
