@@ -49,7 +49,7 @@ class ICSampler(SpaceSampler):
         p_batch = self.p[idx]
         s_batch = self.s[idx]
 
-        batch = (coords_batch, u_batch, v_batch, p_batch, s_batch)
+        batch = (u_batch, v_batch, p_batch, s_batch, coords_batch)
 
         return batch
 
@@ -176,7 +176,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         grains_coords,
         u0, v0, p0, s0, coords0,
         mu0, mu1, rho0, rho1) = get_dataset()
-
+    
     fluid_params = (mu0, mu1, rho0, rho1)
     U_max = .06#.25/3#visc .1
 

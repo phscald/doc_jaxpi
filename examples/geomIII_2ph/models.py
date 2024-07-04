@@ -186,7 +186,7 @@ class NavierStokes2DwSat(ForwardIVP):
         noslip_batch = batch["noslip"]
         res_batch = batch["res"]
 
-        coords_batch, u_batch, v_batch, p_batch, s_batch = ic_batch
+        u_batch, v_batch, p_batch, s_batch, coords_batch  = ic_batch
 
         u_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0))(
             self.u_net, params, 0.0, coords_batch[:, 0], coords_batch[:, 1]
@@ -303,8 +303,8 @@ class NavierStokes2DwSat(ForwardIVP):
             )
 
         ntk_dict = {
-            # "u_ic": u_ic_ntk,
-            # "v_ic": v_ic_ntk,
+            "u_ic": u_ic_ntk,
+            "v_ic": v_ic_ntk,
             # "p_ic": p_ic_ntk,
             "s_ic": s_ic_ntk,
             "p_in": p_in_ntk,
@@ -332,7 +332,7 @@ class NavierStokes2DwSat(ForwardIVP):
         res_batch = batch["res"]
 
         # Initial condition loss
-        coords_batch, u_batch, v_batch, p_batch, s_batch = ic_batch
+        u_batch, v_batch, p_batch, s_batch, coords_batch  = ic_batch
         # s_batch = ic_batch
 
         u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1])
@@ -402,8 +402,8 @@ class NavierStokes2DwSat(ForwardIVP):
             rs_loss = jnp.mean(rs_pred**2)
 
         loss_dict = {
-            # "u_ic": u_ic_loss,
-            # "v_ic": v_ic_loss,
+            "u_ic": u_ic_loss,
+            "v_ic": v_ic_loss,
             # "p_ic": p_ic_loss,
             "s_ic": s_ic_loss,
             "p_in": p_in_loss,
