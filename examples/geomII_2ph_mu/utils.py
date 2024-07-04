@@ -70,36 +70,38 @@ def get_coords():
 #     return coord
 
 
-def initial_fields(coords, mu, pin):
+def initial_fields(coords):
     # # self.coords.max(axis=0)
     # u0 = jnp.zeros(coords.shape[0]) #1/(2*mu)*(pin/coords[:,0].max())*(coords[:,1]**2-coords[:,1].max()*coords[:,1])
     # v0 = jnp.zeros(coords.shape[0])
     # # p0 = jnp.zeros(coords.shape[0])
     # p0 = (pin - (coords[:,0]/.021)*pin)
-    filepath = '../geomII/geomII_steady.pkl'
-    with open(filepath, 'rb') as filepath:
-        arquivos = pickle.load(filepath)
-    u0 = arquivos['u']
-    v0 = arquivos['v']
-    p0 = arquivos['p']
-    del arquivos
+    # filepath = '../geomII/geomII_steady.pkl'
+    # with open(filepath, 'rb') as filepath:
+    #     arquivos = pickle.load(filepath)
+    # u0 = arquivos['u']
+    # v0 = arquivos['v']
+    # p0 = arquivos['p']
+    # del arquivos
+    u0 = jnp.zeros(coords.shape[0])
+    v0 = jnp.zeros(coords.shape[0])
+    p0 = jnp.zeros(coords.shape[0])
     s0 = jnp.zeros(coords.shape[0])
     return u0, v0, p0, s0
 
-def get_dataset(pin):
+def get_dataset():
 
     coords, inflow_coords, outflow_coords, wall_coords = get_coords()
     mu0 = .1
-    mu1 = .15
+    mu1 = [.1, .2]
     rho0 = 1000; rho1 = 1000
-    u0, v0, p0, s0 = initial_fields(coords, mu0, pin)
-    time = jnp.arange(0, 1.001, 0.01)
+    u0, v0, p0, s0 = initial_fields(coords)
+
     return (
         coords,
         inflow_coords,
         outflow_coords,
         wall_coords,
-        #time,
         u0, v0, p0, s0,
         mu0, mu1, rho0, rho1
     )

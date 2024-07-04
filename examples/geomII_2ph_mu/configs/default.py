@@ -7,7 +7,7 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
-    config.mode = "eval"
+    config.mode = "train"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -57,8 +57,8 @@ def get_config():
     config.weighting = weighting = ml_collections.ConfigDict()
     weighting.scheme = "grad_norm"
     weighting.init_weights = {
-        # "u_ic": 1.0,
-        # "v_ic": 1.0,
+        "u_ic": 1.0,
+        "v_ic": 1.0,
         # "p_ic": 1.0,
         "s_ic": 1.0,
         "p_in": 1.0,
@@ -97,7 +97,7 @@ def get_config():
     saving.num_keep_ckpts = 10
 
     # Input shape for initializing Flax models
-    config.input_dim = 3
+    config.input_dim = 4
 
     # Integer for PRNG random seed.
     config.seed = 42

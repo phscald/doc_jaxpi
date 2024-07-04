@@ -29,13 +29,14 @@ from utils import get_dataset#, get_fine_mesh, parabolic_inflow
 
 
 class ICSampler(SpaceSampler):
-    def __init__(self, u, v, p, s, coords, batch_size, rng_key=random.PRNGKey(1234)):
+    def __init__(self, u, v, p, s, coords, mu, batch_size, rng_key=random.PRNGKey(1234)):
         super().__init__(coords, batch_size, rng_key)
 
         self.u = u
         self.v = v
         self.p = p
         self.s = s
+        self.mu = mu
 
     @partial(pmap, static_broadcasted_argnums=(0,))
     def data_generation(self, key):
@@ -49,10 +50,40 @@ class ICSampler(SpaceSampler):
         p_batch = self.p[idx]
         s_batch = self.s[idx]
 
-        batch = (coords_batch, u_batch, v_batch, p_batch, s_batch)
+        mu_batch = random.uniform(random.PRNGKey(1234), shape=(self.batch_size,), minval = self.mu[0], maxval = self.mu[1])
+
+        batch = (coords_batch, u_batch, v_batch, p_batch, s_batch, mu_batch)
 
         return batch
+    
+class TimeSpaceSampler_mu(TimeSpaceSampler):
+    def __init__(self, time_dom, coords, mu, batch_size, rng_key=random.PRNGKey(1234)):
+        super().__init__(time_dom, coords, batch_size, rng_key)
+        
+        self.mu = mu
+        
+    @partial(pmap, static_broadcasted_argnums=(0,))
+    def data_generation(self, key):
+        "Generates data containing batch_size samples"
+        key1, key2, key3 = random.split(key, 3)
 
+        temporal_batch = random.uniform(
+            key1,
+            shape=(self.batch_size, 1),
+            minval=self.temporal_dom[0],
+            maxval=self.temporal_dom[1],
+        )
+
+        spatial_idx = random.choice(
+            key2, self.spatial_coords.shape[0], shape=(self.batch_size,)
+        )
+        spatial_batch = self.spatial_coords[spatial_idx, :]
+
+        mu_batch = random.uniform(key3, shape=(self.batch_size, 1), minval = self.mu[0], maxval = self.mu[1])
+
+        batch = jnp.concatenate([temporal_batch, spatial_batch, mu_batch], axis=1)
+
+        return batch
 
 class ResSampler(BaseSampler):
     def __init__(
@@ -176,9 +207,9 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         #time,
         u0, v0, p0, s0,
         mu0, mu1, rho0, rho1
-    ) = get_dataset(pin=pin)
+    ) = get_dataset()
 
-    fluid_params = (mu0, mu1, rho0, rho1)
+    fluid_params = (mu0, rho0, rho1)
     U_max = .06#.25/3#visc .1
 
     # pmax = 15
@@ -282,38 +313,42 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         ic_sampler = iter(
             ICSampler(
                 # s0, coords, config.training.ic_batch_size, rng_key=keys[0]
-                u0, v0, p0, s0, coords, config.training.ic_batch_size, rng_key=keys[0]
+                u0, v0, p0, s0, coords, mu1, config.training.ic_batch_size, rng_key=keys[0]
             )
         )
         inflow_sampler = iter(
-            TimeSpaceSampler(
+            TimeSpaceSampler_mu(
                 temporal_dom,
                 inflow_coords,
+                mu1,
                 config.training.inflow_batch_size,
                 rng_key=keys[1],
             )
         )
         outflow_sampler = iter(
-            TimeSpaceSampler(
+            TimeSpaceSampler_mu(
                 temporal_dom,
                 outflow_coords,
+                mu1,
                 config.training.outflow_batch_size,
                 rng_key=keys[2],
             )
         )
         noslip_sampler = iter(
-            TimeSpaceSampler(
+            TimeSpaceSampler_mu(
                 temporal_dom,
                 noslip_coords,
+                mu1,
                 config.training.noslip_batch_size,
                 rng_key=keys[3],
             )
         )
 
         res_sampler = iter(
-            TimeSpaceSampler(
+            TimeSpaceSampler_mu(
                 temporal_dom,
                 coords,
+                mu1,
                 config.training.res_batch_size,
                 rng_key=keys[4],
             )
@@ -336,19 +371,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
             "noslip": noslip_sampler,
             "res": res_sampler,
         }
-
-
-    # model = models.NavierStokes2D(
-    #     config,
-    #     # u_inflow,
-    #     p_inflow,
-    #     inflow_coords,
-    #     outflow_coords,
-    #     wall_coords,
-    #     cylinder_coords,
-    #     mu, U_max, pmax
-    #     # Re,
-    # )
 
         # Initialize model
         # model = models.NavierStokes2DwSat(config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, D)
