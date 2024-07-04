@@ -101,36 +101,36 @@ class NavierStokes2DwSat(ForwardIVP):
     #     w = v_x - u_y
     #     return w
 
-    def r_net(self, params, t, x, y, mu):
+    def r_net(self, params, t, x, y, mu1):
         Re = jnp.ones(x.shape)
         (mu0, rho0, rho1) = self.fluid_params
 
-        u, v, p, s = self.neural_net(params, t, x, y, mu)
+        u, v, p, s = self.neural_net(params, t, x, y, mu1)
 
-        u_t = grad(self.u_net, argnums=1)(params, t, x, y, mu)
-        v_t = grad(self.v_net, argnums=1)(params, t, x, y, mu)
-        s_t = grad(self.s_net, argnums=1)(params, t, x, y, mu)
+        u_t = grad(self.u_net, argnums=1)(params, t, x, y, mu1)
+        v_t = grad(self.v_net, argnums=1)(params, t, x, y, mu1)
+        s_t = grad(self.s_net, argnums=1)(params, t, x, y, mu1)
 
-        u_x = grad(self.u_net, argnums=2)(params, t, x, y, mu)
-        v_x = grad(self.v_net, argnums=2)(params, t, x, y, mu)
-        p_x = grad(self.p_net, argnums=2)(params, t, x, y, mu)
-        s_x = grad(self.s_net, argnums=2)(params, t, x, y, mu)
+        u_x = grad(self.u_net, argnums=2)(params, t, x, y, mu1)
+        v_x = grad(self.v_net, argnums=2)(params, t, x, y, mu1)
+        p_x = grad(self.p_net, argnums=2)(params, t, x, y, mu1)
+        s_x = grad(self.s_net, argnums=2)(params, t, x, y, mu1)
 
-        u_y = grad(self.u_net, argnums=3)(params, t, x, y, mu)
-        v_y = grad(self.v_net, argnums=3)(params, t, x, y, mu)
-        p_y = grad(self.p_net, argnums=3)(params, t, x, y, mu)
-        s_y = grad(self.s_net, argnums=3)(params, t, x, y, mu)
+        u_y = grad(self.u_net, argnums=3)(params, t, x, y, mu1)
+        v_y = grad(self.v_net, argnums=3)(params, t, x, y, mu1)
+        p_y = grad(self.p_net, argnums=3)(params, t, x, y, mu1)
+        s_y = grad(self.s_net, argnums=3)(params, t, x, y, mu1)
 
-        u_xx = grad(grad(self.u_net, argnums=2), argnums=2)(params, t, x, y, mu)
-        v_xx = grad(grad(self.v_net, argnums=2), argnums=2)(params, t, x, y, mu)
-        s_xx = grad(grad(self.s_net, argnums=2), argnums=2)(params, t, x, y, mu)
+        u_xx = grad(grad(self.u_net, argnums=2), argnums=2)(params, t, x, y, mu1)
+        v_xx = grad(grad(self.v_net, argnums=2), argnums=2)(params, t, x, y, mu1)
+        s_xx = grad(grad(self.s_net, argnums=2), argnums=2)(params, t, x, y, mu1)
 
-        u_yy = grad(grad(self.u_net, argnums=3), argnums=3)(params, t, x, y, mu)
-        v_yy = grad(grad(self.v_net, argnums=3), argnums=3)(params, t, x, y, mu)
-        s_yy = grad(grad(self.s_net, argnums=3), argnums=3)(params, t, x, y, mu)
+        u_yy = grad(grad(self.u_net, argnums=3), argnums=3)(params, t, x, y, mu1)
+        v_yy = grad(grad(self.v_net, argnums=3), argnums=3)(params, t, x, y, mu1)
+        s_yy = grad(grad(self.s_net, argnums=3), argnums=3)(params, t, x, y, mu1)
 
         # compute Reynolds, initialized as Re=1
-        mu = (1-s)*mu0+s*mu
+        mu = (1-s)*mu0+s*mu1
         rho = (1-s)*rho0+s*rho1
         Re = Re*rho*self.U_max*self.L_max/mu
 

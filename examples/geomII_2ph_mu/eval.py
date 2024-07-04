@@ -38,7 +38,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         #time,
         u0, v0, p0, s0,
         mu0, mu1, rho0, rho1
-    ) = get_dataset(pin=pin)
+    ) = get_dataset()
     noslip_coords = wall_coords
 
     print(f'coords shape:{coords.shape}')
@@ -88,8 +88,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         # v_ref = v_ref / U_star
         # p_ref = p_ref / U_star ** 2
 
-    else:
-        Re = nu
+    # else:
+    #     Re = nu
 
     # # Inflow boundary conditions
     # U_max = 1.5  # maximum velocity
@@ -112,10 +112,10 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     params = model.state.params
 
     # Predict
-    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, 0)), (None, 0, None, None)))
-    v_pred_fn = jit(vmap(vmap(model.v_net, (None, None, 0, 0)), (None, 0, None, None)))
-    p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, 0)), (None, 0, None, None)))
-    s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, 0)), (None, 0, None, None)))
+    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
+    v_pred_fn = jit(vmap(vmap(model.v_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
+    p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
+    s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
 
     # t_coords = jnp.linspace(0, t1, 20)[:-1]
     # t_coords = jnp.linspace(0, t1, 4)[:-1]
@@ -133,10 +133,12 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         model.state = restore_checkpoint(model.state, ckpt_path)
         params = model.state.params
 
-        u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
-        v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
-        s_pred = s_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
-        p_pred = p_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
+        mu = .2
+
+        u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
+        v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
+        s_pred = s_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
+        p_pred = p_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
 
         u_pred_list.append(u_pred)
         v_pred_list.append(v_pred)
@@ -190,53 +192,53 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         # plt.ylabel("y")
         # plt.title("Predicted s(x, y) - t = " + str(t_coords[frames]))
 
-    ani = FuncAnimation(fig, update, frames=m, interval=200)
-    # Save the animation as a GIF
-    ani.save('./video_s.gif', writer='pillow')
+    # ani = FuncAnimation(fig, update, frames=m, interval=200)
+    # # Save the animation as a GIF
+    # ani.save('./video_s_' +str(int(mu*100))+ '.gif', writer='pillow')
 
 
 
     # Plot
     # Save dir
-    # save_dir = os.path.join(workdir, "figures", config.wandb.name)
-    # if not os.path.isdir(save_dir):
-    #     os.makedirs(save_dir)
-    # for i in range(len(u_pred)):
-    #     fig1 = plt.figure(figsize=(18, 12))
+    save_dir = os.path.join(workdir, "figures", config.wandb.name)
+    if not os.path.isdir(save_dir):
+        os.makedirs(save_dir)
+    for i in range(len(u_pred)):
+        fig1 = plt.figure(figsize=(18, 12))
 
-    #     plt.subplot(4, 1, 1)
-    #     plt.scatter(x, y, s=1, c=u_pred[i], cmap="jet")#, levels=100)
-    #     plt.colorbar()
-    #     plt.xlabel("x")
-    #     plt.ylabel("y")
-    #     plt.title("Predicted u(x, y)")
-    #     plt.tight_layout()
+        plt.subplot(4, 1, 1)
+        plt.scatter(x, y, s=1, c=u_pred[i], cmap="jet")#, levels=100)
+        plt.colorbar()
+        plt.xlabel("x")
+        plt.ylabel("y")
+        plt.title("Predicted u(x, y)")
+        plt.tight_layout()
 
-    #     plt.subplot(4, 1, 2)
-    #     plt.scatter(x, y, s=1, c=v_pred[i], cmap="jet")#, levels=100)
-    #     plt.colorbar()
-    #     plt.xlabel("x")
-    #     plt.ylabel("y")
-    #     plt.title("Predicted v(x, y)")
-    #     plt.tight_layout()
+        plt.subplot(4, 1, 2)
+        plt.scatter(x, y, s=1, c=v_pred[i], cmap="jet")#, levels=100)
+        plt.colorbar()
+        plt.xlabel("x")
+        plt.ylabel("y")
+        plt.title("Predicted v(x, y)")
+        plt.tight_layout()
 
-    #     plt.subplot(4, 1, 3)
-    #     plt.scatter(x, y, s=1, c=p_pred[i], cmap="jet")#, levels=100)
-    #     plt.colorbar()
-    #     plt.xlabel("x")
-    #     plt.ylabel("y")
-    #     plt.title("Predicted p(x, y)")
-    #     plt.tight_layout()
+        plt.subplot(4, 1, 3)
+        plt.scatter(x, y, s=1, c=p_pred[i], cmap="jet")#, levels=100)
+        plt.colorbar()
+        plt.xlabel("x")
+        plt.ylabel("y")
+        plt.title("Predicted p(x, y)")
+        plt.tight_layout()
 
-    #     plt.subplot(4, 1, 4)
-    #     plt.scatter(x, y, s=1, c=s_pred[i], cmap="jet")#, levels=100)
-    #     plt.colorbar()
-    #     plt.xlabel("x")
-    #     plt.ylabel("y")
-    #     plt.title("Predicted s(x, y)")
-    #     plt.tight_layout()
+        plt.subplot(4, 1, 4)
+        plt.scatter(x, y, s=1, c=s_pred[i], cmap="jet")#, levels=100)
+        plt.colorbar()
+        plt.xlabel("x")
+        plt.ylabel("y")
+        plt.title("Predicted s(x, y)")
+        plt.tight_layout()
 
-    #     save_path = os.path.join(save_dir, 'ns_geomII'+ str(i) +'.png')
-    #     fig1.savefig(save_path, bbox_inches="tight", dpi=300)
+        save_path = os.path.join(save_dir, 'ns_geomII'+ str(i) +'.png')
+        fig1.savefig(save_path, bbox_inches="tight", dpi=300)
 
-    #     plt.close()
+        plt.close()
