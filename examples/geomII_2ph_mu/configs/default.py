@@ -7,7 +7,7 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
-    config.mode = "train"
+    config.mode = "eval"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -20,8 +20,8 @@ def get_config():
 
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
-    arch.arch_name = "Mlp"
-    arch.num_layers = 6
+    arch.arch_name = "ModifiedMlp"
+    arch.num_layers = 8
     arch.hidden_dim = 256
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
@@ -37,28 +37,30 @@ def get_config():
     optim.beta1 = 0.9
     optim.beta2 = 0.999
     optim.eps = 1e-8
-    optim.learning_rate = 1e-3
-    optim.decay_rate = 0.96
+    optim.learning_rate = .2e-3
+    optim.decay_rate = 0.92
     optim.decay_steps = 5000
     optim.grad_accum_steps = 0
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 300000
+    training.max_steps = 250000
     training.num_time_windows = 1# 10
 
-    training.inflow_batch_size = 2048
-    training.outflow_batch_size = 2048
-    training.noslip_batch_size = 2048
-    training.ic_batch_size = 2048
-    training.res_batch_size = 4096
+    div_batch = 2
+
+    training.inflow_batch_size = int(2048/div_batch)
+    training.outflow_batch_size = int(2048/div_batch)
+    training.noslip_batch_size = int(2048/div_batch)
+    training.ic_batch_size = int(2048/div_batch)
+    training.res_batch_size = int(4096/div_batch)
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
     weighting.scheme = "grad_norm"
     weighting.init_weights = {
-        "u_ic": 1.0,
-        "v_ic": 1.0,
+        # "u_ic": 1.0,
+        # "v_ic": 1.0,
         # "p_ic": 1.0,
         "s_ic": 1.0,
         "p_in": 1.0,
@@ -75,7 +77,7 @@ def get_config():
     }
 
     weighting.momentum = 0.9
-    weighting.update_every_steps = 1000  # 100 for grad norm and 1000 for ntk
+    weighting.update_every_steps = 5000  # 100 for grad norm and 1000 for ntk
 
     weighting.use_causal = True
     weighting.causal_tol = 1.0
@@ -93,7 +95,7 @@ def get_config():
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()
-    saving.save_every_steps = training.max_steps
+    saving.save_every_steps = 50000#training.max_steps
     saving.num_keep_ckpts = 10
 
     # Input shape for initializing Flax models

@@ -290,7 +290,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # Temporal domain of each time window
     t0 = 0.0
-    t1 = 7.0
+    t1 =3.0
 
     temporal_dom = jnp.array([t0, t1 * (1 + 0.05)])
 

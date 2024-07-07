@@ -39,7 +39,7 @@ def get_coords():
     # wall = top+bottom
     wall_coords = np.concatenate((bot_wall_coords, top_wall_coords), axis=0)
 
-    # cylinder
+    # cylinders
     radius = np.sqrt(np.power((X[:,0] - (x1_max/2)) , 2) + np.power((X[:,1] - (x2_max/2)) , 2))
     inds = np.where(radius <= .0015)
 
@@ -93,7 +93,7 @@ def get_dataset():
 
     coords, inflow_coords, outflow_coords, wall_coords = get_coords()
     mu0 = .1
-    mu1 = [.1, .2]
+    mu1 = [.1, .25]
     rho0 = 1000; rho1 = 1000
     u0, v0, p0, s0 = initial_fields(coords)
 

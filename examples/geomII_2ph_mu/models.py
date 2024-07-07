@@ -94,12 +94,6 @@ class NavierStokes2DwSat(ForwardIVP):
         _, _, _, s = self.neural_net(params, t, x, y, mu)
         return s
 
-    # def w_net(self, params, t, x, y, mu): # nao foi usado nesse script, e nao entendi a eq. também
-    #     u, v, _ = self.neural_net(params, t, x, y, mu)
-    #     u_y = grad(self.u_net, argnums=3)(params, t, x, y, mu)
-    #     v_x = grad(self.v_net, argnums=2)(params, t, x, y, mu)
-    #     w = v_x - u_y
-    #     return w
 
     def r_net(self, params, t, x, y, mu1):
         Re = jnp.ones(x.shape)
@@ -322,8 +316,8 @@ class NavierStokes2DwSat(ForwardIVP):
             )
 
         ntk_dict = {
-            "u_ic": u_ic_ntk,
-            "v_ic": v_ic_ntk,
+            # "u_ic": u_ic_ntk,
+            # "v_ic": v_ic_ntk,
             # "p_ic": p_ic_ntk,
             "s_ic": s_ic_ntk,
             "p_in": p_in_ntk,
@@ -420,8 +414,8 @@ class NavierStokes2DwSat(ForwardIVP):
             rs_loss = jnp.mean(rs_pred**2)
 
         loss_dict = {
-            "u_ic": u_ic_loss,
-            "v_ic": v_ic_loss,
+            # "u_ic": u_ic_loss,
+            # "v_ic": v_ic_loss,
             # "p_ic": p_ic_loss,
             "s_ic": s_ic_loss,
             "p_in": p_in_loss,
