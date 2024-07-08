@@ -204,7 +204,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         inflow_coords,
         outflow_coords,
         wall_coords,
-        #time,
         u0, v0, p0, s0,
         mu0, mu1, rho0, rho1
     ) = get_dataset()
@@ -290,7 +289,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # Temporal domain of each time window
     t0 = 0.0
-    t1 =3.0
+    t1 = 7.0
 
     temporal_dom = jnp.array([t0, t1 * (1 + 0.05)])
 

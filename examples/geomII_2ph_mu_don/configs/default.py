@@ -7,7 +7,7 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
-    config.mode = "train"
+    config.mode = "eval"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -22,11 +22,11 @@ def get_config():
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "DeepONet"
     # arch.num_layers = 6
-    arch.num_branch_layers = 6 # (u, x) : u é o branch, x é o trunk
-    arch.num_trunk_layers = 4
+    arch.num_branch_layers = 8 # (u, x) : u é o branch, x é o trunk
+    arch.num_trunk_layers = 8
     arch.hidden_dim = 256
     arch.out_dim = 4
-    arch.activation = "gelu"  # gelu works better than tanh for this problem
+    arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
     arch.fourier_emb = ml_collections.ConfigDict({"embed_scale": 1.0, "embed_dim": 256})
     arch.reparam = ml_collections.ConfigDict(

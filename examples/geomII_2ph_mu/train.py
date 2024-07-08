@@ -312,7 +312,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         keys = random.split(random.PRNGKey(0), 5)
         ic_sampler = iter(
             ICSampler(
-                # s0, coords, config.training.ic_batch_size, rng_key=keys[0]
                 u0, v0, p0, s0, coords, mu1, config.training.ic_batch_size, rng_key=keys[0]
             )
         )

@@ -127,6 +127,7 @@ class Dense(nn.Module):
 
 
 class Mlp(nn.Module):
+    
     arch_name: Optional[str] = "Mlp"
     num_layers: int = 4
     hidden_dim: int = 256
@@ -153,7 +154,7 @@ class Mlp(nn.Module):
 
         x = Dense(features=self.out_dim, reparam=self.reparam)(x)
         return x
-
+    
 
 class ModifiedMlp(nn.Module):
     arch_name: Optional[str] = "ModifiedMlp"
@@ -231,16 +232,19 @@ class DeepONet(nn.Module):
 
     @nn.compact
     def __call__(self, u, x):
-        u = MlpBlock(
+        u = ModifiedMlp(#MlpBlock(
             num_layers=self.num_branch_layers,
             hidden_dim=self.hidden_dim,
             out_dim=self.hidden_dim,
             activation=self.activation,
-            final_activation=False,
+            #final_activation=False,
             reparam=self.reparam,
+            
+            periodicity=self.periodicity,
+            fourier_emb=self.fourier_emb,
         )(u)
 
-        x = Mlp(
+        x = ModifiedMlp(#Mlp(
             num_layers=self.num_trunk_layers,
             hidden_dim=self.hidden_dim,
             out_dim=self.hidden_dim,
