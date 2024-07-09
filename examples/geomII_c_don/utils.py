@@ -71,8 +71,10 @@ def get_dataset():
 
     key = random.PRNGKey(0)
     cylinder_center = random.uniform(key, shape=(100,2)) 
-    minval = jnp.array([0.0045, 0.0165]) 
-    maxval = jnp.array([0.0095, 0.0195]) 
+    # minval = jnp.array([0.0045, 0.0165]) 
+    # maxval = jnp.array([0.0095, 0.0195]) 
+    minval = jnp.array([0.0105, 0.007]) 
+    maxval = jnp.array([0.0105001, 0.007001]) 
     cylinder_center = minval + cylinder_center * (maxval - minval)
 
     return (
