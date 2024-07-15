@@ -20,11 +20,11 @@ def get_config():
 
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
-    arch.arch_name = "DeepONet"
-    # arch.num_layers = 6
-    arch.num_branch_layers = 8 # (u, x) : u é o branch, x é o trunk
-    arch.num_trunk_layers = 8
-    arch.hidden_dim = 256
+    arch.arch_name = "ModifiedMlp"
+    arch.num_layers = 6
+    # arch.num_branch_layers = 8 # (u, x) : u é o branch, x é o trunk
+    # arch.num_trunk_layers = 8
+    arch.hidden_dim = 100
     arch.out_dim = 3
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
@@ -46,7 +46,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 200000
+    training.max_steps = 300000
     training.num_time_windows = 1# 10
 
     div_batch = 2
