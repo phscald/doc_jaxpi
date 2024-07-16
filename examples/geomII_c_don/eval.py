@@ -54,7 +54,7 @@ def get_coords(xcyl, ycyl):
     wall_coords = np.concatenate((bot_wall_coords, top_wall_coords), axis=0)
 
     # cylinder
-    radius = np.sqrt(np.power((X[:,0] - (x1_max/2)) , 2) + np.power((X[:,1] - (x2_max/2)) , 2))
+    radius = np.sqrt(np.power((X[:,0] - (xcyl)) , 2) + np.power((X[:,1] - (ycyl)) , 2))
     inds = np.where(radius <= .0015)
 
     X = np.delete(X, inds, axis = 0)
@@ -81,7 +81,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         outflow_coords,
         wall_coords,
         mu, pin,
-        cylinder_center
+        cylinder_center,
+        cyl_xy, cyl_walls_xy
     ) = get_dataset()
 
     # U_max = 0.3  # maximum velocity
@@ -122,8 +123,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     ckpt_path = os.path.join(".", "ckpt", config.wandb.name)
     model.state = restore_checkpoint(model.state, ckpt_path)
     params = model.state.params
-    
-    xcyl = .021/2; ycyl = .014/2
+    # 0.005, 0.004
+    xcyl = .005; ycyl = .007#.014/2
     coords = get_coords(xcyl, ycyl)
     coords = coords / L_star
     xcyl = xcyl / L_star; ycyl = ycyl / L_star

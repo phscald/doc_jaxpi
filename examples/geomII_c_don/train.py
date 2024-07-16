@@ -7,6 +7,7 @@ from absl import logging
 
 import jax
 import jax.numpy as jnp
+import numpy as np
 from jax import random
 from jax import pmap, vmap, jacrev
 from jax.flatten_util import ravel_pytree
@@ -38,6 +39,7 @@ class ResSampler(BaseSampler):
         outflow_coords,
         # wall_coords,
         cylinder_center,
+        cyl_xy, cyl_walls_xy,
         rng_key=random.PRNGKey(1234),
     ):
         super().__init__(rng_key)
@@ -49,32 +51,10 @@ class ResSampler(BaseSampler):
         self.outflow_coords = outflow_coords
         # self.wall_coords = wall_coords
         self.cyl_center = cylinder_center
-        self.batch_size = 10
-
-    def get_wall(self, cyl_center):
-
-        cyl_walls_x = jnp.zeros((cyl_center.shape[0], jnp.arange(0, 2, 1/35).shape[0]))
-        cyl_walls_y = jnp.zeros((cyl_center.shape[0], jnp.arange(0, 2, 1/35).shape[0]))
-        cyl_x     = jnp.zeros((cyl_center.shape[0], jnp.arange(0, 2, 1/35).shape[0]))
-        cyl_y     = jnp.zeros((cyl_center.shape[0], jnp.arange(0, 2, 1/35).shape[0]))
-        for i in range(cyl_center.shape[0]):
-            L_max = .021
-            R = .0015 / L_max
-            x1_rad =(jnp.arange(0, 2*jnp.pi, jnp.pi/35))
-            x2_rad = cyl_center[i,1] + jnp.sin(x1_rad) * R
-            x1_rad = cyl_center[i,0] + jnp.cos(x1_rad) * R
-            cyl_walls_x.at[i,:].set(x1_rad)
-            cyl_walls_y.at[i,:].set(x2_rad)
-            cyl_x.at[i,:].set(jnp.ones(cyl_x.shape[1])*cyl_center[i,0])
-            cyl_y.at[i,:].set(jnp.ones(cyl_x.shape[1])*cyl_center[i,1])
-        cyl_walls_x = jnp.reshape(cyl_walls_x, (-1,1))
-        cyl_walls_y = jnp.reshape(cyl_walls_y, (-1,1))
-        cyl_walls_xy = jnp.concatenate((cyl_walls_x, cyl_walls_y), axis =1)
-        cyl_x = jnp.reshape(cyl_x, (-1,1))
-        cyl_y = jnp.reshape(cyl_y, (-1,1))
-        cyl_xy = jnp.concatenate((cyl_x, cyl_y), axis =1)
-        return cyl_xy, cyl_walls_xy
-
+        self.cyl_xy = cyl_xy
+        self.cyl_walls_xy = cyl_walls_xy
+        self.batch_size = 1024
+        
     @partial(pmap, static_broadcasted_argnums=(0,))
     def data_generation(self, key):
         "Generates data containing batch_size samples"
@@ -122,10 +102,13 @@ class ResSampler(BaseSampler):
         spatial_batch = spatial_batch.at[:,0].set(jnp.where(mask, 0.0, spatial_batch[:, 0]))
         spatial_batch = spatial_batch.at[:,1].set(jnp.where(mask, 0.0, spatial_batch[:, 1]))
 
-        cyl_xy, cyl_walls = self.get_wall(cyl_batch[0:15])
-        # xcyl_batch = self.get_wall(cyl_batch[0:15])
+        cyl_idx = random.choice(
+            key6+2, self.cyl_xy.shape[0], shape=(self.batch_size*3,)
+        )
+        cyl_xy_batch = self.cyl_xy[cyl_idx, :]
+        cyl_walls_batch = self.cyl_walls_xy[cyl_idx, :]
 
-        batch = ((mu_batch), (pin_batch), inflow_batch, outflow_batch, spatial_batch, cyl_batch, cyl_walls, cyl_xy)
+        batch = ((mu_batch), (pin_batch), inflow_batch, outflow_batch, spatial_batch, cyl_batch, cyl_walls_batch, cyl_xy_batch)
 
         return batch
 
@@ -146,7 +129,8 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         outflow_coords,
         wall_coords,
         mu, pin,
-        cylinder_center
+        cylinder_center,
+        cyl_xy, cyl_walls_xy
     ) = get_dataset()
 
     U_max = .10#17#.25/3#visc .1
@@ -171,6 +155,8 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         wall_coords = wall_coords / L_star
         cylinder_center = cylinder_center / L_star
         coords = coords / L_star
+        cyl_xy = cyl_xy / L_star
+        cyl_walls_xy = cyl_walls_xy / L_star
         # coords_fem = coords_fem / L_star
 
         # Nondimensionalize flow field
@@ -203,8 +189,8 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     evaluator = models.NavierStokesEvaluator(config, model)
 
     # Initialize  residual sampler
-    res_sampler = iter(ResSampler(mu, pin, coords, inflow_coords, outflow_coords, cylinder_center, rng_key=random.PRNGKey(0)))
-
+    res_sampler = iter(ResSampler(mu, pin, coords, inflow_coords, outflow_coords, cylinder_center,
+                                   cyl_xy, cyl_walls_xy, rng_key=random.PRNGKey(0)))
 
     # jit warm up
     print("Waiting for JIT...")

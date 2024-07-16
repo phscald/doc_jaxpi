@@ -56,12 +56,39 @@ def get_coords():
 
     inds = np.where(X[:,1] > x2_max)
     X = np.delete(X, inds, axis = 0)
+    
+    
+    # cylinder
+    # radius = np.sqrt(np.power((X[:,0] - (x1_max/2)) , 2) + np.power((X[:,1] - (x2_max/2)) , 2))
+    # inds = np.where(radius <= .0015)
+
+    # X = np.delete(X, inds, axis = 0)
+    
 
     return jax.device_put(X), \
             jax.device_put(inflow_coords), \
             jax.device_put(outflow_coords), \
-            jax.device_put(wall_coords)
+            jax.device_put(wall_coords), 
+            
+def get_wall(cyl_center, R =.0015):
+    # cyl_center = np.array(cyl_center)
+    x1_rad = jnp.array(jnp.arange(0, 2*jnp.pi, jnp.pi/30))
+    cyl_walls_xy = jnp.zeros((0,2))#jnp.zeros((cyl_center.shape[0]*x1_rad.shape[0], 2))
+    cyl_xy = jnp.zeros((0,2))#jnp.zeros((cyl_center.shape[0]*x1_rad.shape[0], 2))
 
+    for i in range(cyl_center.shape[0]):
+        x1_rad = jnp.array(jnp.arange(0, 2*jnp.pi, jnp.pi/30))
+        x2_rad = jnp.transpose(jnp.array([cyl_center[i,1] + jnp.sin(x1_rad) * R]))
+        x1_rad = jnp.transpose(jnp.array([cyl_center[i,0] + jnp.cos(x1_rad) * R]))
+        x1_rad = jnp.concatenate((x1_rad, x2_rad), axis = 1)
+        cyl_walls_xy = jnp.concatenate((cyl_walls_xy, x1_rad), axis=0)
+        cyl_xy = jnp.concatenate((cyl_xy, jnp.ones((x1_rad.shape[0],2))*cyl_center[i]), axis=0)
+        # cyl_walls_xy.at[i*x1_rad.shape[0]:(i+1)*x1_rad.shape[0],:].set(x1_rad)
+        # cyl_walls_xy[i*x1_rad.shape[0]:(i+1)*x1_rad.shape[0]] = x1_rad
+        # cyl_xy.at[i*x1_rad.shape[0]:(i+1)*x1_rad.shape[0],:].set(cyl_center[i])
+        # cyl_xy[i*x1_rad.shape[0]:(i+1)*x1_rad.shape[0]] = cyl_center[i]
+    
+    return cyl_xy, cyl_walls_xy
 
 def get_dataset():
     u_fem, v_fem, p_fem, coords_fem = get_fem_data()
@@ -69,13 +96,16 @@ def get_dataset():
     mu = [.1, .10001]
     pin = [10, 10.001]
 
-    key = random.PRNGKey(0)
-    cylinder_center = random.uniform(key, shape=(100,2)) 
-    # minval = jnp.array([0.0045, 0.0165]) 
-    # maxval = jnp.array([0.0095, 0.0195]) 
-    minval = jnp.array([0.0105, 0.007]) 
-    maxval = jnp.array([0.0105001, 0.007001]) 
+    # cylinder_center = random.uniform(random.PRNGKey(0), shape=(100,2)) 
+    cylinder_center = random.uniform(random.PRNGKey(1), shape=(500,2)) 
+    # minval = jnp.array([0.005, 0.002]) 
+    # maxval = jnp.array([0.01500, 0.019]) 
+    minval = jnp.array([0.005, 0.004]) 
+    maxval = jnp.array([0.005, 0.01]) 
     cylinder_center = minval + cylinder_center * (maxval - minval)
+    
+    cyl_xy, cyl_walls_xy = get_wall(cylinder_center)
+    
 
     return (
         u_fem, v_fem, p_fem, coords_fem,
@@ -84,5 +114,7 @@ def get_dataset():
         outflow_coords,
         wall_coords,
         mu, pin,
-        cylinder_center
+        cylinder_center,
+        # jnp.concatenate((cylinder_center, cyl_walls_xy), axis = 0),
+        cyl_xy, cyl_walls_xy
     )

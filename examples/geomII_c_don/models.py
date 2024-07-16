@@ -30,7 +30,7 @@ class NavierStokes2D(ForwardBVP):
         self.p_pred_fn = vmap(self.p_net, (None, 0, 0, 0, 0))
         self.r_pred_fn = vmap(self.r_net, (None, 0, 0, 0, 0))
 
-    def neural_net(self, params, x, y, xcyl, ycyl):
+    def neural_net(self, params, x, y, xcyl, ycyl):#, xcyl, ycyl):
         # x = x / self.L  # rescale x into [0, 1]
         # y = y / self.W  # rescale y into [0, 1]
         z = jnp.stack([x, y])

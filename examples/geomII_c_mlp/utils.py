@@ -70,47 +70,25 @@ def get_coords():
             jax.device_put(outflow_coords), \
             jax.device_put(wall_coords), 
             
-# def get_wall(cyl_center):
-
-#     cyl_walls_x = jnp.zeros((cyl_center.shape[0], jnp.arange(0, 2, 1/35).shape[0]))
-#     cyl_walls_y = jnp.zeros((cyl_center.shape[0], jnp.arange(0, 2, 1/35).shape[0]))
-#     cyl_x     = jnp.zeros((cyl_center.shape[0], jnp.arange(0, 2, 1/35).shape[0]))
-#     cyl_y     = jnp.zeros((cyl_center.shape[0], jnp.arange(0, 2, 1/35).shape[0]))
-#     for i in range(cyl_center.shape[0]):
-#         #L_max = .021
-#         R = .0015 
-#         x1_rad =(jnp.arange(0, 2*jnp.pi, jnp.pi/35))
-#         x2_rad = cyl_center[i,1] + jnp.sin(x1_rad) * R
-#         x1_rad = cyl_center[i,0] + jnp.cos(x1_rad) * R
-#         cyl_walls_x.at[i,:].set(x1_rad)
-#         cyl_walls_y.at[i,:].set(x2_rad)
-#         cyl_x.at[i,:].set(jnp.ones(cyl_x.shape[1])*cyl_center[i,0])
-#         cyl_y.at[i,:].set(jnp.ones(cyl_x.shape[1])*cyl_center[i,1])
-#     cyl_walls_x = jnp.reshape(cyl_walls_x, (-1,1))
-#     cyl_walls_y = jnp.reshape(cyl_walls_y, (-1,1))
-#     cyl_walls_xy = jnp.concatenate((cyl_walls_x, cyl_walls_y), axis =1)
-#     cyl_x = jnp.reshape(cyl_x, (-1,1))
-#     cyl_y = jnp.reshape(cyl_y, (-1,1))
-#     cyl_xy = jnp.concatenate((cyl_x, cyl_y), axis =1)
-#     return cyl_xy, cyl_walls_xy
-
 def get_wall(cyl_center, R =.0015):
-    cyl_center = np.array(cyl_center)
-    x1_rad = np.array(np.arange(0, 2*np.pi, np.pi/30))
-    cyl_walls_xy = np.zeros((cyl_center.shape[0]*x1_rad.shape[0], 2))
-    cyl_xy = np.zeros((cyl_center.shape[0]*x1_rad.shape[0], 2))
+    # cyl_center = np.array(cyl_center)
+    x1_rad = jnp.array(jnp.arange(0, 2*jnp.pi, jnp.pi/30))
+    cyl_walls_xy = jnp.zeros((0,2))#jnp.zeros((cyl_center.shape[0]*x1_rad.shape[0], 2))
+    cyl_xy = jnp.zeros((0,2))#jnp.zeros((cyl_center.shape[0]*x1_rad.shape[0], 2))
 
     for i in range(cyl_center.shape[0]):
-        x1_rad = np.array(np.arange(0, 2*np.pi, np.pi/30))
-        x2_rad = np.transpose(np.array([cyl_center[i,1] + np.sin(x1_rad) * R]))
-        x1_rad = np.transpose(np.array([cyl_center[i,0] + np.cos(x1_rad) * R]))
-        x1_rad = np.concatenate((x1_rad, x2_rad), axis = 1)
+        x1_rad = jnp.array(jnp.arange(0, 2*jnp.pi, jnp.pi/30))
+        x2_rad = jnp.transpose(jnp.array([cyl_center[i,1] + jnp.sin(x1_rad) * R]))
+        x1_rad = jnp.transpose(jnp.array([cyl_center[i,0] + jnp.cos(x1_rad) * R]))
+        x1_rad = jnp.concatenate((x1_rad, x2_rad), axis = 1)
+        cyl_walls_xy = jnp.concatenate((cyl_walls_xy, x1_rad), axis=0)
+        cyl_xy = jnp.concatenate((cyl_xy, jnp.ones((x1_rad.shape[0],2))*cyl_center[i]), axis=0)
         # cyl_walls_xy.at[i*x1_rad.shape[0]:(i+1)*x1_rad.shape[0],:].set(x1_rad)
-        cyl_walls_xy[i*x1_rad.shape[0]:(i+1)*x1_rad.shape[0]] = x1_rad
+        # cyl_walls_xy[i*x1_rad.shape[0]:(i+1)*x1_rad.shape[0]] = x1_rad
         # cyl_xy.at[i*x1_rad.shape[0]:(i+1)*x1_rad.shape[0],:].set(cyl_center[i])
-        cyl_xy[i*x1_rad.shape[0]:(i+1)*x1_rad.shape[0]] = cyl_center[i]
+        # cyl_xy[i*x1_rad.shape[0]:(i+1)*x1_rad.shape[0]] = cyl_center[i]
     
-    return jax.device_put(cyl_xy), jax.device_put(cyl_walls_xy)
+    return cyl_xy, cyl_walls_xy
 
 def get_dataset():
     u_fem, v_fem, p_fem, coords_fem = get_fem_data()
@@ -118,14 +96,13 @@ def get_dataset():
     mu = [.1, .10001]
     pin = [10, 10.001]
 
-    key = random.PRNGKey(0)
-    cylinder_center = random.uniform(key, shape=(100,2)) 
-    # minval = jnp.array([0.0045, 0.0165]) 
-    # maxval = jnp.array([0.0095, 0.0195]) 
-    minval = jnp.array([0.0105, 0.005]) 
-    maxval = jnp.array([0.0105001, 0.007001]) 
+    # cylinder_center = random.uniform(random.PRNGKey(0), shape=(100,2)) 
+    cylinder_center = random.uniform(random.PRNGKey(1), shape=(500,2)) 
+    minval = jnp.array([0.005, 0.002]) 
+    maxval = jnp.array([0.01500, 0.019]) 
     cylinder_center = minval + cylinder_center * (maxval - minval)
-    cyl_xy, cyl_walls_xy = get_wall(cylinder_center[:25,:])
+    
+    cyl_xy, cyl_walls_xy = get_wall(cylinder_center)
     
 
     return (
