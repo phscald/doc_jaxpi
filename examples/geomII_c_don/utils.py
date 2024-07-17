@@ -100,8 +100,8 @@ def get_dataset():
     cylinder_center = random.uniform(random.PRNGKey(1), shape=(500,2)) 
     # minval = jnp.array([0.005, 0.002]) 
     # maxval = jnp.array([0.01500, 0.019]) 
-    minval = jnp.array([0.005, 0.004]) 
-    maxval = jnp.array([0.005, 0.01]) 
+    minval = jnp.array([0.0105, 0.006]) 
+    maxval = jnp.array([0.010501, 0.008]) 
     cylinder_center = minval + cylinder_center * (maxval - minval)
     
     cyl_xy, cyl_walls_xy = get_wall(cylinder_center)

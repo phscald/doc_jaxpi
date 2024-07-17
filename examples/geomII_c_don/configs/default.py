@@ -7,7 +7,7 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
-    config.mode = "train"
+    config.mode = "eval"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -24,11 +24,11 @@ def get_config():
     # arch.num_layers = 6
     arch.num_branch_layers = 6 # (u, x) : u é o branch, x é o trunk
     arch.num_trunk_layers = 6
-    arch.hidden_dim = 100
+    arch.hidden_dim = 128
     arch.out_dim = 3
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
-    arch.fourier_emb = ml_collections.ConfigDict({"embed_scale": 1.0, "embed_dim": 100})
+    arch.fourier_emb = ml_collections.ConfigDict({"embed_scale": 1.0, "embed_dim": 128})
     arch.reparam = ml_collections.ConfigDict(
         {"type": "weight_fact", "mean": 1.0, "stddev": 0.1}
     )
@@ -40,13 +40,13 @@ def get_config():
     optim.beta2 = 0.999
     optim.eps = 1e-8
     optim.learning_rate = .2e-3
-    optim.decay_rate = 0.96
+    optim.decay_rate = 0.92
     optim.decay_steps = 5000
     optim.grad_accum_steps = 0
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 1000000
+    training.max_steps = 500000
     training.num_time_windows = 1# 10
 
     div_batch = 2

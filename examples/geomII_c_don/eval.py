@@ -124,7 +124,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     model.state = restore_checkpoint(model.state, ckpt_path)
     params = model.state.params
     # 0.005, 0.004
-    xcyl = .005; ycyl = .007#.014/2
+    xcyl = .0105; ycyl = .0065#.014/2
     coords = get_coords(xcyl, ycyl)
     coords = coords / L_star
     xcyl = xcyl / L_star; ycyl = ycyl / L_star
