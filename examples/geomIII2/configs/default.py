@@ -8,7 +8,7 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     # config.mode = "train""eval"
-    config.mode = "train"
+    config.mode = "eval"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -22,15 +22,15 @@ def get_config():
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "ModifiedMlp"
-    arch.num_layers =15 # 7 300
-    arch.hidden_dim = 400
+    arch.num_layers =12 # 7 300
+    arch.hidden_dim = 256
     arch.out_dim = 3
     arch.activation = "tanh"  # gelu works better than tanh
     arch.periodicity = ml_collections.ConfigDict(
         {"period": (1.0,1.0), "axis": (1,2), "trainable": (True,)}
         )
     arch.fourier_emb = ml_collections.ConfigDict(
-        {"embed_scale": 10.0, "embed_dim": 400} # 128
+        {"embed_scale": 10.0, "embed_dim": 256} # 128
     )
     arch.reparam = ml_collections.ConfigDict(
         {"type": "weight_fact", "mean": 0.5, "stddev": 0.1}
@@ -49,7 +49,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 300002
+    training.max_steps = 100000
     training.batch_size_per_device = 1024
 
     # Weighting

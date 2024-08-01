@@ -10,7 +10,6 @@ import jax
 import jax.numpy as jnp
 from jax import random, jit, vmap, pmap
 from jax.tree_util import tree_map
-
 import scipy.io
 import ml_collections
 

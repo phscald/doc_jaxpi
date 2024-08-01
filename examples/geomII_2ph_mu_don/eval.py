@@ -132,9 +132,9 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         ckpt_path = os.path.join('.', 'ckpt', config.wandb.name, 'time_window_{}'.format(idx + 1))
         model.state = restore_checkpoint(model.state, ckpt_path)
         params = model.state.params
-
-        mu = .1
-
+        # [.02, .15]
+        mu = .15
+        
         u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
         v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
         s_pred = s_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
@@ -177,9 +177,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'coords x shape:{x.shape}')
     print(f'coords y shape:{y.shape}')
     print(f'coords u shape:{u_pred[0].shape}')
-    # print(len(u_pred))
 
-    # print(dsadsa)
+    
     from matplotlib.animation import FuncAnimation
     fig, ax = plt.subplots()
     m = len(u_pred)
@@ -192,9 +191,9 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         # plt.ylabel("y")
         # plt.title("Predicted s(x, y) - t = " + str(t_coords[frames]))
 
-    # ani = FuncAnimation(fig, update, frames=m, interval=200)
-    # # Save the animation as a GIF
-    # ani.save('./video_s_' +str(int(mu*100))+ '.gif', writer='pillow')
+    ani = FuncAnimation(fig, update, frames=m, interval=200)
+    # Save the animation as a GIF
+    ani.save('./video_s_' +str(int(mu/.01))+ '.gif', writer='pillow')
 
 
 
@@ -238,7 +237,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         plt.title("Predicted s(x, y)")
         plt.tight_layout()
 
-        save_path = os.path.join(save_dir, 'ns_geomII'+ str(i) +'.png')
+        save_path = os.path.join(save_dir, 'ns_geomII_'+ str(int(mu/.01)) + '_' + str(i) +'.png')
         fig1.savefig(save_path, bbox_inches="tight", dpi=300)
 
         plt.close()

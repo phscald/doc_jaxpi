@@ -38,6 +38,8 @@ class ICSampler(SpaceSampler):
         self.s = s
         self.mu = mu
 
+        
+
     @partial(pmap, static_broadcasted_argnums=(0,))
     def data_generation(self, key):
         "Generates data containing batch_size samples"
@@ -204,6 +206,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         inflow_coords,
         outflow_coords,
         wall_coords,
+        #time,
         u0, v0, p0, s0,
         mu0, mu1, rho0, rho1
     ) = get_dataset()
@@ -248,7 +251,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
         T_star = L_star/U_star
 
-
         # Nondimensionalize flow field
         # u_inflow = u_inflow / U_star
         # print(f'p0_max:{jnp.max(p0)}')
@@ -289,7 +291,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # Temporal domain of each time window
     t0 = 0.0
-    t1 = 7.0
+    t1 = 20.0
 
     temporal_dom = jnp.array([t0, t1 * (1 + 0.05)])
 
@@ -306,12 +308,11 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     for idx in range(config.training.num_time_windows):
         logging.info("Training time window {}".format(idx + 1))
-
+        
         # Initialize Sampler
         keys = random.split(random.PRNGKey(0), 5)
         ic_sampler = iter(
             ICSampler(
-                # s0, coords, config.training.ic_batch_size, rng_key=keys[0]
                 u0, v0, p0, s0, coords, mu1, config.training.ic_batch_size, rng_key=keys[0]
             )
         )

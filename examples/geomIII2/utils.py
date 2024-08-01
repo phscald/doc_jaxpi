@@ -39,7 +39,9 @@ def get_coords():
     inflow_coords = X[id]
     # direita p saida
     id = np.where(idx == 3)[0]
-    outflow_coords = X[id]
+    outflow_coords = X[id] 
+    outflow_coords[:,1] = outflow_coords[:,1]
+
     # bottom
     id = np.where(idx == 4)[0]
     bot_wall_coords = X[id]

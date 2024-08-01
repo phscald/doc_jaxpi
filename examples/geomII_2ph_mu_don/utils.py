@@ -5,12 +5,6 @@ import pickle
 import scipy.io
 
 
-# def parabolic_inflow(y, U_max):
-#     u = 4 * U_max * y * (0.41 - y) / (0.41**2)
-#     v = jnp.zeros_like(y)
-#     return u, v
-
-
 def get_coords():
     dx = .0001
     x1_max = .021
@@ -39,7 +33,7 @@ def get_coords():
     # wall = top+bottom
     wall_coords = np.concatenate((bot_wall_coords, top_wall_coords), axis=0)
 
-    # cylinders
+    # cylinder
     radius = np.sqrt(np.power((X[:,0] - (x1_max/2)) , 2) + np.power((X[:,1] - (x2_max/2)) , 2))
     inds = np.where(radius <= .0015)
 
@@ -92,8 +86,8 @@ def initial_fields(coords):
 def get_dataset():
 
     coords, inflow_coords, outflow_coords, wall_coords = get_coords()
-    mu0 = .1
-    mu1 = [.1, .25]
+    mu0 = .01
+    mu1 = [.02, .15]
     rho0 = 1000; rho1 = 1000
     u0, v0, p0, s0 = initial_fields(coords)
 

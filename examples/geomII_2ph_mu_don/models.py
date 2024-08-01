@@ -15,6 +15,18 @@ from jaxpi.evaluator import BaseEvaluator
 
 class NavierStokes2DwSat(ForwardIVP):
 
+    # def __init__(
+    #     self,
+    #     config,
+    #     # u_inflow,
+    #     p_inflow,
+    #     inflow_coords,
+    #     outflow_coords,
+    #     wall_coords,
+    #     mu, U_max, pmax
+    #     # Re,
+    # ):
+
     # def __init__(self, config, inflow_fn, temporal_dom, coords, Re, D):
     def __init__(self, config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, D):   
         super().__init__(config)
@@ -53,11 +65,11 @@ class NavierStokes2DwSat(ForwardIVP):
 
     def neural_net(self, params, t, x, y, mu):
         t = t / self.temporal_dom[1]  # rescale t into [0, 1]
-        # x = x / self.L  # rescale x into [0, 1]
-        # y = y / self.W  # rescale y into [0, 1]
-        z = jnp.stack([t, x, y])
-        z1 = jnp.stack([mu])
-        outputs = self.state.apply_fn(params, z, z1)
+        x = x / self.L  # rescale x into [0, 1]
+        y = y / self.W  # rescale y into [0, 1]
+        inputs = jnp.stack([t, x, y])
+        mu = jnp.stack([mu, mu])
+        outputs = self.state.apply_fn(params, inputs, mu)
 
         # Start with an initial state of the channel flow
         # y_hat = y * self.L_star * self.W
@@ -85,7 +97,7 @@ class NavierStokes2DwSat(ForwardIVP):
 
 
     def r_net(self, params, t, x, y, mu1):
-        Re = jnp.ones(x.shape)
+        # Re = jnp.ones(x.shape)
         (mu0, rho0, rho1) = self.fluid_params
 
         u, v, p, s = self.neural_net(params, t, x, y, mu1)
@@ -113,13 +125,16 @@ class NavierStokes2DwSat(ForwardIVP):
         s_yy = grad(grad(self.s_net, argnums=3), argnums=3)(params, t, x, y, mu1)
 
         # compute Reynolds, initialized as Re=1
-        mu = (1-s)*mu0+s*mu1
-        rho = (1-s)*rho0+s*rho1
-        Re = Re*rho*self.U_max*self.L_max/mu
-
+        # mu = (1-s)*mu0+s*mu1
+        # rho = (1-s)*rho0+s*rho1
+        # Re = Re*rho*self.U_max*self.L_max/mu
+        Re = rho0*self.U_max*self.L_max/mu0
+        mu = (1-s)*mu1 + s*mu0
+        mu_ratio = mu/mu0
+                
         # PDE residual
-        ru = u_t + u * u_x + v * u_y + (p_x - (u_xx + u_yy)) / Re
-        rv = v_t + u * v_x + v * v_y + (p_y - (v_xx + v_yy)) / Re
+        ru = u_t + u * u_x + v * u_y + (p_x - mu_ratio*(u_xx + u_yy)) / Re
+        rv = v_t + u * v_x + v * v_y + (p_y - mu_ratio*(v_xx + v_yy)) / Re
         rc = u_x + v_y
         rs = s_t + u * s_x + v * s_y - self.D*(s_xx + s_yy) 
 
