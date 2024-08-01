@@ -5,11 +5,6 @@ import pickle
 import scipy.io
 
 
-# def parabolic_inflow(y, U_max):
-#     u = 4 * U_max * y * (0.41 - y) / (0.41**2)
-#     v = jnp.zeros_like(y)
-#     return u, v
-
 def get_fem_data():
     filepath = './steady_3x3.pkl'
     with open(filepath, 'rb') as filepath:

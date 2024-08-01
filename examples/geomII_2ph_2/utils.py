@@ -5,12 +5,6 @@ import pickle
 import scipy.io
 
 
-# def parabolic_inflow(y, U_max):
-#     u = 4 * U_max * y * (0.41 - y) / (0.41**2)
-#     v = jnp.zeros_like(y)
-#     return u, v
-
-
 def get_coords():
     dx = .0001
     x1_max = .021
@@ -62,28 +56,9 @@ def get_coords():
             jax.device_put(outflow_coords), \
             jax.device_put(wall_coords)
 
-# def get_time(space):
-#     time = jnp.arange(0, 1.001, 0.01)
-#     time_repeated = jnp.tile(time, (space.shape[0], 1)).flatten()
-#     space_repeated = jnp.repeat(space, time.shape[0], axis=0)
-#     coord = jnp.column_stack((time_repeated, space_repeated))
-#     return coord
-
 
 def initial_fields(coords, mu, pin):
-    # # self.coords.max(axis=0)
-    # u0 = jnp.zeros(coords.shape[0]) #1/(2*mu)*(pin/coords[:,0].max())*(coords[:,1]**2-coords[:,1].max()*coords[:,1])
-    # v0 = jnp.zeros(coords.shape[0])
-    # # p0 = jnp.zeros(coords.shape[0])
-    # p0 = (pin - (coords[:,0]/.021)*pin)
-    # filepath = '../geomII/geomII_steady.pkl'
-    # with open(filepath, 'rb') as filepath:
-    #     arquivos = pickle.load(filepath)
-    # u0 = arquivos['u']
-    # v0 = arquivos['v']
-    # p0 = arquivos['p']
-    # del arquivos
-    # s0 = jnp.zeros(coords.shape[0])
+
     u0 = jnp.zeros(coords.shape[0])
     v0 = jnp.zeros(coords.shape[0])
     p0 = jnp.zeros(coords.shape[0])
@@ -105,42 +80,6 @@ def get_dataset(pin):
         inflow_coords,
         outflow_coords,
         wall_coords,
-        #time,
         u0, v0, p0, s0,
         mu0, mu1, rho0, rho1
     )
-
-# def get_dataset():
-#     # data = jnp.load("data/ns_unsteady.npy", allow_pickle=True).item()
-#     # u_ref = jnp.array(data["u"])
-#     # v_ref = jnp.array(data["v"])
-#     # p_ref = jnp.array(data["p"])
-#     t = jnp.array(data["t"])
-#     coords = jnp.array(data["coords"])
-#     inflow_coords = jnp.array(data["inflow_coords"])
-#     outflow_coords = jnp.array(data["outflow_coords"])
-#     wall_coords = jnp.array(data["wall_coords"])
-#     cylinder_coords = jnp.array(data["cylinder_coords"])
-#     nu = jnp.array(data["nu"])
-
-#     return (
-#         u_ref,
-#         v_ref,
-#         p_ref,
-#         coords,
-#         inflow_coords,
-#         outflow_coords,
-#         wall_coords,
-#         cylinder_coords,
-#         nu,
-#     )
-
-
-# def get_fine_mesh():
-#     data = jnp.load("data/fine_mesh.npy", allow_pickle=True).item()
-#     fine_coords = jnp.array(data["coords"])
-
-#     data = jnp.load("data/fine_mesh_near_cylinder.npy", allow_pickle=True).item()
-#     fine_coords_near_cyl = jnp.array(data["coords"])
-
-#     return fine_coords, fine_coords_near_cyl
