@@ -22,7 +22,7 @@ import wandb
 import models
 
 from jaxpi.utils import restore_checkpoint
-
+import pickle
 from utils import get_dataset#, parabolic_inflow
 
 
@@ -39,7 +39,9 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     ) = get_dataset()
     
 
-    U_max = .0002
+    U_max = .0002#17#.25/3#visc .1
+    V_max = U_max/10*2
+    
     L_max = 900/1000/1000
     pmax = mu*U_max/L_max
     
@@ -48,6 +50,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     if config.nondim == True:
         # Nondimensionalization parameters
         U_star = U_max # 0.2  # characteristic velocity
+        V_star = V_max
         L_star = L_max #0.1  # characteristic length
         Re = rho * U_star * L_star / mu
 
@@ -116,6 +119,15 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     y = coords[:, 1]
     x1 = coords_fem[:, 0]
     y1 = coords_fem[:, 1]
+    
+    filepath = './pred_initial_fields.pkl'
+    with open(filepath,"wb") as filepath:
+        pickle.dump({"u_pred": u_pred,
+                     "v_pred": v_pred,
+                     "p_pred": p_pred,
+                     "coords": coords,}, filepath)
+    
+    
     
     fig1 = plt.figure()#(figsize=(18, 12))
     plt.subplot(3, 1, 1)
@@ -201,5 +213,6 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     save_path = os.path.join('./' , save_dir, "ns_steady_p.jpg")
     fig3.savefig(save_path, bbox_inches="tight", dpi=300)
+    
 
 

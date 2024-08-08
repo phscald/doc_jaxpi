@@ -30,28 +30,23 @@ import matplotlib.tri as tri
 def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Load dataset
     pin =10
+       
     (
         coords,
         inflow_coords,
         outflow_coords,
         wall_coords,
-        #time,
-        u0, v0, p0, s0,
+        u0, v0, p0, s0, _,
         mu0, mu1, rho0, rho1
-    ) = get_dataset(pin=pin)
+    ) = get_dataset()
+    
     noslip_coords = wall_coords
 
-    print(f'coords shape:{coords.shape}')
-    print(f'inflow coords shape:{inflow_coords.shape}')
-
     fluid_params = (mu0, mu1, rho0, rho1)
-    U_max = .06#.25/3#visc .1
-    # pmax = 15
 
-    L_max = .021
-    pmax = mu0*U_max/L_max*36
-    pin =pin/pmax
-    # Re = rho0*U_max*L_max/mu0
+    U_max = .0002 
+    L_max = 900/1000/1000
+    pmax = mu0*U_max/L_max
     D = 10**(-9)
 
     T = 1.0  # final time
@@ -68,7 +63,13 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         outflow_coords = outflow_coords / L_star
         noslip_coords = noslip_coords / L_star
         coords = coords / L_star
-
+        ind_coords = random.choice(
+            random.PRNGKey(1234),
+            coords.shape[0],
+            shape=(int(coords.shape[0]/3),),
+            replace=True,
+        )
+        coords = coords[ind_coords]
         T_star = L_star/U_star
         p_inflow = (pin / pmax) * jnp.ones((inflow_coords.shape[0]))
         u0, v0, p0 = u0/U_max, v0/U_max, p0/pmax
@@ -119,7 +120,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # t_coords = jnp.linspace(0, t1, 20)[:-1]
     # t_coords = jnp.linspace(0, t1, 4)[:-1]
-    t_coords = jnp.array([0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.])
+    t_coords = jnp.array([0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.])/2
 
     u_pred_list = []
     v_pred_list = []
@@ -148,17 +149,6 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     p_pred = jnp.concatenate(p_pred_list, axis=0)
     s_pred = jnp.concatenate(s_pred_list, axis=0)
 
-    # Dimensionalize coordinates and flow field
-    # if config.nondim == True:
-    #     # Dimensionalize coordinates and flow field
-    #     coords = coords * L_star
-
-    #     u_ref = u_ref * U_star
-    #     v_ref = v_ref * U_star
-
-    #     u_pred = u_pred * U_star
-    #     v_pred = v_pred * U_star
-
     x = coords[:, 0]
     y = coords[:, 1]
     # triang = tri.Triangulation(x, y)
@@ -184,7 +174,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
      # Update function for each frame
     def update(frames):
         ax.cla()  # Clear the current axis
-        ax.scatter(x, y, s=1, c=s_pred[frames], cmap='jet', vmin=0, vmax=1)
+        ax.scatter(x, y, s=1, c=u_pred[frames], cmap='jet', vmin=0, vmax=1)
         # plt.colorbar()
         # plt.xlabel("x")
         # plt.ylabel("y")

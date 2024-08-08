@@ -5,7 +5,7 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
-    config.mode = "train"
+    config.mode = "eval"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -20,11 +20,11 @@ def get_config():
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "ModifiedMlp"
     arch.num_layers = 8
-    arch.hidden_dim = 128
+    arch.hidden_dim = 256
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
-    arch.fourier_emb = ml_collections.ConfigDict({"embed_scale": 1.0, "embed_dim": 128})
+    arch.fourier_emb = ml_collections.ConfigDict({"embed_scale": 1.0, "embed_dim": 256})
     arch.reparam = ml_collections.ConfigDict(
         {"type": "weight_fact", "mean": 1.0, "stddev": 0.1}
     )
@@ -45,19 +45,20 @@ def get_config():
     training.max_steps = 100000
     training.num_time_windows = 1# 10
 
-    training.inflow_batch_size = int(2048/2)
-    training.outflow_batch_size = int(2048/2)
-    training.noslip_batch_size = int(2048/2)
-    training.ic_batch_size = int(2048/2)
-    training.res_batch_size =  int(4096/2)
+    div=4
+    training.inflow_batch_size = int(2048/div)
+    training.outflow_batch_size = int(2048/div)
+    training.noslip_batch_size = int(2048/div)
+    training.ic_batch_size = int(2048/div)
+    training.res_batch_size =  int(4096/div)
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
     weighting.scheme = "grad_norm"
     weighting.init_weights = {
-        # "u_ic": 1.0,
-        # "v_ic": 1.0,
-        # "p_ic": 1.0,
+        "u_ic": 1.0,
+        "v_ic": 1.0,
+        "p_ic": 1.0,
         "s_ic": 1.0,
         "p_in": 1.0,
         "p_out": 1.0,

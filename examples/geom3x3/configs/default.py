@@ -7,7 +7,7 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
-    config.mode = "train"
+    config.mode = "eval"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -22,12 +22,12 @@ def get_config():
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "ModifiedMlp"
     arch.num_layers = 10
-    arch.hidden_dim = 128
+    arch.hidden_dim = 200
     arch.out_dim = 3
     arch.activation = "tanh"  # gelu works better than tanh
     arch.periodicity = False
     arch.fourier_emb = ml_collections.ConfigDict(
-        {"embed_scale": 10.0, "embed_dim": 128}
+        {"embed_scale": 10.0, "embed_dim": 200}
     )
     arch.reparam = ml_collections.ConfigDict(
         {"type": "weight_fact", "mean": 0.5, "stddev": 0.1}
@@ -39,14 +39,14 @@ def get_config():
     optim.beta1 = 0.9
     optim.beta2 = 0.999
     optim.eps = 1e-8
-    optim.learning_rate = 1e-3
+    optim.learning_rate = .85e-3
     optim.decay_rate = 0.9
     optim.decay_steps = 2000
     optim.grad_accum_steps = 0
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 100000
+    training.max_steps = 150000
     training.batch_size_per_device = 1024
 
     # Weighting
@@ -55,7 +55,7 @@ def get_config():
     weighting.init_weights = ml_collections.ConfigDict(
         {
             # "u_in": 1.0,
-            # "v_in": 1.0,
+            "v_in": 1.0,
             # "u_out": 1.0,
             # "v_out": 1.0,
             "p_in": 1.0,

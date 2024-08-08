@@ -39,6 +39,12 @@ def get_coords():
     top_coords = np.concatenate((top_coords, np.ones(top_coords.shape)*np.max(contour_points[:,1])), axis=1)
     
     wall_coords = np.concatenate((bot_coords, top_coords), axis=0)
+    
+    X[:,1] = np.abs(-1*X[:,1])
+    inflow_coords[:,1] = np.abs(-1*inflow_coords[:,1])
+    outflow_coords[:,1] = np.abs(-1*outflow_coords[:,1])
+    wall_coords[:,1] = np.abs(-1*wall_coords[:,1])
+    contour_points[:,1] = np.abs(-1*contour_points[:,1])
 
     return jax.device_put(X/1000/1000), \
             jax.device_put(inflow_coords/1000/1000), \

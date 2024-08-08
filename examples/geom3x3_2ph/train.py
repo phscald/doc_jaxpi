@@ -29,13 +29,14 @@ from utils import get_dataset#, get_fine_mesh, parabolic_inflow
 
 
 class ICSampler(SpaceSampler):
-    def __init__(self, u, v, p, s, coords, batch_size, rng_key=random.PRNGKey(1234)):
+    def __init__(self, u, v, p, s, coords, coords_initial, batch_size, rng_key=random.PRNGKey(1234)):
         super().__init__(coords, batch_size, rng_key)
 
         self.u = u
         self.v = v
         self.p = p
         self.s = s
+        self.coords_initial = coords_initial
 
     @partial(pmap, static_broadcasted_argnums=(0,))
     def data_generation(self, key):
@@ -48,8 +49,9 @@ class ICSampler(SpaceSampler):
         v_batch = self.v[idx]
         p_batch = self.p[idx]
         s_batch = self.s[idx]
+        coords_inital_batch = self.coords_initial[idx]
 
-        batch = (coords_batch, u_batch, v_batch, p_batch, s_batch)
+        batch = (coords_batch, u_batch, v_batch, p_batch, s_batch, coords_inital_batch)
 
         return batch
 
@@ -171,7 +173,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         inflow_coords,
         outflow_coords,
         wall_coords,
-        u0, v0, p0, s0,
+        u0, v0, p0, s0, coords_initial, # coords_initial is already nondimensional
         mu0, mu1, rho0, rho1
     ) = get_dataset()
     
@@ -182,7 +184,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     L_max = 900/1000/1000
     pmax = mu0*U_max/L_max
     
-    D = 10**(-9)
+    D = 0*10**(-15)
 
     
     noslip_coords = wall_coords
@@ -207,7 +209,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         # u_inflow = u_inflow / U_star
         # print(f'p0_max:{jnp.max(p0)}')
         p_inflow = (pin / pmax) * jnp.ones((inflow_coords.shape[0]))
-        u0, v0, p0 = u0/U_max, v0/U_max, p0/pmax
+        # u0, v0, p0 = u0/U_max, v0/U_max, p0/pmax
 
     else:
         U_star = 1.0
@@ -216,7 +218,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # Temporal domain of each time window
     t0 = 0.0
-    t1 = 6.0
+    t1 = .5
 
     temporal_dom = jnp.array([t0, t1 * (1 + 0.05)])
 
@@ -229,7 +231,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         ic_sampler = iter(
             ICSampler(
                 # s0, coords, config.training.ic_batch_size, rng_key=keys[0]
-                u0, v0, p0, s0, coords, config.training.ic_batch_size, rng_key=keys[0]
+                u0, v0, p0, s0, coords, coords_initial, config.training.ic_batch_size, rng_key=keys[0]
             )
         )
         inflow_sampler = iter(

@@ -175,7 +175,7 @@ class NavierStokes2D(ForwardBVP):
 
         loss_dict = {
             "p_in": p_in_loss,
-            # "v_in": v_in_loss,
+            "v_in": v_in_loss,
             "p_out": p_out_loss,
             # "v_out": v_out_loss,
             "u_noslip": u_noslip_loss,
@@ -233,7 +233,7 @@ class NavierStokes2D(ForwardBVP):
 
         ntk_dict = {
             # "u_in": u_in_ntk,
-            # "v_in": v_in_ntk,
+            "v_in": v_in_ntk,
             # "u_out": u_out_ntk,
             # "v_out": v_out_ntk,
             'p_in': p_in_ntk,
