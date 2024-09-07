@@ -120,6 +120,13 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     x1 = coords_fem[:, 0]
     y1 = coords_fem[:, 1]
     
+    print(f'x_max = {jnp.max(x)}')
+    print(f'y_max = {jnp.max(y)}')
+    print(f'u_pred_min = {jnp.min(u_pred)}')
+    print(f'u_pred_max = {jnp.max(u_pred)}')
+    print(f'p_pred_min = {jnp.min(p_pred)}')
+    print(f'p_pred_max = {jnp.max(p_pred)}')
+    
     filepath = './pred_initial_fields.pkl'
     with open(filepath,"wb") as filepath:
         pickle.dump({"u_pred": u_pred,

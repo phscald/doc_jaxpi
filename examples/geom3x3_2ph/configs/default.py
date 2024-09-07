@@ -5,7 +5,7 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
-    config.mode = "eval"
+    config.mode = "train"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -20,11 +20,13 @@ def get_config():
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "ModifiedMlp"
     arch.num_layers = 8
-    arch.hidden_dim = 256
+    arch.hidden_dim = 400
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
-    arch.periodicity = False
-    arch.fourier_emb = ml_collections.ConfigDict({"embed_scale": 1.0, "embed_dim": 256})
+    arch.periodicity = ml_collections.ConfigDict(
+        {"period": (1.0,1.0), "axis": (1,2), "trainable": (True,True)}
+        ) # False
+    arch.fourier_emb = ml_collections.ConfigDict({"embed_scale": 1.0, "embed_dim": 400})
     arch.reparam = ml_collections.ConfigDict(
         {"type": "weight_fact", "mean": 1.0, "stddev": 0.1}
     )
@@ -42,7 +44,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 100000
+    training.max_steps = 50000
     training.num_time_windows = 1# 10
 
     div=4
@@ -73,12 +75,12 @@ def get_config():
         "rs": 1.0,
     }
 
-    weighting.momentum = 0.9
-    weighting.update_every_steps = 5000  # 100 for grad norm and 1000 for ntk
+    weighting.momentum = 0.9 
+    weighting.update_every_steps = 7000  # 100 for grad norm and 1000 for ntk
 
     weighting.use_causal = True
     weighting.causal_tol = 1.0
-    weighting.num_chunks = 16
+    weighting.num_chunks = 64
 
     # Logging
     config.logging = logging = ml_collections.ConfigDict()

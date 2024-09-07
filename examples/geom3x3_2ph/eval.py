@@ -47,6 +47,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     U_max = .0002 
     L_max = 900/1000/1000
     pmax = mu0*U_max/L_max
+    p_factor = .8/(pin/pmax)
     D = 10**(-9)
 
     T = 1.0  # final time
@@ -72,7 +73,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         coords = coords[ind_coords]
         T_star = L_star/U_star
         p_inflow = (pin / pmax) * jnp.ones((inflow_coords.shape[0]))
-        u0, v0, p0 = u0/U_max, v0/U_max, p0/pmax
+        # u0, v0, p0 = u0/U_max, v0/U_max, p0/pmax
 
         # # Nondimensionalization parameters
         # U_star = 1.0  # characteristic veprint(f'coords shape:{coords.shape}')and inflow velocity
@@ -104,7 +105,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # Initialize model
     # model = models.NavierStokes2D(config, inflow_fn, temporal_dom, coords, Re)
-    model = models.NavierStokes2DwSat(config, pin, temporal_dom, coords, U_max, L_max, fluid_params, D)
+    model = models.NavierStokes2DwSat(config, pin, p_factor, temporal_dom, coords, U_max, L_max, fluid_params, D)
 
     # Restore checkpoint
     ckpt_path = os.path.join(".", "ckpt", config.wandb.name)
@@ -120,7 +121,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # t_coords = jnp.linspace(0, t1, 20)[:-1]
     # t_coords = jnp.linspace(0, t1, 4)[:-1]
-    t_coords = jnp.array([0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.])/2
+    t_coords = jnp.array([0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.])
 
     u_pred_list = []
     v_pred_list = []
@@ -165,24 +166,46 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'coords x shape:{x.shape}')
     print(f'coords y shape:{y.shape}')
     print(f'coords u shape:{u_pred[0].shape}')
+    # print(jnp.max(jnp.abs(p_pred[0])))
     # print(len(u_pred))
 
     # print(dsadsa)
     from matplotlib.animation import FuncAnimation
-    fig, ax = plt.subplots()
+    figs, axs = plt.subplots()
+    figu, axu = plt.subplots()
+    figv, axv = plt.subplots()
+    figp, axp = plt.subplots()
     m = len(u_pred)
      # Update function for each frame
-    def update(frames):
-        ax.cla()  # Clear the current axis
-        ax.scatter(x, y, s=1, c=u_pred[frames], cmap='jet', vmin=0, vmax=1)
-        # plt.colorbar()
+    def update_s(frames):
+        axs.cla()  # Clear the current axis
+        axs.scatter(x, y, s=1, c=s_pred[frames], cmap='jet', vmin=0, vmax=1)
+        
+    def update_u(frames):
+        axu.cla()  # Clear the current axis
+        axu.scatter(x, y, s=1, c=u_pred[frames], cmap='jet', vmin=-0.66, vmax=0.66)
+        
+    def update_v(frames):
+        axv.cla()  # Clear the current axis
+        axv.scatter(x, y, s=1, c=v_pred[frames], cmap='jet', vmin=-0.13, vmax=0.13)
+        
+    def update_p(frames):
+        axp.cla()  # Clear the current axis
+        axp.scatter(x, y, s=1, c=p_pred[frames], cmap='jet', vmin=-0.1, vmax=0.85)  
+        # ax.scatter(x, y, s=1, c=v_pred[frames], cmap='jet', vmin=-0.13, vmax=0.13)
         # plt.xlabel("x")
         # plt.ylabel("y")
         # plt.title("Predicted s(x, y) - t = " + str(t_coords[frames]))
 
-    ani = FuncAnimation(fig, update, frames=m, interval=200)
+    ani = FuncAnimation(figs, update_s, frames=m, interval=200)
     # Save the animation as a GIF
     ani.save('./video_s_p5.gif', writer='pillow')
+    ani = FuncAnimation(figu, update_u, frames=m, interval=200)
+    ani.save('./video_u_p5.gif', writer='pillow')
+    ani = FuncAnimation(figv, update_v, frames=m, interval=200)
+    ani.save('./video_v_p5.gif', writer='pillow')
+    ani = FuncAnimation(figp, update_p, frames=m, interval=200)
+    ani.save('./video_p_p5.gif', writer='pillow')
 
 
 
@@ -205,7 +228,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     #     plt.subplot(4, 1, 2)
     #     plt.scatter(x, y, s=1, c=v_pred[i], cmap="jet")#, levels=100)
     #     plt.colorbar()
-    #     plt.xlabel("x")
+#     plt.xlabel("x")
     #     plt.ylabel("y")
     #     plt.title("Predicted v(x, y)")
     #     plt.tight_layout()

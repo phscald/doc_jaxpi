@@ -179,20 +179,41 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # print(dsadsa)
     from matplotlib.animation import FuncAnimation
-    fig, ax = plt.subplots()
+    figs, axs = plt.subplots()
+    figu, axu = plt.subplots()
+    figv, axv = plt.subplots()
+    figp, axp = plt.subplots()
     m = len(u_pred)
      # Update function for each frame
-    def update(frames):
-        ax.cla()  # Clear the current axis
-        ax.scatter(x, y, s=1, c=s_pred[frames], cmap='jet', vmin=0, vmax=1)
-        # plt.colorbar()
+    def update_s(frames):
+        axs.cla()  # Clear the current axis
+        axs.scatter(x, y, s=1, c=s_pred[frames], cmap='jet', vmin=0, vmax=1)
+        
+    def update_u(frames):
+        axu.cla()  # Clear the current axis
+        axu.scatter(x, y, s=1, c=u_pred[frames], cmap='jet')#, vmin=-0.66, vmax=0.66)
+        
+    def update_v(frames):
+        axv.cla()  # Clear the current axis
+        axv.scatter(x, y, s=1, c=v_pred[frames], cmap='jet')#, vmin=-0.13, vmax=0.13)
+        
+    def update_p(frames):
+        axp.cla()  # Clear the current axis
+        axp.scatter(x, y, s=1, c=p_pred[frames], cmap='jet')#, vmin=-0.1, vmax=0.85)  
+        # ax.scatter(x, y, s=1, c=v_pred[frames], cmap='jet', vmin=-0.13, vmax=0.13)
         # plt.xlabel("x")
         # plt.ylabel("y")
         # plt.title("Predicted s(x, y) - t = " + str(t_coords[frames]))
 
-    ani = FuncAnimation(fig, update, frames=m, interval=200)
+    ani = FuncAnimation(figs, update_s, frames=m, interval=200)
     # Save the animation as a GIF
     ani.save('./video_s_p5.gif', writer='pillow')
+    ani = FuncAnimation(figu, update_u, frames=m, interval=200)
+    ani.save('./video_u_p5.gif', writer='pillow')
+    ani = FuncAnimation(figv, update_v, frames=m, interval=200)
+    ani.save('./video_v_p5.gif', writer='pillow')
+    ani = FuncAnimation(figp, update_p, frames=m, interval=200)
+    ani.save('./video_p_p5.gif', writer='pillow')
 
 
 

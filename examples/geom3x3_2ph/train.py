@@ -45,6 +45,7 @@ class ICSampler(SpaceSampler):
 
         coords_batch = self.coords[idx, :]
 
+        idx = random.choice(key, self.coords_initial.shape[0], shape=(self.batch_size,))
         u_batch = self.u[idx]
         v_batch = self.v[idx]
         p_batch = self.p[idx]
@@ -52,59 +53,6 @@ class ICSampler(SpaceSampler):
         coords_inital_batch = self.coords_initial[idx]
 
         batch = (coords_batch, u_batch, v_batch, p_batch, s_batch, coords_inital_batch)
-
-        return batch
-
-
-class ResSampler(BaseSampler):
-    def __init__(
-        self,
-        temporal_dom,
-        coarse_coords,
-        fine_coords,
-        batch_size,
-        rng_key=random.PRNGKey(1234),
-    ):
-        super().__init__(batch_size, rng_key)
-
-        self.temporal_dom = temporal_dom
-
-        self.coarse_coords = coarse_coords
-        self.fine_coords = fine_coords
-
-    @partial(pmap, static_broadcasted_argnums=(0,))
-    def data_generation(self, key):
-        "Generates data containing batch_size samples"
-        subkeys = random.split(key, 4)
-
-        temporal_batch = random.uniform(
-            subkeys[0],
-            shape=(2 * self.batch_size, 1),
-            minval=self.temporal_dom[0],
-            maxval=self.temporal_dom[1],
-        )
-
-        coarse_idx = random.choice(
-            subkeys[1],
-            self.coarse_coords.shape[0],
-            shape=(self.batch_size,),
-            replace=True,
-        )
-        fine_idx = random.choice(
-            subkeys[2],
-            self.fine_coords.shape[0],
-            shape=(self.batch_size,),
-            replace=True,
-        )
-
-        coarse_spatial_batch = self.coarse_coords[coarse_idx, :]
-        fine_spatial_batch = self.fine_coords[fine_idx, :]
-        spatial_batch = jnp.vstack([coarse_spatial_batch, fine_spatial_batch])
-        spatial_batch = random.permutation(
-            subkeys[3], spatial_batch
-        )  # mix the coarse and fine coordinates
-
-        batch = jnp.concatenate([temporal_batch, spatial_batch], axis=1)
 
         return batch
 
@@ -176,16 +124,17 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         u0, v0, p0, s0, coords_initial, # coords_initial is already nondimensional
         mu0, mu1, rho0, rho1
     ) = get_dataset()
-    
-    
+
     fluid_params = (mu0, mu1, rho0, rho1)
 
     U_max = .0002 
     L_max = 900/1000/1000
     pmax = mu0*U_max/L_max
-    
+    p_factor = .8/(pin/pmax)
+    # p_factor = 1
+    p0 = p0 * p_factor
+           
     D = 0*10**(-15)
-
     
     noslip_coords = wall_coords
 
@@ -202,13 +151,13 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         outflow_coords = outflow_coords / L_star
         noslip_coords = noslip_coords / L_star
         coords = coords / L_star
-
+   
         T_star = L_star/U_star
 
         # Nondimensionalize flow field
         # u_inflow = u_inflow / U_star
         # print(f'p0_max:{jnp.max(p0)}')
-        p_inflow = (pin / pmax) * jnp.ones((inflow_coords.shape[0]))
+        # p_inflow = (pin / pmax) * jnp.ones((inflow_coords.shape[0]))
         # u0, v0, p0 = u0/U_max, v0/U_max, p0/pmax
 
     else:
@@ -218,7 +167,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # Temporal domain of each time window
     t0 = 0.0
-    t1 = .5
+    t1 = 2.0
 
     temporal_dom = jnp.array([t0, t1 * (1 + 0.05)])
 
@@ -276,10 +225,9 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
             "res": res_sampler,
         }
 
-
         # Initialize model
         # model = models.NavierStokes2DwSat(config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, D)
-        model = models.NavierStokes2DwSat(config, pin, temporal_dom, coords, U_max, L_max, fluid_params, D)
+        model = models.NavierStokes2DwSat(config, pin/pmax*p_factor, p_factor, temporal_dom, coords, U_max, L_max, fluid_params, D)
 
         # Train model for the current time window
         model = train_one_window(config, workdir, model, samplers, idx)

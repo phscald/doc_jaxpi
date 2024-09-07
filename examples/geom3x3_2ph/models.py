@@ -15,7 +15,7 @@ from jaxpi.evaluator import BaseEvaluator
 
 class NavierStokes2DwSat(ForwardIVP):
 
-    def __init__(self, config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, D):   
+    def __init__(self, config, p_inflow, p_factor, temporal_dom, coords, U_max, L_max, fluid_params, D):   
         super().__init__(config)
 
         # self.inflow_fn = inflow_fn
@@ -26,6 +26,7 @@ class NavierStokes2DwSat(ForwardIVP):
         self.L_max = L_max
         self.fluid_params = fluid_params
         self.D = D
+        self.p_factor = p_factor
 
         # Non-dimensionalized domain length and width
         self.L, self.W = self.coords.max(axis=0) - self.coords.min(axis=0)
@@ -118,12 +119,12 @@ class NavierStokes2DwSat(ForwardIVP):
         mu_ratio = mu/mu0
                 
         # PDE residual
-        ru = u_t + u * u_x + v * u_y + (p_x - mu_ratio*(u_xx + u_yy)) / Re
-        rv = v_t + u * v_x + v * v_y + (p_y - mu_ratio*(v_xx + v_yy)) / Re
+        ru = u_t + u * u_x + v * u_y + (1/self.p_factor * p_x - mu_ratio*(u_xx + u_yy)) / Re
+        rv = v_t + u * v_x + v * v_y + (1/self.p_factor * p_y - mu_ratio*(v_xx + v_yy)) / Re
         rc = u_x + v_y
         rs = s_t + u * s_x + v * s_y - self.D*(s_xx + s_yy) 
 
-        return ru, rv, rc, rs
+        return ru/(10**4.8), rv/(10**4.8), rc, rs
 
     def ru_net(self, params, t, x, y):
         ru, _, _, _ = self.r_net(params, t, x, y)
@@ -345,10 +346,7 @@ class NavierStokes2DwSat(ForwardIVP):
         p_in_pred = self.p_pred_fn(
             params, inflow_batch[:, 0], inflow_batch[:, 1], inflow_batch[:, 2]
         )
-        # print(p_in_loss.shape)
-        # print(p_in_loss.shape)
-        # print(self.p_in)
-        # print(ewqeqw)
+
         p_in_loss = jnp.mean((p_in_pred - self.p_in) ** 2)
         #
         p_out_pred = self.p_pred_fn(
@@ -418,9 +416,6 @@ class NavierStokes2DwSat(ForwardIVP):
         }
 
         return loss_dict
-
-
-    
 
 
 class NavierStokesEvaluator(BaseEvaluator):
