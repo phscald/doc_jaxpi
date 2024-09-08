@@ -42,7 +42,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 200000
+    training.max_steps = 500000
     training.num_time_windows = 1# 10
 
     div = 4

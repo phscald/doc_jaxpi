@@ -40,6 +40,10 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         mu0, mu1, rho0, rho1
     ) = get_dataset(pin=pin)
     noslip_coords = wall_coords
+    
+    print(jnp.max(coords[:,0]))
+    print(jnp.max(coords[:,1]))
+
 
     print(f'coords shape:{coords.shape}')
     print(f'inflow coords shape:{inflow_coords.shape}')
@@ -51,6 +55,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     pmax =dp
     Re = rho0*dp*(L_max**2)/(mu0**2)
     print(f'Re={Re}')
+
+
 
     D = 0# 10**(-9)
     t1 = 130
@@ -68,7 +74,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         inflow_coords = inflow_coords / L_star
         outflow_coords = outflow_coords / L_star
         noslip_coords = noslip_coords / L_star
-        coords = coords / L_star
+        coords = coords / L_star       
+        
         ind_coords = random.choice(
             random.PRNGKey(1234),
             coords.shape[0],
@@ -110,7 +117,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # Initialize model
     # model = models.NavierStokes2D(config, inflow_fn, temporal_dom, coords, Re)
-    model = models.NavierStokes2DwSat(config, pin, temporal_dom, coords, U_max, L_max, fluid_params, D)
+    model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params, D)
 
     # Restore checkpoint
     ckpt_path = os.path.join(".", "ckpt", config.wandb.name)

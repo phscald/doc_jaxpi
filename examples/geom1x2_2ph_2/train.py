@@ -188,7 +188,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     
 
     D = 0# 10**(-9)
-    t1 = 130 #.1*10/.01
+    t1 = 1500 #.1*10/.01
     # (
     #     fine_coords,
     #     fine_coords_near_cyl,
@@ -335,7 +335,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
         # Initialize model
         # model = models.NavierStokes2DwSat(config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, D)
-        model = models.NavierStokes2DwSat(config, pin, temporal_dom, coords, U_max, L_max, fluid_params, D)
+        model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params, D)
 
         # Train model for the current time window
         model = train_one_window(config, workdir, model, samplers, idx)

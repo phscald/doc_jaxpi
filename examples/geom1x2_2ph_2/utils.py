@@ -124,10 +124,10 @@ def get_coords():
         
     wall_coords = np.concatenate((bot_coords, top_coords, contour_points), axis=0)
 
-    return jax.device_put(X/1000), \
-            jax.device_put(inflow_coords/1000), \
-            jax.device_put(outflow_coords/1000), \
-            jax.device_put(wall_coords/1000) #, \
+    return jax.device_put(X), \
+            jax.device_put(inflow_coords), \
+            jax.device_put(outflow_coords), \
+            jax.device_put(wall_coords) #, \
             # jax.device_put(contour_points/1000)
            
             
@@ -156,8 +156,14 @@ def initial_fields(coords):
 def get_dataset(pin):
 
     coords, inflow_coords, outflow_coords, wall_coords = get_coords()
-    mu0 = .01#.02
-    mu1 = .01
+    scale = 1/1000/1000
+    (coords, inflow_coords, outflow_coords, wall_coords) = (
+                                                                coords*scale, 
+                                                                inflow_coords*scale, 
+                                                                outflow_coords*scale, 
+                                                                wall_coords*scale)
+    mu0 = .001#.02
+    mu1 = .001
     rho0 = 1000; rho1 = 1000
     u0, v0, p0, s0, _ = initial_fields(coords)
     return (
