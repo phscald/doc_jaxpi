@@ -42,8 +42,8 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 500000
-    training.num_time_windows = 1# 10
+    training.max_steps = 100000
+    training.num_time_windows = 20# 10
 
     div = 4
     training.inflow_batch_size = int(2048/div)

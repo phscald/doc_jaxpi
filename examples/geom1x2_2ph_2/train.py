@@ -188,7 +188,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     
 
     D = 0# 10**(-9)
-    t1 = 1500 #.1*10/.01
+    t1 = 300 #.1*10/.01
     # (
     #     fine_coords,
     #     fine_coords_near_cyl,
