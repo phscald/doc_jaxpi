@@ -5,7 +5,7 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
-    config.mode = "eval"
+    config.mode = "train"
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -19,8 +19,8 @@ def get_config():
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "ModifiedMlp"
-    arch.num_layers = 9
-    arch.hidden_dim = 512
+    arch.num_layers = 10
+    arch.hidden_dim = 250
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
@@ -56,9 +56,9 @@ def get_config():
     config.weighting = weighting = ml_collections.ConfigDict()
     weighting.scheme = "grad_norm"
     weighting.init_weights = {
-        # "u_ic": 1.0,
-        # "v_ic": 1.0,
-        # "p_ic": 1.0,
+        "u_ic": 1.0,
+        "v_ic": 1.0,
+        "p_ic": 1.0,
         "s_ic": 1.0,
         "p_in": 1.0,
         "p_out": 1.0,

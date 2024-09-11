@@ -44,11 +44,12 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         mu, rho
     ) = get_dataset()
 
-    U_max = .0002#17#.25/3#visc .1
-    V_max = U_max/10*2
-    
+    dp = 10
     L_max = 900/1000/1000
-    pmax = mu*U_max/L_max
+    U_max = dp*L_max/mu
+    pmax =dp
+    Re = rho*dp*(L_max**2)/(mu**2)
+    print(f'Re={Re}')
     
     # print(pmax)
     # print(dsa)
@@ -61,7 +62,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     if config.nondim == True:
         # Nondimensionalization parameters
         U_star = U_max # 0.2  # characteristic velocity
-        V_star = V_max
         L_star = L_max #0.1  # characteristic length
         Re = rho * U_star * L_star / mu
 
@@ -78,7 +78,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         u_ref = u_fem / U_star
         v_ref = v_fem / U_star
         p_ref = p_fem / pmax
-        p_inflow = 10 / pmax
+        p_inflow = dp / pmax
 
     else:
         U_star = 1.0

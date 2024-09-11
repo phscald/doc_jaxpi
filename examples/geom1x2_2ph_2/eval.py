@@ -59,7 +59,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
 
     D = 0# 10**(-9)
-    t1 = 3000
+    t1 = 6000
 
     T = 1.0  # final time
 
@@ -133,7 +133,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # t_coords = jnp.linspace(0, t1, 20)[:-1]
     # t_coords = jnp.linspace(0, t1, 4)[:-1]
-    t_coords = jnp.array([0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.])*t1/1 #
+    t_coords = jnp.array([0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.])*t1/10 #
 
     u_pred_list = []
     v_pred_list = []

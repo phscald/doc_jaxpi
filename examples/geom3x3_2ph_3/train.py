@@ -179,12 +179,16 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     ) = get_dataset(pin=pin)
 
     fluid_params = (mu0, mu1, rho0, rho1)
-    U_max = .0002 
+    dp = 10
     L_max = 900/1000/1000
-    pmax = mu0*U_max/L_max#*36
-
-    D = 0# 10**(-9)
-    t1 = .01
+    U_max = dp*L_max/mu0
+    pmax =dp
+    Re = rho0*dp*(L_max**2)/(mu0**2)
+    print(f'Re={Re}')
+    
+    D = 0#
+    t1=150
+    
     # (
     #     fine_coords,
     #     fine_coords_near_cyl,

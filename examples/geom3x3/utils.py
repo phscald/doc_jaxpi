@@ -46,16 +46,24 @@ def get_coords():
     wall_coords[:,1] = np.abs(-1*wall_coords[:,1])
     contour_points[:,1] = np.abs(-1*contour_points[:,1])
 
-    return jax.device_put(X/1000/1000), \
-            jax.device_put(inflow_coords/1000/1000), \
-            jax.device_put(outflow_coords/1000/1000), \
-            jax.device_put(wall_coords/1000/1000), \
-            jax.device_put(contour_points/1000/1000)
+    return jax.device_put(X), \
+            jax.device_put(inflow_coords), \
+            jax.device_put(outflow_coords), \
+            jax.device_put(wall_coords), \
+            jax.device_put(contour_points)
 
 
 def get_dataset():
     u_fem, v_fem, p_fem, coords_fem = get_fem_data()
     coords, inflow_coords, outflow_coords, wall_coords, cylinder_coords = get_coords()
+    scale = 1/1000/1000
+    coords, inflow_coords, outflow_coords, wall_coords, cylinder_coords = (
+        coords*scale,
+        inflow_coords*scale, 
+        outflow_coords*scale, 
+        wall_coords*scale, 
+        cylinder_coords*scale
+    )
     mu = .1
     rho = 1000
 
