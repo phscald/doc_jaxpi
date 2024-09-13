@@ -29,7 +29,7 @@ import matplotlib.tri as tri
 
 def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Load dataset
-    pin =10
+    pin =20
     (
         coords,
         inflow_coords,
@@ -49,7 +49,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'inflow coords shape:{inflow_coords.shape}')
     
     fluid_params = (mu0, mu1, rho0, rho1)
-    dp = 10
+    dp = 20
+    #pin la em cima
     L_max = 650/1000/1000
     U_max = dp*L_max/mu0
     pmax =dp
@@ -133,7 +134,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # t_coords = jnp.linspace(0, t1, 20)[:-1]
     # t_coords = jnp.linspace(0, t1, 4)[:-1]
-    t_coords = jnp.array([0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.])*t1/10 #
+    t_coords = jnp.array([0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.])*t1#
 
     u_pred_list = []
     v_pred_list = []
@@ -156,6 +157,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         v_pred_list.append(v_pred)
         s_pred_list.append(s_pred)
         p_pred_list.append(p_pred)
+        
+        print(jnp.max(u_pred))
 
     u_pred = jnp.concatenate(u_pred_list, axis=0)
     v_pred = jnp.concatenate(v_pred_list, axis=0)

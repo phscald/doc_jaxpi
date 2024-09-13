@@ -21,7 +21,7 @@ def get_config():
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "ModifiedMlp"
-    arch.num_layers = 10
+    arch.num_layers = 8
     arch.hidden_dim = 200
     arch.out_dim = 3
     arch.activation = "tanh"  # gelu works better than tanh
@@ -46,7 +46,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 150000
+    training.max_steps = 100000
     training.batch_size_per_device = 1024
 
     # Weighting

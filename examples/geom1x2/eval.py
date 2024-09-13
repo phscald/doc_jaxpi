@@ -36,11 +36,12 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         mu, rho
     ) = get_dataset()
     
-    dp = 10
+    dp = 20
     L_max = 650/1000/1000
     U_max = dp*L_max/mu
     pmax =dp
     Re = rho*dp*(L_max**2)/(mu**2)  
+    p_inflow = 20 / pmax
 
     # Nondimensionalization
     if config.nondim == True:
@@ -58,7 +59,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         # coords = coords_fem
 
         # Nondimensionalize flow field
-        p_inflow = 10 / pmax
+        
     else:
         U_star = 1.0
         L_star = 1.0
