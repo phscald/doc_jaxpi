@@ -54,7 +54,7 @@ class NavierStokes2D(ForwardBVP):
         u = outputs[0]
         v = outputs[1]
         p = outputs[2]
-        return u*0.01, v*0.001, p
+        return u*0.1, v*0.01, p
 
     def u_net(self, params, x, y):
         u, _, _ = self.neural_net(params, x, y)

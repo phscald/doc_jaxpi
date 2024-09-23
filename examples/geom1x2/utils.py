@@ -84,13 +84,13 @@ def get_coords():
 def get_dataset():
     # u_fem, v_fem, p_fem, coords_fem = get_fem_data()
     coords, inflow_coords, outflow_coords, wall_coords = get_coords()
-    scale = 1/1000/1000
+    scale = 1/1000/100
     (coords, inflow_coords, outflow_coords, wall_coords) = (
                                                                 coords*scale, 
                                                                 inflow_coords*scale, 
                                                                 outflow_coords*scale, 
                                                                 wall_coords*scale)
-    mu = .001
+    mu = .01
     rho = 1000
 
     return (

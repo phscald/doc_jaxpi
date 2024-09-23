@@ -55,13 +55,12 @@ class NavierStokes2DwSat(ForwardIVP):
         self.v_pred_fn = vmap(self.v_net, (None, 0, 0, 0))
         self.p_pred_fn = vmap(self.p_net, (None, 0, 0, 0))
         self.s_pred_fn = vmap(self.s_net, (None, 0, 0, 0))
-        # self.w_pred_fn = vmap(self.w_net, (None, 0, 0, 0)) # nao foi usado nesse script, e nao entendi a eq. também
         self.r_pred_fn = vmap(self.r_net, (None, 0, 0, 0))
 
     def neural_net(self, params, t, x, y):
         t = t / (self.temporal_dom[1])  # rescale t into [0, 1]
         x = x / self.L  # rescale x into [0, 1]
-        y = y / self.W  # rescale y into [0, 1]
+        y = y / self.W  # rescale y into [0, 1] 
         inputs = jnp.stack([t, x, y])
         outputs = self.state.apply_fn(params, inputs)
 
@@ -70,7 +69,8 @@ class NavierStokes2DwSat(ForwardIVP):
         v = outputs[1]
         p = outputs[2]
         s = outputs[3]
-        return u*0.001, v*0.0001, p, s
+        # return u, v, p, s
+        return u*0.005, v*0.0005, p, s
     # u*0.01, v*0.001, p
     # lembrar de copiar as condiçoes iniciais no folder geom1x2
 
@@ -119,16 +119,12 @@ class NavierStokes2DwSat(ForwardIVP):
         v_yy = grad(grad(self.v_net, argnums=3), argnums=3)(params, t, x, y)
         s_yy = grad(grad(self.s_net, argnums=3), argnums=3)(params, t, x, y)
 
-        # compute Reynolds, initialized as Re=1
-        # mu = (1-s)*mu1+s*mu0
-        # rho = (1-s)*rho1+s*rho0
-        # Re = Re*rho*self.U_max*self.L_max/mu
-        Re = rho0*self.U_max*self.L_max/mu0
+
+        Re = rho0*self.U_max* (self.L_max *(self.W/self.L))/mu0
         mu = (1-s)*mu1 + s*mu0
         mu_ratio = mu/mu0
                 
         # PDE residual\
-        print(f'Re: {Re}')
         ru = u_t + u * u_x + v * u_y + (p_x - mu_ratio*(u_xx + u_yy)) / Re
         rv = v_t + u * v_x + v * v_y + (p_y - mu_ratio*(v_xx + v_yy)) / Re
         rc = u_x + v_y
@@ -325,7 +321,6 @@ class NavierStokes2DwSat(ForwardIVP):
             "rc": rc_ntk,
             "rs": rs_ntk,
         }
-
         return ntk_dict
 
     @partial(jit, static_argnums=(0,))

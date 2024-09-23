@@ -29,6 +29,9 @@ import matplotlib.tri as tri
 
 def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Load dataset
+    
+
+    
     pin =20
     (
         coords,
@@ -50,17 +53,18 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     
     fluid_params = (mu0, mu1, rho0, rho1)
     dp = 20
-    #pin la em cima
-    L_max = 650/1000/1000
+    # pin la em cima
+    L_max = 650/1000/100
     U_max = dp*L_max/mu0
     pmax =dp
     Re = rho0*dp*(L_max**2)/(mu0**2)
     print(f'Re={Re}')
+    print(f'Re={Re*.15**2}')
 
 
 
     D = 0# 10**(-9)
-    t1 = 6000
+    t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time
 
@@ -87,7 +91,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
         T_star = L_star/U_star
         p_inflow = (pin / pmax) * jnp.ones((inflow_coords.shape[0]))
-        u0, v0, p0 = u0/U_max, v0/U_max, p0/pmax
+        # u0, v0, p0 = u0/U_max, v0/U_max, p0/pmax
+
 
         # # Nondimensionalization parameters
         # U_star = 1.0  # characteristic veprint(f'coords shape:{coords.shape}')and inflow velocity
@@ -143,6 +148,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # U_pred_list = []
 
     for idx in range(config.training.num_time_windows):
+        print(f'{idx+1} / {config.training.num_time_windows}' )
         # Restore the checkpoint
         ckpt_path = os.path.join('.', 'ckpt', config.wandb.name, 'time_window_{}'.format(idx + 1))
         model.state = restore_checkpoint(model.state, ckpt_path)
@@ -158,12 +164,12 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         s_pred_list.append(s_pred)
         p_pred_list.append(p_pred)
         
-        print(jnp.max(u_pred))
-
-    u_pred = jnp.concatenate(u_pred_list, axis=0)
-    v_pred = jnp.concatenate(v_pred_list, axis=0)
-    p_pred = jnp.concatenate(p_pred_list, axis=0)
-    s_pred = jnp.concatenate(s_pred_list, axis=0)
+        
+        
+    # u_pred = jnp.concatenate(u_pred_list, axis=0)
+    # v_pred = jnp.concatenate(v_pred_list, axis=0)
+    # p_pred = jnp.concatenate(p_pred_list, axis=0)
+    # s_pred = jnp.concatenate(s_pred_list, axis=0)
 
     # Dimensionalize coordinates and flow field
     # if config.nondim == True:
@@ -198,53 +204,67 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'v0 min: {jnp.min(v0)}')
     print(f'v0 max: {jnp.max(v0)}')
 
-    # print(dsadsa)
     from matplotlib.animation import FuncAnimation
+    from functools import partial  # Import partial to pass extra arguments to the update function
+
+    # Create figures and axes once
     figs, axs = plt.subplots()
     figu, axu = plt.subplots()
     figv, axv = plt.subplots()
     figp, axp = plt.subplots()
-    m = len(u_pred)
-     # Update function for each frame
-    def update_s(frames):
+
+    m = len(u_pred)  # Assuming u_pred and others are defined
+
+    # Update function for each frame
+    def update_s(frames, idx):
         axs.cla()  # Clear the current axis
-        axs.scatter(x, y, s=1, c=s_pred[frames], cmap='jet', vmin=0, vmax=1)
-        
-    def update_u(frames):
+        axs.scatter(x, y, s=1, c=s_pred_list[idx][frames], cmap='jet', vmin=0, vmax=1)
+
+    def update_u(frames, idx):
         axu.cla()  # Clear the current axis
-        axu.scatter(x, y, s=1, c=u_pred[frames], cmap='jet')#, vmin=jnp.min(u0), vmax=jnp.max(u0))
-        
-    def update_v(frames):
+        axu.scatter(x, y, s=1, c=u_pred_list[idx][frames], cmap='jet', vmin=jnp.min(u0), vmax=jnp.max(u0))
+
+    def update_v(frames, idx):
         axv.cla()  # Clear the current axis
-        axv.scatter(x, y, s=1, c=v_pred[frames], cmap='jet')#, vmin=jnp.min(v0), vmax=jnp.max(v0))
-        
-    def update_p(frames):
+        axv.scatter(x, y, s=1, c=v_pred_list[idx][frames], cmap='jet', vmin=jnp.min(v0), vmax=jnp.max(v0))
+
+
+    def update_p(frames, idx):
         axp.cla()  # Clear the current axis
-        axp.scatter(x, y, s=1, c=p_pred[frames], cmap='jet')#, vmin=jnp.min(p0), vmax=jnp.max(p0))
-        # ax.scatter(x, y, s=1, c=v_pred[frames], cmap='jet', vmin=-0.13, vmax=0.13)
-        # plt.xlabel("x")
-        # plt.ylabel("y")
-        # plt.title("Predicted s(x, y) - t = " + str(t_coords[frames]))
+        axp.scatter(x, y, s=1, c=p_pred_list[idx][frames], cmap='jet', vmin=0, vmax=1)
 
-    ani = FuncAnimation(figs, update_s, frames=m, interval=200)
-    # Save the animation as a GIF
-    ani.save('./video_s_p5.gif', writer='pillow')
-    ani = FuncAnimation(figu, update_u, frames=m, interval=200)
-    ani.save('./video_u_p5.gif', writer='pillow')
-    ani = FuncAnimation(figv, update_v, frames=m, interval=200)
-    ani.save('./video_v_p5.gif', writer='pillow')
-    ani = FuncAnimation(figp, update_p, frames=m, interval=200)
-    ani.save('./video_p_p5.gif', writer='pillow')
+    # Function to generate GIFs
+    def make_gif(idx):
+        ani_s = FuncAnimation(figs, partial(update_s, idx=idx-1), frames=m, interval=200)
+        ani_s.save(f'./video_s_p5_{idx}.gif', writer='pillow')
+        
+        ani_u = FuncAnimation(figu, partial(update_u, idx=idx-1), frames=m, interval=200)
+        ani_u.save(f'./video_u_p5_{idx}.gif', writer='pillow')
+        
+        ani_v = FuncAnimation(figv, partial(update_v, idx=idx-1), frames=m, interval=200)
+        ani_v.save(f'./video_v_p5_{idx}.gif', writer='pillow')
+        
+        ani_p = FuncAnimation(figp, partial(update_p, idx=idx-1), frames=m, interval=200)
+        ani_p.save(f'./video_p_p5_{idx}.gif', writer='pillow')
 
+    # Generate GIFs for each time window
+    for idx in range(1, config.training.num_time_windows + 1):
+        make_gif(idx)
 
-
-    # Plot
-    # Save dir
+    # # Plot
+    # # Save dir
     # save_dir = os.path.join(workdir, "figures", config.wandb.name)
     # if not os.path.isdir(save_dir):
     #     os.makedirs(save_dir)
     # for i in range(len(u_pred)):
     #     fig1 = plt.figure(figsize=(18, 12))
+        
+    #     # U = u_pred[i]
+    #     # ind = jnp.where(coords[:, 0]==.2)[0]
+    #     # dy = coords[ind[:-1], 1] - coords[ind[1:], 1]
+    #     # U = (U[ind[:-1]] + U[ind[1:]])/2
+    #     # U_m = jnp.sum(U*dy)/(coords[ind[-1], 1]-coords[ind[-2], 1])
+    #     # print(f'U_m: {U_m}')
 
     #     plt.subplot(4, 1, 1)
     #     plt.scatter(x, y, s=1, c=u_pred[i], cmap="jet")#, levels=100)

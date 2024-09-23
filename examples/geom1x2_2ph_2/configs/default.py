@@ -5,8 +5,8 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
-    config.mode = "train"
-
+    config.mode = "eval"
+    # ver o coeficiente do causal depois
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
     wandb.project = "geom1x2-unsteady"
@@ -19,8 +19,8 @@ def get_config():
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "ModifiedMlp"
-    arch.num_layers = 8
-    arch.hidden_dim = 400
+    arch.num_layers = 9
+    arch.hidden_dim = 350
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
@@ -37,13 +37,13 @@ def get_config():
     optim.eps = 1e-8
     optim.learning_rate = 1e-3
     optim.decay_rate = 0.95
-    optim.decay_steps = 3000
+    optim.decay_steps = 5000
     optim.grad_accum_steps = 0
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 500000
-    training.num_time_windows = 1
+    training.max_steps = 150000
+    training.num_time_windows = 2
 
     div = 4
     training.inflow_batch_size = int(2048/div)
@@ -76,8 +76,8 @@ def get_config():
     weighting.momentum = 0.9
     weighting.update_every_steps = 5000  # 100 for grad norm and 1000 for ntk
 
-    weighting.use_causal = True
-    weighting.causal_tol = 1.0
+    weighting.use_causal = True  ###################### CAUSALITY
+    weighting.causal_tol = 2
     weighting.num_chunks = 16
 
     # Logging
@@ -92,7 +92,7 @@ def get_config():
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()
-    saving.save_every_steps = 50000
+    saving.save_every_steps = 100000
     saving.num_keep_ckpts = 20
 
     # Input shape for initializing Flax models

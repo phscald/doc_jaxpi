@@ -45,12 +45,12 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     ) = get_dataset()
 
     dp = 20
-    L_max = 650/1000/1000
+    L_max = 650/1000/100
     U_max = dp*L_max/mu
     pmax =dp
     Re = rho*dp*(L_max**2)/(mu**2)
     print(f'Re={Re}')
-    print(f'Re={Re*.15}')
+    print(f'Re={Re*.15*.15}')
 
     # pin = 10
     # L_max = 650/1000

@@ -156,14 +156,14 @@ def initial_fields(coords):
 def get_dataset(pin):
 
     coords, inflow_coords, outflow_coords, wall_coords = get_coords()
-    scale = 1/1000/1000
+    scale = 1/1000/100
     (coords, inflow_coords, outflow_coords, wall_coords) = (
                                                                 coords*scale, 
                                                                 inflow_coords*scale, 
                                                                 outflow_coords*scale, 
                                                                 wall_coords*scale)
-    mu0 = .001#.02
-    mu1 = .001
+    mu0 = .01#.02
+    mu1 = .01
     rho0 = 1000; rho1 = 1000
     u0, v0, p0, s0, _ = initial_fields(coords)
     return (
