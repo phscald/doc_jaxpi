@@ -19,14 +19,14 @@ def get_config():
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "ModifiedMlp"
-    arch.num_layers = 9
-    arch.hidden_dim = 350
+    arch.num_layers = 7
+    arch.hidden_dim = 300
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
-    arch.fourier_emb = ml_collections.ConfigDict({"embed_scale": 10.0, "embed_dim": arch.hidden_dim})
+    arch.fourier_emb = ml_collections.ConfigDict({"embed_scale": 5.0, "embed_dim": arch.hidden_dim})
     arch.reparam = ml_collections.ConfigDict(
-        {"type": "weight_fact", "mean": .5, "stddev": 0.1}
+        {"type": "weight_fact", "mean": 1, "stddev": 0.1}
     )
 
     # Optim
@@ -42,15 +42,15 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 150000
-    training.num_time_windows = 2
+    training.max_steps = 300000
+    training.num_time_windows = 1
 
     div = 4
     training.inflow_batch_size = int(2048/div)
     training.outflow_batch_size = int(2048/div)
     training.noslip_batch_size = int(2048/div)
     training.ic_batch_size = int(2048/div)
-    training.res_batch_size = int(4096/div)
+    training.res_batch_size = int(2048/div)
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
@@ -77,7 +77,7 @@ def get_config():
     weighting.update_every_steps = 5000  # 100 for grad norm and 1000 for ntk
 
     weighting.use_causal = True  ###################### CAUSALITY
-    weighting.causal_tol = 2
+    weighting.causal_tol = .5
     weighting.num_chunks = 16
 
     # Logging
@@ -92,7 +92,7 @@ def get_config():
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()
-    saving.save_every_steps = 100000
+    saving.save_every_steps = 50000
     saving.num_keep_ckpts = 20
 
     # Input shape for initializing Flax models

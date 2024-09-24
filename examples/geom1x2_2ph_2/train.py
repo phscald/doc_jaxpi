@@ -29,13 +29,14 @@ from utils import get_dataset#, get_fine_mesh, parabolic_inflow
 
 
 class ICSampler(SpaceSampler):
-    def __init__(self, u, v, p, s, coords, batch_size, rng_key=random.PRNGKey(1234)):
+    def __init__(self, u, v, p, s, coords, temporal_dom, batch_size, rng_key=random.PRNGKey(1234)):
         super().__init__(coords, batch_size, rng_key)
 
         self.u = u
         self.v = v
         self.p = p
         self.s = s
+        self.temporal_dom = temporal_dom
 
     @partial(pmap, static_broadcasted_argnums=(0,))
     def data_generation(self, key):
@@ -48,6 +49,14 @@ class ICSampler(SpaceSampler):
         v_batch = self.v[idx]
         p_batch = self.p[idx]
         s_batch = self.s[idx]
+        key = random.split(key)[1]
+        temporal_ic_batch = random.uniform(
+            key,
+            shape=(2 * self.batch_size, 1),
+            minval=self.temporal_dom[0],
+            maxval=self.temporal_dom[1],
+            )
+
 
         batch = (coords_batch, u_batch, v_batch, p_batch, s_batch)
 
@@ -191,7 +200,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     
 
     D = 0 #10**(-9)
-    t1 = 400 #.1*10/.01
+    t1 = 1000 #.1*10/.01
     # (
     #     fine_coords,
     #     fine_coords_near_cyl,
@@ -281,7 +290,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         ic_sampler = iter(
             ICSampler(
                 # s0, coords, config.training.ic_batch_size, rng_key=keys[0]
-                u0, v0, p0, s0, coords, config.training.ic_batch_size, rng_key=keys[0]
+                u0, v0, p0, s0, coords, temporal_dom, config.training.ic_batch_size, rng_key=keys[0]
             )
         )
         inflow_sampler = iter(
@@ -347,15 +356,15 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         if config.training.num_time_windows > 1:
             state = jax.device_get(jax.tree_util.tree_map(lambda x: x[0], model.state))
             params = state.params
-            u0 = vmap(model.u_net, (None, None, 0, 0))(
-                params, t1, coords[:, 0], coords[:, 1]
-            )
-            v0 = vmap(model.v_net, (None, None, 0, 0))(
-                params, t1, coords[:, 0], coords[:, 1]
-            )
-            p0 = vmap(model.p_net, (None, None, 0, 0))(
-                params, t1, coords[:, 0], coords[:, 1]
-            )
+            # u0 = vmap(model.u_net, (None, None, 0, 0))(
+            #     params, t1, coords[:, 0], coords[:, 1]
+            # )
+            # v0 = vmap(model.v_net, (None, None, 0, 0))(
+            #     params, t1, coords[:, 0], coords[:, 1]
+            # )
+            # p0 = vmap(model.p_net, (None, None, 0, 0))(
+            #     params, t1, coords[:, 0], coords[:, 1]
+            # )
             s0 = vmap(model.s_net, (None, None, 0, 0))(
                 params, t1, coords[:, 0], coords[:, 1]
             )
