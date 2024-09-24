@@ -129,7 +129,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     ckpt_path = os.path.join(".", "ckpt", config.wandb.name)
     ckpt_path = os.path.abspath(ckpt_path)
     model.state = restore_checkpoint(model.state, ckpt_path)
-    params = model.state.params
+    params = model.state.paramscd examples
 
     # Predict
     u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, 0)), (None, 0, None, None)))
