@@ -5,7 +5,7 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
-    config.mode = "train"
+    config.mode = "eval"
     # ver o coeficiente do causal depois
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -19,7 +19,7 @@ def get_config():
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "ModifiedMlp"
-    arch.num_layers = 7
+    arch.num_layers = 8
     arch.hidden_dim = 300
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
@@ -42,7 +42,8 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 250
+    training.max_steps = 500000
+    training.fine_tune = True
     training.num_time_windows = 1
 
     div = 4
@@ -92,11 +93,11 @@ def get_config():
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()
-    saving.save_every_steps = 250#50000
+    saving.save_every_steps = 50000
     saving.num_keep_ckpts = 20
 
     # Input shape for initializing Flax models
-    config.input_dim = 3
+    config.input_dim = 4
 
     # Integer for PRNG random seed.
     config.seed = 42

@@ -108,10 +108,10 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     params = model.state.params
 
     # Predict
-    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, 0)), (None, 0, None, None)))
-    v_pred_fn = jit(vmap(vmap(model.v_net, (None, None, 0, 0)), (None, 0, None, None)))
-    p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, 0)), (None, 0, None, None)))
-    s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, 0)), (None, 0, None, None)))
+    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
+    v_pred_fn = jit(vmap(vmap(model.v_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
+    p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
+    s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
 
     # t_coords = jnp.linspace(0, t1, 20)[:-1]
     # t_coords = jnp.linspace(0, t1, 4)[:-1]
@@ -129,11 +129,13 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         ckpt_path = os.path.join('.', 'ckpt', config.wandb.name, 'time_window_{}'.format(idx + 1))
         model.state = restore_checkpoint(model.state, ckpt_path)
         params = model.state.params
+        
+        mu = .01
 
-        u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
-        v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
-        s_pred = s_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
-        p_pred = p_pred_fn(params, t_coords, coords[:, 0], coords[:, 1])
+        u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
+        v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
+        s_pred = s_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
+        p_pred = p_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
 
         u_pred_list.append(u_pred)
         v_pred_list.append(v_pred)

@@ -163,7 +163,7 @@ def get_dataset(pin):
                                                                 outflow_coords*scale, 
                                                                 wall_coords*scale)
     mu0 = .01#.02
-    mu1 = [.01, .010001]
+    mu1 = [.01, .05]
     rho0 = 1000; rho1 = 1000
     u0, v0, p0, s0, _ = initial_fields(coords)
     return (

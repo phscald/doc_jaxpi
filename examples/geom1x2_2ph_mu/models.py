@@ -33,10 +33,10 @@ class NavierStokes2DwSat(ForwardIVP):
 
 
         # Predict functions over batch
-        self.u0_pred_fn = vmap(self.u_net, (None, None, 0, 0, None))
-        self.v0_pred_fn = vmap(self.v_net, (None, None, 0, 0, None))
-        self.p0_pred_fn = vmap(self.p_net, (None, None, 0, 0, None))
-        self.s0_pred_fn = vmap(self.s_net, (None, None, 0, 0, None))
+        self.u0_pred_fn = vmap(self.u_net, (None, None, 0, 0, 0))
+        self.v0_pred_fn = vmap(self.v_net, (None, None, 0, 0, 0))
+        self.p0_pred_fn = vmap(self.p_net, (None, None, 0, 0, 0))
+        self.s0_pred_fn = vmap(self.s_net, (None, None, 0, 0, 0))
         
         self.u_pred_1_fn = vmap(self.u_net, (None, 0, 0, 0, None))
         self.v_pred_1_fn = vmap(self.v_net, (None, 0, 0, 0, None))
@@ -83,7 +83,7 @@ class NavierStokes2DwSat(ForwardIVP):
 
     def r_net(self, params, t, x, y, mu1):
         # Re = jnp.ones(x.shape)
-        (mu0, rho0, rho1) = self.fluid_params
+        (mu0, _, rho0, rho1) = self.fluid_params
 
         u, v, p, s = self.neural_net(params, t, x, y, mu1)
 
@@ -144,7 +144,7 @@ class NavierStokes2DwSat(ForwardIVP):
         # Sort temporal coordinates
         t_sorted = batch[:, 0].sort()
         ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn(
-            params, t_sorted, batch[:, 1], batch[:, 2]
+            params, t_sorted, batch[:, 1], batch[:, 2], batch[:,3]
         )
 
         ru_pred = ru_pred.reshape(self.num_chunks, -1)
@@ -332,13 +332,13 @@ class NavierStokes2DwSat(ForwardIVP):
         # Initial condition loss
         coords_batch, u_batch, v_batch, p_batch, s_batch, mu_batch = ic_batch
 
-        u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], 1.0)
-        v_ic_pred = self.v0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], 1.0)
-        p_ic_pred = self.p0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], 1.0)
-        s_ic_pred = self.s0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], 1.0)
+        u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
+        v_ic_pred = self.v0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
+        p_ic_pred = self.p0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
+        s_ic_pred = self.s0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
         
-        u_ic_pred2 = self.u_pred_1_fn(params, res_batch[:, 0], coords_batch[:, 0], coords_batch[:, 1], 1.0)
-        v_ic_pred2 = self.v_pred_1_fn(params, res_batch[:, 0], coords_batch[:, 0], coords_batch[:, 1], 1.0)
+        u_ic_pred2 = self.u_pred_1_fn(params, res_batch[:, 0], coords_batch[:, 0], coords_batch[:, 1], .01)
+        v_ic_pred2 = self.v_pred_1_fn(params, res_batch[:, 0], coords_batch[:, 0], coords_batch[:, 1], .01)
         # u_ic_pred3 = self.u0_pred_fn(params, 1., coords_batch[:, 0], coords_batch[:, 1])
         # v_ic_pred3 = self.v0_pred_fn(params, 1., coords_batch[:, 0], coords_batch[:, 1])
         

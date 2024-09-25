@@ -15,19 +15,7 @@ from jaxpi.evaluator import BaseEvaluator
 
 class NavierStokes2DwSat(ForwardIVP):
 
-    # def __init__(
-    #     self,
-    #     config,
-    #     # u_inflow,
-    #     p_inflow,
-    #     inflow_coords,
-    #     outflow_coords,
-    #     wall_coords,
-    #     mu, U_max, pmax
-    #     # Re,
-    # ):
 
-    # def __init__(self, config, inflow_fn, temporal_dom, coords, Re, D):
     def __init__(self, config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, D):   
         super().__init__(config)
 
@@ -319,9 +307,9 @@ class NavierStokes2DwSat(ForwardIVP):
             )
 
         ntk_dict = {
-            # "u_ic": u_ic_ntk,
-            # "v_ic": v_ic_ntk,
-            # "p_ic": p_ic_ntk,
+            "u_ic": u_ic_ntk,
+            "v_ic": v_ic_ntk,
+            "p_ic": p_ic_ntk,
             "s_ic": s_ic_ntk,
             "p_in": p_in_ntk,
             "p_out": p_out_ntk,
@@ -417,9 +405,9 @@ class NavierStokes2DwSat(ForwardIVP):
             rs_loss = jnp.mean(rs_pred**2)
 
         loss_dict = {
-            # "u_ic": u_ic_loss,
-            # "v_ic": v_ic_loss,
-            # "p_ic": p_ic_loss,
+            "u_ic": u_ic_loss,
+            "v_ic": v_ic_loss,
+            "p_ic": p_ic_loss,
             "s_ic": s_ic_loss,
             "p_in": p_in_loss,
             "p_out": p_out_loss,

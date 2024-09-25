@@ -294,19 +294,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Temporal domain of each time window
     t0 = 0.0
 
-
     temporal_dom = jnp.array([t0, t1 * (1 + 0.05)])
-
-    # Inflow boundary conditions
-    # U_max = 1.5  # maximum velocity
-    # inflow_fn = lambda y: parabolic_inflow(y * L_star, U_max)
-
-    # Set initial condition
-    # Use the last time step of a coarse numerical solution as the initial condition
-    # u0 = u_ref[-1, :]
-    # v0 = v_ref[-1, :]
-    # p0 = p_ref[-1, :]
-    # s0 = s_ref[-1, :]
 
     for idx in range(config.training.num_time_windows):
         logging.info("Training time window {}".format(idx + 1))
@@ -368,13 +356,12 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         # model = models.NavierStokes2DwSat(config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, D)
         model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params, D)
         
-        # ckpt_path = os.path.join(".", "ckpt", config.wandb.name, "time_window_1")
-        # ckpt_path = os.path.abspath(ckpt_path)
-        # state = restore_checkpoint(model.state, ckpt_path)
-        # model.state =  replicate(state)
+        if config.training.fine_tune:
+            ckpt_path = os.path.join(".", "ckpt", config.wandb.name, "time_window_1")
+            ckpt_path = os.path.abspath(ckpt_path)
+            state = restore_checkpoint(model.state, ckpt_path)
+            model.state =  replicate(state)
         
-        # model.state.params = state.params
-
         # Train model for the current time window
         model = train_one_window(config, workdir, model, samplers, idx)
 
