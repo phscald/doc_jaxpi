@@ -44,11 +44,11 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         mu, rho
     ) = get_dataset()
 
-    dp = 10
-    L_max = 900/1000/1000
+    dp = 20
+    L_max = 900/1000/100
     U_max = dp*L_max/mu
     pmax =dp
-    Re = rho*dp*(L_max**2)/(mu**2)
+    Re = rho*dp*((.112*L_max)**2)/(mu**2)
     print(f'Re={Re}')
     
     # print(pmax)
@@ -63,7 +63,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         # Nondimensionalization parameters
         U_star = U_max # 0.2  # characteristic velocity
         L_star = L_max #0.1  # characteristic length
-        Re = rho * U_star * L_star / mu
+        # Re = rho * U_star * (.112*L_star) / mu
 
         # Nondimensionalize coordinates and inflow velocity
         inflow_coords = inflow_coords / L_star

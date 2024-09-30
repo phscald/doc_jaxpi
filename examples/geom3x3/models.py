@@ -54,7 +54,7 @@ class NavierStokes2D(ForwardBVP):
         u = outputs[0]
         v = outputs[1]
         p = outputs[2]
-        return u*0.001, v*0.0001, p
+        return u*0.005, v*0.0005, p
 
     def u_net(self, params, x, y):
         u, _, _ = self.neural_net(params, x, y)
@@ -85,8 +85,6 @@ class NavierStokes2D(ForwardBVP):
         # PDE residual
         ru = u * u_x + v * u_y + (p_x - (u_xx + u_yy)) / self.Re
         rv = u * v_x + v * v_y + (p_y - (v_xx + v_yy)) / self.Re
-        # ru = p_x - (u_xx + u_yy)
-        # rv = p_y - (v_xx + v_yy)
         rc = u_x + v_y
 
         # outflow boundary residual
