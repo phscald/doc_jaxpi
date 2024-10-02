@@ -131,7 +131,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         model.state = restore_checkpoint(model.state, ckpt_path)
         params = model.state.params
         
-        mu = .01
+        mu = .05
 
         u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
         v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)

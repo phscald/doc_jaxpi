@@ -33,8 +33,8 @@ class NavierStokes2DwSat(ForwardIVP):
 
 
         # Predict functions over batch
-        self.u0_pred_fn = vmap(self.u_net, (None, None, 0, 0, 0))
-        self.v0_pred_fn = vmap(self.v_net, (None, None, 0, 0, 0))
+        self.u0_pred_fn = vmap(self.u_net, (None, None, 0, 0, None))
+        self.v0_pred_fn = vmap(self.v_net, (None, None, 0, 0, None))
         self.p0_pred_fn = vmap(self.p_net, (None, None, 0, 0, 0))
         self.s0_pred_fn = vmap(self.s_net, (None, None, 0, 0, 0))
         
@@ -332,8 +332,8 @@ class NavierStokes2DwSat(ForwardIVP):
         # Initial condition loss
         coords_batch, u_batch, v_batch, p_batch, s_batch, mu_batch = ic_batch
 
-        u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
-        v_ic_pred = self.v0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
+        u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], .01)
+        v_ic_pred = self.v0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], .01)
         p_ic_pred = self.p0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
         s_ic_pred = self.s0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
         

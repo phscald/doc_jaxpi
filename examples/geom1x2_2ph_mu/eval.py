@@ -30,8 +30,6 @@ import matplotlib.tri as tri
 def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Load dataset
     
-
-    
     pin =20
     (
         coords,
@@ -131,7 +129,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         params = model.state.params
         
         mu = .01
-
+        
         u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
         v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
         s_pred = s_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
