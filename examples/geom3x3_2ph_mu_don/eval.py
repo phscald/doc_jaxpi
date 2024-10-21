@@ -131,7 +131,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         model.state = restore_checkpoint(model.state, ckpt_path)
         params = model.state.params
         
-        mu = .05
+        mu = .01
 
         u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
         v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
@@ -202,54 +202,54 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     for idx in range(1, config.training.num_time_windows + 1):
         make_gif(idx)
 
-    # # Plot
-    # # Save dir
-    save_dir = os.path.join(workdir, "figures", config.wandb.name)
-    if not os.path.isdir(save_dir):
-        os.makedirs(save_dir)
-    for i in range(len(u_pred)):
-        fig1 = plt.figure(figsize=(18, 12))
+    # # # Plot
+    # # # Save dir
+    # save_dir = os.path.join(workdir, "figures", config.wandb.name)
+    # if not os.path.isdir(save_dir):
+    #     os.makedirs(save_dir)
+    # for i in range(len(u_pred)):
+    #     fig1 = plt.figure(figsize=(18, 12))
         
-        # U = u_pred[i]
-        # ind = jnp.where(coords[:, 0]==.2)[0]
-        # dy = coords[ind[:-1], 1] - coords[ind[1:], 1]
-        # U = (U[ind[:-1]] + U[ind[1:]])/2
-        # U_m = jnp.sum(U*dy)/(coords[ind[-1], 1]-coords[ind[-2], 1])
-        # print(f'U_m: {U_m}')
+    #     # U = u_pred[i]
+    #     # ind = jnp.where(coords[:, 0]==.2)[0]
+    #     # dy = coords[ind[:-1], 1] - coords[ind[1:], 1]
+    #     # U = (U[ind[:-1]] + U[ind[1:]])/2
+    #     # U_m = jnp.sum(U*dy)/(coords[ind[-1], 1]-coords[ind[-2], 1])
+    #     # print(f'U_m: {U_m}')
 
-        plt.subplot(4, 1, 1)
-        plt.scatter(x, y, s=1, c=u_pred[i], cmap="jet")#, levels=100)
-        plt.colorbar()
-        plt.xlabel("x")
-        plt.ylabel("y")
-        plt.title("Predicted u(x, y)")
-        plt.tight_layout()
+    #     plt.subplot(4, 1, 1)
+    #     plt.scatter(x, y, s=1, c=u_pred[i], cmap="jet")#, levels=100)
+    #     plt.colorbar()
+    #     plt.xlabel("x")
+    #     plt.ylabel("y")
+    #     plt.title("Predicted u(x, y)")
+    #     plt.tight_layout()
 
-        plt.subplot(4, 1, 2)
-        plt.scatter(x, y, s=1, c=v_pred[i], cmap="jet")#, levels=100)
-        plt.colorbar()
-        plt.xlabel("x")
-        plt.ylabel("y")
-        plt.title("Predicted v(x, y)")
-        plt.tight_layout()
+    #     plt.subplot(4, 1, 2)
+    #     plt.scatter(x, y, s=1, c=v_pred[i], cmap="jet")#, levels=100)
+    #     plt.colorbar()
+    #     plt.xlabel("x")
+    #     plt.ylabel("y")
+    #     plt.title("Predicted v(x, y)")
+    #     plt.tight_layout()
 
-        plt.subplot(4, 1, 3)
-        plt.scatter(x, y, s=1, c=p_pred[i], cmap="jet")#, levels=100)
-        plt.colorbar()
-        plt.xlabel("x")
-        plt.ylabel("y")
-        plt.title("Predicted p(x, y)")
-        plt.tight_layout()
+    #     plt.subplot(4, 1, 3)
+    #     plt.scatter(x, y, s=1, c=p_pred[i], cmap="jet")#, levels=100)
+    #     plt.colorbar()
+    #     plt.xlabel("x")
+    #     plt.ylabel("y")
+    #     plt.title("Predicted p(x, y)")
+    #     plt.tight_layout()
 
-        plt.subplot(4, 1, 4)
-        plt.scatter(x, y, s=1, c=s_pred[i], cmap="jet")#, levels=100)
-        plt.colorbar()
-        plt.xlabel("x")
-        plt.ylabel("y")
-        plt.title("Predicted s(x, y)")
-        plt.tight_layout()
+    #     plt.subplot(4, 1, 4)
+    #     plt.scatter(x, y, s=1, c=s_pred[i], cmap="jet")#, levels=100)
+    #     plt.colorbar()
+    #     plt.xlabel("x")
+    #     plt.ylabel("y")
+    #     plt.title("Predicted s(x, y)")
+    #     plt.tight_layout()
 
-        save_path = os.path.join(save_dir, 'ns_geomII'+ str(i) +'.png')
-        fig1.savefig(save_path, bbox_inches="tight", dpi=300)
+    #     save_path = os.path.join(save_dir, 'ns_geomII'+ str(i) +'.png')
+    #     fig1.savefig(save_path, bbox_inches="tight", dpi=300)
 
-        plt.close()
+    #     plt.close()

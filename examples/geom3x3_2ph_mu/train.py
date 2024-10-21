@@ -56,13 +56,51 @@ class ICSampler(SpaceSampler):
         v_batch = self.v[idx]
         p_batch = self.p[idx]
         s_batch = self.s[idx]
+        # print(coords_batch.shape);print(v_batch.shape)
         
         u05_batch = self.u0_5[idx]
         v05_batch = self.v0_5[idx]
 
         mu_batch = random.uniform(random.PRNGKey(1234), shape=(self.batch_size,), minval = self.mu[0], maxval = self.mu[1])
+        # self.mu = jnp.array(self.mu)
+        # idx = random.choice(key, self.mu.shape[0], shape=(self.batch_size,))
+        # mu_batch = self.mu[idx]
 
         batch = (coords_batch, u_batch, v_batch, p_batch, s_batch, u05_batch, v05_batch, mu_batch)
+
+        return batch
+        # num_coords = jnp.shape(self.coords)[0]
+        # num_time = jnp.shape(self.t)[0]            
+        
+class ICSampler1(SpaceSampler):
+    
+    def __init__(self, u, v, p, s, coords, time, batch_size, rng_key=random.PRNGKey(1234)):
+        super().__init__(coords, batch_size, rng_key)
+
+        self.u = u
+        self.v = v
+        self.p = p
+        self.s = s
+        self.t = time
+
+
+    @partial(pmap, static_broadcasted_argnums=(0,))
+    def data_generation(self, key):
+        "Generates data containing batch_size samples"
+                    
+        key1, key2 = random.split(key)
+        idx_t = random.choice(key1, self.t.shape[0], shape=(self.batch_size,))
+        idx = random.choice(key2, self.coords.shape[0], shape=(self.batch_size,))
+
+
+        t_batch = self.t[idx_t]
+        coords_batch = self.coords[idx, :]
+        u_batch = self.u[idx_t, idx]
+        v_batch = self.v[idx_t, idx]
+        p_batch = self.p[idx_t, idx]
+        s_batch = self.s[idx_t, idx]
+
+        batch = (coords_batch, t_batch, u_batch, v_batch, p_batch, s_batch)
 
         return batch
     
@@ -166,6 +204,7 @@ def train_one_window(config, workdir, model, samplers, idx):
         batch = {}
         for key, sampler in samplers.items():
             batch[key] = next(sampler)
+            # coords_fem1, t_fem1, u_fem1, v_fem1, p_fem1, s_fem1 = batch[key] 
 
         model.state = model.step(model.state, batch)
 
@@ -215,11 +254,15 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         outflow_coords,
         wall_coords,
         #time,
-        u0, v0, p0, s0, u0_5, v0_5,
+        initial,
         mu0, mu1, rho0, rho1
     ) = get_dataset(pin=pin)
 
     fluid_params = (mu0, mu1, rho0, rho1)
+    (u0, v0, p0, s0, coords_initial, u0_5, v0_5,
+            u_fem1, v_fem1, p_fem1, s_fem1, dt_fem, coords_fem,
+            u_fem5, v_fem5, p_fem5, s_fem5,
+            u_fem2, v_fem2, p_fem2, s_fem2) = initial
     dp = 20
     # pin la em cima
     L_max = 900/1000/100
@@ -230,9 +273,13 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'Re={Re*.15**2}')
     print(f'max_Steps: {config.training.max_steps}')
     
+    # print(jnp.max(u_fem5[0]))
+    # print(jnp.max(u_fem5[100]))
+    # print(dada)
 
-    D = 0 #10**(-9)
-    t1 = 2500 #.1*10/.01
+    D = 0*10**(-4)
+    t1 = 5000
+    # t1 = 1500
     # (
     #     fine_coords,
     #     fine_coords_near_cyl,
@@ -256,40 +303,45 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         noslip_coords = noslip_coords / L_star
         coords = coords / L_star
 
-        T_star = L_star/U_star
+        coords_fem = coords_fem / L_star
+        
+        dt_fem = dt_fem / (mu0/dp)
+        t_fem = jnp.cumsum(dt_fem)
+        idx = jnp.where(t_fem<=t1)[0]
+        
+        u_fem1 = u_fem1[idx] / U_max
+        v_fem1 = v_fem1[idx] / U_max
+        p_fem1 = p_fem1[idx] / pmax
+        s_fem1 = s_fem1[idx]
+        u_fem5 = u_fem5[idx] / U_max
+        v_fem5 = v_fem5[idx] / U_max
+        p_fem5 = p_fem5[idx] / pmax
+        s_fem5 = s_fem5[idx]
+        u_fem2 = u_fem2[idx] / U_max
+        v_fem2 = v_fem2[idx] / U_max
+        p_fem2 = p_fem2[idx] / pmax
+        s_fem2 = s_fem2[idx]
+        
+        # i = 100
+        # plt.scatter(coords_fem[:,0], coords_fem[:,1] , s=1, c=v_fem5[i][:])
+        # save_path = 'conferir.png'
+        # plt.savefig(save_path, bbox_inches="tight", dpi=300)
+        # print(i)
+        # print(dada)
 
 
-        # Nondimensionalize flow field
-        # u_inflow = u_inflow / U_star
-        # print(f'p0_max:{jnp.max(p0)}')
+        
+        # # print((t_fem))
+        # print(f's_fem5: {s_fem5.shape}')
+        # print(f'coords_fem: {coords_fem.shape}')
+        # print(f't_fem: {t_fem.shape}')
+        # print(jnp.squeeze(u_fem1[1:3,4:5]))
+
+        # print(jnp.max(p_fem5))
+        # print(dasdads)
+        
         p_inflow = (pin / pmax) * jnp.ones((inflow_coords.shape[0]))
-        # u0, v0, p0 = u0/U_max, v0/U_max, p0/pmax
 
-        # print(f'pin:{pin}')
-        # print(f'p0_max:{jnp.max(p0)}')
-        # print(fsfd)
-       
-        # # Nondimensionalization parameters
-        # U_star = 1.0  # characteristic velocity
-        # L_star = 0.1  # characteristic length
-        # T_star = L_star / U_star  # characteristic time
-        # Re = U_star * L_star / nu
-
-        # # Nondimensionalize coordinates and inflow velocity
-        # # T = T / T_star
-        # inflow_coords = inflow_coords / L_star
-        # outflow_coords = outflow_coords / L_star
-        # noslip_coords = noslip_coords / L_star
-
-        # coords = coords / L_star
-        # fine_coords = fine_coords / L_star
-        # fine_coords_near_cyl = fine_coords_near_cyl / L_star
-
-        # # Nondimensionalize flow field
-        # # u_inflow = u_inflow / U_star
-        # u_ref = u_ref / U_star
-        # v_ref = v_ref / U_star
-        # p_ref = p_ref / U_star**2
 
     else:
         U_star = 1.0
@@ -306,10 +358,25 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         logging.info("Training time window {}".format(idx + 1))
 
         # Initialize Sampler
-        keys = random.split(random.PRNGKey(0), 5)
+        keys = random.split(random.PRNGKey(0), 7)
         ic_sampler = iter(
             ICSampler(
-                u0, v0, p0, s0, u0_5, v0_5, coords, mu1, config.training.ic_batch_size, rng_key=keys[0]
+                u0, v0, p0, s0, u0_5, v0_5, coords,  mu1, config.training.ic_batch_size, rng_key=keys[6]
+            )
+        )
+        ic_sampler1 = iter(
+            ICSampler1(
+                u_fem1, v_fem1, p_fem1, s_fem1, coords_fem, t_fem, config.training.ic_batch_size, rng_key=keys[0]
+            )
+        )
+        ic_sampler2 = iter(
+            ICSampler1(
+                u_fem2, v_fem2, p_fem2, s_fem2, coords_fem, t_fem, config.training.ic_batch_size, rng_key=keys[1]
+            )
+        )
+        ic_sampler5 = iter(
+            ICSampler1(
+                u_fem5, v_fem5, p_fem5, s_fem5, coords_fem, t_fem, config.training.ic_batch_size, rng_key=keys[1]
             )
         )
         inflow_sampler = iter(
@@ -318,7 +385,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
                 inflow_coords,
                 mu1,
                 config.training.inflow_batch_size,
-                rng_key=keys[1],
+                rng_key=keys[2],
             )
         )
         outflow_sampler = iter(
@@ -327,7 +394,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
                 outflow_coords,
                 mu1,
                 config.training.outflow_batch_size,
-                rng_key=keys[2],
+                rng_key=keys[3],
             )
         )
         noslip_sampler = iter(
@@ -336,7 +403,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
                 noslip_coords,
                 mu1,
                 config.training.noslip_batch_size,
-                rng_key=keys[3],
+                rng_key=keys[4],
             )
         )
 
@@ -346,12 +413,15 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
                 coords,
                 mu1,
                 config.training.res_batch_size,
-                rng_key=keys[4],
+                rng_key=keys[5],
             )
         )
 
         samplers = {
             "ic": ic_sampler,
+            "ic1": ic_sampler1,
+            "ic2": ic_sampler2,
+            "ic5": ic_sampler5,
             "inflow": inflow_sampler,
             "outflow": outflow_sampler,
             "noslip": noslip_sampler,

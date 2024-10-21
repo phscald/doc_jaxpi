@@ -12,6 +12,8 @@ from jaxpi.models import ForwardBVP, ForwardIVP
 from jaxpi.utils import ntk_fn
 from jaxpi.evaluator import BaseEvaluator
 
+from flax import linen as nn
+
 
 class NavierStokes2DwSat(ForwardIVP):
 
@@ -40,6 +42,11 @@ class NavierStokes2DwSat(ForwardIVP):
         
         self.u_pred_1_fn = vmap(self.u_net, (None, 0, 0, 0, None))
         self.v_pred_1_fn = vmap(self.v_net, (None, 0, 0, 0, None))
+        
+        self.ufem_pred_fn = vmap(self.u_net, (None, 0, 0, 0, None))
+        self.vfem_pred_fn = vmap(self.v_net, (None, 0, 0, 0, None))
+        self.pfem_pred_fn = vmap(self.p_net, (None, 0, 0, 0, None))
+        self.sfem_pred_fn = vmap(self.s_net, (None, 0, 0, 0, None))
 
         self.u_pred_fn = vmap(self.u_net, (None, 0, 0, 0, 0))
         self.v_pred_fn = vmap(self.v_net, (None, 0, 0, 0, 0))
@@ -51,6 +58,7 @@ class NavierStokes2DwSat(ForwardIVP):
         t = t / (self.temporal_dom[1])  # rescale t into [0, 1]
         x = x / self.L  # rescale x into [0, 1]
         y = y / self.W  # rescale y into [0, 1] 
+        mu = (mu-.01)/.04
         inputs = jnp.stack([t, x, y, mu])
         outputs = self.state.apply_fn(params, inputs)
 
@@ -172,11 +180,25 @@ class NavierStokes2DwSat(ForwardIVP):
     def compute_diag_ntk(self, params, batch):
         # Unpack batch
         ic_batch = batch["ic"]
+        ic_batch1 = batch["ic1"]
+        ic_batch5 = batch["ic5"]
         inflow_batch = batch["inflow"]
         outflow_batch = batch["outflow"]
         noslip_batch = batch["noslip"]
         res_batch = batch["res"]
+        
+        (coords_fem1, t_fem1, u_fem1, v_fem1, p_fem1, s_fem1) = ic_batch1
+        (coords_fem5, t_fem5, u_fem5, v_fem5, p_fem5, s_fem5) = ic_batch5
 
+        u_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
+            self.u_net, params, t_fem1, coords_fem1[:, 0], coords_fem1[:, 1], .01)
+        v_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
+            self.v_net, params, t_fem1, coords_fem1[:, 0], coords_fem1[:, 1], .01)
+        p_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
+            self.p_net, params, t_fem1, coords_fem1[:, 0], coords_fem1[:, 1], .01)
+        s_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
+            self.s_net, params, t_fem1, coords_fem1[:, 0], coords_fem1[:, 1], .01)
+        
         coords_batch, u_batch, v_batch, p_batch, s_batch, mu_batch = ic_batch
 
         u_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0, 0))(
@@ -301,6 +323,10 @@ class NavierStokes2DwSat(ForwardIVP):
             )
 
         ntk_dict = {
+            "u_data": u_data_ntk,
+            "v_data": v_data_ntk,
+            "p_data": p_data_ntk,
+            "s_data": s_data_ntk,
             "u_ic": u_ic_ntk,
             "v_ic": v_ic_ntk,
             "p_ic": p_ic_ntk,
@@ -308,8 +334,8 @@ class NavierStokes2DwSat(ForwardIVP):
             "p_in": p_in_ntk,
             "p_out": p_out_ntk,
             "s_in": s_in_ntk,
-            "v_in": v_in_ntk,
-            "v_out": v_out_ntk,
+            # "v_in": v_in_ntk,
+            # "v_out": v_out_ntk,
             "u_noslip": u_noslip_ntk,
             "v_noslip": v_noslip_ntk,
             "ru": ru_ntk,
@@ -319,18 +345,49 @@ class NavierStokes2DwSat(ForwardIVP):
         }
 
         return ntk_dict
-
+    
     @partial(jit, static_argnums=(0,))
     def losses(self, params, batch):
         # Unpack batch
         ic_batch = batch["ic"]
+        ic_batch1 = batch["ic1"]
+        ic_batch2 = batch["ic2"]
+        ic_batch5 = batch["ic5"]
         inflow_batch = batch["inflow"]
         outflow_batch = batch["outflow"]
         noslip_batch = batch["noslip"]
         res_batch = batch["res"]
-
+        
+        (coords_fem1, t_fem1, u_fem1, v_fem1, p_fem1, s_fem1) = ic_batch1
+        (coords_fem2, t_fem2, u_fem2, v_fem2, p_fem2, s_fem2) = ic_batch2
+        (coords_fem5, t_fem5, u_fem5, v_fem5, p_fem5, s_fem5) = ic_batch5
+        
+        # coords_batch, u_batch, v_batch, p_batch, s_batch, u05_batch, v05_batch, mu_batch = ic_batch
+        # coords_fem1 = coords_batch
+        # u_fem1 = u_batch
+        # v_fem1 = v_batch
+            
+        u_fem1_pred = self.ufem_pred_fn(params, t_fem1, coords_fem1[:, 0], coords_fem1[:, 1], .01)
+        v_fem1_pred = self.vfem_pred_fn(params, t_fem1, coords_fem1[:, 0], coords_fem1[:, 1], .01)
+        p_fem1_pred = self.pfem_pred_fn(params, t_fem1, coords_fem1[:, 0], coords_fem1[:, 1], .01)
+        s_fem1_pred = self.sfem_pred_fn(params, t_fem1, coords_fem1[:, 0], coords_fem1[:, 1], .01)
+        
+        u_fem5_pred = self.ufem_pred_fn(params, t_fem5, coords_fem5[:, 0], coords_fem5[:, 1], .05)
+        v_fem5_pred = self.vfem_pred_fn(params, t_fem5, coords_fem5[:, 0], coords_fem5[:, 1], .05)
+        p_fem5_pred = self.pfem_pred_fn(params, t_fem5, coords_fem5[:, 0], coords_fem5[:, 1], .05)
+        s_fem5_pred = self.sfem_pred_fn(params, t_fem5, coords_fem5[:, 0], coords_fem5[:, 1], .05)
+        
+        u_fem2_pred = self.ufem_pred_fn(params, t_fem2, coords_fem2[:, 0], coords_fem2[:, 1], .02)
+        v_fem2_pred = self.vfem_pred_fn(params, t_fem2, coords_fem2[:, 0], coords_fem2[:, 1], .02)
+        p_fem2_pred = self.pfem_pred_fn(params, t_fem2, coords_fem2[:, 0], coords_fem2[:, 1], .02)
+        s_fem2_pred = self.sfem_pred_fn(params, t_fem2, coords_fem2[:, 0], coords_fem2[:, 1], .02)
+        
+        u_data = jnp.mean((u_fem1_pred - u_fem1) ** 2) + jnp.mean((u_fem5_pred - u_fem5) ** 2) + jnp.mean((u_fem2_pred - u_fem2) ** 2)  ##
+        v_data = jnp.mean((v_fem1_pred - v_fem1) ** 2) + jnp.mean((v_fem5_pred - v_fem5) ** 2) + jnp.mean((v_fem2_pred - v_fem2) ** 2)  ##
+        p_data = jnp.mean((p_fem1_pred - p_fem1) ** 2) + jnp.mean((p_fem5_pred - p_fem5) ** 2) + jnp.mean((p_fem2_pred - p_fem2) ** 2)  ##
+        s_data = jnp.mean((s_fem1_pred - s_fem1) ** 2) + jnp.mean((s_fem5_pred - s_fem5) ** 2) + jnp.mean((s_fem2_pred - s_fem2) ** 2)  ##
+        
         # Initial condition loss
-        # coords_batch, u_batch, v_batch, p_batch, s_batch, mu_batch = ic_batch
         coords_batch, u_batch, v_batch, p_batch, s_batch, u05_batch, v05_batch, mu_batch = ic_batch
 
         u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], .01)
@@ -339,28 +396,25 @@ class NavierStokes2DwSat(ForwardIVP):
         v_ic_loss = jnp.mean((v_ic_pred - v_batch) ** 2)
         u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], .05)
         v_ic_pred = self.v0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], .05)
-        u_ic_loss = u_ic_loss + jnp.mean((u_ic_pred - u05_batch) ** 2)
-        v_ic_loss = v_ic_loss + jnp.mean((v_ic_pred - v05_batch) ** 2)
+        u_ic_loss = u_ic_loss + jnp.mean((u_ic_pred - u05_batch) ** 2) ##
+        v_ic_loss = v_ic_loss + jnp.mean((v_ic_pred - v05_batch) ** 2) ##
+               
+        u_ic_pred2 = self.u_pred_1_fn(params,
+                                    jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_batch.shape[0],),
+                                    minval=0.0, maxval=self.temporal_dom[1]), coords_batch[:, 0], coords_batch[:, 1], .01) #
+        v_ic_pred2 = self.v_pred_1_fn(params, 
+                                    jax.random.uniform(jax.random.PRNGKey(1), shape=(coords_batch.shape[0],), 
+                                    minval=0.0, maxval=self.temporal_dom[1]), coords_batch[:, 0], coords_batch[:, 1], .01) #
+        u_ic_loss2 = jnp.mean((u_ic_pred2 - u_batch) ** 2) #
+        v_ic_loss2 = jnp.mean((v_ic_pred2 - v_batch) ** 2) #
+        u_ic_loss = u_ic_loss+u_ic_loss2
+        v_ic_loss = v_ic_loss+v_ic_loss2
         
         p_ic_pred = self.p0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
         s_ic_pred = self.s0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
-        
-        u_ic_pred2 = self.u_pred_1_fn(params, res_batch[:, 0], coords_batch[:, 0], coords_batch[:, 1], .01)
-        v_ic_pred2 = self.v_pred_1_fn(params, res_batch[:, 0], coords_batch[:, 0], coords_batch[:, 1], .01)
-        # u_ic_pred3 = self.u0_pred_fn(params, 1., coords_batch[:, 0], coords_batch[:, 1])
-        # v_ic_pred3 = self.v0_pred_fn(params, 1., coords_batch[:, 0], coords_batch[:, 1])
-        
-        u_ic_loss2 = jnp.mean((u_ic_pred2 - u_batch) ** 2)
-        v_ic_loss2 = jnp.mean((v_ic_pred2 - v_batch) ** 2)
-        # u_ic_loss3 = jnp.mean((u_ic_pred3 - u_batch) ** 2)
-        # v_ic_loss3 = jnp.mean((v_ic_pred3 - v_batch) ** 2)
-
-
         p_ic_loss = jnp.mean((p_ic_pred - p_batch) ** 2)
         s_ic_loss = jnp.mean((s_ic_pred - s_batch) ** 2)
         
-        u_ic_loss = u_ic_loss+u_ic_loss2#+u_ic_loss3
-        v_ic_loss = v_ic_loss+v_ic_loss2#+v_ic_loss3
 
         # inflow outflow loss
         p_in_pred = self.p_pred_fn(
@@ -416,8 +470,24 @@ class NavierStokes2DwSat(ForwardIVP):
             rv_loss = jnp.mean(rv_pred**2)
             rc_loss = jnp.mean(rc_pred**2)
             rs_loss = jnp.mean(rs_pred**2)
+            
+        u_pred = self.u_pred_fn( params, t_fem5, coords_fem5[:, 0], coords_fem5[:, 1], 
+                                jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_fem1.shape[0],),
+                                minval=0.01, maxval=0.05))
+        ru_add = jnp.mean(nn.relu(u_fem5 - u_pred)) # u_pred has to be greater than u_fem5
+        ru_loss = ru_loss + 100*ru_add
+        
+        v_pred = self.v_pred_fn( params, t_fem5, coords_fem5[:, 0], coords_fem5[:, 1], 
+                                jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_fem1.shape[0],),
+                                minval=0.01, maxval=0.05))
+        rv_add = jnp.mean(nn.relu(v_fem5 - v_pred)) # v_pred has to be greater than v_fem5
+        rv_loss = rv_loss + 100*rv_add
 
         loss_dict = {
+            "u_data": u_data,
+            "v_data": v_data,
+            "p_data": p_data,
+            "s_data": s_data,
             "u_ic": u_ic_loss,
             "v_ic": v_ic_loss,
             "p_ic": p_ic_loss,
@@ -425,8 +495,8 @@ class NavierStokes2DwSat(ForwardIVP):
             "p_in": p_in_loss,
             "p_out": p_out_loss,
             "s_in": s_in_loss,
-            "v_in": v_in_loss,
-            "v_out": v_out_loss,
+            # "v_in": v_in_loss,
+            # "v_out": v_out_loss,
             "u_noslip": u_noslip_loss,
             "v_noslip": v_noslip_loss,
             "ru": ru_loss,
@@ -436,11 +506,6 @@ class NavierStokes2DwSat(ForwardIVP):
         }
 
         return loss_dict
-
-
-
-    
-
 
 class NavierStokesEvaluator(BaseEvaluator):
     def __init__(self, config, model):

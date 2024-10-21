@@ -20,9 +20,9 @@ def get_config():
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "ModifiedMlp"
     arch.num_layers = 8
-    arch.hidden_dim = 500
+    arch.hidden_dim = 400
     arch.out_dim = 4
-    arch.activation = "tanh"  # gelu works better than tanh for this problem
+    arch.activation = "tanh" 
     arch.periodicity = False
     arch.fourier_emb = ml_collections.ConfigDict({"embed_scale": 5.0, "embed_dim": arch.hidden_dim})
     arch.reparam = ml_collections.ConfigDict(
@@ -35,28 +35,33 @@ def get_config():
     optim.beta1 = 0.9
     optim.beta2 = 0.999
     optim.eps = 1e-8
-    optim.learning_rate = 1e-3
-    optim.decay_rate = 0.99
+    optim.learning_rate = 5e-4
+    optim.decay_rate = 0.96
     optim.decay_steps = 5000
     optim.grad_accum_steps = 0
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 5000000
+    training.max_steps = 500000
     training.fine_tune = True
     training.num_time_windows = 1
 
-    div = 4
-    training.inflow_batch_size = int(2048/div)
-    training.outflow_batch_size = int(2048/div)
-    training.noslip_batch_size = int(2048/div)
-    training.ic_batch_size = int(2048/div)
-    training.res_batch_size = int(2048/div)
+    div = 2
+    training.inflow_batch_size = 256#int(2048/div)
+    training.outflow_batch_size = 256#int(2048/div)
+    training.noslip_batch_size = 512#int(2048/div)
+    training.ic_batch_size = 512#int(2048/div)
+    training.res_batch_size = 512+256#int(2*2048/div)
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
     weighting.scheme = "grad_norm"
+    
     weighting.init_weights = {
+        "u_data": 1.0,
+        "v_data": 1.0,
+        "p_data": 1.0,
+        "s_data": 1.0,
         "u_ic": 1.0,
         "v_ic": 1.0,
         "p_ic": 1.0,
@@ -64,8 +69,8 @@ def get_config():
         "p_in": 1.0,
         "p_out": 1.0,
         "s_in": 1.0,
-        "v_in": 1.0,
-        "v_out": 1.0,
+        # "v_in": 1.0,
+        # "v_out": 1.0,
         "u_noslip": 1.0,
         "v_noslip": 1.0,
         "ru": 1.0,
@@ -78,7 +83,7 @@ def get_config():
     weighting.update_every_steps = 5000  # 100 for grad norm and 1000 for ntk
 
     weighting.use_causal = True  ###################### CAUSALITY
-    weighting.causal_tol = .5
+    weighting.causal_tol = 1
     weighting.num_chunks = 16
 
     # Logging

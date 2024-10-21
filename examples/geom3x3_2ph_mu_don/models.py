@@ -50,9 +50,10 @@ class NavierStokes2DwSat(ForwardIVP):
     def neural_net(self, params, t, x, y, mu):
         t = t / (self.temporal_dom[1])  # rescale t into [0, 1]
         x = x / self.L  # rescale x into [0, 1]
-        y = y / self.W  # rescale y into [0, 1] 
-        inputs = jnp.stack([t, x, y])
-        mu = jnp.stack([mu])
+        y = y / self.W  # rescale y into [0, 1]
+        mu = (mu-.01)/.05 
+        inputs = jnp.stack([t, x, y]) # branch
+        mu = jnp.stack([mu])  # trunk
         outputs = self.state.apply_fn(params, inputs, mu)
 
         # Start with an initial state of the channel flow
@@ -178,7 +179,7 @@ class NavierStokes2DwSat(ForwardIVP):
         noslip_batch = batch["noslip"]
         res_batch = batch["res"]
 
-        coords_batch, u_batch, v_batch, p_batch, s_batch, mu_batch = ic_batch
+        coords_batch, u_batch, v_batch, p_batch, s_batch, u05_batch, v05_batch, mu_batch = ic_batch
 
         u_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0, 0))(
             self.u_net, params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch
@@ -338,10 +339,10 @@ class NavierStokes2DwSat(ForwardIVP):
         v_ic_pred = self.v0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], .01)
         u_ic_loss = jnp.mean((u_ic_pred - u_batch) ** 2)
         v_ic_loss = jnp.mean((v_ic_pred - v_batch) ** 2)
-        # u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], .05)
-        # v_ic_pred = self.v0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], .05)
-        # u_ic_loss = u_ic_loss + jnp.mean((u_ic_pred - u05_batch) ** 2)
-        # v_ic_loss = v_ic_loss + jnp.mean((v_ic_pred - v05_batch) ** 2)
+        u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], .05)
+        v_ic_pred = self.v0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], .05)
+        u_ic_loss = u_ic_loss + jnp.mean((u_ic_pred - u05_batch) ** 2)
+        v_ic_loss = v_ic_loss + jnp.mean((v_ic_pred - v05_batch) ** 2)
         
         p_ic_pred = self.p0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
         s_ic_pred = self.s0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)

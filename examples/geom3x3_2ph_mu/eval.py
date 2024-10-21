@@ -39,11 +39,14 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         outflow_coords,
         wall_coords,
         #time,
-        u0, v0, p0, s0, _, _,
+        initial,
         mu0, mu1, rho0, rho1
     ) = get_dataset(pin=pin)
     noslip_coords = wall_coords
     
+    u0, v0, p0 = initial[:3]
+    u05 = initial[5]
+        
     print(jnp.max(coords[:,0]))
     print(jnp.max(coords[:,1]))
 
@@ -62,9 +65,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'Re={Re*.112**2}')
 
 
-
-
-    D = 0# 10**(-9)
+    mu = .04
+    D =  0*10**(-4)
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time
@@ -131,7 +133,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         model.state = restore_checkpoint(model.state, ckpt_path)
         params = model.state.params
         
-        mu = .05
+        print(f'mu = {mu}')
 
         u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
         v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
@@ -146,14 +148,14 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     x = coords[:, 0]
     y = coords[:, 1]
 
-    print(f'coords x shape:{x.shape}')
-    print(f'coords y shape:{y.shape}')
-    print(f'coords u shape:{u_pred[0].shape}')
-    # print(len(u_pred))
-    print(f'u0 min: {jnp.min(u0)}')
-    print(f'u0 max: {jnp.max(u0)}')
-    print(f'v0 min: {jnp.min(v0)}')
-    print(f'v0 max: {jnp.max(v0)}')
+    # print(f'coords x shape:{x.shape}')
+    # print(f'coords y shape:{y.shape}')
+    # print(f'coords u shape:{u_pred[0].shape}')
+    # # print(len(u_pred))
+    # print(f'u0 min: {jnp.min(u0)}')
+    # print(f'u0 max: {jnp.max(u0)}')
+    # print(f'v0 min: {jnp.min(v0)}')
+    # print(f'v0 max: {jnp.max(v0)}')
 
     from matplotlib.animation import FuncAnimation
     from functools import partial  # Import partial to pass extra arguments to the update function
@@ -173,11 +175,11 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     def update_u(frames, idx):
         axu.cla()  # Clear the current axis
-        axu.scatter(x, y, s=1, c=u_pred_list[idx][frames], cmap='jet', vmin=jnp.min(u0), vmax=jnp.max(u0))
+        axu.scatter(x, y, s=1, c=u_pred_list[idx][frames], cmap='jet', vmin=jnp.min(u05), vmax=jnp.max(u05))
 
     def update_v(frames, idx):
         axv.cla()  # Clear the current axis
-        axv.scatter(x, y, s=1, c=v_pred_list[idx][frames], cmap='jet', vmin=jnp.min(v0), vmax=jnp.max(v0))
+        axv.scatter(x, y, s=1, c=v_pred_list[idx][frames], cmap='jet')#, vmin=jnp.min(v0), vmax=jnp.max(v0))
 
 
     def update_p(frames, idx):
@@ -204,52 +206,52 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # # Plot
     # # Save dir
-    save_dir = os.path.join(workdir, "figures", config.wandb.name)
-    if not os.path.isdir(save_dir):
-        os.makedirs(save_dir)
-    for i in range(len(u_pred)):
-        fig1 = plt.figure(figsize=(18, 12))
+    # save_dir = os.path.join(workdir, "figures", config.wandb.name)
+    # if not os.path.isdir(save_dir):
+    #     os.makedirs(save_dir)
+    # for i in range(len(u_pred)):
+    #     fig1 = plt.figure(figsize=(18, 12))
         
-        # U = u_pred[i]
-        # ind = jnp.where(coords[:, 0]==.2)[0]
-        # dy = coords[ind[:-1], 1] - coords[ind[1:], 1]
-        # U = (U[ind[:-1]] + U[ind[1:]])/2
-        # U_m = jnp.sum(U*dy)/(coords[ind[-1], 1]-coords[ind[-2], 1])
-        # print(f'U_m: {U_m}')
+    #     # U = u_pred[i]
+    #     # ind = jnp.where(coords[:, 0]==.2)[0]
+    #     # dy = coords[ind[:-1], 1] - coords[ind[1:], 1]
+    #     # U = (U[ind[:-1]] + U[ind[1:]])/2
+    #     # U_m = jnp.sum(U*dy)/(coords[ind[-1], 1]-coords[ind[-2], 1])
+    #     # print(f'U_m: {U_m}')
 
-        plt.subplot(4, 1, 1)
-        plt.scatter(x, y, s=1, c=u_pred[i], cmap="jet")#, levels=100)
-        plt.colorbar()
-        plt.xlabel("x")
-        plt.ylabel("y")
-        plt.title("Predicted u(x, y)")
-        plt.tight_layout()
+    #     plt.subplot(4, 1, 1)
+    #     plt.scatter(x, y, s=1, c=u_pred[i], cmap="jet")#, levels=100)
+    #     plt.colorbar()
+    #     plt.xlabel("x")
+    #     plt.ylabel("y")
+    #     plt.title("Predicted u(x, y)")
+    #     plt.tight_layout()
 
-        plt.subplot(4, 1, 2)
-        plt.scatter(x, y, s=1, c=v_pred[i], cmap="jet")#, levels=100)
-        plt.colorbar()
-        plt.xlabel("x")
-        plt.ylabel("y")
-        plt.title("Predicted v(x, y)")
-        plt.tight_layout()
+    #     plt.subplot(4, 1, 2)
+    #     plt.scatter(x, y, s=1, c=v_pred[i], cmap="jet")#, levels=100)
+    #     plt.colorbar()
+    #     plt.xlabel("x")
+    #     plt.ylabel("y")
+    #     plt.title("Predicted v(x, y)")
+    #     plt.tight_layout()
 
-        plt.subplot(4, 1, 3)
-        plt.scatter(x, y, s=1, c=p_pred[i], cmap="jet")#, levels=100)
-        plt.colorbar()
-        plt.xlabel("x")
-        plt.ylabel("y")
-        plt.title("Predicted p(x, y)")
-        plt.tight_layout()
+    #     plt.subplot(4, 1, 3)
+    #     plt.scatter(x, y, s=1, c=p_pred[i], cmap="jet")#, levels=100)
+    #     plt.colorbar()
+    #     plt.xlabel("x")
+    #     plt.ylabel("y")
+    #     plt.title("Predicted p(x, y)")
+    #     plt.tight_layout()
 
-        plt.subplot(4, 1, 4)
-        plt.scatter(x, y, s=1, c=s_pred[i], cmap="jet")#, levels=100)
-        plt.colorbar()
-        plt.xlabel("x")
-        plt.ylabel("y")
-        plt.title("Predicted s(x, y)")
-        plt.tight_layout()
+    #     plt.subplot(4, 1, 4)
+    #     plt.scatter(x, y, s=1, c=s_pred[i], cmap="jet")#, levels=100)
+    #     plt.colorbar()
+    #     plt.xlabel("x")
+    #     plt.ylabel("y")
+    #     plt.title("Predicted s(x, y)")
+    #     plt.tight_layout()
 
-        save_path = os.path.join(save_dir, 'ns_geomII'+ str(i) +'.png')
-        fig1.savefig(save_path, bbox_inches="tight", dpi=300)
+    #     save_path = os.path.join(save_dir, 'ns_geomII'+ str(i) +'.png')
+    #     fig1.savefig(save_path, bbox_inches="tight", dpi=300)
 
-        plt.close()
+    #     plt.close()

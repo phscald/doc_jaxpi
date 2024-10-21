@@ -5,7 +5,7 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
-    config.mode = "train"
+    config.mode = "eval"
     # ver o coeficiente do causal depois
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -20,9 +20,9 @@ def get_config():
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "DeepONet"
     # arch.num_layers = 8
-    arch.num_trunk_layers = 6
+    arch.num_trunk_layers = 2
     arch.num_branch_layers = 6
-    arch.hidden_dim = 500
+    arch.hidden_dim = 300
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
@@ -38,13 +38,13 @@ def get_config():
     optim.beta2 = 0.999
     optim.eps = 1e-8
     optim.learning_rate = 1e-3
-    optim.decay_rate = 0.99
+    optim.decay_rate = 0.965
     optim.decay_steps = 5000
     optim.grad_accum_steps = 0
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 200000
+    training.max_steps = 500000
     training.fine_tune = True
     training.num_time_windows = 1
 
@@ -80,7 +80,7 @@ def get_config():
     weighting.update_every_steps = 5000  # 100 for grad norm and 1000 for ntk
 
     weighting.use_causal = True  ###################### CAUSALITY
-    weighting.causal_tol = .5
+    weighting.causal_tol = .2
     weighting.num_chunks = 16
 
     # Logging
