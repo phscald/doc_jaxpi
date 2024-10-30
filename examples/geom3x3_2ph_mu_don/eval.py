@@ -30,19 +30,18 @@ import matplotlib.tri as tri
 def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Load dataset
     
-
-    
-    pin =20
+    pin =50
     (
         coords,
         inflow_coords,
         outflow_coords,
         wall_coords,
-        #time,
-        u0, v0, p0, s0, _, _,
+        initial,
         mu0, mu1, rho0, rho1
     ) = get_dataset(pin=pin)
     noslip_coords = wall_coords
+    
+    u0, v0, p0, s0, coord_intial = initial[:5]
     
     print(jnp.max(coords[:,0]))
     print(jnp.max(coords[:,1]))
@@ -52,19 +51,18 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'inflow coords shape:{inflow_coords.shape}')
     
     fluid_params = (mu0, mu1, rho0, rho1)
-    dp = 20
+    dp = pin
     # pin la em cima
     L_max = 900/1000/100
-    U_max = dp*L_max/mu0
+    U_max = dp*L_max/mu1
     pmax =dp
-    Re = rho0*dp*(L_max**2)/(mu0**2)
+    Re = rho0*dp*(L_max**2)/(mu1**2)
     print(f'Re={Re}')
     print(f'Re={Re*.112**2}')
 
 
-
-
-    D = 0# 10**(-9)
+    mu = .005 # mu0 = [.0025, .05]
+    D = 0*10**(-5)
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time
@@ -80,7 +78,9 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         inflow_coords = inflow_coords / L_star
         outflow_coords = outflow_coords / L_star
         noslip_coords = noslip_coords / L_star
-        coords = coords / L_star       
+        coords = coords / L_star    
+        
+        u0, v0, p0 = u0/U_max, v0/U_max, p0/dp   
     
         ind_coords = random.choice(
             random.PRNGKey(1234),
@@ -117,12 +117,12 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # t_coords = jnp.linspace(0, t1, 20)[:-1]
     # t_coords = jnp.linspace(0, t1, 4)[:-1]
     t_coords = jnp.array([0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.])*t1#
+    # t_coords = jnp.array([0,])
 
     u_pred_list = []
     v_pred_list = []
     p_pred_list = []
     s_pred_list = []
-    # U_pred_list = []
 
     for idx in range(config.training.num_time_windows):
         print(f'{idx+1} / {config.training.num_time_windows}' )
@@ -131,7 +131,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         model.state = restore_checkpoint(model.state, ckpt_path)
         params = model.state.params
         
-        mu = .01
+        print(f'mu = {mu}')
 
         u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
         v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
@@ -143,17 +143,30 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         s_pred_list.append(s_pred)
         p_pred_list.append(p_pred)    
 
+
+    # u_pred_list = []
+    # v_pred_list = []
+    # p_pred_list = []
+    # s_pred_list = []
+    # u_pred_list.append(u0[jnp.newaxis, :])
+    # v_pred_list.append(v0[jnp.newaxis, :])
+    # p_pred_list.append(p0[jnp.newaxis, :])   
+    # s_pred_list.append(s0[jnp.newaxis, :])   
+
     x = coords[:, 0]
     y = coords[:, 1]
+    
+    # x = coord_intial[:, 0]
+    # y = coord_intial[:, 1]
 
-    print(f'coords x shape:{x.shape}')
-    print(f'coords y shape:{y.shape}')
-    print(f'coords u shape:{u_pred[0].shape}')
-    # print(len(u_pred))
-    print(f'u0 min: {jnp.min(u0)}')
-    print(f'u0 max: {jnp.max(u0)}')
-    print(f'v0 min: {jnp.min(v0)}')
-    print(f'v0 max: {jnp.max(v0)}')
+    # print(f'coords x shape:{x.shape}')
+    # print(f'coords y shape:{y.shape}')
+    # print(f'coords u shape:{u_pred[0].shape}')
+    # # print(len(u_pred))
+    # print(f'u0 min: {jnp.min(u0)}')
+    # print(f'u0 max: {jnp.max(u0)}')
+    # print(f'v0 min: {jnp.min(v0)}')
+    # print(f'v0 max: {jnp.max(v0)}')
 
     from matplotlib.animation import FuncAnimation
     from functools import partial  # Import partial to pass extra arguments to the update function
@@ -169,7 +182,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Update function for each frame
     def update_s(frames, idx):
         axs.cla()  # Clear the current axis
-        axs.scatter(x, y, s=1, c=s_pred_list[idx][frames], cmap='jet', vmin=0, vmax=1)
+        axs.scatter(x, y, s=1, c=s_pred_list[idx][frames], cmap='jet' , vmin=0, vmax=1)
 
     def update_u(frames, idx):
         axu.cla()  # Clear the current axis
@@ -202,8 +215,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     for idx in range(1, config.training.num_time_windows + 1):
         make_gif(idx)
 
-    # # # Plot
-    # # # Save dir
+    # # Plot
+    # # Save dir
     # save_dir = os.path.join(workdir, "figures", config.wandb.name)
     # if not os.path.isdir(save_dir):
     #     os.makedirs(save_dir)

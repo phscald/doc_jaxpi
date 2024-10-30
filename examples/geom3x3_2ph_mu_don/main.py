@@ -12,7 +12,7 @@ import jax
 from ml_collections import config_flags
 
 import train
-import eval
+import eval as eval
 
 FLAGS = flags.FLAGS
 

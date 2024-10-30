@@ -51,6 +51,12 @@ def _create_arch(config):
     elif config.arch_name == "DeepONet":
         arch = archs.DeepONet(**config)
 
+    elif config.arch_name == "ResNet":
+        arch = archs.ResNet(**config)
+
+    # elif config.arch_name == "DeepResNet":
+    #     arch = archs.ResNet(**config)
+        
     else:
         raise NotImplementedError(f"Arch {config.arch_name} not supported yet!")
 

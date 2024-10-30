@@ -125,6 +125,35 @@ class Dense(nn.Module):
 
 # TODO: Make it more general, e.g. imposing periodicity for the given axis
 
+class ResNet(nn.Module):
+    arch_name: Optional[str] = "ResNet"
+    num_layers: int = 4
+    hidden_dim: int = 128
+    out_dim: int = 1
+    activation: str = "tanh"
+    periodicity: Union[None, Dict] = None
+    fourier_emb: Union[None, Dict] = None
+    reparam: Union[None, Dict] = None
+
+    def setup(self):
+        self.activation_fn = _get_activation(self.activation)
+    @nn.compact
+    def __call__(self, x):
+        if self.periodicity:
+            x = PeriodEmbs(**self.periodicity)(x)
+
+        if self.fourier_emb:
+            x = FourierEmbs(**self.fourier_emb)(x)
+
+        for _ in range(self.num_layers):
+            x_previous = x
+            x = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
+            x = self.activation_fn(x)
+            x = jnp.concatenate(
+                     [x, x_previous], axis=-1 )
+
+        x = Dense(features=self.out_dim, reparam=self.reparam)(x)
+        return x
 
 class Mlp(nn.Module):
     
