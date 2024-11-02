@@ -8,7 +8,6 @@ def get_config():
     config.mode = "train"
     config.mode = "eval"
     
-    # ver o coeficiente do causal depois
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
     wandb.project = "geom1x2-unsteady"
@@ -22,15 +21,15 @@ def get_config():
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "DeepONet"
     # arch.num_layers = 8
-    arch.num_trunk_layers = 4 # mu 2 4
-    arch.num_branch_layers = 4 # x y t 6 5
-    arch.hidden_dim =500
+    arch.num_trunk_layers = 10 # mu 2 4
+    arch.num_branch_layers = 10 # x y t 6 5
+    arch.hidden_dim = 400
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
     arch.fourier_emb = ml_collections.ConfigDict({"embed_scale": 5.0, "embed_dim": arch.hidden_dim})
     arch.reparam = ml_collections.ConfigDict(
-        {"type": "weight_fact", "mean": 1, "stddev": 0.1}
+        {"type": "weight_fact", "mean": 1.5, "stddev": 0.15}
     )
 
     # Optim
@@ -39,14 +38,14 @@ def get_config():
     optim.beta1 = 0.9
     optim.beta2 = 0.999
     optim.eps = 1e-8
-    optim.learning_rate = 5e-4
+    optim.learning_rate = 1e-4
     optim.decay_rate = 0.97
     optim.decay_steps = 5000
     optim.grad_accum_steps = 0
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 100000
+    training.max_steps =50000
     training.fine_tune = True
     training.num_time_windows = 1
 
@@ -87,7 +86,7 @@ def get_config():
     weighting.update_every_steps = 5000  # 100 for grad norm and 1000 for ntk
 
     weighting.use_causal = True  ###################### CAUSALITY
-    weighting.causal_tol = .5
+    weighting.causal_tol = .9
     weighting.num_chunks = 16
 
     # Logging

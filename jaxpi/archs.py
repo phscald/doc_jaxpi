@@ -32,7 +32,7 @@ def _weight_fact(init_fn, mean, stddev):
         w = init_fn(key1, shape)
         g = mean + normal(stddev)(key2, (shape[-1],))
         g = jnp.exp(g)
-        v = w / g
+        v = w / (g)
         return g, v
 
     return init

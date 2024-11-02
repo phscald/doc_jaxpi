@@ -4,6 +4,7 @@ from typing import Any, Callable, Sequence, Tuple, Optional, Dict
 from flax.training import train_state
 from flax import jax_utils
 
+import jax
 import jax.numpy as jnp
 from jax import lax, jit, grad, pmap, random, tree_map, jacfwd, jacrev
 from jax.tree_util import tree_map, tree_reduce, tree_leaves
@@ -73,7 +74,9 @@ def _create_optimizer(config):
         tx = optax.adam(
             learning_rate=lr, b1=config.beta1, b2=config.beta2, eps=config.eps
         )
-
+    # elif config.optimizer == "LBFGS":
+    #     tx = optax.scale_by_lbfgs()
+                
     else:
         raise NotImplementedError(f"Optimizer {config.optimizer} not supported yet!")
 
@@ -179,11 +182,16 @@ class PINN:
 
     @partial(pmap, axis_name="batch", static_broadcasted_argnums=(0,))
     def step(self, state, batch, *args):
+        # if  self.config.optimizer == "Adam":
         grads = grad(self.loss)(state.params, state.weights, batch, *args)
         grads = lax.pmean(grads, "batch")
         state = state.apply_gradients(grads=grads)
         return state
-
+        # elif self.config.optimizer == "LBFGS":
+        #     value, grads = jax.value_and_grad(self.loss)(state.params, state.weights, batch, *args)
+        #     grads = lax.pmean(grads, "batch")
+        #     state = state.apply_gradients(grads=grads)
+        #     return state
 
 class ForwardIVP(PINN):
     def __init__(self, config):

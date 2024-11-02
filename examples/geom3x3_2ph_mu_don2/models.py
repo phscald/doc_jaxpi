@@ -475,13 +475,13 @@ class NavierStokes2DwSat(ForwardIVP):
         u_pred = self.u_pred_fn( params, t_fem5, coords_fem5[:, 0], coords_fem5[:, 1], 
                                 jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_fem1.shape[0],),
                                 minval=0.01, maxval=0.05))
-        ru_add = jnp.mean(nn.relu(u_fem5 - u_pred)) # u_pred has to be greater than u_fem5
+        ru_add = jnp.mean(nn.relu(jnp.abs(u_fem5) - jnp.abs(u_pred))) # u_pred has to be greater than u_fem5
         ru_loss = ru_loss + 100*ru_add
         
         v_pred = self.v_pred_fn( params, t_fem5, coords_fem5[:, 0], coords_fem5[:, 1], 
                                 jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_fem1.shape[0],),
                                 minval=0.01, maxval=0.05))
-        rv_add = jnp.mean(nn.relu(v_fem5 - v_pred)) # v_pred has to be greater than v_fem5
+        rv_add = jnp.mean(nn.relu(jnp.abs(v_fem5) - jnp.abs(v_pred))) # v_pred has to be greater than v_fem5
         rv_loss = rv_loss + 100*rv_add
 
         loss_dict = {

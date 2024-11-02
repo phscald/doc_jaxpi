@@ -5,6 +5,7 @@ def get_config():
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
+    config.mode = "train"
     config.mode = "eval"
     # ver o coeficiente do causal depois
     # Weights & Biases
@@ -42,7 +43,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 500000
+    training.max_steps = 100000
     training.fine_tune = True
     training.num_time_windows = 1
 

@@ -76,7 +76,7 @@ def initial_fields(coords):
     
     coords_fem = jax.device_put(coords_fem)
     s0 = jnp.zeros(coords_fem.shape[0])  # Initialize with zeros
-    condition = jnp.where(coords_fem[:, 0] <= 0.0111 * jnp.max(coords_fem[:, 0]))
+    condition = jnp.where(coords_fem[:, 0] <= 0.01 * jnp.max(coords_fem[:, 0]))
     s0 = s0.at[condition].set(1.0)  # Assign the result back to s0
     coords_initial = coords_fem
     return (jax.device_put(u0), jax.device_put(v0), jax.device_put(p0), jax.device_put(s0), jax.device_put(coords_initial),
@@ -93,10 +93,10 @@ def get_dataset(pin):
                                                                 inflow_coords*scale, 
                                                                 outflow_coords*scale, 
                                                                 wall_coords*scale)
-    mu0 = [.0025, .05]#.02
+    # mu0 = [.0025, .05]#.02
     
     # mu0 = [.05, .1]
-    # mu0 = [.0025, .01]
+    mu0 = [.09, .1]
     mu1 = .05
     rho0 = 1000; rho1 = 1000
     initial = initial_fields(coords)

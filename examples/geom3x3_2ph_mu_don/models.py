@@ -57,10 +57,10 @@ class NavierStokes2DwSat(ForwardIVP):
         t = t / (self.temporal_dom[1])  # rescale t into [0, 1]
         x = x / self.L  # rescale x into [0, 1]
         y = y / self.W  # rescale y into [0, 1]
-        #mu = (mu-.0025) #*10 #
-        mu = jnp.log(mu)/jnp.log(.0025)
+        mu = (mu-.09)/(0.1-.09) #*10 #
+        # mu = jnp.log(mu)/jnp.log(.0025)
         inputs = jnp.stack([t,x, y]) # branch
-        mu = jnp.stack([ mu])  # trunk
+        mu = jnp.stack([mu])  # trunk
         outputs = self.state.apply_fn(params, inputs, mu)
 
         # Start with an initial state of the channel flow
@@ -69,7 +69,7 @@ class NavierStokes2DwSat(ForwardIVP):
         p = outputs[2]
         s = outputs[3]
         # return u, v, p, s
-        return u*0.003, v*0.0003, p, nn.sigmoid(s) # nn.sigmoid(s)
+        return u*0.003, v*0.0003, p, s
     # u*0.01, v*0.001, p
     # lembrar de copiar as condiçoes iniciais no folder geom1x2
 

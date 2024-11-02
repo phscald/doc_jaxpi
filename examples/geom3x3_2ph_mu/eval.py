@@ -179,7 +179,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     def update_v(frames, idx):
         axv.cla()  # Clear the current axis
-        axv.scatter(x, y, s=1, c=v_pred_list[idx][frames], cmap='jet')#, vmin=jnp.min(v0), vmax=jnp.max(v0))
+        axv.scatter(x, y, s=1, c=v_pred_list[idx][frames], cmap='jet', vmin=jnp.min(v0), vmax=jnp.max(v0))
 
 
     def update_p(frames, idx):

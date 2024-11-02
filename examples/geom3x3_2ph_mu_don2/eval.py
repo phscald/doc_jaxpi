@@ -64,7 +64,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'Re={Re*.112**2}')
 
 
-    mu = .04
+    mu = .03
     D = 0*10**(-4)
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 

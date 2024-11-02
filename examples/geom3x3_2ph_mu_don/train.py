@@ -297,21 +297,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         v_fem_q = v_fem_q[idx] / U_max
         p_fem_q = p_fem_q[idx] / pmax
         s_fem_q = s_fem_q[idx]
-        
-        # print(f'umax_q: {jnp.max(u_fem_q)}')
-        # print(f'umax_s: {jnp.max(u_fem_s)}')
-        # print(f'vmax_q: {jnp.max(v_fem_q)}')
-        # print(f'vmax_s: {jnp.max(v_fem_s)}')
-        # print(dsadasda)
-        
-        # i = 100
-        # plt.scatter(coords_fem[:,0], coords_fem[:,1] , s=1, c=v_fem_q[i][:])
-        # save_path = 'conferir.png'
-        # plt.savefig(save_path, bbox_inches="tight", dpi=300)
-        # print(i)
-        # print(dada)
-
-        
+    
         p_inflow = (pin / pmax) * jnp.ones((inflow_coords.shape[0]))
 
     else:
