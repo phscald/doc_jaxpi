@@ -96,7 +96,7 @@ def get_dataset(pin):
     # mu0 = [.0025, .05]#.02
     
     # mu0 = [.05, .1]
-    mu0 = [.08, .1]
+    mu0 = [.04, .1]
     mu1 = .05
     rho0 = 1000; rho1 = 1000
     initial = initial_fields(coords)

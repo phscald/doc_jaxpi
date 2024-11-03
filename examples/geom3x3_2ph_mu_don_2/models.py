@@ -58,7 +58,7 @@ class NavierStokes2DwSat(ForwardIVP):
         t = t / (self.temporal_dom[1])  # rescale t into [0, 1]
         x = x / self.L  # rescale x into [0, 1]
         y = y / self.W  # rescale y into [0, 1]
-        mu = (mu-.08)/.05 
+        mu = (mu-.04)/(.1 - .04)
         inputs = jnp.stack([t, x, y]) # branch
         mu = jnp.stack([mu])  # trunk
         outputs = self.state.apply_fn(params, inputs, mu)
