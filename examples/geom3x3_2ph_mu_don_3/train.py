@@ -56,9 +56,6 @@ class ICSampler(SpaceSampler):
         # print(coords_batch.shape);print(v_batch.shape)
 
         mu_batch = random.uniform(random.PRNGKey(1234), shape=(self.batch_size,), minval = self.mu[0], maxval = self.mu[1])
-        # self.mu = jnp.array(self.mu)
-        # idx = random.choice(key, self.mu.shape[0], shape=(self.batch_size,))
-        # mu_batch = self.mu[idx]
 
         batch = (coords_batch, u_batch, v_batch, p_batch, s_batch, mu_batch)
 
