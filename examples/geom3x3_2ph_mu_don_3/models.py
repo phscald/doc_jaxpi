@@ -53,11 +53,44 @@ class NavierStokes2DwSat(ForwardIVP):
         self.p_pred_fn = vmap(self.p_net, (None, 0, 0, 0, 0))
         self.s_pred_fn = vmap(self.s_net, (None, 0, 0, 0, 0))
         self.r_pred_fn = vmap(self.r_net, (None, 0, 0, 0, 0))
+        
+    def __linear_scaler_equation(self, mu, mus, muq, mur, multiplier):
+        mur = mur*multiplier
+        return (mur-1)/(mus-muq) * (mu-muq) +1
+    
+    def __nonlinear_scaler_equation(self, mu, mus, muq, mur, multiplier):
+        mur = mur*multiplier
+        
+        a = mur / ( (mus**(-2) - muq**(-2)) +1 )
+        b = 1- a * muq**(-2)
+        
+        return a*mu**(-2) +b
+        
+    def __linear_scaler(self, mu):
+        (mu0, _, _, _) = self.fluid_params
+        mus = mu0[1]
+        muq = mu0[0]
+        mur = mus/muq
+        
+        yu =  self.__linear_scaler_equation(mu, mus, muq, mur, multiplier=16/40)    
+        yv =  self.__linear_scaler_equation(mu, mus, muq, mur, multiplier=54/40)                  
+        return 0.01565*yu, 0.00244*yv
+    
+    def __nonlinear_scaler(self, mu):
+        (mu0, _, _, _) = self.fluid_params
+        mus = mu0[1]
+        muq = mu0[0]
+        mur = mus/muq
+        
+        yu =  self.__nonlinear_scaler_equation(mu, mus, muq, mur, multiplier=16/40)    
+        yv =  self.__nonlinear_scaler_equation(mu, mus, muq, mur, multiplier=54/40)                  
+        return 0.01565*yu, 0.00244*yv
 
     def neural_net(self, params, t, x, y, mu):
+        yu, yv = self.__nonlinear_scaler(mu)
         t = t / (self.temporal_dom[1])  # rescale t into [0, 1]
-        x = x / self.L  # rescale x into [0, 1]
-        y = y / self.W  # rescale y into [0, 1]
+        x = x # / self.L  # rescale x into [0, 1]
+        y = y # / self.W  # rescale y into [0, 1]
         mu = (mu-.0025)/(.006 - .0025)
         inputs = jnp.stack([t, x, y]) # branch
         mu = jnp.stack([mu])  # trunk
@@ -69,7 +102,7 @@ class NavierStokes2DwSat(ForwardIVP):
         p = outputs[2]
         s = outputs[3]
         # return u, v, p, s
-        return u*0.003, v*0.0003, p, s
+        return u*yu, v*yv, p, s
     # u*0.01, v*0.001, p
     # lembrar de copiar as condiçoes iniciais no folder geom1x2
 
@@ -118,8 +151,7 @@ class NavierStokes2DwSat(ForwardIVP):
         v_yy = grad(grad(self.v_net, argnums=3), argnums=3)(params, t, x, y, mu0)
         s_yy = grad(grad(self.s_net, argnums=3), argnums=3)(params, t, x, y, mu0)
 
-
-        Re = rho0*self.U_max*(self.L_max*.112**2)/mu1
+        Re = rho0*self.U_max*(self.L_max)/mu1 # *.112**2
         mu = (1-s)*mu1 + s*mu0
         mu_ratio = mu/mu1
                 
@@ -339,8 +371,8 @@ class NavierStokes2DwSat(ForwardIVP):
             # "v_out": v_out_ntk,
             "u_noslip": u_noslip_ntk,
             "v_noslip": v_noslip_ntk,
-            "ru": ru_ntk,
-            "rv": rv_ntk,
+            "ru": ru_ntk, #
+            "rv": rv_ntk, #
             "rc": rc_ntk,
             "rs": rs_ntk,
         }

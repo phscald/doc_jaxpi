@@ -21,8 +21,8 @@ def get_config():
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "DeepONet"
     # arch.num_layers = 8
-    arch.num_trunk_layers = 6 # mu 2
-    arch.num_branch_layers = 6 # x y t 6
+    arch.num_trunk_layers = 7 # mu 2
+    arch.num_branch_layers = 2 # x y t 6
     arch.hidden_dim = 400
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
@@ -52,9 +52,9 @@ def get_config():
     div = 2
     training.inflow_batch_size = 256#int(2048/div)
     training.outflow_batch_size = 256#int(2048/div)
-    training.noslip_batch_size = 32#512int(2048/div)
+    training.noslip_batch_size = 512#512int(2048/div)
     training.ic_batch_size = 512#int(2048/div)
-    training.res_batch_size = 512#int(2*2048/div)
+    training.res_batch_size = 512+512#int(2*2048/div)
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
@@ -85,8 +85,8 @@ def get_config():
     weighting.momentum = 0.9
     weighting.update_every_steps = 5000  # 100 for grad norm and 1000 for ntk
 
-    weighting.use_causal = True  ###################### CAUSALITY
-    weighting.causal_tol = .25
+    weighting.use_causal = False  ###################### CAUSALITY
+    weighting.causal_tol = .5
     weighting.num_chunks = 16
 
     # Logging

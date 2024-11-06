@@ -62,7 +62,7 @@ def initial_fields(coords):
     s_fem_s = arquivos['c_data']
     dt_fem_s = arquivos['dt_data']
     del arquivos
-        
+
     filepath = './chip3x3_inv20.pkl'
     with open(filepath, 'rb') as filepath:
         arquivos = pickle.load(filepath)
@@ -96,7 +96,7 @@ def get_dataset(pin):
     # mu0 = [.0025, .05]#.02
     
     # mu0 = [.05, .1]
-    mu0 = [.0025, .006]
+    mu0 = [.0025, .0051]
     mu1 = .05
     rho0 = 1000; rho1 = 1000
     initial = initial_fields(coords)

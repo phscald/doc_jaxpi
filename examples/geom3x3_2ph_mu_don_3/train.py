@@ -83,7 +83,6 @@ class ICSampler1(SpaceSampler):
         idx_t = random.choice(key1, self.t.shape[0], shape=(self.batch_size,))
         idx = random.choice(key2, self.coords.shape[0], shape=(self.batch_size,))
 
-
         t_batch = self.t[idx_t]
         coords_batch = self.coords[idx, :]
         u_batch = self.u[idx_t, idx]
@@ -253,10 +252,10 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     # pin la em cima
     L_max = 900/1000/100
     U_max = dp*L_max/mu1
+    
     pmax =dp
     Re = rho0*dp*(L_max**2)/(mu1**2)
     print(f'Re={Re}')
-    print(f'Re={Re*.15**2}')
     print(f'max_Steps: {config.training.max_steps}')
     
 
@@ -315,7 +314,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         keys = random.split(random.PRNGKey(0), 7)
         ic_sampler = iter(
             ICSampler(
-                u0, v0, p0, s0, coords, mu0, config.training.ic_batch_size, rng_key=keys[6]
+                u0, v0, p0, s0, coords_fem, mu0, config.training.ic_batch_size, rng_key=keys[6]
             )
         )
         ic_sampler_s = iter(
