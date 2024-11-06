@@ -22,7 +22,7 @@ def get_config():
     arch.arch_name = "DeepONet"
     # arch.num_layers = 8
     arch.num_trunk_layers = 7 # mu 2
-    arch.num_branch_layers = 2 # x y t 6
+    arch.num_branch_layers = 7 # x y t 6
     arch.hidden_dim = 400
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
@@ -39,13 +39,13 @@ def get_config():
     optim.beta2 = 0.999
     optim.eps = 1e-8
     optim.learning_rate = 5e-4
-    optim.decay_rate = 0.95
+    optim.decay_rate = 0.97
     optim.decay_steps = 5000
     optim.grad_accum_steps = 0
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 50000
+    training.max_steps = 5000000
     training.fine_tune = True
     training.num_time_windows = 1
 

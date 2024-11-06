@@ -74,7 +74,7 @@ class NavierStokes2DwSat(ForwardIVP):
         
         yu =  self.__linear_scaler_equation(mu, mus, muq, mur, multiplier=16/40)    
         yv =  self.__linear_scaler_equation(mu, mus, muq, mur, multiplier=54/40)                  
-        return 0.01565*yu, 0.00244*yv
+        return 0.00174*yu, 0.00027111*yv
     
     def __nonlinear_scaler(self, mu):
         (mu0, _, _, _) = self.fluid_params
@@ -84,7 +84,7 @@ class NavierStokes2DwSat(ForwardIVP):
         
         yu =  self.__nonlinear_scaler_equation(mu, mus, muq, mur, multiplier=16/40)    
         yv =  self.__nonlinear_scaler_equation(mu, mus, muq, mur, multiplier=54/40)                  
-        return 0.01565*yu, 0.00244*yv
+        return 0.00174*yu, 0.00027111*yv
 
     def neural_net(self, params, t, x, y, mu):
         yu, yv = self.__nonlinear_scaler(mu)
