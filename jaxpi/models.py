@@ -52,11 +52,14 @@ def _create_arch(config):
     elif config.arch_name == "DeepONet":
         arch = archs.DeepONet(**config)
 
-    elif config.arch_name == "ResNet":
+    elif config.arch_name == "ResNet":  
+        arch = archs.ResNet(**config)
+        
+    elif config.arch_name == "ModifiedResNet":
         arch = archs.ResNet(**config)
 
-    # elif config.arch_name == "DeepResNet":
-    #     arch = archs.ResNet(**config)
+    elif config.arch_name == "DeepOResNet":
+        arch = archs.DeepOResNet(**config)
         
     else:
         raise NotImplementedError(f"Arch {config.arch_name} not supported yet!")
@@ -90,7 +93,8 @@ def _create_optimizer(config):
 def _create_train_state(config):
     # Initialize network
     arch = _create_arch(config.arch)
-    if config.arch.arch_name == "DeepONet":  # (u, x) : u é o branch, x é o trunk
+    if config.arch.arch_name == "DeepONet" or config.arch.arch_name == "DeepOResNet": 
+        # (u, x) : u é o branch, x é o trunk
         u = jnp.ones(config.input_branch)
         x = jnp.ones(config.input_trunk)
         params = arch.init(random.PRNGKey(config.seed), u, x)

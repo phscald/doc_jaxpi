@@ -144,12 +144,13 @@ class ResNet(nn.Module):
 
         if self.fourier_emb:
             x = FourierEmbs(**self.fourier_emb)(x)
-
+            
+        x_previous = x
         for _ in range(self.num_layers):
-            x_previous = x
-            x = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
+
+            x = Dense(features=self.hidden_dim, reparam=self.reparam)(x_previous)
             x = self.activation_fn(x)
-            x = jnp.concatenate(
+            x_previous = jnp.concatenate(
                      [x, x_previous], axis=-1 )
 
         x = Dense(features=self.out_dim, reparam=self.reparam)(x)
@@ -220,6 +221,44 @@ class ModifiedMlp(nn.Module):
         x = Dense(features=self.out_dim, reparam=self.reparam)(x)
         return x
 
+class ModifiedResNet(nn.Module):
+    arch_name: Optional[str] = "ModifiedResNet"
+    num_layers: int = 4
+    hidden_dim: int = 256
+    out_dim: int = 1
+    activation: str = "tanh"
+    periodicity: Union[None, Dict] = None
+    fourier_emb: Union[None, Dict] = None
+    reparam: Union[None, Dict] = None
+
+    def setup(self):
+        self.activation_fn = _get_activation(self.activation)
+
+    @nn.compact
+    def __call__(self, x):
+        if self.periodicity:
+            x = PeriodEmbs(**self.periodicity)(x)
+
+        if self.fourier_emb:
+            x = FourierEmbs(**self.fourier_emb)(x)
+
+        u = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
+        v = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
+
+        u = self.activation_fn(u)
+        v = self.activation_fn(v)
+
+        x_previous = x
+        for _ in range(self.num_layers):
+            x = Dense(features=self.hidden_dim, reparam=self.reparam)(x_previous)
+            x = self.activation_fn(x)
+            x = x * u + (1 - x) * v
+            x_previous = jnp.concatenate(
+                     [x, x_previous], axis=-1 )
+
+        x = Dense(features=self.out_dim, reparam=self.reparam)(x)
+        return x
+
 
 class MlpBlock(nn.Module):
     num_layers: int
@@ -283,7 +322,65 @@ class DeepONet(nn.Module):
             reparam=self.reparam,
         )(x)
 
-        y = u * x
+        y = u * x#nn.sigmoid(x)
         y = self.activation_fn(y)
         y = Dense(features=self.out_dim, reparam=self.reparam)(y)
         return y
+    
+class DeepOResNet(nn.Module):
+    arch_name: Optional[str] = "DeepOResNet"
+    num_branch_layers: int = 4
+    num_trunk_layers: int = 4 # (u, x) : u é o branch, x é o trunk
+    hidden_dim: int = 256
+    out_dim: int = 1
+    activation: str = "tanh"
+    periodicity: Union[None, Dict] = None
+    fourier_emb: Union[None, Dict] = None
+    reparam: Union[None, Dict] = None
+
+    def setup(self):
+        self.activation_fn = _get_activation(self.activation)
+
+    @nn.compact
+    def __call__(self, u, x):
+        u = ModifiedResNet(#MlpBlock(
+            num_layers=self.num_branch_layers,
+            hidden_dim=self.hidden_dim,
+            out_dim=  self.num_branch_layers*self.hidden_dim,
+            activation=self.activation,
+            #final_activation=False,
+            reparam=self.reparam,
+            
+            periodicity=self.periodicity,
+            fourier_emb=self.fourier_emb,
+        )(u)
+
+        x = ModifiedResNet(#Mlp(
+            num_layers=self.num_trunk_layers,
+            hidden_dim=self.hidden_dim,
+            out_dim=  self.num_branch_layers*self.hidden_dim,
+            activation=self.activation,
+            periodicity=self.periodicity,
+            fourier_emb=self.fourier_emb,
+            reparam=self.reparam,
+        )(x)
+
+        # y = u * nn.sigmoid(x)
+        y  = u * x
+        y = self.activation_fn(y)
+        # y = jnp.concatenate(
+        #             [y, x], axis=-1 )
+
+        # y = ModifiedMlp(
+        #     num_layers=1,
+        #     hidden_dim=600,
+        #     out_dim=self.out_dim,
+        #     activation=self.activation,
+        #     periodicity=self.periodicity,
+        #     fourier_emb=self.fourier_emb,
+        #     reparam=self.reparam,
+        # )(y)
+
+        y = Dense(features=self.out_dim, reparam=self.reparam)(y)
+        return y
+

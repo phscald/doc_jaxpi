@@ -53,7 +53,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     fluid_params = (mu0, mu1, rho0, rho1)
     dp = pin
-    # pin la em cima
+    # pin la em cimao
     L_max = 900/1000/100
     U_max = dp*L_max/mu1
     pmax =dp
@@ -61,7 +61,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'Re={Re}')
 
 
-    mu = .0025# mu0 = [.0025, .01]
+    mu = .003# mu0 = [.0025, .01]
     D = 0*10**(-5)
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
@@ -136,6 +136,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
         s_pred = s_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
         p_pred = p_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
+        
 
         u_pred_list.append(u_pred)
         v_pred_list.append(v_pred)
@@ -143,29 +144,11 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         p_pred_list.append(p_pred)    
 
 
-    # u_pred_list = []
-    # v_pred_list = []
-    # p_pred_list = []
-    # s_pred_list = []
-    # u_pred_list.append(u0[jnp.newaxis, :])
-    # v_pred_list.append(v0[jnp.newaxis, :])
-    # p_pred_list.append(p0[jnp.newaxis, :])   
-    # s_pred_list.append(s0[jnp.newaxis, :])   
-
     x = coords[:, 0]
     y = coords[:, 1]
     
     # x = coord_intial[:, 0]
     # y = coord_intial[:, 1]
-
-    # print(f'coords x shape:{x.shape}')
-    # print(f'coords y shape:{y.shape}')
-    # print(f'coords u shape:{u_pred[0].shape}')
-    # # print(len(u_pred))
-    # print(f'u0 min: {jnp.min(u0)}')
-    # print(f'u0 max: {jnp.max(u0)}')
-    # print(f'v0 min: {jnp.min(v0)}')
-    # print(f'v0 max: {jnp.max(v0)}')
 
     from matplotlib.animation import FuncAnimation
     from functools import partial  # Import partial to pass extra arguments to the update function

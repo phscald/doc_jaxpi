@@ -73,7 +73,7 @@ class NavierStokes2DwSat(ForwardIVP):
         mur = mus/muq
         
         yu =  self.__linear_scaler_equation(mu, mus, muq, mur, multiplier=16/40)    
-        yv =  self.__linear_scaler_equation(mu, mus, muq, mur, multiplier=54/40)                  
+        yv =  self.__linear_scaler_equation(mu, mus, muq, mur, multiplier=54/40)               
         return 0.00174*yu, 0.00027111*yv
     
     def __nonlinear_scaler(self, mu):
@@ -87,7 +87,6 @@ class NavierStokes2DwSat(ForwardIVP):
         return 0.00174*yu, 0.00027111*yv
 
     def neural_net(self, params, t, x, y, mu):
-        yu, yv = self.__nonlinear_scaler(mu)
         t = t / (self.temporal_dom[1])  # rescale t into [0, 1]
         x = x # / self.L  # rescale x into [0, 1]
         y = y # / self.W  # rescale y into [0, 1]
@@ -102,7 +101,7 @@ class NavierStokes2DwSat(ForwardIVP):
         p = outputs[2]
         s = outputs[3]
         # return u, v, p, s
-        return u*yu, v*yv, p, s
+        return 0.00174*u, 0.00027111*v, p, s# nn.sigmoid(2*s)
     # u*0.01, v*0.001, p
     # lembrar de copiar as condiçoes iniciais no folder geom1x2
 
@@ -389,6 +388,7 @@ class NavierStokes2DwSat(ForwardIVP):
         outflow_batch = batch["outflow"]
         noslip_batch = batch["noslip"]
         res_batch = batch["res"]
+        # res2_batch = batch["res_shock"]
         
         (coords_fem_q, t_fem_q, u_fem_q, v_fem_q, p_fem_q, s_fem_q) = ic_batch_q
         (coords_fem_s, t_fem_s, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = ic_batch_s
@@ -475,10 +475,14 @@ class NavierStokes2DwSat(ForwardIVP):
             ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn(
                 params, res_batch[:, 0], res_batch[:, 1], res_batch[:, 2], res_batch[:, 3]
             )
-            ru_loss = jnp.mean(ru_pred**2)
-            rv_loss = jnp.mean(rv_pred**2)
-            rc_loss = jnp.mean(rc_pred**2)
-            rs_loss = jnp.mean(rs_pred**2)
+            ru_pred2, rv_pred2, rc_pred2, rs_pred2 = self.r_pred_fn(
+                params, noslip_batch[:, 0], noslip_batch[:, 1], noslip_batch[:, 2], noslip_batch[:, 3]
+            )
+            
+            ru_loss = jnp.mean(jnp.mean(ru_pred**2) + jnp.mean(ru_pred2**2))
+            rv_loss = jnp.mean(jnp.mean(rv_pred**2) + jnp.mean(rv_pred2**2))
+            rc_loss = jnp.mean(jnp.mean(rc_pred**2) + jnp.mean(rc_pred2**2))
+            rs_loss = jnp.mean(jnp.mean(rs_pred**2) + jnp.mean(rs_pred2**2))
             
         u_pred = self.u_pred_fn( params, t_fem_s, coords_fem_s[:, 0], coords_fem_s[:, 1], 
                                 jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_fem_s.shape[0],),

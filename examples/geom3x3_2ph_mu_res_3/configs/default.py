@@ -6,7 +6,7 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     config.mode = "train"
-    # config.mode = "eval"
+    config.mode = "eval"
     # ver o coeficiente do causal depois
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -19,11 +19,11 @@ def get_config():
 
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
-    arch.arch_name = "ResNet"
+    arch.arch_name = "ModifiedResNet" # ModifiedResNet
     arch.num_layers = 6
     # arch.num_trunk_layers = 6 # mu 2
     # arch.num_branch_layers = 6 # x y t 6
-    arch.hidden_dim = 100
+    arch.hidden_dim = 120
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
@@ -45,7 +45,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 50000
+    training.max_steps = 100000
     training.fine_tune = True
     training.num_time_windows = 1
 
@@ -85,8 +85,8 @@ def get_config():
     weighting.momentum = 0.9
     weighting.update_every_steps = 5000  # 100 for grad norm and 1000 for ntk
 
-    weighting.use_causal = False  ###################### CAUSALITY
-    weighting.causal_tol = .5
+    weighting.use_causal = True  ###################### CAUSALITY
+    weighting.causal_tol = .3
     weighting.num_chunks = 16
 
     # Logging
@@ -101,7 +101,7 @@ def get_config():
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()
-    saving.save_every_steps = 50000
+    saving.save_every_steps = 10000
     saving.num_keep_ckpts = 20
 
     # Input shape for initializing Flax models

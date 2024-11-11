@@ -8,7 +8,7 @@ from absl import logging
 import jax
 
 import jax.numpy as jnp
-from jax import random, vmap, pmap, local_device_count
+from jax import random, vmap, pmap, local_device_count, jit
 from jax.tree_util import tree_map
 
 import matplotlib.pyplot as plt
@@ -123,6 +123,66 @@ class TimeSpaceSampler_mu(TimeSpaceSampler):
 
         return batch
 
+class TimeSpaceSampler_mu_shock(TimeSpaceSampler):
+    def __init__(self, time_dom, coords, mu, model, t1, batch_size, rng_key=random.PRNGKey(1234)):
+        super().__init__(time_dom, coords, batch_size, rng_key)
+        self.model = model
+        self.mu = mu
+        self.t1 =t1
+        
+        
+    @partial(pmap, static_broadcasted_argnums=(0,))
+    def data_generation(self, key):
+        
+        key1, key2 = random.split(key, 2)
+        
+        mu = random.uniform(key1, shape=(self.batch_size, 1), minval = self.mu[0], maxval = self.mu[1])
+        mu = mu[0,0]
+
+        # s_pred_fn = jit(vmap(vmap(self.model.s_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
+        # s_pred_fn = vmap(self.model.s_net, (None, None, 0, 0, None))(
+        #         self.model.state.params, t_coords, self.spatial_coords[:, 0], self.spatial_coords[:, 1], mu
+        #     )
+        t_coords = jnp.array([.05, .1, .15, .2, .25, .3, .35, .4, .45, .5, .55, .6, .65, .7, .75, .8, .85, .9, .95, 1.])*self.t1
+        
+        coords_list = []
+        time_list = []
+        for i in range(t_coords.shape[0]):
+            # s_pred = s_pred_fn(self.model.state.params, t_coords, self.spatial_coords[:, 0], self.spatial_coords[:, 1], mu)
+            
+            state = jax.device_get(jax.tree_util.tree_map(lambda x: x[0], self.model.state))
+            params = state.params
+  
+            s_pred = vmap(self.model.s_net, (None, None, 0, 0, None))(
+                params, t_coords[i], self.spatial_coords[:, 0], self.spatial_coords[:, 1], mu
+            )
+            indices_s_pred = jnp.where((s_pred >= .1) & (s_pred <= .9), size=1000)[0]
+            
+            coords_list.append(self.spatial_coords[indices_s_pred])
+            time_list.append(jnp.ones(indices_s_pred.shape[0])*self.t1)
+            
+        coords_array = jnp.concatenate(coords_list)
+        time_array = jnp.concatenate(time_list)
+        
+        "Generates data containing batch_size samples"
+        
+        idx = random.choice(
+            key2, coords_array.shape[0], shape=(self.batch_size,))
+        
+        spatial_batch = coords_array[idx, :]
+        temporal_batch = time_array[idx]
+        temporal_batch = temporal_batch[:, jnp.newaxis]
+
+        mu_batch = jnp.ones(self.batch_size) * mu
+        mu_batch = mu_batch[:, jnp.newaxis]
+        
+
+        batch = jnp.concatenate([temporal_batch, spatial_batch, mu_batch], axis=1)
+
+        return batch
+
+
+
 class ResSampler(BaseSampler):
     def __init__(
         self,
@@ -193,6 +253,14 @@ def train_one_window(config, workdir, model, samplers, idx):
         batch = {}
         for key, sampler in samplers.items():
             batch[key] = next(sampler)
+            
+        # if step % 100 ==0:
+        #     for key, sampler in samplers.items():
+        #         batch[key] = next(sampler)
+        # else:
+        #     for key, sampler in samplers.items():
+        #         if key != "res_shock":
+        #             batch[key] = next(sampler) 
             # coords_fem_s, t_fem1, u_fem_s, v_fem_s, p_fem_s, s_fem_s = batch[key] 
 
         model.state = model.step(model.state, batch)
@@ -252,6 +320,10 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     # pin la em cima
     L_max = 900/1000/100
     U_max = dp*L_max/mu1
+    # print(f"U_max: {U_max}")
+    # print(f"u_fem_s/U_max: {jnp.max(u_fem_s)/U_max}")
+    # print(f"v_fem_s/U_max: {jnp.max(v_fem_s)/U_max}")
+
     
     pmax =dp
     Re = rho0*dp*(L_max**2)/(mu1**2)
@@ -310,6 +382,11 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     for idx in range(config.training.num_time_windows):
         logging.info("Training time window {}".format(idx + 1))
 
+
+        
+        # Initialize model
+        model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params, D)
+        
         # Initialize Sampler
         keys = random.split(random.PRNGKey(0), 7)
         ic_sampler = iter(
@@ -364,7 +441,19 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
                 rng_key=keys[5],
             )
         )
-
+        
+        # res_sampler_shock = iter(
+        #     TimeSpaceSampler_mu_shock(
+        #         temporal_dom,
+        #         coords,
+        #         mu0,
+        #         model,
+        #         t1,
+        #         config.training.res_batch_size,
+        #         rng_key=keys[5],
+        #     )
+        # )
+        
         samplers = {
             "ic": ic_sampler,
             "ic_s": ic_sampler_s,
@@ -373,11 +462,8 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
             "outflow": outflow_sampler,
             "noslip": noslip_sampler,
             "res": res_sampler,
+            # "res_shock": res_sampler_shock
         }
-
-        # Initialize model
-        # model = models.NavierStokes2DwSat(config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, D)
-        model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params, D)
         
         if config.training.fine_tune:
             ckpt_path = os.path.join(".", "ckpt", config.wandb.name, "time_window_1")
