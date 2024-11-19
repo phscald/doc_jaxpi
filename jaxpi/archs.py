@@ -307,7 +307,6 @@ class DeepONet(nn.Module):
             activation=self.activation,
             #final_activation=False,
             reparam=self.reparam,
-            
             periodicity=self.periodicity,
             fourier_emb=self.fourier_emb,
         )(u)
@@ -322,7 +321,108 @@ class DeepONet(nn.Module):
             reparam=self.reparam,
         )(x)
 
-        y = u * x#nn.sigmoid(x)
+        y = u * x #nn.sigmoid(x)
+        y = self.activation_fn(y)
+        y = Dense(features=self.out_dim, reparam=self.reparam)(y)
+        return y
+    
+class DeepONetwD(nn.Module):
+    arch_name: Optional[str] = "DeepONetwD"
+    num_branch_layers: int = 4
+    num_trunk_layers: int = 4 # (u, x) : u é o branch, x é o trunk
+    hidden_dim: int = 256
+    out_dim: int = 1
+    activation: str = "tanh"
+    periodicity: Union[None, Dict] = None
+    fourier_emb: Union[None, Dict] = None
+    reparam: Union[None, Dict] = None
+
+    def setup(self):
+        self.activation_fn = _get_activation(self.activation)
+
+    @nn.compact
+    def __call__(self, u, x, pde_param):
+        u = ModifiedMlp(#MlpBlock(
+            num_layers=self.num_branch_layers,
+            hidden_dim=self.hidden_dim,
+            out_dim=self.hidden_dim,
+            activation=self.activation,
+            #final_activation=False,
+            reparam=self.reparam,
+            periodicity=self.periodicity,
+            fourier_emb=self.fourier_emb,
+        )(u)
+
+        x = ModifiedMlp(#Mlp(
+            num_layers=self.num_trunk_layers,
+            hidden_dim=self.hidden_dim,
+            out_dim=self.hidden_dim,
+            activation=self.activation,
+            periodicity=self.periodicity,
+            fourier_emb=self.fourier_emb,
+            reparam=self.reparam,
+        )(x)
+        
+        pde_param = Dense(features=1, reparam=self.reparam)(pde_param)
+        pde_param = nn.sigmoid(pde_param)
+
+        y = u * x #nn.sigmoid(x)
+        y = self.activation_fn(y)
+        y = Dense(features=self.out_dim, reparam=self.reparam)(y)
+        
+        y = jnp.concatenate( [y, pde_param], axis=-1 )
+        return y
+    
+class DeepONet3(nn.Module):
+    arch_name: Optional[str] = "DeepONet3"
+    num_branch_layers: int = 4
+    num_branch_layers2: int = 4
+    num_trunk_layers: int = 4 # (u, x) : u é o branch, x é o trunk
+    hidden_dim: int = 256
+    out_dim: int = 1
+    activation: str = "tanh"
+    periodicity: Union[None, Dict] = None
+    fourier_emb: Union[None, Dict] = None
+    reparam: Union[None, Dict] = None
+
+    def setup(self):
+        self.activation_fn = _get_activation(self.activation)
+
+    @nn.compact
+    def __call__(self, u, u2, x):
+        u = ModifiedMlp(#MlpBlock(
+            num_layers=self.num_branch_layers,
+            hidden_dim=self.hidden_dim,
+            out_dim=self.hidden_dim,
+            activation=self.activation,
+            #final_activation=False,
+            reparam=self.reparam,
+            periodicity=self.periodicity,
+            fourier_emb=self.fourier_emb,
+        )(u)
+        
+        u2 = ModifiedMlp(#MlpBlock(
+            num_layers=self.num_branch_layers2,
+            hidden_dim=self.hidden_dim,
+            out_dim=self.hidden_dim,
+            activation=self.activation,
+            #final_activation=False,
+            reparam=self.reparam,
+            periodicity=self.periodicity,
+            fourier_emb=self.fourier_emb,
+        )(u2)
+
+        x = ModifiedMlp(#Mlp(
+            num_layers=self.num_trunk_layers,
+            hidden_dim=self.hidden_dim,
+            out_dim=self.hidden_dim,
+            activation=self.activation,
+            periodicity=self.periodicity,
+            fourier_emb=self.fourier_emb,
+            reparam=self.reparam,
+        )(x)
+
+        y = u * u2 * x#nn.sigmoid(x)
         y = self.activation_fn(y)
         y = Dense(features=self.out_dim, reparam=self.reparam)(y)
         return y
@@ -365,21 +465,8 @@ class DeepOResNet(nn.Module):
             reparam=self.reparam,
         )(x)
 
-        # y = u * nn.sigmoid(x)
         y  = u * x
         y = self.activation_fn(y)
-        # y = jnp.concatenate(
-        #             [y, x], axis=-1 )
-
-        # y = ModifiedMlp(
-        #     num_layers=1,
-        #     hidden_dim=600,
-        #     out_dim=self.out_dim,
-        #     activation=self.activation,
-        #     periodicity=self.periodicity,
-        #     fourier_emb=self.fourier_emb,
-        #     reparam=self.reparam,
-        # )(y)
 
         y = Dense(features=self.out_dim, reparam=self.reparam)(y)
         return y

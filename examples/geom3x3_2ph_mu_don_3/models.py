@@ -2,6 +2,7 @@ from functools import partial
 
 import jax
 import jax.numpy as jnp
+import numpy as np
 from jax import lax, jit, grad, vmap
 from jax.tree_util import tree_map
 
@@ -74,7 +75,7 @@ class NavierStokes2DwSat(ForwardIVP):
         
         yu =  self.__linear_scaler_equation(mu, mus, muq, mur, multiplier=16/40)    
         yv =  self.__linear_scaler_equation(mu, mus, muq, mur, multiplier=54/40)               
-        return 0.00174*yu, 0.00027111*yv
+        return 0.00174*yu, 0.00027*yv
     
     def __nonlinear_scaler(self, mu):
         (mu0, _, _, _) = self.fluid_params
@@ -84,15 +85,15 @@ class NavierStokes2DwSat(ForwardIVP):
         
         yu =  self.__nonlinear_scaler_equation(mu, mus, muq, mur, multiplier=16/40)    
         yv =  self.__nonlinear_scaler_equation(mu, mus, muq, mur, multiplier=54/40)                  
-        return 0.00174*yu, 0.00027111*yv
+        return  0.00174*yu, 0.00027*yv# 0.0175*yu, 0.00271*yv 
 
     def neural_net(self, params, t, x, y, mu):
         t = t / (self.temporal_dom[1])  # rescale t into [0, 1]
         x = x # / self.L  # rescale x into [0, 1]
         y = y # / self.W  # rescale y into [0, 1]
         mu = (mu-.0025)/(.006 - .0025)
-        inputs = jnp.stack([t, x, y]) # branch
-        mu = jnp.stack([mu])  # trunk
+        inputs = jnp.stack([ x, y]) # branch
+        mu = jnp.stack([t, mu])  # trunk
         outputs = self.state.apply_fn(params, inputs, mu)
 
         # Start with an initial state of the channel flow
@@ -101,7 +102,7 @@ class NavierStokes2DwSat(ForwardIVP):
         p = outputs[2]
         s = outputs[3]
         # return u, v, p, s
-        return 0.00174*u, 0.00027111*v, p, s# nn.sigmoid(2*s)
+        return 0.00174*u, 0.00027*v, p, s
     # u*0.01, v*0.001, p
     # lembrar de copiar as condiçoes iniciais no folder geom1x2
 
@@ -155,10 +156,10 @@ class NavierStokes2DwSat(ForwardIVP):
         mu_ratio = mu/mu1
                 
         # PDE residual
-        ru = u_t + u * u_x + v * u_y + (p_x - mu_ratio*(u_xx + u_yy)) / Re
-        rv = v_t + u * v_x + v * v_y + (p_y - mu_ratio*(v_xx + v_yy)) / Re
+        ru = u_t + u * u_x + v * u_y + (p_x - mu_ratio*(u_xx + u_yy)) / Re #  
+        rv = v_t + u * v_x + v * v_y + (p_y - mu_ratio*(v_xx + v_yy)) / Re #
         rc = u_x + v_y
-        rs = s_t + u * s_x + v * s_y - self.D*(s_xx + s_yy) 
+        rs = s_t + u * s_x + v * s_y - 0*(s_xx + s_yy)  #self.D*(s_xx + s_yy)  #.0001*(s_xx + s_yy) 
 
         return ru, rv, rc, rs
 
@@ -388,7 +389,7 @@ class NavierStokes2DwSat(ForwardIVP):
         outflow_batch = batch["outflow"]
         noslip_batch = batch["noslip"]
         res_batch = batch["res"]
-        # res2_batch = batch["res_shock"]
+        res2_batch = batch["res_shock"]
         
         (coords_fem_q, t_fem_q, u_fem_q, v_fem_q, p_fem_q, s_fem_q) = ic_batch_q
         (coords_fem_s, t_fem_s, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = ic_batch_s
@@ -424,6 +425,21 @@ class NavierStokes2DwSat(ForwardIVP):
         v_ic_loss = jnp.mean((v_ic_pred - v_batch) ** 2)
         p_ic_loss = jnp.mean((p_ic_pred - p_batch) ** 2)
         s_ic_loss = jnp.mean((s_ic_pred - s_batch) ** 2)
+        u_ic_pred = self.ufem_pred_fn(params, 
+                                    jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_batch.shape[0],),
+                                       minval=0, maxval=500),
+                                    coords_batch[:, 0], coords_batch[:, 1], .05)
+        v_ic_pred = self.vfem_pred_fn(params, 
+                                    jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_batch.shape[0],),
+                                       minval=0, maxval=500),
+                                    coords_batch[:, 0], coords_batch[:, 1], .05)
+        p_ic_pred = self.pfem_pred_fn(params, 
+                                    jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_batch.shape[0],),
+                                       minval=0, maxval=500),
+                                    coords_batch[:, 0], coords_batch[:, 1], .05)
+        u_ic_loss = jnp.mean( u_ic_loss + jnp.mean((u_ic_pred - u_batch) ** 2) )
+        v_ic_loss = jnp.mean( v_ic_loss + jnp.mean((v_ic_pred - v_batch) ** 2) )
+        p_ic_loss = jnp.mean( p_ic_loss + jnp.mean((p_ic_pred - p_batch) ** 2) )
 
         # inflow outflow loss
         p_in_pred = self.p_pred_fn(
@@ -476,25 +492,33 @@ class NavierStokes2DwSat(ForwardIVP):
                 params, res_batch[:, 0], res_batch[:, 1], res_batch[:, 2], res_batch[:, 3]
             )
             ru_pred2, rv_pred2, rc_pred2, rs_pred2 = self.r_pred_fn(
+                params, res2_batch[:, 0], res2_batch[:, 1], res2_batch[:, 2], res2_batch[:, 3]
+            )
+            ru_pred3, rv_pred3, rc_pred3, rs_pred3 = self.r_pred_fn(
                 params, noslip_batch[:, 0], noslip_batch[:, 1], noslip_batch[:, 2], noslip_batch[:, 3]
             )
             
-            ru_loss = jnp.mean(jnp.mean(ru_pred**2) + jnp.mean(ru_pred2**2))
-            rv_loss = jnp.mean(jnp.mean(rv_pred**2) + jnp.mean(rv_pred2**2))
-            rc_loss = jnp.mean(jnp.mean(rc_pred**2) + jnp.mean(rc_pred2**2))
-            rs_loss = jnp.mean(jnp.mean(rs_pred**2) + jnp.mean(rs_pred2**2))
+            # ru_loss = jnp.mean(jnp.mean(ru_pred**2) + jnp.mean(ru_pred3**2))
+            # rv_loss = jnp.mean(jnp.mean(rv_pred**2) + jnp.mean(rv_pred3**2))
+            # rc_loss = jnp.mean(jnp.mean(rc_pred**2) + jnp.mean(rc_pred3**2))
+            # rs_loss = jnp.mean(jnp.mean(rs_pred**2) + jnp.mean(rs_pred3**2))
             
-        u_pred = self.u_pred_fn( params, t_fem_s, coords_fem_s[:, 0], coords_fem_s[:, 1], 
-                                jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_fem_s.shape[0],),
-                                minval=self.fluid_params[0][0], maxval=self.fluid_params[0][1]))
-        ru_add = jnp.mean(nn.relu(jnp.abs(u_fem_s) - jnp.abs(u_pred))) # u_pred has to be greater than u_fem_s
-        ru_loss = ru_loss + 100*ru_add
+            ru_loss = jnp.mean(jnp.mean(ru_pred**2) + jnp.mean(ru_pred2**2) + jnp.mean(ru_pred3**2))
+            rv_loss = jnp.mean(jnp.mean(rv_pred**2) + jnp.mean(rv_pred2**2) + jnp.mean(rv_pred3**2))
+            rc_loss = jnp.mean(jnp.mean(rc_pred**2) + jnp.mean(rc_pred2**2) + jnp.mean(rc_pred3**2))
+            rs_loss = jnp.mean(jnp.mean(rs_pred**2) + jnp.mean(rs_pred2**2) + jnp.mean(rs_pred3**2))
+            
+        # u_pred = self.u_pred_fn( params, t_fem_s, coords_fem_s[:, 0], coords_fem_s[:, 1], 
+        #                         jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_fem_s.shape[0],),
+        #                         minval=self.fluid_params[0][0], maxval=self.fluid_params[0][1]))
+        # ru_add = jnp.mean(nn.relu(jnp.abs(u_fem_s) - jnp.abs(u_pred))) # u_pred has to be greater than u_fem_s
+        # ru_loss = ru_loss + 100*ru_add
         
-        v_pred = self.v_pred_fn( params, t_fem_s, coords_fem_s[:, 0], coords_fem_s[:, 1], 
-                                jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_fem_s.shape[0],),
-                                minval=self.fluid_params[0][0], maxval=self.fluid_params[0][1]))
-        rv_add = jnp.mean(nn.relu(jnp.abs(v_fem_s) - jnp.abs(v_pred))) # v_pred has to be greater than v_fem_s
-        rv_loss = rv_loss + 100*rv_add
+        # v_pred = self.v_pred_fn( params, t_fem_s, coords_fem_s[:, 0], coords_fem_s[:, 1], 
+        #                         jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_fem_s.shape[0],),
+        #                         minval=self.fluid_params[0][0], maxval=self.fluid_params[0][1]))
+        # rv_add = jnp.mean(nn.relu(jnp.abs(v_fem_s) - jnp.abs(v_pred))) # v_pred has to be greater than v_fem_s
+        # rv_loss = rv_loss + 100*rv_add
 
         loss_dict = {
             "u_data": u_data,
@@ -519,10 +543,6 @@ class NavierStokes2DwSat(ForwardIVP):
         }
 
         return loss_dict
-
-
-
-    
 
 
 class NavierStokesEvaluator(BaseEvaluator):

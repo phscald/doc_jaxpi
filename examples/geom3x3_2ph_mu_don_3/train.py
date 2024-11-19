@@ -122,64 +122,97 @@ class TimeSpaceSampler_mu(TimeSpaceSampler):
         batch = jnp.concatenate([temporal_batch, spatial_batch, mu_batch], axis=1)
 
         return batch
-
-class TimeSpaceSampler_mu_shock(TimeSpaceSampler):
-    def __init__(self, time_dom, coords, mu, model, t1, batch_size, rng_key=random.PRNGKey(1234)):
-        super().__init__(time_dom, coords, batch_size, rng_key)
-        self.model = model
+    
+class TimeSpaceSampler_mu_shock(TimeSpaceSampler): #TimeSpaceSampler):
+    def __init__(self, time_dom, X, mu, batch_size, rng_key=random.PRNGKey(1234)):
+        super().__init__(time_dom, X, batch_size, rng_key)
         self.mu = mu
-        self.t1 =t1
-        
+        self.X = X
+        self.t = time_dom
+        self.batch_size = batch_size
         
     @partial(pmap, static_broadcasted_argnums=(0,))
     def data_generation(self, key):
         
-        key1, key2 = random.split(key, 2)
+        key1, key2, key3, key4 = random.split(key, 4)
         
-        mu = random.uniform(key1, shape=(self.batch_size, 1), minval = self.mu[0], maxval = self.mu[1])
-        mu = mu[0,0]
-
-        # s_pred_fn = jit(vmap(vmap(self.model.s_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
-        # s_pred_fn = vmap(self.model.s_net, (None, None, 0, 0, None))(
-        #         self.model.state.params, t_coords, self.spatial_coords[:, 0], self.spatial_coords[:, 1], mu
-        #     )
-        t_coords = jnp.array([.05, .1, .15, .2, .25, .3, .35, .4, .45, .5, .55, .6, .65, .7, .75, .8, .85, .9, .95, 1.])*self.t1
-        
-        coords_list = []
-        time_list = []
-        for i in range(t_coords.shape[0]):
-            # s_pred = s_pred_fn(self.model.state.params, t_coords, self.spatial_coords[:, 0], self.spatial_coords[:, 1], mu)
-            
-            state = jax.device_get(jax.tree_util.tree_map(lambda x: x[0], self.model.state))
-            params = state.params
-  
-            s_pred = vmap(self.model.s_net, (None, None, 0, 0, None))(
-                params, t_coords[i], self.spatial_coords[:, 0], self.spatial_coords[:, 1], mu
-            )
-            indices_s_pred = jnp.where((s_pred >= .1) & (s_pred <= .9), size=1000)[0]
-            
-            coords_list.append(self.spatial_coords[indices_s_pred])
-            time_list.append(jnp.ones(indices_s_pred.shape[0])*self.t1)
-            
-        coords_array = jnp.concatenate(coords_list)
-        time_array = jnp.concatenate(time_list)
-        
-        "Generates data containing batch_size samples"
+        y_mains = jnp.array([[150, 250], [400, 500], [650, 750]])
+        y_mains = y_mains/(900)
         
         idx = random.choice(
-            key2, coords_array.shape[0], shape=(self.batch_size,))
+            key1, self.t.shape[0], shape=(self.batch_size,)
+        )
         
-        spatial_batch = coords_array[idx, :]
-        temporal_batch = time_array[idx]
-        temporal_batch = temporal_batch[:, jnp.newaxis]
+        temporal_batch = self.t[idx,0][:,jnp.newaxis]
 
-        mu_batch = jnp.ones(self.batch_size) * mu
-        mu_batch = mu_batch[:, jnp.newaxis]
-        
+        mu_batch = random.uniform(key2, shape=(self.batch_size, 1), minval = self.mu[0], maxval = self.mu[1])
+        # print(y_mains.shape)
+        # print(dads)
 
-        batch = jnp.concatenate([temporal_batch, spatial_batch, mu_batch], axis=1)
+        spatial_batch1  = random.uniform(key3, shape=(self.batch_size, 1), minval = self.X[idx,0][:,jnp.newaxis], maxval = self.X[idx,1][:,jnp.newaxis])
+        spatial_batch2  = random.uniform(key4, shape=(self.batch_size, 1), minval = y_mains[self.t[idx,1].astype(int),0][:,jnp.newaxis], maxval = y_mains[self.t[idx,1].astype(int),1][:,jnp.newaxis])
+
+        batch = jnp.concatenate([temporal_batch, spatial_batch1, spatial_batch2, mu_batch], axis=1)
 
         return batch
+
+# class TimeSpaceSampler_mu_shock(TimeSpaceSampler):
+#     def __init__(self, time_dom, coords, mu, model, t1, batch_size, rng_key=random.PRNGKey(1234)):
+#         super().__init__(time_dom, coords, batch_size, rng_key)
+#         self.model = model
+#         self.mu = mu
+#         self.t1 =t1
+        
+        
+#     @partial(pmap, static_broadcasted_argnums=(0,))
+#     def data_generation(self, key):
+        
+#         key1, key2 = random.split(key, 2)
+        
+#         mu = random.uniform(key1, shape=(self.batch_size, 1), minval = self.mu[0], maxval = self.mu[1])
+#         mu = mu[0,0]
+
+#         # s_pred_fn = jit(vmap(vmap(self.model.s_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
+#         # s_pred_fn = vmap(self.model.s_net, (None, None, 0, 0, None))(
+#         #         self.model.state.params, t_coords, self.spatial_coords[:, 0], self.spatial_coords[:, 1], mu
+#         #     )
+#         t_coords = jnp.array([.05, .1, .15, .2, .25, .3, .35, .4, .45, .5, .55, .6, .65, .7, .75, .8, .85, .9, .95, 1.])*self.t1
+        
+#         coords_list = []
+#         time_list = []
+#         for i in range(t_coords.shape[0]):
+#             # s_pred = s_pred_fn(self.model.state.params, t_coords, self.spatial_coords[:, 0], self.spatial_coords[:, 1], mu)
+            
+#             state = jax.device_get(jax.tree_util.tree_map(lambda x: x[0], self.model.state))
+#             params = state.params
+  
+#             s_pred = vmap(self.model.s_net, (None, None, 0, 0, None))(
+#                 params, t_coords[i], self.spatial_coords[:, 0], self.spatial_coords[:, 1], mu
+#             )
+#             indices_s_pred = jnp.where((s_pred >= .1) & (s_pred <= .9), size=1000)[0]
+            
+#             coords_list.append(self.spatial_coords[indices_s_pred])
+#             time_list.append(jnp.ones(indices_s_pred.shape[0])*self.t1)
+            
+#         coords_array = jnp.concatenate(coords_list)
+#         time_array = jnp.concatenate(time_list)
+        
+#         "Generates data containing batch_size samples"
+        
+#         idx = random.choice(
+#             key2, coords_array.shape[0], shape=(self.batch_size,))
+        
+#         spatial_batch = coords_array[idx, :]
+#         temporal_batch = time_array[idx]
+#         temporal_batch = temporal_batch[:, jnp.newaxis]
+
+#         mu_batch = jnp.ones(self.batch_size) * mu
+#         mu_batch = mu_batch[:, jnp.newaxis]
+        
+
+#         batch = jnp.concatenate([temporal_batch, spatial_batch, mu_batch], axis=1)
+
+#         return batch
 
 
 
@@ -301,7 +334,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     wandb_config = config.wandb
     wandb.init(project=wandb_config.project, name=wandb_config.name)
 
-    pin = 50
+    pin = 300
     (
         coords,
         inflow_coords,
@@ -315,24 +348,24 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         
     (u0, v0, p0, s0, coords_initial,
             u_fem_s, v_fem_s, p_fem_s, s_fem_s, dt_fem, coords_fem,
-            u_fem_q, v_fem_q, p_fem_q, s_fem_q) = initial
+            u_fem_q, v_fem_q, p_fem_q, s_fem_q,
+            coords_middle, t_middle) = initial
+    
     dp = pin
     # pin la em cima
     L_max = 900/1000/100
     U_max = dp*L_max/mu1
-    # print(f"U_max: {U_max}")
-    # print(f"u_fem_s/U_max: {jnp.max(u_fem_s)/U_max}")
-    # print(f"v_fem_s/U_max: {jnp.max(v_fem_s)/U_max}")
-
+    print(f"U_max: {U_max}")
+    print(f"u_fem_s/U_max: {jnp.max(u_fem_s)/U_max}")
+    print(f"v_fem_s/U_max: {jnp.max(v_fem_s)/U_max}")
     
     pmax =dp
     Re = rho0*dp*(L_max**2)/(mu1**2)
     print(f'Re={Re}')
     print(f'max_Steps: {config.training.max_steps}')
-    
 
     D = 0*10**(-4)
-    t1 = 500
+    t1 = 400
 
     # noslip_coords = jnp.vstack((wall_coords, cyl_coords))
     noslip_coords = wall_coords
@@ -353,8 +386,13 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         coords_fem = coords_fem / L_star
         
         dt_fem = dt_fem / (mu1/dp)
+        t_middle = t_middle / (mu1/dp)
         t_fem = jnp.cumsum(dt_fem)
         idx = jnp.where(t_fem<=t1)[0]
+        
+        idx_mid = jnp.where(t_middle[:,0]<=t1)[0]
+        t_middle = t_middle[idx_mid]
+        coords_middle = coords_middle[idx_mid]
         
         (u0, v0, p0) = (u0/U_max, v0/U_max, p0/pmax)
         u_fem_s = u_fem_s[idx] / U_max
@@ -385,7 +423,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
         
         # Initialize model
-        model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params, D)
+        model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params, D) #  no 1
         
         # Initialize Sampler
         keys = random.split(random.PRNGKey(0), 7)
@@ -442,6 +480,16 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
             )
         )
         
+        res_sampler_shock = iter(
+            TimeSpaceSampler_mu_shock(
+                t_middle,
+                coords_middle,
+                mu0,
+                config.training.res_shock_size,
+                rng_key=keys[5],
+            )
+        )
+        
         # res_sampler_shock = iter(
         #     TimeSpaceSampler_mu_shock(
         #         temporal_dom,
@@ -462,7 +510,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
             "outflow": outflow_sampler,
             "noslip": noslip_sampler,
             "res": res_sampler,
-            # "res_shock": res_sampler_shock
+            "res_shock": res_sampler_shock
         }
         
         if config.training.fine_tune:

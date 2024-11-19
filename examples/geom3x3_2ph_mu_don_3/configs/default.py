@@ -6,7 +6,7 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     config.mode = "train"
-    # config.mode = "eval"
+    config.mode = "eval"
     # ver o coeficiente do causal depois
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -23,6 +23,7 @@ def get_config():
     # arch.num_layers = 8
     arch.num_trunk_layers = 5 # mu 2
     arch.num_branch_layers = 5 # x y t 6
+    # arch.num_branch_layers2
     arch.hidden_dim = 250
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
@@ -38,24 +39,24 @@ def get_config():
     optim.beta1 = 0.9
     optim.beta2 = 0.999
     optim.eps = 1e-8
-    optim.learning_rate = 5e-4
+    optim.learning_rate = 1e-4
     optim.decay_rate = 0.98
     optim.decay_steps = 5000
     optim.grad_accum_steps = 0
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 50000
+    training.max_steps = 100000
     training.fine_tune = True
     training.num_time_windows = 1
 
     div = 2
     training.inflow_batch_size = 32#int(2048/div)
     training.outflow_batch_size = 32#int(2048/div)
-    training.noslip_batch_size = 512#512int(2048/div)
+    training.noslip_batch_size = 128#512int(2048/div)
     training.ic_batch_size = 512#int(2048/div)
-    training.res_batch_size = 1024+512#+512#int(2*2048/div)
-    # training.res_shock_size = 1024+128
+    training.res_batch_size = 512 #+512#int(2*2048/div)
+    training.res_shock_size = 512
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
@@ -84,7 +85,7 @@ def get_config():
     }
 
     weighting.momentum = 0.9
-    weighting.update_every_steps = 5000  # 100 for grad norm and 1000 for ntk
+    weighting.update_every_steps = 5000 # 100 for grad norm and 1000 for ntk
 
     weighting.use_causal = False  ###################### CAUSALITY
     weighting.causal_tol = .25
@@ -107,8 +108,9 @@ def get_config():
 
     # Input shape for initializing Flax models
     config.input_dim = 4
-    config.input_branch = 3
-    config.input_trunk = 1
+    config.input_branch = 2
+    # config.input_branch = 2
+    config.input_trunk = 2
 
     # Integer for PRNG random seed.
     config.seed = 42

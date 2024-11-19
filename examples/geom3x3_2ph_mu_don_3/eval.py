@@ -31,7 +31,7 @@ import matplotlib.tri as tri
 def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Load dataset
     
-    pin =50
+    pin = 300
     (
         coords,
         inflow_coords,
@@ -61,7 +61,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'Re={Re}')
 
 
-    mu = .003# mu0 = [.0025, .01]
+    mu = .08# mu0 = [.0025, .01]
     D = 0*10**(-5)
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
@@ -168,11 +168,11 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     def update_u(frames, idx):
         axu.cla()  # Clear the current axis
-        axu.scatter(x, y, s=1, c=u_pred_list[idx][frames], cmap='jet')#, vmin=jnp.min(u0), vmax=jnp.max(u0))
+        axu.scatter(x, y, s=1, c=u_pred_list[idx][frames], cmap='jet', vmin=jnp.min(u0), vmax=jnp.max(u0))
 
     def update_v(frames, idx):
         axv.cla()  # Clear the current axis
-        axv.scatter(x, y, s=1, c=v_pred_list[idx][frames], cmap='jet')#, vmin=jnp.min(v0), vmax=jnp.max(v0))
+        axv.scatter(x, y, s=1, c=v_pred_list[idx][frames], cmap='jet', vmin=jnp.min(v0), vmax=jnp.max(v0))
 
 
     def update_p(frames, idx):

@@ -61,6 +61,12 @@ def _create_arch(config):
     elif config.arch_name == "DeepOResNet":
         arch = archs.DeepOResNet(**config)
         
+    elif config.arch_name == "DeepONet3":
+        arch = archs.DeepONet3(**config)
+        
+    elif config.arch_name == "DeepONetwD":
+        arch = archs.DeepONetwD(**config)
+        
     else:
         raise NotImplementedError(f"Arch {config.arch_name} not supported yet!")
 
@@ -93,7 +99,19 @@ def _create_optimizer(config):
 def _create_train_state(config):
     # Initialize network
     arch = _create_arch(config.arch)
-    if config.arch.arch_name == "DeepONet" or config.arch.arch_name == "DeepOResNet": 
+    if config.arch.arch_name == "DeepONet3": 
+        # (u, x) : u é o branch, x é o trunk
+        u = jnp.ones(config.input_branch)
+        u2 = jnp.ones(config.input_branch2)
+        x = jnp.ones(config.input_trunk)
+        params = arch.init(random.PRNGKey(config.seed), u, u2, x)
+    elif config.arch.arch_name == "DeepONetwD": 
+        # (u, x) : u é o branch, x é o trunk
+        u = jnp.ones(config.input_branch)
+        x = jnp.ones(config.input_trunk)
+        Dparam = jnp.ones(1)
+        params = arch.init(random.PRNGKey(config.seed), u, x, Dparam)
+    elif config.arch.arch_name == "DeepONet" or config.arch.arch_name == "DeepOResNet": 
         # (u, x) : u é o branch, x é o trunk
         u = jnp.ones(config.input_branch)
         x = jnp.ones(config.input_trunk)
