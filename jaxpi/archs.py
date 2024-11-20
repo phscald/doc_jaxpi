@@ -363,8 +363,15 @@ class DeepONetwD(nn.Module):
             reparam=self.reparam,
         )(x)
         
-        pde_param = Dense(features=1, reparam=self.reparam)(pde_param)
-        pde_param = nn.sigmoid(pde_param)
+        pde_param = Mlp(
+            num_layers=1,
+            hidden_dim=2,
+            out_dim=1,
+            activation=self.activation,
+            periodicity=None,
+            fourier_emb=None,
+            reparam=None,
+        )(pde_param)
 
         y = u * x #nn.sigmoid(x)
         y = self.activation_fn(y)

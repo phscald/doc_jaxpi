@@ -63,7 +63,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'Re={Re}')
 
 
-    mu = .08 # mu0 = [.0025, .01]
+    mu = .05 # mu0 = [.0025, .01]
     D = 0*10**(-5)
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
@@ -110,7 +110,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     params = model.state.params
     
     # Predict
-    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
+    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, 0, None)), (None, 0, None, None, None))) # shape t by xy
     v_pred_fn = jit(vmap(vmap(model.v_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
     p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
     s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
@@ -138,8 +138,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
         v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
         s_pred = s_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
-        p_pred = p_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
-        
+        p_pred = p_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)      
 
         u_pred_list.append(u_pred)
         v_pred_list.append(v_pred)

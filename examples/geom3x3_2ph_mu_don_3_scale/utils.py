@@ -161,7 +161,7 @@ def get_dataset(pin):
                                                                 wall_coords*scale)
     # mu0 = [.0025, .05]#.02
     
-    mu0 = [.049, .1]
+    mu0 = [.079, .1]
     # mu0 = [.0025, .0051]
     # mu0 = [.05, .101]
     mu1 = .05
