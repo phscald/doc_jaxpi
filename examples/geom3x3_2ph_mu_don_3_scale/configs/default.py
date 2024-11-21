@@ -54,9 +54,9 @@ def get_config():
     training.inflow_batch_size = 32#int(2048/div)
     training.outflow_batch_size = 32#int(2048/div)
     training.noslip_batch_size = 128#512int(2048/div)
-    training.ic_batch_size = 512#int(2048/div)
-    training.res_batch_size = 512 #+512#int(2*2048/div)
-    training.res_shock_size = 1024#-2*128
+    training.ic_batch_size = 512#512#int(2048/div)
+    training.res_batch_size = 512#512 #+512#int(2*2048/div)
+    training.res_shock_size = 1024#512
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
@@ -87,8 +87,8 @@ def get_config():
     weighting.momentum = 0.9
     weighting.update_every_steps = 5000 # 100 for grad norm and 1000 for ntk
 
-    weighting.use_causal = True  ###################### CAUSALITY
-    weighting.causal_tol = .25
+    weighting.use_causal = False  ###################### CAUSALITY
+    weighting.causal_tol = .1
     weighting.num_chunks = 16
 
     # Logging

@@ -523,7 +523,7 @@ class NavierStokes2DwSat(ForwardIVP):
             rs2 = jnp.mean(gamma * rs_l)
             
             ru_l, rv_l, rc_l, rs_l, gamma = self.res_and_w(params, 
-                                        jnp.concatenate((res2_batch[:,:-1], jnp.ones(res2_batch.shape[0])[:,jnp.newaxis]*res2_batch[:,-1]), axis=1))
+                                        jnp.concatenate((res2_batch[:,:-1], jnp.ones(res2_batch.shape[0])[:,jnp.newaxis]*res2_batch[1,-1]), axis=1))
             
             ru3 = jnp.mean(gamma * ru_l)
             rv3 = jnp.mean(gamma * rv_l)
@@ -551,28 +551,68 @@ class NavierStokes2DwSat(ForwardIVP):
             # ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn(
             #     params, res_batch[:, 0], res_batch[:, 1], res_batch[:, 2], res_batch[:, 3]
             # )
-            # ru_pred2, rv_pred2, rc_pred2, rs_pred2 = self.r_pred_fn(
+            # ru1 =  jnp.mean(ru_pred**2)
+            # rv1 =  jnp.mean(rv_pred**2)
+            # rc1 =  jnp.mean(rc_pred**2)
+            # rs1 =  jnp.mean(rs_pred**2)            
+
+            # ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn(
             #     params, res2_batch[:, 0], res2_batch[:, 1], res2_batch[:, 2], res2_batch[:, 3]
             # )
-            # ru_pred3, rv_pred3, rc_pred3, rs_pred3 = self.r_pred_fn(
+            # ru2 =  jnp.mean(ru_pred**2)
+            # rv2 =  jnp.mean(rv_pred**2)
+            # rc2 =  jnp.mean(rc_pred**2)
+            # rs2 =  jnp.mean(rs_pred**2)   
+
+            # ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn(
             #     params, noslip_batch[:, 0], noslip_batch[:, 1], noslip_batch[:, 2], noslip_batch[:, 3]
             # )
-            ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fem_fn(
-                params, t_fem_q, coords_fem_q[:, 0], coords_fem_q[:, 1], .0025
-            )
-            ru4 =  jnp.mean(ru_pred**2)
-            rv4 =  jnp.mean(rv_pred**2)
-            rc4 =  jnp.mean(rc_pred**2)
-            rs4 =  jnp.mean(rs_pred**2)
+            # ru3 =  jnp.mean(ru_pred**2)
+            # rv3 =  jnp.mean(rv_pred**2)
+            # rc3 =  jnp.mean(rc_pred**2)
+            # rs3 =  jnp.mean(rs_pred**2)   
+
+            # ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fem_fn(
+            #     params, t_fem_q, coords_fem_q[:, 0], coords_fem_q[:, 1], .0025
+            # )
+            # ru4 =  jnp.mean(ru_pred**2)
+            # rv4 =  jnp.mean(rv_pred**2)
+            # rc4 =  jnp.mean(rc_pred**2)
+            # rs4 =  jnp.mean(rs_pred**2)
+
+            # ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fem_fn(
+            #     params, t_fem_s, coords_fem_s[:, 0], coords_fem_s[:, 1], .1
+            # )
+            # ru5 =  jnp.mean(ru_pred**2)
+            # rv5 =  jnp.mean(rv_pred**2)
+            # rc5 =  jnp.mean(rc_pred**2)
+            # rs5 =  jnp.mean(rs_pred**2)
             
-            ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fem_fn(
-                params, t_fem_s, coords_fem_s[:, 0], coords_fem_s[:, 1], .1
-            )
-            ru5 =  jnp.mean(ru_pred**2)
-            rv5 =  jnp.mean(rv_pred**2)
-            rc5 =  jnp.mean(rc_pred**2)
-            rs5 =  jnp.mean(rs_pred**2)
+    #                     jnp.concatenate(
+    #             (                    
+    #                 jnp.concatenate((t_fem_q[:,jnp.newaxis], coords_fem_q, jnp.ones(t_fem_q.shape)[:,jnp.newaxis]*.0025), axis=1),
+    #                 jnp.concatenate((t_fem_s[:,jnp.newaxis], coords_fem_s, jnp.ones(t_fem_s.shape)[:,jnp.newaxis]*.1), axis=1),
+    #                 jnp.concatenate((
+    #                                     jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_batch.shape[0],),
+    #                             minval=0, maxval=500)[:,jnp.newaxis],
+    #                                             coords_batch, jnp.ones(coords_batch.shape[0])[:,jnp.newaxis]*.05), axis=1)
+    #             )
+    #         , axis=0)
+    # )
             
+            
+            # ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn(
+            #     params,
+            #     jnp.concatenate((t_fem_s, t_fem_q), axis =0),
+            #     jnp.concatenate((coords_fem_s[:, 0], coords_fem_q[:, 0]), axis =0), 
+            #     jnp.concatenate((coords_fem_s[:, 1], coords_fem_q[:, 1]), axis =0), 
+            #     jnp.concatenate((.1*jnp.ones(t_fem_s.shape[0]), coords_fem_q[:, 1]), axis =0)
+            # )
+            # ru5 =  jnp.mean(ru_pred**2)
+            # rv5 =  jnp.mean(rv_pred**2)
+            # rc5 =  jnp.mean(rc_pred**2)
+            # rs5 =  jnp.mean(rs_pred**2)
+
             ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fem_fn(  params,
              jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_batch.shape[0],),
                                        minval=0, maxval=500),
@@ -582,7 +622,7 @@ class NavierStokes2DwSat(ForwardIVP):
             rv6 =  jnp.mean(rv_pred**2)
             rc6 =  jnp.mean(rc_pred**2)
             rs6 =  jnp.mean(rs_pred**2)
-            
+
             ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fem_fn(  params,
                 res_batch[:, 0], res_batch[:, 1], res_batch[:, 2], res2_batch[0, 3]
             )
@@ -591,19 +631,18 @@ class NavierStokes2DwSat(ForwardIVP):
             rc7 =  jnp.mean(rc_pred**2)
             rs7 =  jnp.mean(rs_pred**2)
             
-            
-            ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fem_fn(  params,
-                res2_batch[:, 0], res2_batch[:, 1], res2_batch[:, 2], res2_batch[1, 3]
+            ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fem_fn(
+                params, res2_batch[:, 0], res2_batch[:, 1], res2_batch[:, 2], res2_batch[1, 3]
             )
             ru8 =  jnp.mean(ru_pred**2)
             rv8 =  jnp.mean(rv_pred**2)
             rc8 =  jnp.mean(rc_pred**2)
             rs8 =  jnp.mean(rs_pred**2)
 
-            ru_loss = jnp.mean( ru1 + ru4 + ru5 + ru6 + ru7 + ru8 )
-            rv_loss = jnp.mean( rv1 + rv4 + rv5 + rv6 + rv7 + rv8 )
-            rc_loss = jnp.mean( rc1 + rc4 + rc5 + rc6 + rc7 + rc8 )
-            rs_loss = jnp.mean( rs1 + rs4 + rs5 + rs6 + rs7 + rs8 )            
+            ru_loss = jnp.mean( ru1 + ru6 + ru7 + ru8 ) #5
+            rv_loss = jnp.mean( rv1 + rv6 + rv7 + rv8 )
+            rc_loss = jnp.mean( rc1 + rc6 + rc7 + rc8 )
+            rs_loss = jnp.mean( rs1 + rs6 + rs7 + rs8 )       
                         
             # ru_loss = jnp.mean(jnp.mean(ru_pred**2) + jnp.mean(ru_pred3**2))
             # rv_loss = jnp.mean(jnp.mean(rv_pred**2) + jnp.mean(rv_pred3**2))
