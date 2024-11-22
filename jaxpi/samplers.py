@@ -65,7 +65,7 @@ class TimeSpaceSampler(BaseSampler):
 
         self.temporal_dom = temporal_dom
         self.spatial_coords = spatial_coords
-
+        
     @partial(pmap, static_broadcasted_argnums=(0,))
     def data_generation(self, key):
         "Generates data containing batch_size samples"
