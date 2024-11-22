@@ -299,8 +299,12 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     # L_max = 900/1000/100
     L_max = 50/1000/100
     U_max = dp*L_max/mu1
-    u_max2 = jnp.max(u_fem_s)/U_max
-    v_max2 = jnp.max(v_fem_s)/U_max
+    u_maxs = jnp.max(u_fem_s)/U_max
+    v_maxs = jnp.max(v_fem_s)/U_max
+    u_maxq = jnp.max(u_fem_q)/U_max
+    v_maxq = jnp.max(v_fem_q)/U_max
+    
+    uv_max = (u_maxq, v_maxq, u_maxs, v_maxs)
     print(f"U_max: {U_max}")
     print(f"u_fem_s/U_max: {jnp.max(u_fem_s)/U_max}")
     print(f"v_fem_s/U_max: {jnp.max(v_fem_s)/U_max}")
@@ -310,7 +314,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'Re={Re}')
     print(f'max_Steps: {config.training.max_steps}')
 
-    D = 0*10**(-4)
     t1 = 400
 
     # noslip_coords = jnp.vstack((wall_coords, cyl_coords))
@@ -340,13 +343,13 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         t_middle = t_middle[idx_mid]
         coords_middle = coords_middle[idx_mid]
         
-        (u0, v0, p0) = (u0/U_max /u_max2, v0/U_max /v_max2, p0/pmax)
-        u_fem_s = u_fem_s[idx] / U_max /u_max2
-        v_fem_s = v_fem_s[idx] / U_max /v_max2
+        (u0, v0, p0) = (u0/U_max , v0/U_max , p0/pmax)
+        u_fem_s = u_fem_s[idx] / U_max 
+        v_fem_s = v_fem_s[idx] / U_max 
         p_fem_s = p_fem_s[idx] / pmax
         s_fem_s = s_fem_s[idx]
-        u_fem_q = u_fem_q[idx] / U_max /u_max2
-        v_fem_q = v_fem_q[idx] / U_max /v_max2
+        u_fem_q = u_fem_q[idx] / U_max 
+        v_fem_q = v_fem_q[idx] / U_max 
         p_fem_q = p_fem_q[idx] / pmax
         s_fem_q = s_fem_q[idx]
         
@@ -369,7 +372,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
         
         # Initialize model
-        model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params, D, u_max2, v_max2) #  no 1
+        model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params, uv_max) #  no 1
         
         # Initialize Sampler
         keys = random.split(random.PRNGKey(0), 7)

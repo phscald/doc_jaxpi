@@ -18,7 +18,7 @@ from flax import linen as nn
 
 class NavierStokes2DwSat(ForwardIVP):
 
-    def __init__(self, config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, D, u_max2, v_max2):   
+    def __init__(self, config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, uv_max):   
         super().__init__(config)
 
         # self.inflow_fn = inflow_fn
@@ -29,9 +29,8 @@ class NavierStokes2DwSat(ForwardIVP):
         self.L_max = L_max
         # self.Re = Re  # Reynolds number
         self.fluid_params = fluid_params
-        self.D = D
-        self.u_max2 = u_max2
-        self.v_max2 = v_max2
+
+        self.uv_max = uv_max
 
         # Non-dimensionalized domain length and width
         self.L, self.W = self.coords.max(axis=0) - self.coords.min(axis=0)
@@ -58,63 +57,43 @@ class NavierStokes2DwSat(ForwardIVP):
         self.r_pred_fn = vmap(self.r_net, (None, 0, 0, 0, 0))
         self.r_pred_fem_fn = vmap(self.r_net, (None, 0, 0, 0, None))
         
-                                                 # (None, None, 0, 0, None)), (None, 0, None, None, None))) # shape t by xy
-        # self.r_pred_mus_fn = vmap(vmap(self.r_net, (None, 0, 0, 0, None)), (None, None, None, None, 0)) # 
+    def __nonlinear_scaler(self, mu, umax_q, umax_s):
+        mus = .1
+        muq = .0025
         
-    def __linear_scaler_equation(self, mu, mus, muq, mur, multiplier):
-        mur = mur*multiplier
-        return (mur-1)/(mus-muq) * (mu-muq) +1
-    
-    def __nonlinear_scaler_equation(self, mu, mus, muq, mur, multiplier):
-        mur = mur*multiplier
+        y_scaler =  self.__nonlinear_scaler_equation(mu, mus, muq, umax_q, umax_s)                   
+        return y_scaler
+
+    def __nonlinear_scaler_equation(self, mu, mus, muq, umax_q, umax_s):
         
-        a = mur / ( (mus**(-2) - muq**(-2)) +1 )
-        b = 1- a * muq**(-2)
+        a = (umax_s - umax_q) / ( (mus**(-2) - muq**(-2)) )
+        b = umax_q - a * muq**(-2)
         
         return a*mu**(-2) +b
-        
-    def __linear_scaler(self, mu):
-        (mu0, _, _, _) = self.fluid_params
-        mus = mu0[1]
-        muq = mu0[0]
-        mur = mus/muq
-        
-        yu =  self.__linear_scaler_equation(mu, mus, muq, mur, multiplier=16/40)    
-        yv =  self.__linear_scaler_equation(mu, mus, muq, mur, multiplier=54/40)               
-        return 0.00174*yu, 0.00027*yv
-    
-    def __nonlinear_scaler(self, mu):
-        (mu0, _, _, _) = self.fluid_params
-        mus = mu0[1]
-        muq = mu0[0]
-        mur = mus/muq
-        
-        yu =  self.__nonlinear_scaler_equation(mu, mus, muq, mur, multiplier=16/40)    
-        yv =  self.__nonlinear_scaler_equation(mu, mus, muq, mur, multiplier=54/40)                  
-        return  0.00174*yu, 0.00027*yv# 0.0175*yu, 0.00271*yv 
 
     def neural_net(self, params, t, x, y, mu):
+        
+        (u_maxq, v_maxq, u_maxs, v_maxs) = self.uv_max
+        y_scaler_u = self.__nonlinear_scaler(mu, u_maxq, u_maxs)
+        y_scaler_v = self.__nonlinear_scaler(mu, v_maxq, v_maxs)
+        
         t = t / (self.temporal_dom[1])  # rescale t into [0, 1]
         x = x / self.L  # rescale x into [0, 1]
-        y = y / self.W  # rescale y into [0, 1]
-        mu = (mu-.045)/(.1 - .045)
+        y = y / self.W  # rescale y into [0, 1]   mu = (mu-.045)/(.1 - .045)
+        mu = 2* ((mu - .0025) / (.1 - .0025)) -1
         ones = jnp.stack([jnp.ones(t.shape)])
         inputs = jnp.stack([t, x, y]) # branch
         mu = jnp.stack([ mu, jnp.exp(mu), jnp.exp(2*mu)])  # trunk
         outputs = self.state.apply_fn(params, inputs, mu, ones)
 
         # Start with an initial state of the channel flow
-        u = outputs[0]
-        v = outputs[1]
+        u = outputs[0] *y_scaler_u
+        v = outputs[1] *y_scaler_v
         p = outputs[2]
         s = outputs[3]
         D = nn.sigmoid(outputs[4]) *5*10**(-1)
-        # a = nn.sigmoid(outputs[5])
-        # b = nn.sigmoid(outputs[6])
-        # return u, v, p, s
+
         return u, v, p, s, D
-    # u*0.01, v*0.001, p
-    # lembrar de copiar as condiçoes iniciais no folder geom1x2
 
     def u_net(self, params, t, x, y, mu):
         u, _, _, _, _ = self.neural_net(params, t, x, y, mu)
@@ -142,29 +121,27 @@ class NavierStokes2DwSat(ForwardIVP):
         ( _, mu1, rho0, rho1) = self.fluid_params
 
         u , v , p, s, D = self.neural_net(params, t, x, y, mu0)
-        u = u *self.u_max2
-        v = v *self.v_max2
 
         u_t = grad(self.u_net, argnums=1)(params, t, x, y, mu0) 
-        v_t = grad(self.v_net, argnums=1)(params, t, x, y, mu0) *self.v_max2
+        v_t = grad(self.v_net, argnums=1)(params, t, x, y, mu0) 
         s_t = grad(self.s_net, argnums=1)(params, t, x, y, mu0)
 
-        u_x = grad(self.u_net, argnums=2)(params, t, x, y, mu0) *self.u_max2
-        v_x = grad(self.v_net, argnums=2)(params, t, x, y, mu0) *self.v_max2
+        u_x = grad(self.u_net, argnums=2)(params, t, x, y, mu0)
+        v_x = grad(self.v_net, argnums=2)(params, t, x, y, mu0)
         p_x = grad(self.p_net, argnums=2)(params, t, x, y, mu0)
         s_x = grad(self.s_net, argnums=2)(params, t, x, y, mu0)
 
-        u_y = grad(self.u_net, argnums=3)(params, t, x, y, mu0) *self.u_max2
-        v_y = grad(self.v_net, argnums=3)(params, t, x, y, mu0) *self.v_max2
+        u_y = grad(self.u_net, argnums=3)(params, t, x, y, mu0)
+        v_y = grad(self.v_net, argnums=3)(params, t, x, y, mu0)
         p_y = grad(self.p_net, argnums=3)(params, t, x, y, mu0)
         s_y = grad(self.s_net, argnums=3)(params, t, x, y, mu0)
 
-        u_xx = grad(grad(self.u_net, argnums=2), argnums=2)(params, t, x, y, mu0) *self.u_max2
-        v_xx = grad(grad(self.v_net, argnums=2), argnums=2)(params, t, x, y, mu0) *self.v_max2
+        u_xx = grad(grad(self.u_net, argnums=2), argnums=2)(params, t, x, y, mu0)
+        v_xx = grad(grad(self.v_net, argnums=2), argnums=2)(params, t, x, y, mu0)
         s_xx = grad(grad(self.s_net, argnums=2), argnums=2)(params, t, x, y, mu0)
 
-        u_yy = grad(grad(self.u_net, argnums=3), argnums=3)(params, t, x, y, mu0) *self.u_max2
-        v_yy = grad(grad(self.v_net, argnums=3), argnums=3)(params, t, x, y, mu0) *self.v_max2
+        u_yy = grad(grad(self.u_net, argnums=3), argnums=3)(params, t, x, y, mu0)
+        v_yy = grad(grad(self.v_net, argnums=3), argnums=3)(params, t, x, y, mu0)
         s_yy = grad(grad(self.s_net, argnums=3), argnums=3)(params, t, x, y, mu0)
 
         Re = rho0*self.U_max*(self.L_max)/mu1  
