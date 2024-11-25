@@ -149,12 +149,12 @@ class TimeSpaceSampler_mu_res(BaseSampler):
         
         self.key, subkey = random.split(self.key)
         
-        # alpha = .9
-        # t_max = self.temporal_dom[0] + (1-alpha)* (self.temporal_dom[1] - self.temporal_dom[0]) \
-        #                      + 2*alpha * step/step_max *(self.temporal_dom[1] - self.temporal_dom[0])
+        alpha = .9
+        t_max = self.temporal_dom[0] + (1-alpha)* (self.temporal_dom[1] - self.temporal_dom[0]) \
+                             + alpha * step/(step_max/3) *(self.temporal_dom[1] - self.temporal_dom[0])
         
-        # t_max = jnp.where(t_max > self.temporal_dom[1], self.temporal_dom[1], t_max)
-        t_max = self.temporal_dom[1]
+        t_max = jnp.where(t_max > self.temporal_dom[1], self.temporal_dom[1], t_max)
+        # t_max = self.temporal_dom[1]
         
         self.ts = random.uniform(
             subkey,
@@ -162,8 +162,24 @@ class TimeSpaceSampler_mu_res(BaseSampler):
             minval=self.temporal_dom[0],
             maxval= t_max,
         )
+        # self.key, subkey = random.split(self.key)
+        # self.mus = random.uniform(subkey, shape=(ind_coords.shape[0], ), minval = self.mu[0], maxval = self.mu[1])
+        self.key, subkey, subkey2 = random.split(self.key, 3)
+        self.mus = jnp.concatenate(
+                    (
+                        random.uniform(subkey,  shape=(int(2*ind_coords.shape[0]), ), minval = self.mu[0], maxval = .01), # .1 - .0025
+                        random.uniform(subkey,  shape=(int(1.5*ind_coords.shape[0]), ), minval = .01, maxval = .05),
+                        random.uniform(subkey2, shape=(ind_coords.shape[0], ), minval = .01, maxval = self.mu[1])
+                    )
+        )
+        
         self.key, subkey = random.split(self.key)
-        self.mus = random.uniform(subkey, shape=(ind_coords.shape[0], ), minval = self.mu[0], maxval = self.mu[1])
+        ind_coords = random.choice(
+            subkey,
+            self.mus.shape[0],
+            shape=(ind_coords.shape[0],),
+        )
+        self.mus = self.mus[ind_coords]
 
 
         state = jax.device_get(jax.tree_util.tree_map(lambda x: x[0], model.state))
@@ -321,18 +337,14 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # Nondimensionalization
     if config.nondim == True:
-        # Nondimensionalization parameters
-        U_star = U_max # 0.2  # characteristic velocity
-        L_star = L_max #0.1  # characteristic length
-        # Re = U_star * L_star / nu
 
         # Nondimensionalize coordinates and inflow velocity
-        inflow_coords = inflow_coords / L_star
-        outflow_coords = outflow_coords / L_star
-        noslip_coords = noslip_coords / L_star
-        coords = coords / L_star
+        inflow_coords = inflow_coords / L_max
+        outflow_coords = outflow_coords / L_max
+        noslip_coords = noslip_coords / L_max
+        coords = coords / L_max
 
-        coords_fem = coords_fem / L_star
+        coords_fem = coords_fem / L_max
         
         dt_fem = dt_fem / (mu1/dp)
         t_middle = t_middle / (mu1/dp)

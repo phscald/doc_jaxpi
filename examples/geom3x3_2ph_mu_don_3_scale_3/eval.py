@@ -59,14 +59,17 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     
     L_max = 50/1000/100
     U_max = dp*L_max/mu1
-    u_max2 = jnp.max(u_fem_s)/U_max
-    v_max2 = jnp.max(v_fem_s)/U_max
+    u_maxs = jnp.max(u_fem_s)/U_max
+    v_maxs = jnp.max(v_fem_s)/U_max
+    u_maxq = jnp.max(u_fem_q)/U_max
+    v_maxq = jnp.max(v_fem_q)/U_max
+    
+    uv_max = (u_maxq, v_maxq, u_maxs, v_maxs)
     print(f"U_max: {U_max}")
     print(f"u_fem_s/U_max: {jnp.max(u_fem_s)/U_max}")
     print(f"v_fem_s/U_max: {jnp.max(v_fem_s)/U_max}")
 
-    mu = .05 # mu0 = [.0025, .01]
-    D = 0*10**(-5)
+    mu = .005 # mu0 = [.0025, .01]
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time
@@ -97,7 +100,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # Initialize model
     # model = models.NavierStokes2D(config, inflow_fn, temporal_dom, coords, Re)
-    model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params, D, u_max2, v_max2)
+    model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params, uv_max) #  no 1
 
     # Restore checkpoint
     ckpt_path = os.path.join(".", "ckpt", config.wandb.name)

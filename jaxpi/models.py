@@ -110,6 +110,7 @@ def _create_train_state(config):
         u = jnp.ones(config.input_branch)
         x = jnp.ones(config.input_trunk)
         Dparam = jnp.ones(1)
+        uv_scale = jnp.ones(1)
         params = arch.init(random.PRNGKey(config.seed), u, x, Dparam)
     elif config.arch.arch_name == "DeepONet" or config.arch.arch_name == "DeepOResNet": 
         # (u, x) : u é o branch, x é o trunk

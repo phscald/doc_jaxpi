@@ -46,7 +46,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 10**(6)
+    training.max_steps = 6*10**(5)
     training.fine_tune = True
     training.num_time_windows = 1
 
@@ -55,7 +55,7 @@ def get_config():
     training.outflow_batch_size = 32#int(2048/div)
     training.noslip_batch_size = 128#512int(2048/div)
     training.ic_batch_size = 512#512#int(2048/div)
-    training.res_batch_size = 512+128 #512 #+512#int(2*2048/div)
+    training.res_batch_size = 512 #512 #+512#int(2*2048/div)
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
@@ -102,14 +102,14 @@ def get_config():
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()
-    saving.save_every_steps = 10000
+    saving.save_every_steps = 50000
     saving.num_keep_ckpts = 10
 
     # Input shape for initializing Flax models
     config.input_dim = 4
     config.input_branch = 3
     # config.input_branch = 2
-    config.input_trunk = 3
+    config.input_trunk = 1
 
     # Integer for PRNG random seed.
     config.seed = 42

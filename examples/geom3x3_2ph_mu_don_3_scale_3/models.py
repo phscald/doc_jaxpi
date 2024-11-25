@@ -74,8 +74,6 @@ class NavierStokes2DwSat(ForwardIVP):
     def neural_net(self, params, t, x, y, mu):
         
         (u_maxq, v_maxq, u_maxs, v_maxs) = self.uv_max
-        y_scaler_u = self.__nonlinear_scaler(mu, u_maxq, u_maxs)
-        y_scaler_v = self.__nonlinear_scaler(mu, v_maxq, v_maxs)
         
         t = t / (self.temporal_dom[1])  # rescale t into [0, 1]
         x = x / self.L  # rescale x into [0, 1]
@@ -83,15 +81,21 @@ class NavierStokes2DwSat(ForwardIVP):
         mu = 2* ((mu - .0025) / (.1 - .0025)) -1
         ones = jnp.stack([jnp.ones(t.shape)])
         inputs = jnp.stack([t, x, y]) # branch
-        mu = jnp.stack([ mu, jnp.exp(mu), jnp.exp(2*mu)])  # trunk
+        mu = jnp.stack([ mu ] )
+        # mu = jnp.stack([ mu, jnp.exp(mu), jnp.exp(2*mu)])  # trunk
         outputs = self.state.apply_fn(params, inputs, mu, ones)
 
         # Start with an initial state of the channel flow
-        u = outputs[0] *y_scaler_u
-        v = outputs[1] *y_scaler_v
+        u = outputs[0]
+        v = outputs[1]
         p = outputs[2]
         s = outputs[3]
-        D = nn.sigmoid(outputs[4]) *5*10**(-1)
+        D = nn.sigmoid(outputs[4]) *5*10**(-3)
+        u_scaler = nn.sigmoid(outputs[5]) *u_maxq
+        v_scaler = nn.sigmoid(outputs[6]) *v_maxq
+        
+        u = u *u_scaler
+        v = v *v_scaler
 
         return u, v, p, s, D
 
