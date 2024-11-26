@@ -536,7 +536,7 @@ class NavierStokes2DwSat(ForwardIVP):
             rs7 =  jnp.mean(rs_pred**2)
             
             ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fem_fn(  params,
-                res_batch[0][:, 0], res_batch[0][:, 1], res_batch[0][:, 2], res_batch[0][0, 3]
+                res_batch[1][:, 0], res_batch[1][:, 1], res_batch[1][:, 2], res_batch[1][0, 3]
             )
             ru8 =  jnp.mean(ru_pred**2)
             rv8 =  jnp.mean(rv_pred**2)

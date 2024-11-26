@@ -344,9 +344,11 @@ class DeepONetwD(nn.Module):
     def __call__(self, u, x, pde_param):
         
         pde_param = Dense(features=1)(pde_param)
+        
         uv_scale = Dense(features=2)(x)
         uv_scale = nn.sigmoid(uv_scale)
         uv_scale = Dense(features=2)(uv_scale)
+        uv_scale = nn.sigmoid(uv_scale)
         
         u = ModifiedMlp(#MlpBlock(
             num_layers=self.num_branch_layers,
@@ -368,6 +370,9 @@ class DeepONetwD(nn.Module):
             fourier_emb=self.fourier_emb,
             reparam=self.reparam,
         )(x)
+        
+        # uv_scale = Dense(features=2)(x)
+        # uv_scale = nn.sigmoid(uv_scale)
         
         y = u * x #nn.sigmoid(x)
         y = self.activation_fn(y)
