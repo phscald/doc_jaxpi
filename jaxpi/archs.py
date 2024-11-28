@@ -370,11 +370,8 @@ class DeepONetwD(nn.Module):
             fourier_emb=self.fourier_emb,
             reparam=self.reparam,
         )(x)
-        
-        # uv_scale = Dense(features=2)(x)
-        # uv_scale = nn.sigmoid(uv_scale)
-        
-        y = u * x #nn.sigmoid(x)
+               
+        y = u * x 
         y = self.activation_fn(y)
         y = Dense(features=self.out_dim, reparam=self.reparam)(y)
         

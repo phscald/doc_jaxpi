@@ -137,6 +137,7 @@ class TimeSpaceSampler_mu_res(BaseSampler):
         self.ts = None
         
         self.step = 0
+        self.flag = None
         
     def update_step(self, step):
         self.step =step
@@ -155,10 +156,12 @@ class TimeSpaceSampler_mu_res(BaseSampler):
         self.key, subkey = random.split(self.key)
         
         alpha = .9
-        t_max = self.temporal_dom[0] + (1-alpha)* (self.temporal_dom[1] - self.temporal_dom[0]) \
+        t_max = self.temporal_dom[0] \
+                             + (1-alpha) * (self.temporal_dom[1] - self.temporal_dom[0]) \
                              + alpha * step/(step_max/2) *(self.temporal_dom[1] - self.temporal_dom[0])
         
         t_max = jnp.where(t_max > self.temporal_dom[1], self.temporal_dom[1], t_max)
+        self.flag = jnp.where(t_max > self.temporal_dom[1], True, False)
         # t_max = self.temporal_dom[1]
         
         self.ts = random.uniform(
@@ -167,24 +170,23 @@ class TimeSpaceSampler_mu_res(BaseSampler):
             minval=self.temporal_dom[0],
             maxval= t_max,
         )
-        # self.key, subkey = random.split(self.key)
-        # self.mus = random.uniform(subkey, shape=(ind_coords.shape[0], ), minval = self.mu[0], maxval = self.mu[1])
-        self.key, subkey, subkey2 = random.split(self.key, 3)
-        self.mus = jnp.concatenate(
-                    (
-                        random.uniform(subkey,  shape=(int(2*ind_coords.shape[0]), ), minval = self.mu[0], maxval = .01), # .1 - .0025
-                        random.uniform(subkey,  shape=(int(1.5*ind_coords.shape[0]), ), minval = .01, maxval = .05),
-                        random.uniform(subkey2, shape=(ind_coords.shape[0], ), minval = .01, maxval = self.mu[1])
-                    )
-        )
-        
         self.key, subkey = random.split(self.key)
-        ind_coords = random.choice(
-            subkey,
-            self.mus.shape[0],
-            shape=(ind_coords.shape[0],),
-        )
-        self.mus = self.mus[ind_coords]
+        self.mus = random.uniform(subkey, shape=(ind_coords.shape[0], ), minval = self.mu[0], maxval = self.mu[1])
+        # self.key, subkey, subkey2 = random.split(self.key, 3)
+        # self.mus = jnp.concatenate(
+        #             (
+        #                 random.uniform(subkey,  shape=(int(2*ind_coords.shape[0]), ), minval = self.mu[0], maxval = .01), # .1 - .0025
+        #                 random.uniform(subkey,  shape=(int(1.5*ind_coords.shape[0]), ), minval = .01, maxval = .05),
+        #                 random.uniform(subkey2, shape=(ind_coords.shape[0], ), minval = .01, maxval = self.mu[1])
+        #             )
+        # )
+        # self.key, subkey = random.split(self.key)
+        # ind_coords = random.choice(
+        #     subkey,
+        #     self.mus.shape[0],
+        #     shape=(ind_coords.shape[0],),
+        # )
+        # self.mus = self.mus[ind_coords]
 
 
         state = jax.device_get(jax.tree_util.tree_map(lambda x: x[0], model.state))
@@ -201,24 +203,64 @@ class TimeSpaceSampler_mu_res(BaseSampler):
     def data_generation(self, key):
         "Generates data containing batch_size samples"
         
-        res_mu0 = [.1, .09, .08, .07, .06, .05, .045,
-                   .04, .035, .03, .025, .02, .015, .01,
-                   .009, .008, .007, .006, .005, .004, .003, .002, .0025]
-
-        key, subkey = random.split(key, 2)
-        idx = random.choice(
-            subkey, self.probs_u.shape[0], shape=(self.batch_size,), p=self.probs_u
+        # res_mu0 = [.1, .09, .08, .07, .06, .05, .045,
+        #            .04, .035, .03, .025, .02, .015, .01,
+        #            .009, .008, .007, .006, .005, .004, .003, .002, .0025]
+        # res_mu0 = [ .009, .008, .007, .006, .005, .004, .003, .002, .0025 ]
+        
+        # step_max  = 6*10**(5)
+        # metade = jnp.where(self.step/(step_max/2), True, False)
+        
+        # time_list = [self.temporal_dom[0]]
+        # for i in range(10):
+        #     time_list.append(self.temporal_dom[0]+(i+1)*(self.temporal_dom[1]-self.temporal_dom[0])/10)        
+        
+        # 1) get times ranges. 2) condition. 3) shuffle. 4) get only batchsize
+        
+        times = jnp.array( [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1])
+        times = self.temporal_dom[1] + times * self.temporal_dom[1]
+        
+        i = jnp.floor(self.step/100) % ( times.shape[0] - 1 )
+        i = i.astype(int)
+        idx_selec_times = (self.ts >= times[i]) & (self.ts < times[i + 1])
+        
+        idx_selec_times = jax.lax.cond( # True for selected , False for not selected
+            self.flag,
+            lambda _: (self.ts >= times[i]) & (self.ts < times[i + 1]),  # True case
+            lambda _: jnp.ones_like(self.ts, dtype=bool),                # False case
+            operand=None
         )
-        batch_u = jnp.concatenate([self.ts[idx][:,jnp.newaxis], self.coords2[idx], self.mus[idx][:,jnp.newaxis]], axis=1)
+        
+        idx_num = jnp.arange(idx_selec_times.shape[0])                    # numerate the array positions
+        indices_selected = jnp.where(idx_selec_times, idx_num, -1)        # array position number where True and -1 otherwise
+        indices_selected2 = jnp.where(idx_selec_times==False, idx_num, 0) # array position number where False and 0 otherwise
+
+            
+        probs_u = self.probs_u
+        probs_u = probs_u.at[indices_selected2].set(0)
+
+        probs_s = self.probs_s
+        probs_s = probs_s.at[indices_selected2].set(0)
         
         key, subkey = random.split(key, 2)
         idx = random.choice(
-            subkey, self.probs_s.shape[0], shape=(self.batch_size,), p=self.probs_s
+            subkey, indices_selected.shape[0], shape=(self.batch_size,), p=probs_u
         )
-        batch_s = jnp.concatenate([self.ts[idx][:,jnp.newaxis], self.coords2[idx], self.mus[idx][:,jnp.newaxis]], axis=1)
-         
-        batch_u = batch_u.at[0,3].set(jnp.where(self.step%2==0, res_mu0[int(self.step/2)%len(res_mu0)], batch_u[idx][0,3]))
-        batch_s = batch_s.at[0,3].set(jnp.where(self.step%2==0, res_mu0[int(self.step/2)%len(res_mu0)], batch_s[idx][0,3]))
+        
+        batch_u = jnp.concatenate((self.ts[idx][:,jnp.newaxis], 
+                                   self.coords2[idx], 
+                                   self.mus[idx][:,jnp.newaxis])
+                                  , axis=1)
+        
+        key, subkey = random.split(key, 2)
+        idx = random.choice(
+            subkey, indices_selected.shape[0], shape=(self.batch_size,), p=probs_s
+        )
+        
+        batch_s = jnp.concatenate([self.ts[idx][:,jnp.newaxis], 
+                                   self.coords2[idx], 
+                                   self.mus[idx][:,jnp.newaxis]]
+                                  , axis=1)
          
         return batch_u, batch_s
     

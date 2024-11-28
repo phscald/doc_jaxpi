@@ -150,6 +150,7 @@ class NavierStokes2DwSat(ForwardIVP):
         s_yy = grad(grad(self.s_net, argnums=3), argnums=3)(params, t, x, y, mu0)
 
         Re = rho0*self.U_max*(self.L_max)/mu1  
+        Re = .1
         mu = (1-s)*mu1 + s*mu0
         mu_ratio = mu/mu1
                 

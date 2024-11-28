@@ -69,7 +69,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f"u_fem_s/U_max: {jnp.max(u_fem_s)/U_max}")
     print(f"v_fem_s/U_max: {jnp.max(v_fem_s)/U_max}")
 
-    mu = .08 # mu0 = [.0025, .01]
+    mu = .1 # mu0 = [.0025, .01]
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time
@@ -117,7 +117,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # t_coords = jnp.linspace(0, t1, 20)[:-1]
     # t_coords = jnp.linspace(0, t1, 4)[:-1]
-    t_coords = jnp.array([0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.])*t1#
+    t_coords = jnp.array([0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.])*t1*.5#
     # t_coords = jnp.array([0,])
 
     u_pred_list = []
