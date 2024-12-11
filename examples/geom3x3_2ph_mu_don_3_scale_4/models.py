@@ -22,6 +22,7 @@ class NavierStokes2DwSat(ForwardIVP):
         super().__init__(config)
 
         # self.inflow_fn = inflow_fn
+        self.epoch = 0
         self.p_in = p_inflow 
         self.temporal_dom = temporal_dom
         self.coords = coords
@@ -56,6 +57,9 @@ class NavierStokes2DwSat(ForwardIVP):
         self.s_pred_fn = vmap(self.s_net, (None, 0, 0, 0, 0))
         self.r_pred_fn = vmap(self.r_net, (None, 0, 0, 0, 0))
         self.r_pred_fem_fn = vmap(self.r_net, (None, 0, 0, 0, None))
+    
+    def update_step(self, step):
+        self.epoch = step
         
     def __nonlinear_scaler(self, mu, umax_q, umax_s):
         mus = .1
@@ -75,8 +79,8 @@ class NavierStokes2DwSat(ForwardIVP):
         
         (u_maxq, v_maxq, u_maxs, v_maxs) = self.uv_max
         #  def __nonlinear_scaler(self, mu, umax_q, umax_s)
-        u_scaler = self.__nonlinear_scaler(mu, u_maxq, u_maxs)
-        v_scaler = self.__nonlinear_scaler(mu, v_maxq, v_maxs)
+        # u_scaler = self.__nonlinear_scaler(mu, u_maxq, u_maxs)
+        # v_scaler = self.__nonlinear_scaler(mu, v_maxq, v_maxs)
         
         t = t / (self.temporal_dom[1])  # rescale t into [0, 1]
         x = x / self.L  # rescale x into [0, 1]
@@ -92,8 +96,10 @@ class NavierStokes2DwSat(ForwardIVP):
         u = outputs[0]
         v = outputs[1]
         p = outputs[2]
-        s = outputs[3]
+        s = outputs[3] # nn.softplus( outputs[3] )
         D = nn.sigmoid(outputs[4]) *5*10**(-3)
+        u_scaler = outputs[5] * (u_maxq - u_maxs) + u_maxs
+        v_scaler = outputs[6] * (v_maxq - v_maxs) + v_maxs
         
         u = u *u_scaler
         v = v *v_scaler
@@ -212,24 +218,25 @@ class NavierStokes2DwSat(ForwardIVP):
     def compute_diag_ntk(self, params, batch):
         # Unpack batch
         ic_batch = batch["ic"]
-        ic_batch_q = batch["ic_q"]
-        ic_batch_s = batch["ic_s"]
+        ic_batch_qs = batch["ic_qs"]
+        # ic_batch_s = batch["ic_s"]
         inflow_batch = batch["inflow"]
         outflow_batch = batch["outflow"]
         noslip_batch = batch["noslip"]
         res_batch = batch["res"]
         
-        (coords_fem_q, t_fem_q, u_fem_q, v_fem_q, p_fem_q, s_fem_q) = ic_batch_q
-        (coords_fem_s, t_fem_s, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = ic_batch_s
+
+        (coords_fem, t_fem, u_fem_q, v_fem_q, p_fem_q, s_fem_q, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = ic_batch_qs
+        # (coords_fem, t_fem, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = ic_batch_s
 
         u_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
-            self.u_net, params, t_fem_q, coords_fem_q[:, 0], coords_fem_q[:, 1], .0025)
+            self.u_net, params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .0025)
         v_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
-            self.v_net, params, t_fem_q, coords_fem_q[:, 0], coords_fem_q[:, 1], .0025)
+            self.v_net, params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .0025)
         p_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
-            self.p_net, params, t_fem_q, coords_fem_q[:, 0], coords_fem_q[:, 1], .0025)
+            self.p_net, params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .0025)
         s_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
-            self.s_net, params, t_fem_q, coords_fem_q[:, 0], coords_fem_q[:, 1], .0025)
+            self.s_net, params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .0025)
         
         coords_batch, u_batch, v_batch, p_batch, s_batch, mu_batch = ic_batch
 
@@ -382,35 +389,52 @@ class NavierStokes2DwSat(ForwardIVP):
     def losses(self, params, batch):
         # Unpack batch
         ic_batch = batch["ic"]
-        ic_batch_q = batch["ic_q"]
-        ic_batch_s = batch["ic_s"]
+        ic_batch_qs = batch["ic_qs"]
+        # ic_batch_s = batch["ic_s"]
         inflow_batch = batch["inflow"]
         outflow_batch = batch["outflow"]
         noslip_batch = batch["noslip"]
         res_batch = batch["res"]
         
-        (coords_fem_q, t_fem_q, u_fem_q, v_fem_q, p_fem_q, s_fem_q) = ic_batch_q
-        (coords_fem_s, t_fem_s, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = ic_batch_s
-        
-            
-        u_fem_q_pred = self.ufem_pred_fn(params, t_fem_q, coords_fem_q[:, 0], coords_fem_q[:, 1], .0025)
-        v_fem_q_pred = self.vfem_pred_fn(params, t_fem_q, coords_fem_q[:, 0], coords_fem_q[:, 1], .0025)
-        p_fem_q_pred = self.pfem_pred_fn(params, t_fem_q, coords_fem_q[:, 0], coords_fem_q[:, 1], .0025)
-        s_fem_q_pred = self.sfem_pred_fn(params, t_fem_q, coords_fem_q[:, 0], coords_fem_q[:, 1], .0025)
-        
-        u_fem_s_pred = self.ufem_pred_fn(params, t_fem_s, coords_fem_s[:, 0], coords_fem_s[:, 1], .1)
-        v_fem_s_pred = self.vfem_pred_fn(params, t_fem_s, coords_fem_s[:, 0], coords_fem_s[:, 1], .1)
-        p_fem_s_pred = self.pfem_pred_fn(params, t_fem_s, coords_fem_s[:, 0], coords_fem_s[:, 1], .1)
-        s_fem_s_pred = self.sfem_pred_fn(params, t_fem_s, coords_fem_s[:, 0], coords_fem_s[:, 1], .1)
-        
-        u_data = jnp.mean((u_fem_q_pred - u_fem_q) ** 2) + jnp.mean((u_fem_s_pred - u_fem_s) ** 2) ##
-        v_data = jnp.mean((v_fem_q_pred - v_fem_q) ** 2) + jnp.mean((v_fem_s_pred - v_fem_s) ** 2) ##
-        p_data = jnp.mean((p_fem_q_pred - p_fem_q) ** 2) + jnp.mean((p_fem_s_pred - p_fem_s) ** 2) ##
-        s_data = jnp.mean((s_fem_q_pred - s_fem_q) ** 2) + jnp.mean((s_fem_s_pred - s_fem_s) ** 2) ##
-        
-        # Initial condition loss
+        (u_maxq, v_maxq, u_maxs, v_maxs) = self.uv_max
+        (coords_fem, t_fem, u_fem_q, v_fem_q, p_fem_q, s_fem_q, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = ic_batch_qs
+        # (coords_fem, t_fem, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = ic_batch_s
+                
         coords_batch, u_batch, v_batch, p_batch, s_batch, mu_batch = ic_batch
         
+            
+        u_fem_q_pred = self.ufem_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .0025)
+        v_fem_q_pred = self.vfem_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .0025)
+        p_fem_q_pred = self.pfem_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .0025)
+        s_fem_q_pred = self.sfem_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .0025)
+        
+        u_fem_s_pred = self.ufem_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .1)
+        v_fem_s_pred = self.vfem_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .1)
+        p_fem_s_pred = self.pfem_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .1)
+        s_fem_s_pred = self.sfem_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .1)
+        
+        u_fem_res_pred = self.u_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], mu_batch)
+        v_fem_res_pred = self.v_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], mu_batch)
+        s_fem_res_pred = self.s_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], mu_batch)
+        u_fem_res_pred = jnp.mean((u_fem_res_pred - (u_fem_q/u_maxq)*((self.__nonlinear_scaler(mu_batch, u_maxq, u_maxs)-u_maxs))+u_fem_s) ** 2)
+        v_fem_res_pred = jnp.mean((v_fem_res_pred - (v_fem_q/v_maxq)*((self.__nonlinear_scaler(mu_batch, v_maxq, v_maxs)-v_maxs))+v_fem_s) ** 2)
+        s_slider = (1/u_maxq)*((self.__nonlinear_scaler(mu_batch, u_maxq, u_maxs)-u_maxs))
+        s_fem_interpol = (s_fem_q*s_slider + s_fem_s*(1-s_slider))
+        s_fem_res_pred = jnp.mean( (s_fem_res_pred - s_fem_interpol) **2 )
+         
+        mult = jax.lax.cond( # True for selected , False for not selected
+            self.epoch>100000,
+            lambda _: 0.0,  # True case
+            lambda _: 1.-(self.epoch/100000)*.9,   # False case
+            operand=None
+        )
+        
+        u_data = jnp.mean( jnp.mean((u_fem_q_pred - u_fem_q) ** 2) + jnp.mean((u_fem_s_pred - u_fem_s) ** 2) + u_fem_res_pred*mult ) ##
+        v_data = jnp.mean( jnp.mean((v_fem_q_pred - v_fem_q) ** 2) + jnp.mean((v_fem_s_pred - v_fem_s) ** 2) + v_fem_res_pred*mult ) ##
+        p_data = jnp.mean( jnp.mean((p_fem_q_pred - p_fem_q) ** 2) + jnp.mean((p_fem_s_pred - p_fem_s) ** 2) )  ##
+        s_data = jnp.mean( jnp.mean((s_fem_q_pred - s_fem_q) ** 2) + jnp.mean((s_fem_s_pred - s_fem_s) ** 2) + s_fem_res_pred*mult )  ##
+        
+        # Initial condition loss
         u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
         v_ic_pred = self.v0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
         p_ic_pred = self.p0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
@@ -484,8 +508,8 @@ class NavierStokes2DwSat(ForwardIVP):
             ru_l, rv_l, rc_l, rs_l, gamma = self.res_and_w(params, 
                     jnp.concatenate(
                         (                    
-                            jnp.concatenate((t_fem_q[:,jnp.newaxis], coords_fem_q, jnp.ones(t_fem_q.shape)[:,jnp.newaxis]*.0025), axis=1),
-                            jnp.concatenate((t_fem_s[:,jnp.newaxis], coords_fem_s, jnp.ones(t_fem_s.shape)[:,jnp.newaxis]*.1), axis=1),
+                            jnp.concatenate((t_fem[:,jnp.newaxis], coords_fem, jnp.ones(t_fem.shape)[:,jnp.newaxis]*.0025), axis=1),
+                            jnp.concatenate((t_fem[:,jnp.newaxis], coords_fem, jnp.ones(t_fem.shape)[:,jnp.newaxis]*.1), axis=1),
                             jnp.concatenate((
                                              jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_batch.shape[0],),
                                        minval=0, maxval=500)[:,jnp.newaxis],
@@ -499,7 +523,6 @@ class NavierStokes2DwSat(ForwardIVP):
             rc2 = jnp.mean(gamma * rc_l)
             rs2 = jnp.mean(gamma * rs_l)
             
-            
             ru_loss = jnp.mean( ru1 + ru2 )
             rv_loss = jnp.mean( rv1 + rv2 )
             rc_loss = jnp.mean( rc1 + rc2 )
@@ -508,16 +531,15 @@ class NavierStokes2DwSat(ForwardIVP):
         else:
             ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn(
                 params, 
-                jnp.concatenate((res_batch[0][:, 0], res_batch[1][:, 0], noslip_batch[:, 0]), axis=0),
-                jnp.concatenate((res_batch[0][:, 1], res_batch[1][:, 1], noslip_batch[:, 1]), axis=0),
-                jnp.concatenate((res_batch[0][:, 2], res_batch[1][:, 2], noslip_batch[:, 2]), axis=0),
-                jnp.concatenate((res_batch[0][:, 3], res_batch[1][:, 3], noslip_batch[:, 3]), axis=0),
+                jnp.concatenate( ( res_batch[0][:, 0], res_batch[1][:, 0], t_fem            ), axis=0),
+                jnp.concatenate( ( res_batch[0][:, 1], res_batch[1][:, 1], coords_fem[:, 0] ), axis=0),
+                jnp.concatenate( ( res_batch[0][:, 2], res_batch[1][:, 2], coords_fem[:, 1] ), axis=0),
+                jnp.concatenate( ( res_batch[0][:, 3], res_batch[1][:, 3], mu_batch         ), axis=0),
             )
             ru1 =  jnp.mean(ru_pred**2)
             rv1 =  jnp.mean(rv_pred**2)
             rc1 =  jnp.mean(rc_pred**2)
             rs1 =  jnp.mean(rs_pred**2)
-
 
             ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fem_fn(  params,
              jax.random.uniform(jax.random.PRNGKey(0), shape=(coords_batch.shape[0],),
@@ -549,8 +571,6 @@ class NavierStokes2DwSat(ForwardIVP):
             rv_loss = jnp.mean( rv1 + rv6 + rv7 + rv8 )
             rc_loss = jnp.mean( rc1 + rc6 + rc7 + rc8 )
             rs_loss = jnp.mean( rs1 + rs6 + rs7 + rs8 )       
-                        
-
 
         loss_dict = {
             "u_data": u_data,

@@ -21,10 +21,10 @@ def get_config():
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "DeepONetwD"
     # arch.num_layers = 8
-    arch.num_trunk_layers = 5 # mu 2
-    arch.num_branch_layers = 5 # x y t 6
+    arch.num_trunk_layers = 4 # mu 2
+    arch.num_branch_layers = 4 # x y t 6
     # arch.num_branch_layers2
-    arch.hidden_dim = 250
+    arch.hidden_dim = 200
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
@@ -39,23 +39,23 @@ def get_config():
     optim.beta1 = 0.9
     optim.beta2 = 0.999
     optim.eps = 1e-8
-    optim.learning_rate = 1e-4
-    optim.decay_rate = 0.98
+    optim.learning_rate = 1e-5#1e-4
+    optim.decay_rate = 1 #0.98
     optim.decay_steps = 5000
     optim.grad_accum_steps = 0
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 8*10**(5)
+    training.max_steps = 2*10**(5)
     training.fine_tune = True
     training.num_time_windows = 1
 
     div = 2
-    training.inflow_batch_size = 32#int(2048/div)
-    training.outflow_batch_size = 32#int(2048/div)
-    training.noslip_batch_size = 128#512int(2048/div)
-    training.ic_batch_size = 512#512#int(2048/div)
-    training.res_batch_size = 512+64 #512 #+512#int(2*2048/div)
+    training.inflow_batch_size = 32  #int(2048/div)
+    training.outflow_batch_size = 32 #int(2048/div)
+    training.noslip_batch_size = 128 #512int(2048/div)
+    training.ic_batch_size = 512  #512 #int(2048/div)
+    training.res_batch_size = 512 #512 #+512#int(2*2048/div)
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()

@@ -65,13 +65,17 @@ class ICSampler(SpaceSampler):
         
 class ICSampler1(SpaceSampler):
     
-    def __init__(self, u, v, p, s, coords, time, batch_size, rng_key=random.PRNGKey(1234)):
+    def __init__(self, uq, vq, pq, sq, us, vs, ps, ss, coords, time, batch_size, rng_key=random.PRNGKey(1234)):
         super().__init__(coords, batch_size, rng_key)
 
-        self.u = u
-        self.v = v
-        self.p = p
-        self.s = s
+        self.uq = uq
+        self.vq = vq
+        self.pq = pq
+        self.sq = sq
+        self.us = us
+        self.vs = vs
+        self.ps = ps
+        self.ss = ss
         self.t = time
 
     @partial(pmap, static_broadcasted_argnums=(0,))
@@ -84,12 +88,16 @@ class ICSampler1(SpaceSampler):
 
         t_batch = self.t[idx_t]
         coords_batch = self.coords[idx, :]
-        u_batch = self.u[idx_t, idx]
-        v_batch = self.v[idx_t, idx]
-        p_batch = self.p[idx_t, idx]
-        s_batch = self.s[idx_t, idx]
+        u_batchq = self.uq[idx_t, idx]
+        v_batchq = self.vq[idx_t, idx]
+        p_batchq = self.pq[idx_t, idx]
+        s_batchq = self.sq[idx_t, idx]
+        u_batchs = self.uq[idx_t, idx]
+        v_batchs = self.vq[idx_t, idx]
+        p_batchs = self.pq[idx_t, idx]
+        s_batchs = self.sq[idx_t, idx]
 
-        batch = (coords_batch, t_batch, u_batch, v_batch, p_batch, s_batch)
+        batch = (coords_batch, t_batch, u_batchq, v_batchq, p_batchq, s_batchq, u_batchs, v_batchs, p_batchs, s_batchs)
         return batch
     
 class TimeSpaceSampler_mu(TimeSpaceSampler):
@@ -195,7 +203,7 @@ class TimeSpaceSampler_mu_res(BaseSampler):
         error = ( error / jnp.mean(error) ) + c
         self.probs_s = error / jnp.sum( error )
         
-        error = ( ru/jnp.sum(ru) + rv/jnp.sum(rv) + rc/jnp.sum(rc) )**k 
+        error = (ru**k)/jnp.sum((ru**k)) + (rv**k)/jnp.sum((rv**k)) + (rc**k)/jnp.sum((rc**k)) 
         error = ( error / jnp.mean(error) ) + c
         self.probs_u = error / jnp.sum( error )
          
@@ -217,34 +225,35 @@ class TimeSpaceSampler_mu_res(BaseSampler):
         
         # 1) get times ranges. 2) condition. 3) shuffle. 4) get only batchsize
         
-        times = jnp.array( [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1])
-        times = self.temporal_dom[1] + times * self.temporal_dom[1]
+        # times = jnp.array( [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1])
+        # times = self.temporal_dom[1] + times * self.temporal_dom[1]
         
-        i = jnp.floor(self.step/100) % ( times.shape[0] - 1 )
-        i = i.astype(int)
-        idx_selec_times = (self.ts >= times[i]) & (self.ts < times[i + 1])
+        # i = jnp.floor(self.step/100) % ( times.shape[0] - 1 )
+        # i = i.astype(int)
+        # idx_selec_times = (self.ts >= times[i]) & (self.ts < times[i + 1])
         
-        idx_selec_times = jax.lax.cond( # True for selected , False for not selected
-            self.flag,
-            lambda _: (self.ts >= times[i]) & (self.ts < times[i + 1]),  # True case
-            lambda _: jnp.ones_like(self.ts, dtype=bool),                # False case
-            operand=None
-        )
+        # idx_selec_times = jax.lax.cond( # True for selected , False for not selected
+        #     self.flag,
+        #     lambda _: (self.ts >= times[i]) & (self.ts < times[i + 1]),  # True case
+        #     lambda _: jnp.ones_like(self.ts, dtype=bool),                # False case
+        #     operand=None
+        # )
         
-        idx_num = jnp.arange(idx_selec_times.shape[0])                    # numerate the array positions
-        indices_selected = jnp.where(idx_selec_times, idx_num, -1)        # array position number where True and -1 otherwise
-        indices_selected2 = jnp.where(idx_selec_times==False, idx_num, 0) # array position number where False and 0 otherwise
+        # idx_num = jnp.arange(idx_selec_times.shape[0])                    # numerate the array positions
+        # indices_selected = jnp.where(idx_selec_times, idx_num, -1)        # array position number where True and -1 otherwise
+        # indices_selected2 = jnp.where(idx_selec_times==False, idx_num, 0) # array position number where False and 0 otherwise
 
             
-        probs_u = self.probs_u
-        probs_u = probs_u.at[indices_selected2].set(0)
+        # probs_u = self.probs_u
+        # probs_u = probs_u.at[indices_selected2].set(0)
 
-        probs_s = self.probs_s
-        probs_s = probs_s.at[indices_selected2].set(0)
+        # probs_s = self.probs_s
+        # probs_s = probs_s.at[indices_selected2].set(0)
         
         key, subkey = random.split(key, 2)
         idx = random.choice(
-            subkey, indices_selected.shape[0], shape=(self.batch_size,), p=probs_u
+            subkey, self.ts.shape[0], shape=(self.batch_size,), p=self.probs_u
+            # subkey, indices_selected.shape[0], shape=(self.batch_size,), p=probs_u
         )
         
         batch_u = jnp.concatenate((self.ts[idx][:,jnp.newaxis], 
@@ -254,7 +263,8 @@ class TimeSpaceSampler_mu_res(BaseSampler):
         
         key, subkey = random.split(key, 2)
         idx = random.choice(
-            subkey, indices_selected.shape[0], shape=(self.batch_size,), p=probs_s
+            subkey, self.ts.shape[0], shape=(self.batch_size,), p=self.probs_s
+            # subkey, indices_selected.shape[0], shape=(self.batch_size,), p=probs_s
         )
         
         batch_s = jnp.concatenate([self.ts[idx][:,jnp.newaxis], 
@@ -282,6 +292,28 @@ class TimeSpaceSamplerIterator:
         subkey = random.split(self.sampler.rng_key, 1)
         return self.sampler.data_generation(subkey)
     
+# def update_batch(step, samplers, batch):
+#     def update_conditionally(_):
+#         updated_batch = batch.copy()
+#         for key, sampler in samplers.items():
+#             if key == "res":
+#                 updated_batch[key] = next(sampler._iterator)
+#             else:
+#                 updated_batch[key] = next(sampler)
+#         return updated_batch
+
+#     def no_update(_):
+#         return batch
+    
+#     # Use lax.cond to perform the conditional update
+#     batch = jax.lax.cond(
+#         step % 50 == 0,  # Condition
+#         update_conditionally,  # True branch
+#         no_update,  # False branch
+#         operand=None  # No additional input needed
+#     )
+#     return batch
+    
 
 def train_one_window(config, workdir, model, samplers, idx):
     # Initialize evaluator
@@ -293,6 +325,15 @@ def train_one_window(config, workdir, model, samplers, idx):
     step_offset = idx * config.training.max_steps
 
     # jit warm up
+    batch = {}
+    samplers["res"].update_RAD(model, 0, config.training.max_steps, k=1, c=1)
+    samplers["res"]._iterator = iter(samplers["res"])
+
+    # for key, sampler in samplers.items():
+    #     if key == "res": #and step % 50 ==0:
+    #         batch[key] = next(sampler._iterator)
+    #     else:
+    #         batch[key] = next(sampler)
     print("Waiting for JIT...")
     for step in range(config.training.max_steps):
         start_time = time.time()
@@ -302,14 +343,18 @@ def train_one_window(config, workdir, model, samplers, idx):
             samplers["res"]._iterator = iter(samplers["res"])
         samplers["res"].update_step(step)
         
+        
+        # batch = update_batch(step, samplers, batch)
         # Sample mini-batch        
         batch = {}
+
         for key, sampler in samplers.items():
-            if key == "res":
+            if key == "res": #and step % 50 ==0:
                 batch[key] = next(sampler._iterator)
             else:
                 batch[key] = next(sampler)
-            
+        
+        model.update_step(step)    
         model.state = model.step(model.state, batch)
 
         # Update weights if necessary
@@ -448,16 +493,17 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
                 u0, v0, p0, s0, coords_fem, mu0, config.training.ic_batch_size, rng_key=keys[6]
             )
         )
-        ic_sampler_s = iter(
+        ic_sampler_qs = iter(
             ICSampler1(
+                u_fem_q, v_fem_q, p_fem_q, s_fem_q,
                 u_fem_s, v_fem_s, p_fem_s, s_fem_s, coords_fem, t_fem, config.training.ic_batch_size, rng_key=keys[0]
             )
         )
-        ic_sampler_q = iter(
-            ICSampler1(
-                u_fem_q, v_fem_q, p_fem_q, s_fem_q, coords_fem, t_fem, config.training.ic_batch_size, rng_key=keys[1]
-            )
-        )
+        # ic_sampler_q = iter(
+        #     ICSampler1(
+        #         u_fem_q, v_fem_q, p_fem_q, s_fem_q, coords_fem, t_fem, config.training.ic_batch_size, rng_key=keys[1]
+        #     )
+        # )
         inflow_sampler = iter(
             TimeSpaceSampler_mu(
                 temporal_dom,
@@ -494,12 +540,9 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
                 rng_key=keys[5],
             )
         
-        
-        
         samplers = {
             "ic": ic_sampler,
-            "ic_s": ic_sampler_s,
-            "ic_q": ic_sampler_q,
+            "ic_qs": ic_sampler_qs,
             "inflow": inflow_sampler,
             "outflow": outflow_sampler,
             "noslip": noslip_sampler,

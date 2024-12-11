@@ -69,7 +69,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f"u_fem_s/U_max: {jnp.max(u_fem_s)/U_max}")
     print(f"v_fem_s/U_max: {jnp.max(v_fem_s)/U_max}")
 
-    mu = .1 # mu0 = [.0025, .01]
+    mu = .0056 # mu0 = [.0025, .01]
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time

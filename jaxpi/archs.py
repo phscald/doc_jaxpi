@@ -345,10 +345,10 @@ class DeepONetwD(nn.Module):
         
         pde_param = Dense(features=1)(pde_param)
         
-        uv_scale = Dense(features=2)(x)
-        uv_scale = nn.sigmoid(uv_scale)
-        uv_scale = Dense(features=2)(uv_scale)
-        uv_scale = nn.sigmoid(uv_scale)
+        # uv_scale = Dense(features=2)(jnp.concatenate( [x, u[ 1:]], axis=-1 )) #(x)
+        # uv_scale = nn.sigmoid(uv_scale)
+        # uv_scale = Dense(features=2)(uv_scale)
+        # uv_scale = nn.sigmoid(uv_scale)
         
         u = ModifiedMlp(#MlpBlock(
             num_layers=self.num_branch_layers,
@@ -372,10 +372,15 @@ class DeepONetwD(nn.Module):
         )(x)
                
         y = u * x 
-        y = self.activation_fn(y)
-        y = Dense(features=self.out_dim, reparam=self.reparam)(y)
         
-        y = jnp.concatenate( [y, pde_param, uv_scale], axis=-1 )
+        y1 = self.activation_fn(y)
+        y1 = Dense(features=self.out_dim-1, reparam=self.reparam)(y1)
+        
+        y2 = nn.sigmoid(y)
+        uv_scale = Dense(features=2, reparam=self.reparam)(y2)
+        y2 = Dense(features=1, reparam=self.reparam)(y2)
+        
+        y = jnp.concatenate( [y1, y2, pde_param, uv_scale], axis=-1 )
         return y
     
 class DeepONet3(nn.Module):
