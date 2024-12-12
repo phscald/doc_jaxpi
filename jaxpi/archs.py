@@ -4,6 +4,7 @@ from typing import Any, Callable, Sequence, Tuple, Optional, Union, Dict
 from flax import linen as nn
 from flax.core.frozen_dict import freeze
 
+import jax
 from jax import random, jit, vmap
 import jax.numpy as jnp
 from jax.nn.initializers import glorot_normal, normal, zeros, constant
@@ -123,6 +124,55 @@ class Dense(nn.Module):
         return y
 
 
+class Conv1D(nn.Module):
+    features: int
+    kernel_size: int = 1
+    kernel_init: Callable = glorot_normal()
+    bias_init: Callable = zeros
+    reparam: Union[None, Dict] = None
+
+    @nn.compact
+    def __call__(self, x):
+        """
+        x: Input tensor of shape (batch_size, seq_length, in_channels)
+        """
+        # Reshape for efficient batch processing (optional if batch_size=1)
+        # x = x.reshape(-1, x.shape[1], x.shape[2])
+        x = x[jnp.newaxis, :, jnp.newaxis]
+        kernel_shape = (self.features,1,1) #(self.features, x.shape[0], 1)
+        kernel = self.param("kernel", self.kernel_init, kernel_shape)
+        bias = self.param("bias", self.bias_init, (self.features,))
+
+        # # Efficient vectorized convolution using einsum
+        # y = jnp.einsum("ijk,jk->ik", x, kernel) + bias
+        # y = jnp.squeeze(y)
+        # return y #.reshape(x.shape[0], self.features)  # Reshape to original output shape
+            
+
+        # Apply 1D convolution
+        y = jax.lax.conv_general_dilated(
+            x,                      # Input tensor
+            kernel,                 # Convolution kernel
+            window_strides=(1,),    # Stride of 1
+            padding="SAME",         # Zero-padding to keep output the same size as input
+            dimension_numbers=("NWC", "WIO", "NWC"),  # Input format, kernel format, output format
+        )
+        
+        # elif self.reparam["type"] == "weight_fact":
+        #     g, v = self.param(
+        #         "kernel",
+        #         _weight_fact(
+        #             self.kernel_init,
+        #             mean=self.reparam["mean"],
+        #             stddev=self.reparam["stddev"],
+        #         ),
+        #         (x.shape[-1], self.features),
+        #     )
+        #     kernel = g * v
+        y = jnp.squeeze(y)
+        y += bias  # Add bias
+        return y
+
 # TODO: Make it more general, e.g. imposing periodicity for the given axis
 
 class ResNet(nn.Module):
@@ -184,6 +234,51 @@ class Mlp(nn.Module):
 
         x = Dense(features=self.out_dim, reparam=self.reparam)(x)
         return x
+    
+class SharedMlp(nn.Module):
+    
+    arch_name: Optional[str] = "SharedMlp"
+    num_layers: int = 4
+    hidden_dim: int = 256
+    out_dim: int = 1
+    activation: str = "tanh"
+    periodicity: Union[None, Dict] = None
+    fourier_emb: Union[None, Dict] = None
+    reparam: Union[None, Dict] = None
+
+    def setup(self):
+        self.activation_fn = _get_activation(self.activation)
+
+    @nn.compact
+    def __call__(self, x, pde_param):
+        
+        pde_param = Dense(features=1)(pde_param)
+        
+        if self.periodicity:
+            x = PeriodEmbs(**self.periodicity)(x)
+
+        if self.fourier_emb:
+            x = FourierEmbs(**self.fourier_emb)(x)
+            
+        for _ in range(self.num_layers):
+            x = Conv1D(features=self.hidden_dim, reparam=self.reparam)(x)
+            # x = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
+            x = self.activation_fn(x)
+
+        for _ in range(1):
+            x = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
+            x = self.activation_fn(x)
+        y1 = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
+        y2 = nn.sigmoid(y1)
+        y1 = self.activation_fn(y1)
+        y1 = Dense(features=self.out_dim-1, reparam=self.reparam)(y1)
+
+        uv_scale = Dense(features=2, reparam=self.reparam)(y2)
+        y2 = Dense(features=1, reparam=self.reparam)(y2)
+        
+        y = jnp.concatenate( [y1, y2, pde_param, uv_scale], axis=-1 )
+        
+        return y
     
 
 class ModifiedMlp(nn.Module):

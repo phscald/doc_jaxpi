@@ -311,7 +311,7 @@ class NavierStokes2DwSat(ForwardIVP):
             noslip_batch[:, 2],
             noslip_batch[:, 3]
         )
-
+        u_noslip_ntk = jnp.mean(u_noslip_ntk + v_noslip_ntk)
         # Consider the effect of causal weights
         if self.config.weighting.use_causal:
             res_batch = jnp.array(
@@ -372,11 +372,11 @@ class NavierStokes2DwSat(ForwardIVP):
             "s_ic": s_ic_ntk,
             "p_in": p_in_ntk,
             "p_out": p_out_ntk,
-            "s_in": s_in_ntk,
+            # "s_in": s_in_ntk,
             # "v_in": v_in_ntk,
             # "v_out": v_out_ntk,
             "u_noslip": u_noslip_ntk,
-            "v_noslip": v_noslip_ntk,
+            # "v_noslip": v_noslip_ntk,
             "ru": ru_ntk, #
             "rv": rv_ntk, #
             "rc": rc_ntk,
@@ -475,6 +475,7 @@ class NavierStokes2DwSat(ForwardIVP):
             params, inflow_batch[:, 0], inflow_batch[:, 1], inflow_batch[:, 2], inflow_batch[:, 3]
         )
         s_in_loss = jnp.mean((s_in_pred - 1.0) ** 2)
+        s_ic_loss = jnp.mean(s_ic_loss + s_in_loss)
         #
         v_in_pred = self.v_pred_fn(
             params, inflow_batch[:, 0], inflow_batch[:, 1], inflow_batch[:, 2], inflow_batch[:, 3]
@@ -496,6 +497,7 @@ class NavierStokes2DwSat(ForwardIVP):
 
         u_noslip_loss = jnp.mean(u_noslip_pred**2)
         v_noslip_loss = jnp.mean(v_noslip_pred**2)
+        u_noslip_loss = jnp.mean(u_noslip_loss + v_noslip_loss)
 
         # residual loss
         if self.config.weighting.use_causal == True:
@@ -583,11 +585,11 @@ class NavierStokes2DwSat(ForwardIVP):
             "s_ic": s_ic_loss,
             "p_in": p_in_loss,
             "p_out": p_out_loss,
-            "s_in": s_in_loss,
+            # "s_in": s_in_loss,
             # "v_in": v_in_loss,
             # "v_out": v_out_loss,
             "u_noslip": u_noslip_loss,
-            "v_noslip": v_noslip_loss,
+            # "v_noslip": v_noslip_loss,
             "ru": ru_loss,
             "rv": rv_loss,
             "rc": rc_loss,

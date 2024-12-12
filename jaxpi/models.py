@@ -45,6 +45,9 @@ class TrainState(train_state.TrainState):
 def _create_arch(config):
     if config.arch_name == "Mlp":
         arch = archs.Mlp(**config)
+        
+    elif config.arch_name == "SharedMlp":
+        arch = archs.SharedMlp(**config)
 
     elif config.arch_name == "ModifiedMlp":
         arch = archs.ModifiedMlp(**config)
@@ -105,6 +108,10 @@ def _create_train_state(config):
         u2 = jnp.ones(config.input_branch2)
         x = jnp.ones(config.input_trunk)
         params = arch.init(random.PRNGKey(config.seed), u, u2, x)
+    elif config.arch.arch_name == "SharedMlp":    
+        u = jnp.ones(config.input_dim)
+        Dparam = jnp.ones(1)
+        params = arch.init(random.PRNGKey(config.seed), u, Dparam)
     elif config.arch.arch_name == "DeepONetwD": 
         # (u, x) : u é o branch, x é o trunk
         u = jnp.ones(config.input_branch)
