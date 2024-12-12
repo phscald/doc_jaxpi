@@ -139,17 +139,11 @@ class Conv1D(nn.Module):
         # Reshape for efficient batch processing (optional if batch_size=1)
         # x = x.reshape(-1, x.shape[1], x.shape[2])
         x = x[jnp.newaxis, :, jnp.newaxis]
-        kernel_shape = (self.features,1,1) #(self.features, x.shape[0], 1)
+        kernel_shape = (1,1,1) #(self.features, x.shape[0], 1)
         kernel = self.param("kernel", self.kernel_init, kernel_shape)
         bias = self.param("bias", self.bias_init, (self.features,))
-
-        # # Efficient vectorized convolution using einsum
-        # y = jnp.einsum("ijk,jk->ik", x, kernel) + bias
-        # y = jnp.squeeze(y)
-        # return y #.reshape(x.shape[0], self.features)  # Reshape to original output shape
-            
-
-        # Apply 1D convolution
+        
+        # # Apply 1D convolution
         y = jax.lax.conv_general_dilated(
             x,                      # Input tensor
             kernel,                 # Convolution kernel
@@ -157,18 +151,9 @@ class Conv1D(nn.Module):
             padding="SAME",         # Zero-padding to keep output the same size as input
             dimension_numbers=("NWC", "WIO", "NWC"),  # Input format, kernel format, output format
         )
-        
-        # elif self.reparam["type"] == "weight_fact":
-        #     g, v = self.param(
-        #         "kernel",
-        #         _weight_fact(
-        #             self.kernel_init,
-        #             mean=self.reparam["mean"],
-        #             stddev=self.reparam["stddev"],
-        #         ),
-        #         (x.shape[-1], self.features),
-        #     )
-        #     kernel = g * v
+
+        # x = x[jnp.newaxis, :, jnp.newaxis]
+        # y = 
         y = jnp.squeeze(y)
         y += bias  # Add bias
         return y
@@ -262,10 +247,10 @@ class SharedMlp(nn.Module):
             
         for _ in range(self.num_layers):
             x = Conv1D(features=self.hidden_dim, reparam=self.reparam)(x)
-            # x = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
+        # x = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
             x = self.activation_fn(x)
 
-        for _ in range(1):
+        for _ in range(1):#self.num_layers):
             x = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
             x = self.activation_fn(x)
         y1 = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
