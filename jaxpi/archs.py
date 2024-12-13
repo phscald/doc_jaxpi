@@ -546,6 +546,7 @@ class DeepONetwDssep(nn.Module):
             fourier_emb=self.fourier_emb,
             reparam=self.reparam,
         )(x)
+        x = nn.sigmoid( x )
                
         s = nn.sigmoid( s * x )
         s = Dense(features=1, reparam=self.reparam)(s)
