@@ -19,12 +19,12 @@ def get_config():
 
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
-    arch.arch_name = "SharedMlp"
-    arch.num_layers = 6
-    # arch.num_trunk_layers = 4 # mu 2
-    # arch.num_branch_layers = 4 # x y t 6
+    arch.arch_name = "DeepONetwDssep"
+    # arch.num_layers = 6
+    arch.num_trunk_layers = 4 # mu 2
+    arch.num_branch_layers = 4 # x y t 6
     # arch.num_branch_layers2
-    arch.hidden_dim = 200
+    arch.hidden_dim = 100
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
@@ -57,7 +57,7 @@ def get_config():
     training.ic_batch_size = 512  #512 #int(2048/div)
     training.res_batch_size = 512 #512 #+512#int(2*2048/div)
 
-    # Weighting
+    # Weighting 
     config.weighting = weighting = ml_collections.ConfigDict()
     weighting.scheme = "grad_norm"
     
@@ -106,9 +106,9 @@ def get_config():
     saving.num_keep_ckpts = 10
 
     # Input shape for initializing Flax models
-    config.input_dim = 4
-    # config.input_branch = 3
-    # config.input_trunk = 1
+    # config.input_dim = 4
+    config.input_branch = 3
+    config.input_trunk = 1
 
     # Integer for PRNG random seed.
     config.seed = 42

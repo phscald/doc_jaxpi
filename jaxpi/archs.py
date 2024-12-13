@@ -140,7 +140,20 @@ class Conv1D(nn.Module):
         # x = x.reshape(-1, x.shape[1], x.shape[2])
         x = x[jnp.newaxis, :, jnp.newaxis]
         kernel_shape = (1,1,1) #(self.features, x.shape[0], 1)
-        kernel = self.param("kernel", self.kernel_init, kernel_shape)
+        if self.reparam is None:
+            kernel = self.param("kernel", self.kernel_init, kernel_shape)
+        elif self.reparam["type"] == "weight_fact":
+            g, v = self.param(
+                "kernel",
+                _weight_fact(
+                    self.kernel_init,
+                    mean=self.reparam["mean"],
+                    stddev=self.reparam["stddev"],
+                ),
+                (1,1,1),
+            )
+            kernel = g * v 
+            
         bias = self.param("bias", self.bias_init, (self.features,))
         
         # # Apply 1D convolution
@@ -221,7 +234,7 @@ class Mlp(nn.Module):
         return x
     
 class SharedMlp(nn.Module):
-    
+        
     arch_name: Optional[str] = "SharedMlp"
     num_layers: int = 4
     hidden_dim: int = 256
@@ -235,9 +248,7 @@ class SharedMlp(nn.Module):
         self.activation_fn = _get_activation(self.activation)
 
     @nn.compact
-    def __call__(self, x, pde_param):
-        
-        pde_param = Dense(features=1)(pde_param)
+    def __call__(self, x):
         
         if self.periodicity:
             x = PeriodEmbs(**self.periodicity)(x)
@@ -247,27 +258,50 @@ class SharedMlp(nn.Module):
             
         for _ in range(self.num_layers):
             x = Conv1D(features=self.hidden_dim, reparam=self.reparam)(x)
-        # x = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
             x = self.activation_fn(x)
-
-        for _ in range(1):#self.num_layers):
-            x = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
-            x = self.activation_fn(x)
-        y1 = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
-        y2 = nn.sigmoid(y1)
-        y1 = self.activation_fn(y1)
-        y1 = Dense(features=self.out_dim-1, reparam=self.reparam)(y1)
-
-        uv_scale = Dense(features=2, reparam=self.reparam)(y2)
-        y2 = Dense(features=1, reparam=self.reparam)(y2)
+            
+        x = Conv1D(features=self.out_dim, reparam=self.reparam)(x)
         
-        y = jnp.concatenate( [y1, y2, pde_param, uv_scale], axis=-1 )
-        
-        return y
+        return x
     
 
 class ModifiedMlp(nn.Module):
     arch_name: Optional[str] = "ModifiedMlp"
+    num_layers: int = 4
+    hidden_dim: int = 256
+    out_dim: int = 1
+    activation: str = "tanh"
+    periodicity: Union[None, Dict] = None
+    fourier_emb: Union[None, Dict] = None
+    reparam: Union[None, Dict] = None
+
+    def setup(self):
+        self.activation_fn = _get_activation(self.activation)
+
+    @nn.compact
+    def __call__(self, x):
+        if self.periodicity:
+            x = PeriodEmbs(**self.periodicity)(x)
+
+        if self.fourier_emb:
+            x = FourierEmbs(**self.fourier_emb)(x)
+
+        u = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
+        v = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
+
+        u = self.activation_fn(u)
+        v = self.activation_fn(v)
+
+        for _ in range(self.num_layers):
+            x = Dense(features=self.hidden_dim, reparam=self.reparam)(x)
+            x = self.activation_fn(x)
+            x = x * u + (1 - x) * v
+
+        x = Dense(features=self.out_dim, reparam=self.reparam)(x)
+        return x
+    
+class ModifiedMlp(nn.Module):
+    arch_name: Optional[str] = "ModSharedMlp"
     num_layers: int = 4
     hidden_dim: int = 256
     out_dim: int = 1
@@ -422,13 +456,10 @@ class DeepONetwD(nn.Module):
 
     @nn.compact
     def __call__(self, u, x, pde_param):
-        
-        pde_param = Dense(features=1)(pde_param)
-        
-        # uv_scale = Dense(features=2)(jnp.concatenate( [x, u[ 1:]], axis=-1 )) #(x)
-        # uv_scale = nn.sigmoid(uv_scale)
-        # uv_scale = Dense(features=2)(uv_scale)
-        # uv_scale = nn.sigmoid(uv_scale)
+        # (u, x) : u é o branch, x é o trunk
+        #  u: x y t mu - branch
+        #  x: mu       - trunk
+        pde_param = Dense(features=1)(pde_param)         
         
         u = ModifiedMlp(#MlpBlock(
             num_layers=self.num_branch_layers,
@@ -462,6 +493,72 @@ class DeepONetwD(nn.Module):
         
         y = jnp.concatenate( [y1, y2, pde_param, uv_scale], axis=-1 )
         return y
+
+class DeepONetwDssep(nn.Module):
+    arch_name: Optional[str] = "DeepONetwDssep"
+    num_branch_layers: int = 4
+    num_trunk_layers: int = 4 # (u, x) : u é o branch, x é o trunk
+    hidden_dim: int = 256
+    out_dim: int = 1
+    activation: str = "tanh"
+    periodicity: Union[None, Dict] = None
+    fourier_emb: Union[None, Dict] = None
+    reparam: Union[None, Dict] = None
+
+    def setup(self):
+        self.activation_fn = _get_activation(self.activation)
+
+    @nn.compact
+    def __call__(self, u, x, pde_param):
+        # (u, x) : u é o branch, x é o trunk
+        #  u: x y t mu - branch
+        #  x: mu       - trunk
+        pde_param = Dense(features=1)(pde_param)
+        
+        s = ModifiedMlp(#MlpBlock(
+            num_layers=self.num_branch_layers,
+            hidden_dim=self.hidden_dim,
+            out_dim=1,
+            activation="gelu",
+            #final_activation=False,
+            reparam=self.reparam,
+            periodicity=self.periodicity,
+            fourier_emb=self.fourier_emb,
+        )(u)
+                
+        u = ModifiedMlp(#MlpBlock(
+            num_layers=self.num_branch_layers,
+            hidden_dim=self.hidden_dim,
+            out_dim=self.hidden_dim,
+            activation=self.activation,
+            #final_activation=False,
+            reparam=self.reparam,
+            periodicity=self.periodicity,
+            fourier_emb=self.fourier_emb,
+        )(u)
+
+        x = ModifiedMlp(#Mlp(
+            num_layers=self.num_trunk_layers,
+            hidden_dim=self.hidden_dim,
+            out_dim=self.hidden_dim,
+            activation=self.activation,
+            periodicity=self.periodicity,
+            fourier_emb=self.fourier_emb,
+            reparam=self.reparam,
+        )(x)
+               
+        s = nn.sigmoid( s * x )
+        s = Dense(features=1, reparam=self.reparam)(s)
+        
+        y = u * x 
+        y1 = self.activation_fn(y)
+        y1 = Dense(features=self.out_dim-1, reparam=self.reparam)(y1)  
+        uv_scale = Dense(features=2, reparam=self.reparam)( nn.sigmoid(y) )
+             
+        y = jnp.concatenate( [y1, s, pde_param, uv_scale], axis=-1 )
+        return y
+
+
     
 class DeepONet3(nn.Module):
     arch_name: Optional[str] = "DeepONet3"

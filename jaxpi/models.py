@@ -70,6 +70,9 @@ def _create_arch(config):
     elif config.arch_name == "DeepONetwD":
         arch = archs.DeepONetwD(**config)
         
+    elif config.arch_name == "DeepONetwDssep":
+        arch = archs.DeepONetwDssep(**config)
+        
     else:
         raise NotImplementedError(f"Arch {config.arch_name} not supported yet!")
 
@@ -104,20 +107,20 @@ def _create_train_state(config):
     arch = _create_arch(config.arch)
     if config.arch.arch_name == "DeepONet3": 
         # (u, x) : u é o branch, x é o trunk
+        #  u: x y t mu - branch
+        #  x: mu       - trunk
         u = jnp.ones(config.input_branch)
         u2 = jnp.ones(config.input_branch2)
         x = jnp.ones(config.input_trunk)
         params = arch.init(random.PRNGKey(config.seed), u, u2, x)
     elif config.arch.arch_name == "SharedMlp":    
         u = jnp.ones(config.input_dim)
-        Dparam = jnp.ones(1)
-        params = arch.init(random.PRNGKey(config.seed), u, Dparam)
-    elif config.arch.arch_name == "DeepONetwD": 
+        params = arch.init(random.PRNGKey(config.seed), u)
+    elif config.arch.arch_name == "DeepONetwD" or config.arch.arch_name == "DeepONetwDssep": 
         # (u, x) : u é o branch, x é o trunk
         u = jnp.ones(config.input_branch)
         x = jnp.ones(config.input_trunk)
         Dparam = jnp.ones(1)
-        uv_scale = jnp.ones(1)
         params = arch.init(random.PRNGKey(config.seed), u, x, Dparam)
     elif config.arch.arch_name == "DeepONet" or config.arch.arch_name == "DeepOResNet": 
         # (u, x) : u é o branch, x é o trunk
