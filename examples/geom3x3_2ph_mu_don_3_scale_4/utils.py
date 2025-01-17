@@ -96,7 +96,6 @@ def initial_fields(coords):
     
     print(f"quick: {np.max(u_fem_q[-1])}")
     
-    
     X_middle, t_middle = get_points_middle_shock(s_fem_s, s_fem_q, coords_fem, dt_fem_s)
     
     coords_fem = jax.device_put(coords_fem)
@@ -161,7 +160,7 @@ def get_dataset(pin):
                                                                 wall_coords*scale)
     # mu0 = [.0025, .05]#.02
     
-    mu0 = [.0055, .006]
+    mu0 = [.0025, .1]
     # mu0 = [.0025, .0051]
     # mu0 = [.05, .101]
     mu1 = .05

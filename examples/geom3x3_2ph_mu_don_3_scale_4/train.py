@@ -166,10 +166,11 @@ class TimeSpaceSampler_mu_res(BaseSampler):
         alpha = .9
         t_max = self.temporal_dom[0] \
                              + (1-alpha) * (self.temporal_dom[1] - self.temporal_dom[0]) \
-                             + alpha * step/(step_max/2) *(self.temporal_dom[1] - self.temporal_dom[0])
+                             + alpha * step/(100000) *(self.temporal_dom[1] - self.temporal_dom[0])
+        # t_max = self.temporal_dom[1]+5
         
         t_max = jnp.where(t_max > self.temporal_dom[1], self.temporal_dom[1], t_max)
-        self.flag = jnp.where(t_max > self.temporal_dom[1], True, False)
+        # self.flag = jnp.where(t_max > self.temporal_dom[1], True, False)
         # t_max = self.temporal_dom[1]
         
         self.ts = random.uniform(
@@ -316,6 +317,8 @@ class TimeSpaceSamplerIterator:
     
 
 def train_one_window(config, workdir, model, samplers, idx):
+    
+    # upd_stp = 100
     # Initialize evaluator
     evaluator = models.NavierStokesEvaluator(config, model)
 
@@ -354,7 +357,9 @@ def train_one_window(config, workdir, model, samplers, idx):
             else:
                 batch[key] = next(sampler)
         
-        model.update_step(step)    
+        model.update_step(step) 
+        
+        # for _ in range(10):   
         model.state = model.step(model.state, batch)
 
         # Update weights if necessary
@@ -425,7 +430,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f"u_fem_s/U_max: {jnp.max(u_fem_s)/U_max}")
     print(f"v_fem_s/U_max: {jnp.max(v_fem_s)/U_max}")
     
-    pmax =dp
+    pmax = dp
     Re = rho0*dp*(L_max**2)/(mu1**2)
     print(f'Re={Re}')
     print(f'max_Steps: {config.training.max_steps}')

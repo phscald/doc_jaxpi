@@ -481,6 +481,7 @@ class DeepONetwD(nn.Module):
             fourier_emb=self.fourier_emb,
             reparam=self.reparam,
         )(x)
+        # x = nn.softplus(x)
                
         y = u * x 
         
@@ -511,7 +512,7 @@ class DeepONetwDssep(nn.Module):
     @nn.compact
     def __call__(self, u, x, pde_param):
         # (u, x) : u é o branch, x é o trunk
-        #  u: x y t mu - branch
+        #  u: x y t - branch
         #  x: mu       - trunk
         pde_param = Dense(features=1)(pde_param)
         
@@ -519,7 +520,7 @@ class DeepONetwDssep(nn.Module):
             num_layers=self.num_branch_layers,
             hidden_dim=self.hidden_dim,
             out_dim=1,
-            activation="gelu",
+            activation="sigmoid",
             #final_activation=False,
             reparam=self.reparam,
             periodicity=self.periodicity,
@@ -541,12 +542,12 @@ class DeepONetwDssep(nn.Module):
             num_layers=self.num_trunk_layers,
             hidden_dim=self.hidden_dim,
             out_dim=self.hidden_dim,
-            activation=self.activation,
+            activation="sigmoid",
             periodicity=self.periodicity,
             fourier_emb=self.fourier_emb,
             reparam=self.reparam,
         )(x)
-        x = nn.sigmoid( x )
+        # x = nn.sigmoid( x )
                
         s = nn.sigmoid( s * x )
         s = Dense(features=1, reparam=self.reparam)(s)

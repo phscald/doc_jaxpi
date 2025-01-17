@@ -2,6 +2,8 @@ import ml_collections
 import jax.numpy as jnp
 
 def get_config():
+    
+    upd_stp = 1
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
@@ -46,7 +48,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 2*10**(5)
+    training.max_steps = 250000#int(2*10**(5)/upd_stp*2)
     training.fine_tune = True
     training.num_time_windows = 1
 
@@ -84,7 +86,7 @@ def get_config():
     }
 
     weighting.momentum = 0.9
-    weighting.update_every_steps = 5000 # 100 for grad norm and 1000 for ntk
+    weighting.update_every_steps = 2500#int(5000/upd_stp) # 100 for grad norm and 1000 for ntk
 
     weighting.use_causal = False  ###################### CAUSALITY
     weighting.causal_tol = .1
@@ -102,7 +104,7 @@ def get_config():
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()
-    saving.save_every_steps = 50000
+    saving.save_every_steps = 50000#int(50000/upd_stp)
     saving.num_keep_ckpts = 10
 
     # Input shape for initializing Flax models

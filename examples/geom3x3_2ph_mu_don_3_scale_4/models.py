@@ -413,26 +413,26 @@ class NavierStokes2DwSat(ForwardIVP):
         p_fem_s_pred = self.pfem_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .1)
         s_fem_s_pred = self.sfem_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .1)
         
-        u_fem_res_pred = self.u_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], mu_batch)
-        v_fem_res_pred = self.v_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], mu_batch)
-        s_fem_res_pred = self.s_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], mu_batch)
-        u_fem_res_pred = jnp.mean((u_fem_res_pred - (u_fem_q/u_maxq)*((self.__nonlinear_scaler(mu_batch, u_maxq, u_maxs)-u_maxs))+u_fem_s) ** 2)
-        v_fem_res_pred = jnp.mean((v_fem_res_pred - (v_fem_q/v_maxq)*((self.__nonlinear_scaler(mu_batch, v_maxq, v_maxs)-v_maxs))+v_fem_s) ** 2)
-        s_slider = (1/u_maxq)*((self.__nonlinear_scaler(mu_batch, u_maxq, u_maxs)-u_maxs))
-        s_fem_interpol = (s_fem_q*s_slider + s_fem_s*(1-s_slider))
-        s_fem_res_pred = jnp.mean( (s_fem_res_pred - s_fem_interpol) **2 )
+        # u_fem_res_pred = self.u_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], mu_batch)
+        # v_fem_res_pred = self.v_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], mu_batch)
+        # s_fem_res_pred = self.s_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], mu_batch)
+        # u_fem_res_pred = jnp.mean((u_fem_res_pred - (u_fem_q/u_maxq)*((self.__nonlinear_scaler(mu_batch, u_maxq, u_maxs)-u_maxs))+u_fem_s) ** 2)
+        # v_fem_res_pred = jnp.mean((v_fem_res_pred - (v_fem_q/v_maxq)*((self.__nonlinear_scaler(mu_batch, v_maxq, v_maxs)-v_maxs))+v_fem_s) ** 2)
+        # s_slider = (1/u_maxq)*((self.__nonlinear_scaler(mu_batch, u_maxq, u_maxs)-u_maxs))
+        # s_fem_interpol = (s_fem_q*s_slider + s_fem_s*(1-s_slider))
+        # s_fem_res_pred = jnp.mean( (s_fem_res_pred - s_fem_interpol) **2 )
          
-        mult = jax.lax.cond( # True for selected , False for not selected
-            self.epoch>100000,
-            lambda _: 0.0,  # True case
-            lambda _: 1.-(self.epoch/100000)*.9,   # False case
-            operand=None
-        )
+        # mult = jax.lax.cond( # True for selected , False for not selected
+        #     self.epoch>100000,
+        #     lambda _: 0.0,  # True case
+        #     lambda _: 1.-(self.epoch/100000)*.9,   # False case
+        #     operand=None
+        # )
         
-        u_data = jnp.mean( jnp.mean((u_fem_q_pred - u_fem_q) ** 2) + jnp.mean((u_fem_s_pred - u_fem_s) ** 2) + u_fem_res_pred*mult ) ##
-        v_data = jnp.mean( jnp.mean((v_fem_q_pred - v_fem_q) ** 2) + jnp.mean((v_fem_s_pred - v_fem_s) ** 2) + v_fem_res_pred*mult ) ##
+        u_data = jnp.mean( jnp.mean((u_fem_q_pred - u_fem_q) ** 2) + jnp.mean((u_fem_s_pred - u_fem_s) ** 2) ) # + u_fem_res_pred*mult ) ##
+        v_data = jnp.mean( jnp.mean((v_fem_q_pred - v_fem_q) ** 2) + jnp.mean((v_fem_s_pred - v_fem_s) ** 2) ) #  + v_fem_res_pred*mult ) ##
         p_data = jnp.mean( jnp.mean((p_fem_q_pred - p_fem_q) ** 2) + jnp.mean((p_fem_s_pred - p_fem_s) ** 2) )  ##
-        s_data = jnp.mean( jnp.mean((s_fem_q_pred - s_fem_q) ** 2) + jnp.mean((s_fem_s_pred - s_fem_s) ** 2) + s_fem_res_pred*mult )  ##
+        s_data = jnp.mean( jnp.mean((s_fem_q_pred - s_fem_q) ** 2) + jnp.mean((s_fem_s_pred - s_fem_s) ** 2) ) #  + s_fem_res_pred*mult )  ##
         
         # Initial condition loss
         u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)
