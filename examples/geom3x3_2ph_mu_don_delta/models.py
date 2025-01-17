@@ -18,7 +18,7 @@ from flax import linen as nn
 
 class NavierStokes2DwSat(ForwardIVP):
 
-    def __init__(self, config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, uv_max):   
+    def __init__(self, config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, uv_max, delta_matrices=None):   
         super().__init__(config)
 
         # self.inflow_fn = inflow_fn
@@ -31,6 +31,7 @@ class NavierStokes2DwSat(ForwardIVP):
         # self.Re = Re  # Reynolds number
         self.fluid_params = fluid_params
 
+        self.delta_matrices = delta_matrices
         self.uv_max = uv_max
 
         # Non-dimensionalized domain length and width
@@ -57,31 +58,16 @@ class NavierStokes2DwSat(ForwardIVP):
         self.s_pred_fn = vmap(self.s_net, (None, 0, 0, 0, 0))
         self.r_pred_fn = vmap(self.r_net, (None, 0, 0, 0, 0))
         self.r_pred_fem_fn = vmap(self.r_net, (None, 0, 0, 0, None))
+        
+    def update_delta_matrices(self, delta_matrices):
+        self.delta_matrices = delta_matrices
     
     def update_step(self, step):
         self.epoch = step
         
-    def __nonlinear_scaler(self, mu, umax_q, umax_s):
-        mus = .1
-        muq = .0025
-        
-        y_scaler =  self.__nonlinear_scaler_equation(mu, mus, muq, umax_q, umax_s)                   
-        return y_scaler
 
-    def __nonlinear_scaler_equation(self, mu, mus, muq, umax_q, umax_s):
-        
-        a = (umax_s - umax_q) / ( (mus**(-2) - muq**(-2)) )
-        b = umax_q - a * muq**(-2)
-        
-        return a*mu**(-2) +b
-
-    def neural_net(self, params, t, x, y, mu):
-        
-        (u_maxq, v_maxq, u_maxs, v_maxs) = self.uv_max
-        #  def __nonlinear_scaler(self, mu, umax_q, umax_s)
-        # u_scaler = self.__nonlinear_scaler(mu, u_maxq, u_maxs)
-        # v_scaler = self.__nonlinear_scaler(mu, v_maxq, v_maxs)
-        
+    def neural_net(self, params, t, x, y, mu, indices=None):
+                
         t = t / (self.temporal_dom[1])  # rescale t into [0, 1]
         x = x / self.L  # rescale x into [0, 1]
         y = y / self.W  # rescale y into [0, 1]   mu = (mu-.045)/(.1 - .045)
@@ -98,8 +84,8 @@ class NavierStokes2DwSat(ForwardIVP):
         p = outputs[2]
         s = outputs[3] # nn.softplus( outputs[3] )
         D = nn.sigmoid(outputs[4]) *5*10**(-3)
-        u_scaler = outputs[5] * (u_maxq - u_maxs) + u_maxs
-        v_scaler = outputs[6] * (v_maxq - v_maxs) + v_maxs
+        u_scaler = 0.00174
+        v_scaler = 0.00027
         
         u = u *u_scaler
         v = v *v_scaler
@@ -130,30 +116,38 @@ class NavierStokes2DwSat(ForwardIVP):
     def r_net(self, params, t, x, y, mu0):
         # Re = jnp.ones(x.shape)
         ( _, mu1, rho0, rho1) = self.fluid_params
+        
+        (vertices, centroids, B, A) = self.delta_matrices
+        
+        ind = jnp.where((centroids[:, 0] == x) & (centroids[:, 1] == y))[0]
+        vertices = vertices[ind] # should be (3x2) (3 vertices with x,y coord each)
+        B = B[ind]               #           (2x3)  
+        A = A[ind]               #           (3x3)         
 
-        u , v , p, s, D = self.neural_net(params, t, x, y, mu0)
+        u , v , _, s, D = self.neural_net(params, t, x, y, mu0)
+        u_e , v_e , p_e, s_e, _ = self.neural_net(params, t, vertices[:,0], vertices[:,1], mu0)
 
         u_t = grad(self.u_net, argnums=1)(params, t, x, y, mu0) 
         v_t = grad(self.v_net, argnums=1)(params, t, x, y, mu0) 
         s_t = grad(self.s_net, argnums=1)(params, t, x, y, mu0)
 
-        u_x = grad(self.u_net, argnums=2)(params, t, x, y, mu0)
-        v_x = grad(self.v_net, argnums=2)(params, t, x, y, mu0)
-        p_x = grad(self.p_net, argnums=2)(params, t, x, y, mu0)
-        s_x = grad(self.s_net, argnums=2)(params, t, x, y, mu0)
+        u_x = B @ u_e
+        v_x = B @ v_e
+        p_x = B @ p_e
+        s_x = B @ s_e
 
-        u_y = grad(self.u_net, argnums=3)(params, t, x, y, mu0)
-        v_y = grad(self.v_net, argnums=3)(params, t, x, y, mu0)
-        p_y = grad(self.p_net, argnums=3)(params, t, x, y, mu0)
-        s_y = grad(self.s_net, argnums=3)(params, t, x, y, mu0)
+        u_y = u_x[1] ; u_x = u_x[0]
+        v_y = v_x[1] ; v_x = v_x[0]
+        p_y = p_x[1] ; p_x = p_x[0]
+        s_y = s_x[1] ; s_x = s_x[0]
+        
+        u_xx = A @ u_e
+        v_xx = A @ v_e
+        s_xx = A @ s_e
 
-        u_xx = grad(grad(self.u_net, argnums=2), argnums=2)(params, t, x, y, mu0)
-        v_xx = grad(grad(self.v_net, argnums=2), argnums=2)(params, t, x, y, mu0)
-        s_xx = grad(grad(self.s_net, argnums=2), argnums=2)(params, t, x, y, mu0)
-
-        u_yy = grad(grad(self.u_net, argnums=3), argnums=3)(params, t, x, y, mu0)
-        v_yy = grad(grad(self.v_net, argnums=3), argnums=3)(params, t, x, y, mu0)
-        s_yy = grad(grad(self.s_net, argnums=3), argnums=3)(params, t, x, y, mu0)
+        u_yy = u_xx[2] ; u_xx = u_xx[0]
+        v_yy = v_xx[2] ; v_xx = v_xx[0]
+        s_yy = s_xx[2] ; s_xx = s_xx[0]
 
         Re = rho0*self.U_max*(self.L_max)/mu1  
         Re = .1
@@ -164,7 +158,7 @@ class NavierStokes2DwSat(ForwardIVP):
         ru = u_t + u * u_x + v * u_y + (p_x - mu_ratio*(u_xx + u_yy)) / Re #  
         rv = v_t + u * v_x + v * v_y + (p_y - mu_ratio*(v_xx + v_yy)) / Re #
         rc = u_x + v_y
-        rs = s_t + u * s_x + v * s_y - D*(s_xx + s_yy)  #self.D*(s_xx + s_yy)  #.0001*(s_xx + s_yy) 
+        rs = s_t + u * s_x + v * s_y - D*(s_xx + s_yy)
 
         return ru, rv, rc, rs
 
@@ -413,26 +407,11 @@ class NavierStokes2DwSat(ForwardIVP):
         p_fem_s_pred = self.pfem_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .1)
         s_fem_s_pred = self.sfem_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], .1)
         
-        # u_fem_res_pred = self.u_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], mu_batch)
-        # v_fem_res_pred = self.v_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], mu_batch)
-        # s_fem_res_pred = self.s_pred_fn(params, t_fem, coords_fem[:, 0], coords_fem[:, 1], mu_batch)
-        # u_fem_res_pred = jnp.mean((u_fem_res_pred - (u_fem_q/u_maxq)*((self.__nonlinear_scaler(mu_batch, u_maxq, u_maxs)-u_maxs))+u_fem_s) ** 2)
-        # v_fem_res_pred = jnp.mean((v_fem_res_pred - (v_fem_q/v_maxq)*((self.__nonlinear_scaler(mu_batch, v_maxq, v_maxs)-v_maxs))+v_fem_s) ** 2)
-        # s_slider = (1/u_maxq)*((self.__nonlinear_scaler(mu_batch, u_maxq, u_maxs)-u_maxs))
-        # s_fem_interpol = (s_fem_q*s_slider + s_fem_s*(1-s_slider))
-        # s_fem_res_pred = jnp.mean( (s_fem_res_pred - s_fem_interpol) **2 )
-         
-        # mult = jax.lax.cond( # True for selected , False for not selected
-        #     self.epoch>100000,
-        #     lambda _: 0.0,  # True case
-        #     lambda _: 1.-(self.epoch/100000)*.9,   # False case
-        #     operand=None
-        # )
-        
-        u_data = jnp.mean( jnp.mean((u_fem_q_pred - u_fem_q) ** 2) + jnp.mean((u_fem_s_pred - u_fem_s) ** 2) ) # + u_fem_res_pred*mult ) ##
-        v_data = jnp.mean( jnp.mean((v_fem_q_pred - v_fem_q) ** 2) + jnp.mean((v_fem_s_pred - v_fem_s) ** 2) ) #  + v_fem_res_pred*mult ) ##
-        p_data = jnp.mean( jnp.mean((p_fem_q_pred - p_fem_q) ** 2) + jnp.mean((p_fem_s_pred - p_fem_s) ** 2) )  ##
-        s_data = jnp.mean( jnp.mean((s_fem_q_pred - s_fem_q) ** 2) + jnp.mean((s_fem_s_pred - s_fem_s) ** 2) ) #  + s_fem_res_pred*mult )  ##
+       
+        u_data = jnp.mean( jnp.mean((u_fem_q_pred - u_fem_q) ** 2) + jnp.mean((u_fem_s_pred - u_fem_s) ** 2) ) 
+        v_data = jnp.mean( jnp.mean((v_fem_q_pred - v_fem_q) ** 2) + jnp.mean((v_fem_s_pred - v_fem_s) ** 2) ) 
+        p_data = jnp.mean( jnp.mean((p_fem_q_pred - p_fem_q) ** 2) + jnp.mean((p_fem_s_pred - p_fem_s) ** 2) ) 
+        s_data = jnp.mean( jnp.mean((s_fem_q_pred - s_fem_q) ** 2) + jnp.mean((s_fem_s_pred - s_fem_s) ** 2) ) 
         
         # Initial condition loss
         u_ic_pred = self.u0_pred_fn(params, 0.0, coords_batch[:, 0], coords_batch[:, 1], mu_batch)

@@ -57,12 +57,11 @@ def get_coords():
             jax.device_put(wall_coords) #, \
             # jax.device_put(contour_points) 
             
-def initial_fields(coords):
+def initial_fields():
 
     filepath = './chip3x3_steady_mu_50cp.pkl'
     with open(filepath, 'rb') as filepath:
         arquivos = pickle.load(filepath)
-    # coords_initial = arquivos['coord']
     u0 = np.squeeze(arquivos['u_data'])
     v0 = np.squeeze(arquivos['v_data'])
     p0 = np.squeeze(arquivos['p_data'])
@@ -95,8 +94,7 @@ def initial_fields(coords):
     del arquivos
     
     print(f"quick: {np.max(u_fem_q[-1])}")
-    
-    X_middle, t_middle = get_points_middle_shock(s_fem_s, s_fem_q, coords_fem, dt_fem_s)
+
     
     coords_fem = jax.device_put(coords_fem)
     s0 = jnp.zeros(coords_fem.shape[0])  # Initialize with zeros
@@ -105,51 +103,35 @@ def initial_fields(coords):
     coords_initial = coords_fem
     return (jax.device_put(u0), jax.device_put(v0), jax.device_put(p0), jax.device_put(s0), jax.device_put(coords_initial),
             jax.device_put(u_fem_s), jax.device_put(v_fem_s), jax.device_put(p_fem_s), jax.device_put(s_fem_s), jax.device_put(dt_fem_s), coords_fem,
-            jax.device_put(u_fem_q), jax.device_put(v_fem_q), jax.device_put(p_fem_q), jax.device_put(s_fem_q),
-            jax.device_put(X_middle), jax.device_put(t_middle))
+            jax.device_put(u_fem_q), jax.device_put(v_fem_q), jax.device_put(p_fem_q), jax.device_put(s_fem_q))
     
-def get_points_middle_shock(s_fem_s, s_fem_q, coords_fem, dt_fem_s):
-    upper_lim_s = .3
-    lower_lim_s = .2
-    upper_lim_q = .8
-    lower_lim_q = .7
     
-    y_mains = np.array([[150, 250], [400, 500], [650, 750]])/100/1000
+def get_delta_matrices():
     
-    X = []
-    t = []
+    filepath = './matrices_delta.pkl'
+    with open(filepath, 'rb') as filepath:
+        arquivos = pickle.load(filepath)
+    eigvals = np.squeeze(arquivos['eigvals'])
+    eigvecs = np.squeeze(arquivos['eigvecs'])
+    indices = np.squeeze(arquivos['indices'])
+    vertices = np.squeeze(arquivos['vertices'])
+    centroid = np.squeeze(arquivos['centroid'])
+    B_matrices = np.squeeze(arquivos['B_matrices'])
+    A_matrices = np.squeeze(arquivos['A_matrices'])
+    del arquivos
+    
+    eigvecs = jax.device_put(eigvecs)
+    vertices = jax.device_put(np.stack(vertices))
+    centroid =  jax.device_put(np.stack(centroid))
+    B_matrices = jax.device_put(np.stack(B_matrices))
+    A_matrices = jax.device_put(np.stack(A_matrices))
+   
+    return (
+        eigvecs, vertices, centroid, B_matrices, A_matrices
+    )
+       
 
-    cont = 1
-    for i in range(s_fem_s.shape[0]):
-        inds_s = np.where((s_fem_s[i]>=lower_lim_s) & (s_fem_s[i]<=upper_lim_s))[0]
-        inds_q = np.where((s_fem_q[i]>=lower_lim_q) & (s_fem_q[i]<=upper_lim_q))[0]    
-        
-        cont2 = 0 
-        for j in range(y_mains.shape[0]): 
-            
-            inds_main = np.where((coords_fem[:,1]>=y_mains[j,0]) & (coords_fem[:,1]<=y_mains[j,1]))[0]
-            inds_back = np.intersect1d(inds_s, inds_main)
-            inds_front = np.intersect1d(inds_q, inds_main)
-            
-            if inds_back.size == 0 or inds_front.size == 0:
-                continue
-            
-            x_max = np.max(coords_fem[inds_front,0])
-            x_min = np.max(coords_fem[inds_back,0])
-            
-            X.append([x_min, x_max])
-            t.append([cont * dt_fem_s[0], cont2])
-            cont2 += 1
-        
-        cont += 1
-    
-    X = np.array(X)
-    t = np.array(t)
-                                       
-    return X, t
-    
-
-def get_dataset(pin):
+def get_dataset():
 
     coords, inflow_coords, outflow_coords, wall_coords = get_coords()
     scale = 1/1000/100
@@ -158,19 +140,20 @@ def get_dataset(pin):
                                                                 inflow_coords*scale, 
                                                                 outflow_coords*scale, 
                                                                 wall_coords*scale)
-    # mu0 = [.0025, .05]#.02
     
     mu0 = [.0025, .1]
-    # mu0 = [.0025, .0051]
-    # mu0 = [.05, .101]
+
     mu1 = .05
     rho0 = 1000; rho1 = 1000
-    initial = initial_fields(coords)
+    initial = initial_fields()
+    delta_matrices = get_delta_matrices()
+        
     return (
         coords,
         inflow_coords,
         outflow_coords,
         wall_coords,
         initial,
+        delta_matrices,
         mu0, mu1, rho0, rho1
     )

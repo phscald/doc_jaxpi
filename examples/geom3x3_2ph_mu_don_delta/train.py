@@ -129,192 +129,45 @@ class TimeSpaceSampler_mu(TimeSpaceSampler):
 
         return batch
     
-class TimeSpaceSampler_mu_res(BaseSampler):
-    def __init__(self, time_dom, coords, mu, batch_size, rng_key=jax.random.PRNGKey(1234)):
+
+class resSampler(BaseSampler):
+    def __init__(self, time_dom, delta_matrices, mu, batch_size, rng_key=random.PRNGKey(1234)):
         super().__init__(batch_size, rng_key)
-                
+        
+        self.time_dom = time_dom
+        (self.eigvecs, 
+         self.vertices, 
+         self.centroid, 
+         self.B_matrices,
+         self.A_matrices
+         ) = delta_matrices
         self.mu = mu
-        self.temporal_dom = time_dom
-        self.coords = coords
-        self.batch_size = batch_size
         
-        self.probs_s = None
-        self.probs_u = None
-        self.coords2 = None
-        self.mus = None
-        self.ts = None
-        
-        self.step = 0
-        self.flag = None
-        
-    def update_step(self, step):
-        self.step =step
-        
-    def update_RAD(self, model, step, step_max, k=1, c=1):
-        
-        self.key, subkey = random.split(self.key)
-
-        ind_coords = random.choice(
-            subkey,
-            self.coords.shape[0],
-            shape=(int(self.coords.shape[0]/10),),
-        )
-        self.coords2 = self.coords[ind_coords]
-        
-        self.key, subkey = random.split(self.key)
-        
-        alpha = .9
-        t_max = self.temporal_dom[0] \
-                             + (1-alpha) * (self.temporal_dom[1] - self.temporal_dom[0]) \
-                             + alpha * step/(100000) *(self.temporal_dom[1] - self.temporal_dom[0])
-        # t_max = self.temporal_dom[1]+5
-        
-        t_max = jnp.where(t_max > self.temporal_dom[1], self.temporal_dom[1], t_max)
-        # self.flag = jnp.where(t_max > self.temporal_dom[1], True, False)
-        # t_max = self.temporal_dom[1]
-        
-        self.ts = random.uniform(
-            subkey,
-            shape=(ind_coords.shape[0], ),
-            minval=self.temporal_dom[0],
-            maxval= t_max,
-        )
-        self.key, subkey = random.split(self.key)
-        self.mus = random.uniform(subkey, shape=(ind_coords.shape[0], ), minval = self.mu[0], maxval = self.mu[1])
-        # self.key, subkey, subkey2 = random.split(self.key, 3)
-        # self.mus = jnp.concatenate(
-        #             (
-        #                 random.uniform(subkey,  shape=(int(2*ind_coords.shape[0]), ), minval = self.mu[0], maxval = .01), # .1 - .0025
-        #                 random.uniform(subkey,  shape=(int(1.5*ind_coords.shape[0]), ), minval = .01, maxval = .05),
-        #                 random.uniform(subkey2, shape=(ind_coords.shape[0], ), minval = .01, maxval = self.mu[1])
-        #             )
-        # )
-        # self.key, subkey = random.split(self.key)
-        # ind_coords = random.choice(
-        #     subkey,
-        #     self.mus.shape[0],
-        #     shape=(ind_coords.shape[0],),
-        # )
-        # self.mus = self.mus[ind_coords]
-
-
-        state = jax.device_get(jax.tree_util.tree_map(lambda x: x[0], model.state))
-        ru, rv, rc, rs  = model.r_pred_fn(state.params, self.ts, self.coords2[:,0], self.coords2[:,1], self.mus)
-        error = rs**k 
-        error = ( error / jnp.mean(error) ) + c
-        self.probs_s = error / jnp.sum( error )
-        
-        error = (ru**k)/jnp.sum((ru**k)) + (rv**k)/jnp.sum((rv**k)) + (rc**k)/jnp.sum((rc**k)) 
-        error = ( error / jnp.mean(error) ) + c
-        self.probs_u = error / jnp.sum( error )
-         
     @partial(pmap, static_broadcasted_argnums=(0,))
     def data_generation(self, key):
         "Generates data containing batch_size samples"
-        
-        # res_mu0 = [.1, .09, .08, .07, .06, .05, .045,
-        #            .04, .035, .03, .025, .02, .015, .01,
-        #            .009, .008, .007, .006, .005, .004, .003, .002, .0025]
-        # res_mu0 = [ .009, .008, .007, .006, .005, .004, .003, .002, .0025 ]
-        
-        # step_max  = 6*10**(5)
-        # metade = jnp.where(self.step/(step_max/2), True, False)
-        
-        # time_list = [self.temporal_dom[0]]
-        # for i in range(10):
-        #     time_list.append(self.temporal_dom[0]+(i+1)*(self.temporal_dom[1]-self.temporal_dom[0])/10)        
-        
-        # 1) get times ranges. 2) condition. 3) shuffle. 4) get only batchsize
-        
-        # times = jnp.array( [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1])
-        # times = self.temporal_dom[1] + times * self.temporal_dom[1]
-        
-        # i = jnp.floor(self.step/100) % ( times.shape[0] - 1 )
-        # i = i.astype(int)
-        # idx_selec_times = (self.ts >= times[i]) & (self.ts < times[i + 1])
-        
-        # idx_selec_times = jax.lax.cond( # True for selected , False for not selected
-        #     self.flag,
-        #     lambda _: (self.ts >= times[i]) & (self.ts < times[i + 1]),  # True case
-        #     lambda _: jnp.ones_like(self.ts, dtype=bool),                # False case
-        #     operand=None
-        # )
-        
-        # idx_num = jnp.arange(idx_selec_times.shape[0])                    # numerate the array positions
-        # indices_selected = jnp.where(idx_selec_times, idx_num, -1)        # array position number where True and -1 otherwise
-        # indices_selected2 = jnp.where(idx_selec_times==False, idx_num, 0) # array position number where False and 0 otherwise
+        key1, key2, key3 = random.split(key, 3)
 
-            
-        # probs_u = self.probs_u
-        # probs_u = probs_u.at[indices_selected2].set(0)
-
-        # probs_s = self.probs_s
-        # probs_s = probs_s.at[indices_selected2].set(0)
-        
-        key, subkey = random.split(key, 2)
-        idx = random.choice(
-            subkey, self.ts.shape[0], shape=(self.batch_size,), p=self.probs_u
-            # subkey, indices_selected.shape[0], shape=(self.batch_size,), p=probs_u
+        temporal_batch = random.uniform(
+            key1,
+            shape=(self.batch_size, 1),
+            minval=self.temporal_dom[0],
+            maxval=self.temporal_dom[1],
         )
-        
-        batch_u = jnp.concatenate((self.ts[idx][:,jnp.newaxis], 
-                                   self.coords2[idx], 
-                                   self.mus[idx][:,jnp.newaxis])
-                                  , axis=1)
-        
-        key, subkey = random.split(key, 2)
-        idx = random.choice(
-            subkey, self.ts.shape[0], shape=(self.batch_size,), p=self.probs_s
-            # subkey, indices_selected.shape[0], shape=(self.batch_size,), p=probs_s
+
+        mat_idx = random.choice(
+            key2, self.vertices.shape[0], shape=(self.batch_size,)
         )
+        matrices = (self.vertices[mat_idx], self.centroid[mat_idx], self.B_matrices[mat_idx], self.A_matrices[mat_idx])
+        spatial_batch = # XY and EIGEN ###########################################################################################
+
+        mu_batch = random.uniform(key3, shape=(self.batch_size, 1), minval = self.mu[0], maxval = self.mu[1])
+
+        batch = jnp.concatenate([temporal_batch, spatial_batch, mu_batch], axis=1)
+
+        return batch
+
         
-        batch_s = jnp.concatenate([self.ts[idx][:,jnp.newaxis], 
-                                   self.coords2[idx], 
-                                   self.mus[idx][:,jnp.newaxis]]
-                                  , axis=1)
-         
-        return batch_u, batch_s
-    
-    # def __iter__(self):
-    #     return TimeSpaceSamplerIterator(self)
-    
-class TimeSpaceSamplerIterator:
-    def __init__(self, sampler):
-        self.sampler = sampler
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.sampler.probs is None:
-            raise StopIteration("You must call `update_RAD` before iteration.")
-
-        self.sampler.rng_key, subkey = random.split(self.sampler.rng_key)
-        subkey = random.split(self.sampler.rng_key, 1)
-        return self.sampler.data_generation(subkey)
-    
-# def update_batch(step, samplers, batch):
-#     def update_conditionally(_):
-#         updated_batch = batch.copy()
-#         for key, sampler in samplers.items():
-#             if key == "res":
-#                 updated_batch[key] = next(sampler._iterator)
-#             else:
-#                 updated_batch[key] = next(sampler)
-#         return updated_batch
-
-#     def no_update(_):
-#         return batch
-    
-#     # Use lax.cond to perform the conditional update
-#     batch = jax.lax.cond(
-#         step % 50 == 0,  # Condition
-#         update_conditionally,  # True branch
-#         no_update,  # False branch
-#         operand=None  # No additional input needed
-#     )
-#     return batch
-    
 
 def train_one_window(config, workdir, model, samplers, idx):
     
@@ -398,23 +251,24 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     wandb_config = config.wandb
     wandb.init(project=wandb_config.project, name=wandb_config.name)
 
-    pin = 50
     (
         coords,
         inflow_coords,
         outflow_coords,
         wall_coords,
         initial,
+        delta_matrices,
         mu0, mu1, rho0, rho1
-    ) = get_dataset(pin=pin)
+    ) = get_dataset()
 
-    fluid_params = (mu0, mu1, rho0, rho1)
+    fluid_params = (mu0, mu1, rho0, rho1)    
         
     (u0, v0, p0, s0, coords_initial,
             u_fem_s, v_fem_s, p_fem_s, s_fem_s, dt_fem, coords_fem,
             u_fem_q, v_fem_q, p_fem_q, s_fem_q,
             coords_middle, t_middle) = initial
     
+    pin = 50
     dp = pin
     # pin la em cima
     # L_max = 900/1000/100
@@ -444,9 +298,9 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     if config.nondim == True:
 
         # Nondimensionalize coordinates and inflow velocity
-        inflow_coords = inflow_coords / L_max
+        inflow_coords  = inflow_coords / L_max
         outflow_coords = outflow_coords / L_max
-        noslip_coords = noslip_coords / L_max
+        noslip_coords  = noslip_coords / L_max
         coords = coords / L_max
 
         coords_fem = coords_fem / L_max
@@ -485,8 +339,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     for idx in range(config.training.num_time_windows):
         logging.info("Training time window {}".format(idx + 1))
-
-
         
         # Initialize model
         model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params, uv_max) #  no 1
@@ -504,11 +356,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
                 u_fem_s, v_fem_s, p_fem_s, s_fem_s, coords_fem, t_fem, config.training.ic_batch_size, rng_key=keys[0]
             )
         )
-        # ic_sampler_q = iter(
-        #     ICSampler1(
-        #         u_fem_q, v_fem_q, p_fem_q, s_fem_q, coords_fem, t_fem, config.training.ic_batch_size, rng_key=keys[1]
-        #     )
-        # )
         inflow_sampler = iter(
             TimeSpaceSampler_mu(
                 temporal_dom,
@@ -537,7 +384,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
             )
         )
 
-        res_sampler = TimeSpaceSampler_mu_res(
+        res_sampler = resSampler(
                 temporal_dom,
                 coords,
                 mu0,
