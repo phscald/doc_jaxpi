@@ -560,12 +560,9 @@ class DeepONetwDssep(nn.Module):
         y = jnp.concatenate( [y1, s, pde_param, uv_scale], axis=-1 )
         return y
 
-
-    
-class DeepONet3(nn.Module):
-    arch_name: Optional[str] = "DeepONet3"
+class DeepONet3wD(nn.Module):
+    arch_name: Optional[str] = "DeepONet3wD"
     num_branch_layers: int = 4
-    num_branch_layers2: int = 4
     num_trunk_layers: int = 4 # (u, x) : u é o branch, x é o trunk
     hidden_dim: int = 256
     out_dim: int = 1
@@ -578,8 +575,14 @@ class DeepONet3(nn.Module):
         self.activation_fn = _get_activation(self.activation)
 
     @nn.compact
-    def __call__(self, u, u2, x):
-        u = ModifiedMlp(#MlpBlock(
+    def __call__(self, u1, u2, x, pde_param):
+        # (u, x) : u é o branch, x é o trunk
+        #  u1: t              - branch1
+        #  u2: x, y, v(x,y)   - branch2
+        #  x: mu              - trunk
+        pde_param = Dense(features=1)(pde_param)         
+        
+        u1 = ModifiedMlp(#MlpBlock(
             num_layers=self.num_branch_layers,
             hidden_dim=self.hidden_dim,
             out_dim=self.hidden_dim,
@@ -588,17 +591,16 @@ class DeepONet3(nn.Module):
             reparam=self.reparam,
             periodicity=self.periodicity,
             fourier_emb=self.fourier_emb,
-        )(u)
+        )(u1)
         
-        u2 = ModifiedMlp(#MlpBlock(
-            num_layers=self.num_branch_layers2,
+        u2 = ModifiedMlp(#Mlp(
+            num_layers=self.num_branch_layers,
             hidden_dim=self.hidden_dim,
             out_dim=self.hidden_dim,
             activation=self.activation,
-            #final_activation=False,
-            reparam=self.reparam,
             periodicity=self.periodicity,
             fourier_emb=self.fourier_emb,
+            reparam=self.reparam,
         )(u2)
 
         x = ModifiedMlp(#Mlp(
@@ -610,12 +612,27 @@ class DeepONet3(nn.Module):
             fourier_emb=self.fourier_emb,
             reparam=self.reparam,
         )(x)
-
-        y = u * u2 * x#nn.sigmoid(x)
-        y = self.activation_fn(y)
-        y = Dense(features=self.out_dim, reparam=self.reparam)(y)
+             
+        u1 = u1 * u2
+        u1 = self.activation_fn(u1)
+        y = u1 * x
+        
+        y_p = self.activation_fn(y)
+        y_u = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
+        y_v = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
+        y_p = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
+        y_u = Dense(features=1, reparam=self.reparam)(y_u)
+        y_v = Dense(features=1, reparam=self.reparam)(y_v)
+        y_p = Dense(features=1, reparam=self.reparam)(y_p)
+        
+        y_s = nn.sigmoid(y)
+        y_s = nn.sigmoid(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_s))
+        y_s = Dense(features=1, reparam=self.reparam)(y_s)
+        
+        y = jnp.concatenate( [y_u, y_v, y_p, y_s, pde_param], axis=-1 )
         return y
     
+ 
 class DeepOResNet(nn.Module):
     arch_name: Optional[str] = "DeepOResNet"
     num_branch_layers: int = 4

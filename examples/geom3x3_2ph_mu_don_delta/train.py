@@ -341,7 +341,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         logging.info("Training time window {}".format(idx + 1))
         
         # Initialize model
-        model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params, uv_max) #  no 1
+        model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params) #  no 1
         
         # Initialize Sampler
         keys = random.split(random.PRNGKey(0), 7)

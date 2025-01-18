@@ -64,8 +64,8 @@ def _create_arch(config):
     elif config.arch_name == "DeepOResNet":
         arch = archs.DeepOResNet(**config)
         
-    elif config.arch_name == "DeepONet3":
-        arch = archs.DeepONet3(**config)
+    elif config.arch_name == "DeepONet3wD":
+        arch = archs.DeepONet3wD(**config)
         
     elif config.arch_name == "DeepONetwD":
         arch = archs.DeepONetwD(**config)
@@ -105,14 +105,16 @@ def _create_optimizer(config):
 def _create_train_state(config):
     # Initialize network
     arch = _create_arch(config.arch)
-    if config.arch.arch_name == "DeepONet3": 
+    if config.arch.arch_name == "DeepONet3wD": 
         # (u, x) : u é o branch, x é o trunk
-        #  u: x y t mu - branch
-        #  x: mu       - trunk
-        u = jnp.ones(config.input_branch)
+        #  u1: t              - branch1
+        #  u2: x, y, v(x,y)   - branch2
+        #  x: mu              - trunk
+        u1 = jnp.ones(config.input_branch)
         u2 = jnp.ones(config.input_branch2)
         x = jnp.ones(config.input_trunk)
-        params = arch.init(random.PRNGKey(config.seed), u, u2, x)
+        Dparam = jnp.ones(1)
+        params = arch.init(random.PRNGKey(config.seed), u1, u2, x, Dparam)
     elif config.arch.arch_name == "SharedMlp":    
         u = jnp.ones(config.input_dim)
         params = arch.init(random.PRNGKey(config.seed), u)

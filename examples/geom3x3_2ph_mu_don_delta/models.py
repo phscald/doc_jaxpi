@@ -18,7 +18,7 @@ from flax import linen as nn
 
 class NavierStokes2DwSat(ForwardIVP):
 
-    def __init__(self, config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, uv_max, delta_matrices=None):   
+    def __init__(self, config, p_inflow, temporal_dom, coords, U_max, L_max, fluid_params, delta_matrices=None):   
         super().__init__(config)
 
         # self.inflow_fn = inflow_fn
@@ -32,8 +32,7 @@ class NavierStokes2DwSat(ForwardIVP):
         self.fluid_params = fluid_params
 
         self.delta_matrices = delta_matrices
-        self.uv_max = uv_max
-
+        
         # Non-dimensionalized domain length and width
         self.L, self.W = self.coords.max(axis=0) - self.coords.min(axis=0)
 
@@ -66,17 +65,18 @@ class NavierStokes2DwSat(ForwardIVP):
         self.epoch = step
         
 
-    def neural_net(self, params, t, x, y, mu, indices=None):
+    def neural_net(self, params, t, X, mu):
                 
         t = t / (self.temporal_dom[1])  # rescale t into [0, 1]
-        x = x / self.L  # rescale x into [0, 1]
-        y = y / self.W  # rescale y into [0, 1]   mu = (mu-.045)/(.1 - .045)
+        # x = x / self.L  # rescale x into [0, 1]
+        # y = y / self.W  # rescale y into [0, 1]   mu = (mu-.045)/(.1 - .045)
         mu = 2* ((mu - .0025) / (.1 - .0025)) -1
         ones = jnp.stack([jnp.ones(t.shape)])
-        inputs = jnp.stack([t, x, y]) # branch
+        X = jnp.stack([X]) # branch
+        t = jnp.stack([ t ] )
         mu = jnp.stack([ mu ] )
         # mu = jnp.stack([ mu, jnp.exp(mu), jnp.exp(2*mu)])  # trunk
-        outputs = self.state.apply_fn(params, inputs, mu, ones)
+        outputs = self.state.apply_fn(params, t, X, mu, ones)
 
         # Start with an initial state of the channel flow
         u = outputs[0]
@@ -92,44 +92,44 @@ class NavierStokes2DwSat(ForwardIVP):
 
         return u, v, p, s, D
 
-    def u_net(self, params, t, x, y, mu):
-        u, _, _, _, _ = self.neural_net(params, t, x, y, mu)
+    def u_net(self, params, t, X, mu):
+        u, _, _, _, _ = self.neural_net(params, t, X, mu)
         return u
 
-    def v_net(self, params, t, x, y, mu):
-        _, v, _, _, _ = self.neural_net(params, t, x, y, mu)
+    def v_net(self, params, t, X, mu):
+        _, v, _, _, _ = self.neural_net(params, t, X, mu)
         return v
 
-    def p_net(self, params, t, x, y, mu):
-        _, _, p, _, _ = self.neural_net(params, t, x, y, mu)
+    def p_net(self, params, t, X, mu):
+        _, _, p, _, _ = self.neural_net(params, t, X, mu)
         return p
 
-    def s_net(self, params, t, x, y, mu):
-        _, _, _, s, _ = self.neural_net(params, t, x, y, mu)
+    def s_net(self, params, t, X, mu):
+        _, _, _, s, _ = self.neural_net(params, t, X, mu)
         return s
     
-    def D_net(self, params, t, x, y, mu):
-        _, _, _, _, D = self.neural_net(params, t, x, y, mu)
+    def D_net(self, params, t, X, mu):
+        _, _, _, _, D = self.neural_net(params, t, X, mu)
         return D
 
 
-    def r_net(self, params, t, x, y, mu0):
+    def r_net(self, params, t, X, mu0):
         # Re = jnp.ones(x.shape)
         ( _, mu1, rho0, rho1) = self.fluid_params
         
         (vertices, centroids, B, A) = self.delta_matrices
         
-        ind = jnp.where((centroids[:, 0] == x) & (centroids[:, 1] == y))[0]
+        ind = jnp.where((centroids[:, 0] == X[:, 0]) & (centroids[:, 1] == X[:, 1]))[0]
         vertices = vertices[ind] # should be (3x2) (3 vertices with x,y coord each)
         B = B[ind]               #           (2x3)  
         A = A[ind]               #           (3x3)         
 
-        u , v , _, s, D = self.neural_net(params, t, x, y, mu0)
+        u , v , _, s, D = self.neural_net(params, t, X, mu0)
         u_e , v_e , p_e, s_e, _ = self.neural_net(params, t, vertices[:,0], vertices[:,1], mu0)
 
-        u_t = grad(self.u_net, argnums=1)(params, t, x, y, mu0) 
-        v_t = grad(self.v_net, argnums=1)(params, t, x, y, mu0) 
-        s_t = grad(self.s_net, argnums=1)(params, t, x, y, mu0)
+        u_t = grad(self.u_net, argnums=1)(params, t, X, mu0) 
+        v_t = grad(self.v_net, argnums=1)(params, t, X, mu0) 
+        s_t = grad(self.s_net, argnums=1)(params, t, X, mu0)
 
         u_x = B @ u_e
         v_x = B @ v_e
@@ -162,20 +162,20 @@ class NavierStokes2DwSat(ForwardIVP):
 
         return ru, rv, rc, rs
 
-    def ru_net(self, params, t, x, y, mu):
-        ru, _, _, _ = self.r_net(params, t, x, y, mu)
+    def ru_net(self, params, t, X, mu):
+        ru, _, _, _ = self.r_net(params, t, X, mu)
         return ru
 
-    def rv_net(self, params, t, x, y, mu):
-        _, rv, _, _ = self.r_net(params, t, x, y, mu)
+    def rv_net(self, params, t, X, mu):
+        _, rv, _, _ = self.r_net(params, t, X, mu)
         return rv
 
-    def rc_net(self, params, t, x, y, mu):
-        _, _, rc, _ = self.r_net(params, t, x, y, mu)
+    def rc_net(self, params, t, X, mu):
+        _, _, rc, _ = self.r_net(params, t, X, mu)
         return rc
 
-    def rs_net(self, params, t, x, y, mu):
-        _, _, _, rs = self.r_net(params, t, x, y, mu)
+    def rs_net(self, params, t, X, mu):
+        _, _, _, rs = self.r_net(params, t, X, mu)
         return rs
 
 
@@ -390,7 +390,6 @@ class NavierStokes2DwSat(ForwardIVP):
         noslip_batch = batch["noslip"]
         res_batch = batch["res"]
         
-        (u_maxq, v_maxq, u_maxs, v_maxs) = self.uv_max
         (coords_fem, t_fem, u_fem_q, v_fem_q, p_fem_q, s_fem_q, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = ic_batch_qs
         # (coords_fem, t_fem, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = ic_batch_s
                 
