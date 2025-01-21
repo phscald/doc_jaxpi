@@ -8,7 +8,7 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     config.mode = "train"
-    config.mode = "eval"
+    # config.mode = "eval"
     # ver o coeficiente do causal depois
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -72,13 +72,6 @@ def get_config():
         "v_ic": 1.0,
         "p_ic": 1.0,
         "s_ic": 1.0,
-        "p_in": 1.0,
-        "p_out": 1.0,
-        # "s_in": 1.0,
-        # "v_in": 1.0,
-        # "v_out": 1.0,
-        "u_noslip": 1.0,
-        # "v_noslip": 1.0,
         "ru": 1.0,
         "rv": 1.0,
         "rc": 1.0,
@@ -95,12 +88,12 @@ def get_config():
     # Logging
     config.logging = logging = ml_collections.ConfigDict()
     logging.log_every_steps = 100
-    logging.log_errors = True
-    logging.log_losses = True
+    logging.log_errors  = True
+    logging.log_lossesn = True
     logging.log_weights = True
-    logging.log_grads = False
-    logging.log_ntk = False
-    logging.log_preds = False
+    logging.log_grads   = False
+    logging.log_ntk     = False
+    logging.log_preds   = False
 
     # Saving
     config.saving = saving = ml_collections.ConfigDict()

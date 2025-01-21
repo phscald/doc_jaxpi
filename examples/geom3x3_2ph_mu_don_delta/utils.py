@@ -67,6 +67,9 @@ def initial_fields():
     p0 = np.squeeze(arquivos['p_data'])
     del arquivos
     
+    print(u0.shape)
+    print(dsa)
+    
     print(f"medio: {np.max(u0)}")
         
     filepath = './chip3x3_inv0.pkl'

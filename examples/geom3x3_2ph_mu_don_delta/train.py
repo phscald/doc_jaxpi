@@ -131,10 +131,9 @@ class TimeSpaceSampler_mu(TimeSpaceSampler):
     
 
 class resSampler(BaseSampler):
-    def __init__(self, time_dom, delta_matrices, mu, batch_size, rng_key=random.PRNGKey(1234)):
+    def __init__(self, delta_matrices, mu, initial, batch_size, rng_key=random.PRNGKey(1234)):
         super().__init__(batch_size, rng_key)
         
-        self.time_dom = time_dom
         (self.eigvecs, 
          self.vertices, 
          self.centroid, 
@@ -142,28 +141,43 @@ class resSampler(BaseSampler):
          self.A_matrices
          ) = delta_matrices
         self.mu = mu
+        self.initial = initial
+    #     self.step = 0
+        
+    # def update_step(self, step):
+    #     self.step = step
         
     @partial(pmap, static_broadcasted_argnums=(0,))
     def data_generation(self, key):
         "Generates data containing batch_size samples"
-        key1, key2, key3 = random.split(key, 3)
 
-        temporal_batch = random.uniform(
-            key1,
-            shape=(self.batch_size, 1),
-            minval=self.temporal_dom[0],
-            maxval=self.temporal_dom[1],
-        )
+        
+        (  u0,   v0,   p0,   s0,   coords_initial,
+              u_fem_s,   v_fem_s,   p_fem_s,   s_fem_s,   t_fem,  coords_fem,
+              u_fem_q,   v_fem_q,   p_fem_q,   s_fem_q) = self.initial
 
-        mat_idx = random.choice(
-            key2, self.vertices.shape[0], shape=(self.batch_size,)
-        )
-        matrices = (self.vertices[mat_idx], self.centroid[mat_idx], self.B_matrices[mat_idx], self.A_matrices[mat_idx])
-        spatial_batch = # XY and EIGEN ###########################################################################################
+        key1, key = random.split(key, 2)
+        idx_t = random.choice(key1, t_fem.shape[0], shape=(self.batch_size,) )
+        key1, key = random.split(key, 2)
+        idx_xy = random.choice(key1, u_fem_s.shape[1], shape=(self.batch_size,) )
+        
+        u0, v0, p0, s0 = u0[idx_xy], v0[idx_xy], p0[idx_xy], s0 [idx_xy]
+        u_fem_s, v_fem_s, p_fem_s, s_fem_s = u_fem_s[idx_t, idx_xy], v_fem_s[idx_t, idx_xy], p_fem_s[idx_t, idx_xy], s_fem_s[idx_t, idx_xy]
+        u_fem_q, v_fem_q, p_fem_q, s_fem_q = u_fem_q[idx_t, idx_xy], v_fem_q[idx_t, idx_xy], p_fem_q[idx_t, idx_xy], s_fem_q[idx_t, idx_xy]
+        t = t_fem[idx_t]
+        
+        idx = jnp.where((self.centroid[:,0] == coords_fem[idx_xy,0]) & (self.centroid[:,1] == coords_fem[idx_xy,1]))[0]
+        
+        X = jnp.concatenate([self.centroid[idx], self.eigvecs[idx]], axis=1)
+        matrices = (self.vertices[idx], self.centroid[idx], self.B_matrices[idx], self.A_matrices[idx])
+        
+        key1, key = random.split(key, 2)
+        mu_batch = random.uniform(key1, shape=(self.batch_size, 1), minval = self.mu[0], maxval = self.mu[1])     
+        
+        fields = (u_fem_q, v_fem_q, p_fem_q, s_fem_q, u_fem_s, v_fem_s, p_fem_s, s_fem_s)
+        fields_ic = (u0, v0, p0, s0) 
 
-        mu_batch = random.uniform(key3, shape=(self.batch_size, 1), minval = self.mu[0], maxval = self.mu[1])
-
-        batch = jnp.concatenate([temporal_batch, spatial_batch, mu_batch], axis=1)
+        batch = (t, X, mu_batch, matrices, fields, fields_ic)
 
         return batch
 
@@ -181,9 +195,9 @@ def train_one_window(config, workdir, model, samplers, idx):
     step_offset = idx * config.training.max_steps
 
     # jit warm up
-    batch = {}
-    samplers["res"].update_RAD(model, 0, config.training.max_steps, k=1, c=1)
-    samplers["res"]._iterator = iter(samplers["res"])
+    # batch = {}
+    # samplers["res"].update_RAD(model, 0, config.training.max_steps, k=1, c=1)
+    # samplers["res"]._iterator = iter(samplers["res"])
 
     # for key, sampler in samplers.items():
     #     if key == "res": #and step % 50 ==0:
@@ -194,10 +208,10 @@ def train_one_window(config, workdir, model, samplers, idx):
     for step in range(config.training.max_steps):
         start_time = time.time()
 
-        if step % 1000 ==0:
-            samplers["res"].update_RAD(model, step, config.training.max_steps, k=1, c=1)
-            samplers["res"]._iterator = iter(samplers["res"])
-        samplers["res"].update_step(step)
+        # if step % 1000 ==0:
+        #     samplers["res"].update_RAD(model, step, config.training.max_steps, k=1, c=1)
+        #     samplers["res"]._iterator = iter(samplers["res"])
+        # samplers["res"].update_step(step)
         
         
         # batch = update_batch(step, samplers, batch)
@@ -205,11 +219,13 @@ def train_one_window(config, workdir, model, samplers, idx):
         batch = {}
 
         for key, sampler in samplers.items():
-            if key == "res": #and step % 50 ==0:
-                batch[key] = next(sampler._iterator)
-            else:
-                batch[key] = next(sampler)
-        
+            batch[key] = next(sampler)
+            # if key == "res": #and step % 50 ==0:
+            #     batch[key] = next(sampler._iterator)
+            # else:
+            #     batch[key] = next(sampler)
+            
+        model.update_delta_matrices(batch["res"][3])
         model.update_step(step) 
         
         # for _ in range(10):   
@@ -265,8 +281,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         
     (u0, v0, p0, s0, coords_initial,
             u_fem_s, v_fem_s, p_fem_s, s_fem_s, dt_fem, coords_fem,
-            u_fem_q, v_fem_q, p_fem_q, s_fem_q,
-            coords_middle, t_middle) = initial
+            u_fem_q, v_fem_q, p_fem_q, s_fem_q) = initial
     
     pin = 50
     dp = pin
@@ -278,8 +293,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     v_maxs = jnp.max(v_fem_s)/U_max
     u_maxq = jnp.max(u_fem_q)/U_max
     v_maxq = jnp.max(v_fem_q)/U_max
-    
-    uv_max = (u_maxq, v_maxq, u_maxs, v_maxs)
+
     print(f"U_max: {U_max}")
     print(f"u_fem_s/U_max: {jnp.max(u_fem_s)/U_max}")
     print(f"v_fem_s/U_max: {jnp.max(v_fem_s)/U_max}")
@@ -294,43 +308,30 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     # noslip_coords = jnp.vstack((wall_coords, cyl_coords))
     noslip_coords = wall_coords
 
-    # Nondimensionalization
-    if config.nondim == True:
-
-        # Nondimensionalize coordinates and inflow velocity
-        inflow_coords  = inflow_coords / L_max
-        outflow_coords = outflow_coords / L_max
-        noslip_coords  = noslip_coords / L_max
-        coords = coords / L_max
-
-        coords_fem = coords_fem / L_max
-        
-        dt_fem = dt_fem / (mu1/dp)
-        t_middle = t_middle / (mu1/dp)
-        t_fem = jnp.cumsum(dt_fem)
-        idx = jnp.where(t_fem<=t1)[0]
-        
-        idx_mid = jnp.where(t_middle[:,0]<=t1)[0]
-        t_middle = t_middle[idx_mid]
-        coords_middle = coords_middle[idx_mid]
-        
-        (u0, v0, p0) = (u0/U_max , v0/U_max , p0/pmax)
-        u_fem_s = u_fem_s[idx] / U_max 
-        v_fem_s = v_fem_s[idx] / U_max 
-        p_fem_s = p_fem_s[idx] / pmax
-        s_fem_s = s_fem_s[idx]
-        u_fem_q = u_fem_q[idx] / U_max 
-        v_fem_q = v_fem_q[idx] / U_max 
-        p_fem_q = p_fem_q[idx] / pmax
-        s_fem_q = s_fem_q[idx]
-        
-        p_inflow = (pin / pmax) * jnp.ones((inflow_coords.shape[0]))
-
-    else:
-        U_star = 1.0
-        L_star = 1.0
-        T_star = 1.0
-        # Re = 1 / nu
+    coords_fem = coords_fem / L_max
+    
+    dt_fem = dt_fem / (mu1/dp)
+    t_fem = jnp.cumsum(dt_fem)
+    idx = jnp.where(t_fem<=t1)[0]
+    
+    (u0, v0, p0) = (u0/U_max , v0/U_max , p0/pmax)
+    u_fem_s = u_fem_s[idx] / U_max 
+    v_fem_s = v_fem_s[idx] / U_max 
+    p_fem_s = p_fem_s[idx] / pmax
+    s_fem_s = s_fem_s[idx]
+    u_fem_q = u_fem_q[idx] / U_max 
+    v_fem_q = v_fem_q[idx] / U_max 
+    p_fem_q = p_fem_q[idx] / pmax
+    s_fem_q = s_fem_q[idx]
+    
+    initial = (u0, v0, p0, s0, coords_initial,
+            u_fem_s, v_fem_s, p_fem_s, s_fem_s, t_fem, coords_fem,
+            u_fem_q, v_fem_q, p_fem_q, s_fem_q)
+    
+    eigvecs, vertices, centroid, B_matrices, A_matrices  = delta_matrices
+    vertices = vertices / L_max
+    centroid = centroid / L_max
+    delta_matrices = (eigvecs, vertices, centroid, B_matrices, A_matrices )
 
     # Temporal domain of each time window
     t0 = 0.0
@@ -344,60 +345,20 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params) #  no 1
         
         # Initialize Sampler
-        keys = random.split(random.PRNGKey(0), 7)
-        ic_sampler = iter(
-            ICSampler(
-                u0, v0, p0, s0, coords_fem, mu0, config.training.ic_batch_size, rng_key=keys[6]
-            )
-        )
-        ic_sampler_qs = iter(
-            ICSampler1(
-                u_fem_q, v_fem_q, p_fem_q, s_fem_q,
-                u_fem_s, v_fem_s, p_fem_s, s_fem_s, coords_fem, t_fem, config.training.ic_batch_size, rng_key=keys[0]
-            )
-        )
-        inflow_sampler = iter(
-            TimeSpaceSampler_mu(
-                temporal_dom,
-                inflow_coords,
-                mu0,
-                config.training.inflow_batch_size,
-                rng_key=keys[2],
-            )
-        )
-        outflow_sampler = iter(
-            TimeSpaceSampler_mu(
-                temporal_dom,
-                outflow_coords,
-                mu0,
-                config.training.outflow_batch_size,
-                rng_key=keys[3],
-            )
-        )
-        noslip_sampler = iter(
-            TimeSpaceSampler_mu(
-                temporal_dom,
-                noslip_coords,
-                mu0,
-                config.training.noslip_batch_size,
-                rng_key=keys[4],
-            )
-        )
-
-        res_sampler = resSampler(
-                temporal_dom,
-                coords,
-                mu0,
-                config.training.res_batch_size,
-                rng_key=keys[5],
-            )
+        keys = random.split(random.PRNGKey(0))
         
+        res_sampler = resSampler(
+                delta_matrices,
+                mu0,
+                initial,
+                config.training.res_batch_size,
+                rng_key=keys,
+            )
+     
+               
         samplers = {
-            "ic": ic_sampler,
-            "ic_qs": ic_sampler_qs,
-            "inflow": inflow_sampler,
-            "outflow": outflow_sampler,
-            "noslip": noslip_sampler,
+            # "ic": ic_sampler,
+            # "ic_qs": ic_sampler_qs,
             "res": res_sampler,
         }
         
