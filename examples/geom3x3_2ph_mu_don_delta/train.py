@@ -134,12 +134,7 @@ class resSampler(BaseSampler):
     def __init__(self, delta_matrices, mu, initial, batch_size, rng_key=random.PRNGKey(1234)):
         super().__init__(batch_size, rng_key)
         
-        (self.eigvecs, 
-         self.vertices, 
-         self.centroid, 
-         self.B_matrices,
-         self.A_matrices
-         ) = delta_matrices
+        self.delta_matrices = delta_matrices
         self.mu = mu
         self.initial = initial
     #     self.step = 0
@@ -155,15 +150,32 @@ class resSampler(BaseSampler):
         (  u0,   v0,   p0,   s0,   coords_initial,
               u_fem_s,   v_fem_s,   p_fem_s,   s_fem_s,   t_fem,  coords_fem,
               u_fem_q,   v_fem_q,   p_fem_q,   s_fem_q) = self.initial
+        
+        (subdomain_id, eigvecs, vertices, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices) = self.delta_matrices
+        
+        #1st step: sample of elements to be considered by the loss terms
+        
+        key1, key = random.split(key, 2)
+        idx_elem = random.choice(key1, map_elements_vertexes.shape[0], shape=(self.batch_size,) )
+        
+        matrices = (eigvecs[idx_elem],
+                    vertices[idx_elem],  
+                    N_matrices[idx_elem],
+                    B_matrices[idx_elem], 
+                    A_matrices[idx_elem],
+                    M_matrices[idx_elem])
+
+        #2nd step: sample of time points
 
         key1, key = random.split(key, 2)
         idx_t = random.choice(key1, t_fem.shape[0], shape=(self.batch_size,) )
-        key1, key = random.split(key, 2)
-        idx_xy = random.choice(key1, u_fem_s.shape[1], shape=(self.batch_size,) )
         
-        u0, v0, p0, s0 = u0[idx_xy], v0[idx_xy], p0[idx_xy], s0 [idx_xy]
-        u_fem_s, v_fem_s, p_fem_s, s_fem_s = u_fem_s[idx_t, idx_xy], v_fem_s[idx_t, idx_xy], p_fem_s[idx_t, idx_xy], s_fem_s[idx_t, idx_xy]
-        u_fem_q, v_fem_q, p_fem_q, s_fem_q = u_fem_q[idx_t, idx_xy], v_fem_q[idx_t, idx_xy], p_fem_q[idx_t, idx_xy], s_fem_q[idx_t, idx_xy]
+        idx_fem = map_elements_vertexes[idx_elem]
+        idx_fem = jnp.reshape(idx_fem, (-1,))
+
+        u0, v0, p0, s0 = u0[idx_fem], v0[idx_fem], p0[idx_fem], s0[idx_fem]
+        u_fem_s, v_fem_s, p_fem_s, s_fem_s = u_fem_s[idx_t, idx_fem], v_fem_s[idx_t, idx_fem], p_fem_s[idx_t, idx_fem], s_fem_s[idx_t, idx_fem]
+        u_fem_q, v_fem_q, p_fem_q, s_fem_q = u_fem_q[idx_t, idx_fem], v_fem_q[idx_t, idx_fem], p_fem_q[idx_t, idx_fem], s_fem_q[idx_t, idx_fem]
         t = t_fem[idx_t]
         
         idx = jnp.where((self.centroid[:,0] == coords_fem[idx_xy,0]) & (self.centroid[:,1] == coords_fem[idx_xy,1]))[0]
@@ -267,15 +279,19 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     wandb_config = config.wandb
     wandb.init(project=wandb_config.project, name=wandb_config.name)
 
-    (
-        coords,
-        inflow_coords,
-        outflow_coords,
-        wall_coords,
-        initial,
+    # (
+    #     coords,
+    #     inflow_coords,
+    #     outflow_coords,
+    #     wall_coords,
+    #     initial,
+    #     delta_matrices,
+    #     mu0, mu1, rho0, rho1
+    # ) = get_dataset()
+    
+    (   initial,
         delta_matrices,
-        mu0, mu1, rho0, rho1
-    ) = get_dataset()
+        mu0, mu1, rho0, rho1) = get_dataset()
 
     fluid_params = (mu0, mu1, rho0, rho1)    
         

@@ -55,7 +55,7 @@ def get_coords():
             jax.device_put(inflow_coords), \
             jax.device_put(outflow_coords), \
             jax.device_put(wall_coords) #, \
-            # jax.device_put(contour_points) 
+            # jax.device_put(contour_points)    
             
 def initial_fields():
 
@@ -67,8 +67,6 @@ def initial_fields():
     p0 = np.squeeze(arquivos['p_data'])
     del arquivos
     
-    print(u0.shape)
-    print(dsa)
     
     print(f"medio: {np.max(u0)}")
         
@@ -114,25 +112,85 @@ def get_delta_matrices():
     filepath = './matrices_delta.pkl'
     with open(filepath, 'rb') as filepath:
         arquivos = pickle.load(filepath)
-    eigvals = np.squeeze(arquivos['eigvals'])
     eigvecs = np.squeeze(arquivos['eigvecs'])
-    indices = np.squeeze(arquivos['indices'])
-    vertices = np.squeeze(arquivos['vertices'])
-    centroid = np.squeeze(arquivos['centroid'])
-    B_matrices = np.squeeze(arquivos['B_matrices'])
-    A_matrices = np.squeeze(arquivos['A_matrices'])
     del arquivos
     
+    filepath = './matrices2.pkl'
+    with open(filepath, 'rb') as filepath:
+        arquivos = pickle.load(filepath)
+    subdomain_id = np.squeeze(arquivos['subdomain_id'])
+    vertices = np.squeeze(arquivos['vertices'])
+    mesh_vertices = arquivos['mesh_vertices']
+    centroid = np.squeeze(arquivos['centroid'])
+    A_matrices = np.squeeze(arquivos['A_matrices'])
+    B_matrices = np.squeeze(arquivos['B_matrices'])
+    M_matrices = np.squeeze(arquivos['M_matrices'])
+    N_matrices = arquivos['N_matrices']
+    del arquivos
+    
+    subdomain_id = jax.device_put(subdomain_id)
     eigvecs = jax.device_put(eigvecs)
     vertices = jax.device_put(np.stack(vertices))
+    mesh_vertices = jax.device_put(mesh_vertices[:,:-1])
     centroid =  jax.device_put(np.stack(centroid))
     B_matrices = jax.device_put(np.stack(B_matrices))
     A_matrices = jax.device_put(np.stack(A_matrices))
-   
+    M_matrices = jax.device_put(np.stack(M_matrices))
+    N_matrices = jax.device_put(np.stack(N_matrices))
+       
     return (
-        eigvecs, vertices, centroid, B_matrices, A_matrices
+        subdomain_id,
+        eigvecs, 
+        vertices,
+        mesh_vertices,
+        centroid, 
+        B_matrices, 
+        A_matrices, 
+        M_matrices, 
+        N_matrices
     )
        
+def relationship_element_vertex(delta_matrices):
+    
+    subdomain_id, eigvecs, vertices, mesh_vertices, centroid, B_matrices, A_matrices, M_matrices, N_matrices = delta_matrices
+
+    eigvecs = jnp.concatenate([mesh_vertices, eigvecs], axis=1)
+    
+    # mesh_vertices have all the coordinates 
+    # iterate over the elements to find the indexes of their vertices
+       
+    if False:
+        map_elements_vertexes = []
+        for i in range(vertices.shape[0]):
+            idxs = []
+            for j in range(vertices.shape[1]):
+                idx = jnp.where((mesh_vertices[:,0]==vertices[i,j,0]) & (mesh_vertices[:,1]==vertices[i,j,1]))[0]
+                idxs.append(idx)
+            idxs = jnp.squeeze(jnp.stack(idxs))
+            map_elements_vertexes.append(idxs)
+        map_elements_vertexes = np.stack(map_elements_vertexes)
+            
+        filepath = './map_elements_vertexes.pkl'
+        with open(filepath,"wb") as filepath:
+            pickle.dump({
+                        "map_elements_vertexes": map_elements_vertexes,
+                    }, filepath)
+    else:
+        filepath = './map_elements_vertexes.pkl'
+        with open(filepath, 'rb') as filepath:
+            arquivos = pickle.load(filepath)
+        map_elements_vertexes = arquivos['map_elements_vertexes']
+        del arquivos
+
+    # print(jnp.where(subdomain_id==0)[0].shape) # fluid
+    # print(jnp.where(subdomain_id==1)[0].shape) # InnerWalls
+    # print(jnp.where(subdomain_id==2)[0].shape) # Inlet
+    # print(jnp.where(subdomain_id==3)[0].shape) # Outlet
+    # print(jnp.where(subdomain_id==4)[0].shape) # TopWall
+    # print(jnp.where(subdomain_id==5)[0].shape) # BottomWall
+    
+    delta_matrices = (subdomain_id, eigvecs, vertices, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices)
+    return delta_matrices
 
 def get_dataset():
 
@@ -150,12 +208,13 @@ def get_dataset():
     rho0 = 1000; rho1 = 1000
     initial = initial_fields()
     delta_matrices = get_delta_matrices()
+    delta_matrices = relationship_element_vertex(delta_matrices)
         
     return (
-        coords,
-        inflow_coords,
-        outflow_coords,
-        wall_coords,
+        # coords,
+        # inflow_coords,
+        # outflow_coords,
+        # wall_coords,
         initial,
         delta_matrices,
         mu0, mu1, rho0, rho1
