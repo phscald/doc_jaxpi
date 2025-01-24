@@ -109,7 +109,7 @@ class resSampler(BaseSampler):
         fields = (u_fem_q, v_fem_q, p_fem_q, s_fem_q, u_fem_s, v_fem_s, p_fem_s, s_fem_s)
         fields_ic = (u0, v0, p0, s0) 
 
-        batch = (sort_idx, t, X, mu_batch, matrices, fields, fields_ic)
+        batch = (t, X, mu_batch, matrices, fields, fields_ic)
 
         return batch
 
@@ -158,7 +158,7 @@ def train_one_window(config, workdir, model, samplers, idx):
             #     batch[key] = next(sampler)
             
             
-        model.update_delta_matrices(batch["res"][4])
+        model.update_delta_matrices(batch["res"][3])
         
         # for _ in range(10):   
         model.state = model.step(model.state, batch)
@@ -171,15 +171,16 @@ def train_one_window(config, workdir, model, samplers, idx):
         # Log training metrics, only use host 0 to record results
         if jax.process_index() == 0:
             if step % config.logging.log_every_steps == 0:
-                # Get the first replica of the state and batch
-                state = jax.device_get(tree_map(lambda x: x[0], model.state))
-                batch = jax.device_get(tree_map(lambda x: x[0], batch))
-                log_dict = evaluator(state, batch)
-                wandb.log(log_dict, step + step_offset)
+                print(f"step: {step}")
+                # # Get the first replica of the state and batch
+                # state = jax.device_get(tree_map(lambda x: x[0], model.state))
+                # batch = jax.device_get(tree_map(lambda x: x[0], batch))
+                # log_dict = evaluator(state, batch)
+                # wandb.log(log_dict, step + step_offset)
 
-                end_time = time.time()
-                # Report training metrics
-                logger.log_iter(step, start_time, end_time, log_dict)
+                # end_time = time.time()
+                # # Report training metrics
+                # logger.log_iter(step, start_time, end_time, log_dict)
 
         # Save checkpoint
         if config.saving.save_every_steps is not None:

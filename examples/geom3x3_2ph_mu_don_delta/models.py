@@ -50,9 +50,9 @@ class NavierStokes2DwSat(ForwardIVP):
         # self.v_pred_fn = vmap(self.v_net, (None, 0, 0, 0, 0))
         # self.p_pred_fn = vmap(self.p_net, (None, 0, 0, 0, 0))
         # self.s_pred_fn = vmap(self.s_net, (None, 0, 0, 0, 0))
-        self.r_pred_fn = vmap(self.r_net, (None, 0, 0, 0, 0, 0, 0, 0, 0 ))
-        self.r_pred_fn_mu = vmap(self.r_net, (None, 0, 0, 0, None, 0, 0, 0, 0 ))
-        self.r_pred_fn_t = vmap(self.r_net, (None, 0, None, 0, 0, 0, 0, 0, 0 ))
+        self.r_pred_fn = vmap(self.r_net, (None,  0, 0, 0, 0, 0, 0, 0 ))
+        self.r_pred_fn_mu = vmap(self.r_net, (None,  0, 0, None, 0, 0, 0, 0 ))
+        self.r_pred_fn_t = vmap(self.r_net, (None,  None, 0, 0, 0, 0, 0, 0 ))
         
     def update_delta_matrices(self, delta_matrices):
         self.delta_matrices = delta_matrices
@@ -101,7 +101,7 @@ class NavierStokes2DwSat(ForwardIVP):
         _, _, _, _, D = self.neural_net(params, t, X, mu)
         return D
 
-    def r_net(self, params, sort_idx, t, eigenvecs_element, mu0, B, A, M, N):
+    def r_net(self, params, t, eigenvecs_element, mu0, B, A, M, N):
         # Re = jnp.ones(x.shape)
         ( _, mu1, rho0, rho1) = self.fluid_params
         
@@ -227,45 +227,47 @@ class NavierStokes2DwSat(ForwardIVP):
         # Unpack batch
         res_batch = batch["res"]
         
-        (t, X, mu_batch, _, fields, fields_ic) = res_batch
+        (t, X, mu_batch, delta_matrices, fields, fields_ic) = res_batch
+        ( _, N, B, A, M) = delta_matrices
+        
         (u_fem_q, v_fem_q, p_fem_q, s_fem_q, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = fields
         (u_ic, v_ic, p_ic, s_ic) = fields_ic
 
-        u_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
-            self.u_net, params, t, X, .0025)
-        v_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
-            self.v_net, params, t, X, .0025)
-        p_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
-            self.p_net, params, t, X, .0025)
-        s_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
-            self.s_net, params, t, X, .0025)
+        # u_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
+        #     self.u_net, params, t, X, .0025)
+        # v_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
+        #     self.v_net, params, t, X, .0025)
+        # p_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
+        #     self.p_net, params, t, X, .0025)
+        # s_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
+        #     self.s_net, params, t, X, .0025)
         
 
-        u_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0, 0))(
-            self.u_net, params, 0.0, X, mu_batch
-        )
-        v_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0, 0))(
-            self.v_net, params, 0.0, X, mu_batch
-        )
-        p_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0, 0))(
-            self.p_net, params, 0.0, X, mu_batch
-        )
-        s_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0, 0))(
-            self.s_net, params, 0.0, X, mu_batch
-        )
+        # u_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0, 0))(
+        #     self.u_net, params, 0.0, X, mu_batch
+        # )
+        # v_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0, 0))(
+        #     self.v_net, params, 0.0, X, mu_batch
+        # )
+        # p_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0, 0))(
+        #     self.p_net, params, 0.0, X, mu_batch
+        # )
+        # s_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0, 0))(
+        #     self.s_net, params, 0.0, X, mu_batch
+        # )
 
 
-        ru_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0))(
-            self.ru_net, params, t, X, mu_batch
+        ru_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0, 0, 0))(
+            self.ru_net, params, t, X, mu_batch, B, A, M, N 
         )
-        rv_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0))(
-            self.rv_net, params, t, X, mu_batch
+        rv_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0, 0, 0))(
+            self.rv_net, params, t, X, mu_batch, B, A, M, N 
         )
-        rc_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0))(
-            self.rc_net, params, t, X, mu_batch
+        rc_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0, 0, 0))(
+            self.rc_net, params, t, X, mu_batch, B, A, M, N 
         )
-        rs_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0))(
-            self.rs_net, params, t, X, mu_batch
+        rs_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0, 0, 0))(
+            self.rs_net, params, t, X, mu_batch, B, A, M, N 
         )
 
         ntk_dict = {
@@ -291,7 +293,7 @@ class NavierStokes2DwSat(ForwardIVP):
 
         res_batch = batch["res"]
         
-        (sort_idx, t, X, mu_batch, delta_matrices, fields, fields_ic) = res_batch
+        (t, X, mu_batch, delta_matrices, fields, fields_ic) = res_batch
         ( _, N, B, A, M) = delta_matrices
         (u_fem_q, v_fem_q, p_fem_q, s_fem_q, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = fields
         (u_ic, v_ic, p_ic, s_ic) = fields_ic
@@ -321,27 +323,27 @@ class NavierStokes2DwSat(ForwardIVP):
         # p_ic_loss = jnp.mean((p_ic_pred - p_ic) ** 2)
         # s_ic_loss = jnp.mean((s_ic_pred - s_ic) ** 2)
 
-        ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn( params, sort_idx, t, X, mu_batch, B, A, M, N )
+        ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn( params, t, X, mu_batch, B, A, M, N )
         ru1 =  jnp.mean(ru_pred**2)
         rv1 =  jnp.mean(rv_pred**2)
         rc1 =  jnp.mean(rc_pred**2)
         rs1 =  jnp.mean(rs_pred**2)
         
-        ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn_mu( params, sort_idx, t, X, .0025, B, A, M, N )
+        ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn_mu( params, t, X, .0025, B, A, M, N )
         ru1 =  jnp.mean(ru_pred**2)
         ru2 =  jnp.mean(ru_pred**2)
         rv2 =  jnp.mean(rv_pred**2)
         rc2 =  jnp.mean(rc_pred**2)
         rs2 =  jnp.mean(rs_pred**2)
         
-        ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn_mu( params, sort_idx, t, X, .1, B, A, M, N )
+        ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn_mu( params, t, X, .1, B, A, M, N )
         ru1 =  jnp.mean(ru_pred**2)
         ru3 =  jnp.mean(ru_pred**2)
         rv3 =  jnp.mean(rv_pred**2)
         rc3 =  jnp.mean(rc_pred**2)
         rs3 =  jnp.mean(rs_pred**2)
         
-        ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn_t( params, sort_idx, 0.0, X, mu_batch, B, A, M, N )
+        ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn_t( params, 0.0, X, mu_batch, B, A, M, N )
         ru1 =  jnp.mean(ru_pred**2)
         ru4 =  jnp.mean(ru_pred**2)
         rv4 =  jnp.mean(rv_pred**2)
