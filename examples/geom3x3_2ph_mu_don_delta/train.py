@@ -31,103 +31,6 @@ from flax.jax_utils import replicate
 
 from utils import get_dataset#, get_fine_mesh, parabolic_inflow
 
-
-class ICSampler(SpaceSampler):
-    def __init__(self, u, v, p, s, coords, mu, batch_size, rng_key=random.PRNGKey(1234)):
-        super().__init__(coords, batch_size, rng_key)
-
-        self.u = u
-        self.v = v
-        self.p = p
-        self.s = s
-        self.mu = mu
-
-    @partial(pmap, static_broadcasted_argnums=(0,))
-    def data_generation(self, key):
-        "Generates data containing batch_size samples"
-        idx = random.choice(key, self.coords.shape[0], shape=(self.batch_size,))
-
-        coords_batch = self.coords[idx, :]
-
-        u_batch = self.u[idx]
-        v_batch = self.v[idx]
-        p_batch = self.p[idx]
-        s_batch = self.s[idx]
-        # print(coords_batch.shape);print(v_batch.shape)
-
-        mu_batch = random.uniform(random.PRNGKey(1234), shape=(self.batch_size,), minval = self.mu[0], maxval = self.mu[1])
-
-        batch = (coords_batch, u_batch, v_batch, p_batch, s_batch, mu_batch)
-
-        return batch
-        # num_coords = jnp.shape(self.coords)[0]
-        # num_time = jnp.shape(self.t)[0]               
-        
-class ICSampler1(SpaceSampler):
-    
-    def __init__(self, uq, vq, pq, sq, us, vs, ps, ss, coords, time, batch_size, rng_key=random.PRNGKey(1234)):
-        super().__init__(coords, batch_size, rng_key)
-
-        self.uq = uq
-        self.vq = vq
-        self.pq = pq
-        self.sq = sq
-        self.us = us
-        self.vs = vs
-        self.ps = ps
-        self.ss = ss
-        self.t = time
-
-    @partial(pmap, static_broadcasted_argnums=(0,))
-    def data_generation(self, key):
-        "Generates data containing batch_size samples"
-                    
-        key1, key2 = random.split(key)
-        idx_t = random.choice(key1, self.t.shape[0], shape=(self.batch_size,))
-        idx = random.choice(key2, self.coords.shape[0], shape=(self.batch_size,))
-
-        t_batch = self.t[idx_t]
-        coords_batch = self.coords[idx, :]
-        u_batchq = self.uq[idx_t, idx]
-        v_batchq = self.vq[idx_t, idx]
-        p_batchq = self.pq[idx_t, idx]
-        s_batchq = self.sq[idx_t, idx]
-        u_batchs = self.uq[idx_t, idx]
-        v_batchs = self.vq[idx_t, idx]
-        p_batchs = self.pq[idx_t, idx]
-        s_batchs = self.sq[idx_t, idx]
-
-        batch = (coords_batch, t_batch, u_batchq, v_batchq, p_batchq, s_batchq, u_batchs, v_batchs, p_batchs, s_batchs)
-        return batch
-    
-class TimeSpaceSampler_mu(TimeSpaceSampler):
-    def __init__(self, time_dom, coords, mu, batch_size, rng_key=random.PRNGKey(1234)):
-        super().__init__(time_dom, coords, batch_size, rng_key)
-        
-        self.mu = mu
-        
-    @partial(pmap, static_broadcasted_argnums=(0,))
-    def data_generation(self, key):
-        "Generates data containing batch_size samples"
-        key1, key2, key3 = random.split(key, 3)
-
-        temporal_batch = random.uniform(
-            key1,
-            shape=(self.batch_size, 1),
-            minval=self.temporal_dom[0],
-            maxval=self.temporal_dom[1],
-        )
-
-        spatial_idx = random.choice(
-            key2, self.spatial_coords.shape[0], shape=(self.batch_size,)
-        )
-        spatial_batch = self.spatial_coords[spatial_idx, :]
-
-        mu_batch = random.uniform(key3, shape=(self.batch_size, 1), minval = self.mu[0], maxval = self.mu[1])
-
-        batch = jnp.concatenate([temporal_batch, spatial_batch, mu_batch], axis=1)
-
-        return batch
     
 
 class resSampler(BaseSampler):
@@ -151,19 +54,26 @@ class resSampler(BaseSampler):
               u_fem_s,   v_fem_s,   p_fem_s,   s_fem_s,   t_fem,  coords_fem,
               u_fem_q,   v_fem_q,   p_fem_q,   s_fem_q) = self.initial
         
-        (subdomain_id, eigvecs, vertices, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices) = self.delta_matrices
+        (subdomain_id, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices) = self.delta_matrices
         
         #1st step: sample of elements to be considered by the loss terms
         
         key1, key = random.split(key, 2)
         idx_elem = random.choice(key1, map_elements_vertexes.shape[0], shape=(self.batch_size,) )
         
-        matrices = (eigvecs[idx_elem],
-                    vertices[idx_elem],  
+        idx_fem = map_elements_vertexes[idx_elem]
+        idx_fem = jnp.reshape(idx_fem, (-1,))
+        eigvecs_elem = jnp.reshape(eigvecs[idx_fem][jnp.newaxis, :, :], (self.batch_size, 3, 52))
+        
+        sort_idx = jnp.arange(self.batch_size).astype(int)
+
+        X = eigvecs_elem 
+        matrices = (eigvecs_elem,  
                     N_matrices[idx_elem],
                     B_matrices[idx_elem], 
                     A_matrices[idx_elem],
                     M_matrices[idx_elem])
+        
 
         #2nd step: sample of time points
 
@@ -172,24 +82,34 @@ class resSampler(BaseSampler):
         
         idx_fem = map_elements_vertexes[idx_elem]
         idx_fem = jnp.reshape(idx_fem, (-1,))
-
+               
+        t = t_fem[idx_t]
+        idx_t = jnp.repeat(idx_t, 3)
         u0, v0, p0, s0 = u0[idx_fem], v0[idx_fem], p0[idx_fem], s0[idx_fem]
         u_fem_s, v_fem_s, p_fem_s, s_fem_s = u_fem_s[idx_t, idx_fem], v_fem_s[idx_t, idx_fem], p_fem_s[idx_t, idx_fem], s_fem_s[idx_t, idx_fem]
         u_fem_q, v_fem_q, p_fem_q, s_fem_q = u_fem_q[idx_t, idx_fem], v_fem_q[idx_t, idx_fem], p_fem_q[idx_t, idx_fem], s_fem_q[idx_t, idx_fem]
-        t = t_fem[idx_t]
+
+        u0 = jnp.reshape(u0, (-1,3))
+        v0 = jnp.reshape(v0, (-1,3))
+        p0 = jnp.reshape(p0, (-1,3))
+        s0 = jnp.reshape(s0, (-1,3))
+        u_fem_s = jnp.reshape(u_fem_s, (-1,3))
+        v_fem_s = jnp.reshape(v_fem_s, (-1,3))
+        p_fem_s = jnp.reshape(p_fem_s, (-1,3))
+        s_fem_s = jnp.reshape(s_fem_s, (-1,3))
+        u_fem_q = jnp.reshape(u_fem_q, (-1,3))
+        v_fem_q = jnp.reshape(v_fem_q, (-1,3))
+        p_fem_q = jnp.reshape(p_fem_q, (-1,3))
+        s_fem_q = jnp.reshape(s_fem_q, (-1,3))
         
-        idx = jnp.where((self.centroid[:,0] == coords_fem[idx_xy,0]) & (self.centroid[:,1] == coords_fem[idx_xy,1]))[0]
-        
-        X = jnp.concatenate([self.centroid[idx], self.eigvecs[idx]], axis=1)
-        matrices = (self.vertices[idx], self.centroid[idx], self.B_matrices[idx], self.A_matrices[idx])
         
         key1, key = random.split(key, 2)
-        mu_batch = random.uniform(key1, shape=(self.batch_size, 1), minval = self.mu[0], maxval = self.mu[1])     
+        mu_batch = random.uniform(key1, shape=(self.batch_size,), minval = self.mu[0], maxval = self.mu[1])     
         
         fields = (u_fem_q, v_fem_q, p_fem_q, s_fem_q, u_fem_s, v_fem_s, p_fem_s, s_fem_s)
         fields_ic = (u0, v0, p0, s0) 
 
-        batch = (t, X, mu_batch, matrices, fields, fields_ic)
+        batch = (sort_idx, t, X, mu_batch, matrices, fields, fields_ic)
 
         return batch
 
@@ -237,8 +157,8 @@ def train_one_window(config, workdir, model, samplers, idx):
             # else:
             #     batch[key] = next(sampler)
             
-        model.update_delta_matrices(batch["res"][3])
-        model.update_step(step) 
+            
+        model.update_delta_matrices(batch["res"][4])
         
         # for _ in range(10):   
         model.state = model.step(model.state, batch)
@@ -278,16 +198,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Initialize W&B
     wandb_config = config.wandb
     wandb.init(project=wandb_config.project, name=wandb_config.name)
-
-    # (
-    #     coords,
-    #     inflow_coords,
-    #     outflow_coords,
-    #     wall_coords,
-    #     initial,
-    #     delta_matrices,
-    #     mu0, mu1, rho0, rho1
-    # ) = get_dataset()
     
     (   initial,
         delta_matrices,
@@ -301,8 +211,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     
     pin = 50
     dp = pin
-    # pin la em cima
-    # L_max = 900/1000/100
     L_max = 50/1000/100
     U_max = dp*L_max/mu1
     u_maxs = jnp.max(u_fem_s)/U_max
@@ -322,7 +230,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     t1 = 400
 
     # noslip_coords = jnp.vstack((wall_coords, cyl_coords))
-    noslip_coords = wall_coords
+    # noslip_coords = wall_coords
 
     coords_fem = coords_fem / L_max
     
@@ -344,10 +252,10 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
             u_fem_s, v_fem_s, p_fem_s, s_fem_s, t_fem, coords_fem,
             u_fem_q, v_fem_q, p_fem_q, s_fem_q)
     
-    eigvecs, vertices, centroid, B_matrices, A_matrices  = delta_matrices
-    vertices = vertices / L_max
-    centroid = centroid / L_max
-    delta_matrices = (eigvecs, vertices, centroid, B_matrices, A_matrices )
+    subdomain_id, eigvecs, vertices, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices  = delta_matrices
+    # vertices = vertices / L_max
+    # centroid = centroid / L_max
+    delta_matrices = (subdomain_id, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices )
 
     # Temporal domain of each time window
     t0 = 0.0
@@ -357,51 +265,53 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     for idx in range(config.training.num_time_windows):
         logging.info("Training time window {}".format(idx + 1))
         
-        # Initialize model
-        model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params) #  no 1
+        # Initialize model 
+        model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, U_max, L_max, fluid_params) #  no 1
         
         # Initialize Sampler
-        keys = random.split(random.PRNGKey(0))
+        keys = random.PRNGKey(0)
         
         res_sampler = resSampler(
                 delta_matrices,
                 mu0,
                 initial,
                 config.training.res_batch_size,
-                rng_key=keys,
+                # rng_key=keys,
             )
-     
-               
+                    
         samplers = {
             # "ic": ic_sampler,
             # "ic_qs": ic_sampler_qs,
             "res": res_sampler,
         }
+        batch = {}
+        for key, sampler in samplers.items():
+            batch[key] = next(sampler)
         
-        if config.training.fine_tune:
-            ckpt_path = os.path.join(".", "ckpt", config.wandb.name, "time_window_1")
-            ckpt_path = os.path.abspath(ckpt_path)
-            state = restore_checkpoint(model.state, ckpt_path)
-            model.state =  replicate(state)
+        # if config.training.fine_tune:
+        #     ckpt_path = os.path.join(".", "ckpt", config.wandb.name, "time_window_1")
+        #     ckpt_path = os.path.abspath(ckpt_path)
+        #     state = restore_checkpoint(model.state, ckpt_path)
+        #     model.state =  replicate(state)
         
         # Train model for the current time window
         model = train_one_window(config, workdir, model, samplers, idx)
 
-        # Update the initial condition for the next time window
-        if config.training.num_time_windows > 1:
-            state = jax.device_get(jax.tree_util.tree_map(lambda x: x[0], model.state))
-            params = state.params
-            # u0 = vmap(model.u_net, (None, None, 0, 0))(
-            #     params, t1, coords[:, 0], coords[:, 1]
-            # )
-            # v0 = vmap(model.v_net, (None, None, 0, 0))(
-            #     params, t1, coords[:, 0], coords[:, 1]
-            # )
-            # p0 = vmap(model.p_net, (None, None, 0, 0))(
-            #     params, t1, coords[:, 0], coords[:, 1]
-            # )
-            s0 = vmap(model.s_net, (None, None, 0, 0))(
-                params, t1, coords[:, 0], coords[:, 1]
-            )
+        # # Update the initial condition for the next time window
+        # if config.training.num_time_windows > 1:
+        #     state = jax.device_get(jax.tree_util.tree_map(lambda x: x[0], model.state))
+        #     params = state.params
+        #     # u0 = vmap(model.u_net, (None, None, 0, 0))(
+        #     #     params, t1, coords[:, 0], coords[:, 1]
+        #     # )
+        #     # v0 = vmap(model.v_net, (None, None, 0, 0))(
+        #     #     params, t1, coords[:, 0], coords[:, 1]
+        #     # )
+        #     # p0 = vmap(model.p_net, (None, None, 0, 0))(
+        #     #     params, t1, coords[:, 0], coords[:, 1]
+        #     # )
+        #     s0 = vmap(model.s_net, (None, None, 0, 0))(
+        #         params, t1, coords[:, 0], coords[:, 1]
+        #     )
 
-            del model, state, params
+            # del model, state, params

@@ -153,7 +153,7 @@ def get_delta_matrices():
 def relationship_element_vertex(delta_matrices):
     
     subdomain_id, eigvecs, vertices, mesh_vertices, centroid, B_matrices, A_matrices, M_matrices, N_matrices = delta_matrices
-
+    
     eigvecs = jnp.concatenate([mesh_vertices, eigvecs], axis=1)
     
     # mesh_vertices have all the coordinates 
@@ -168,7 +168,7 @@ def relationship_element_vertex(delta_matrices):
                 idxs.append(idx)
             idxs = jnp.squeeze(jnp.stack(idxs))
             map_elements_vertexes.append(idxs)
-        map_elements_vertexes = np.stack(map_elements_vertexes)
+        map_elements_vertexes = jnp.stack(map_elements_vertexes)
             
         filepath = './map_elements_vertexes.pkl'
         with open(filepath,"wb") as filepath:
@@ -181,7 +181,7 @@ def relationship_element_vertex(delta_matrices):
             arquivos = pickle.load(filepath)
         map_elements_vertexes = arquivos['map_elements_vertexes']
         del arquivos
-
+        
     # print(jnp.where(subdomain_id==0)[0].shape) # fluid
     # print(jnp.where(subdomain_id==1)[0].shape) # InnerWalls
     # print(jnp.where(subdomain_id==2)[0].shape) # Inlet

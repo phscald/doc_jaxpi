@@ -12,13 +12,21 @@ class BaseSampler(Dataset):
         self.batch_size = batch_size
         self.key = rng_key
         self.num_devices = local_device_count()
+        
+    def __iter__(self):
+        return self
 
-    def __getitem__(self, index):
-        "Generate one batch of data"
+    def __next__(self):
         self.key, subkey = random.split(self.key)
         keys = random.split(subkey, self.num_devices)
-        batch = self.data_generation(keys)
-        return batch
+        return self.data_generation(keys)
+
+    # def __getitem__(self, index):
+    #     "Generate one batch of data"
+    #     self.key, subkey = random.split(self.key)
+    #     keys = random.split(subkey, self.num_devices)
+    #     batch = self.data_generation(keys)
+    #     return batch
 
     def data_generation(self, key):
         raise NotImplementedError("Subclasses should implement this!")

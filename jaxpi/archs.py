@@ -582,6 +582,16 @@ class DeepONet3wD(nn.Module):
         #  x: mu              - trunk
         pde_param = Dense(features=1)(pde_param)         
         
+        # pde_param = ModifiedMlp(#MlpBlock(
+        #     num_layers=1,
+        #     hidden_dim=3,
+        #     out_dim=1,
+        #     activation=self.activation,
+        # )(pde_param)
+        
+        pde_param = Dense(features=1)(pde_param)
+        u0 =u1
+        
         u1 = ModifiedMlp(#MlpBlock(
             num_layers=self.num_branch_layers,
             hidden_dim=self.hidden_dim,
@@ -612,7 +622,8 @@ class DeepONet3wD(nn.Module):
             fourier_emb=self.fourier_emb,
             reparam=self.reparam,
         )(x)
-             
+   
+        # u2 = jnp.squeeze(u2)
         u1 = u1 * u2
         u1 = self.activation_fn(u1)
         y = u1 * x

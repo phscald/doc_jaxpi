@@ -24,9 +24,9 @@ def get_config():
     arch.arch_name = "DeepONet3wD"
     # arch.num_layers = 8
     arch.num_trunk_layers = 4 # mu 2
-    arch.num_branch_layers = 1 # t 6
-    arch.num_branch_layers2 = 52 # xy v(xy)
-    arch.hidden_dim = 200
+    arch.num_branch_layers = 4 # t 6
+    # arch.num_branch_layers2 = 4 # xy v(xy)
+    arch.hidden_dim = 50
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
@@ -64,14 +64,14 @@ def get_config():
     weighting.scheme = "grad_norm"
     
     weighting.init_weights = {
-        "u_data": 1.0,
-        "v_data": 1.0,
-        "p_data": 1.0,
-        "s_data": 1.0,
-        "u_ic": 1.0,
-        "v_ic": 1.0,
-        "p_ic": 1.0,
-        "s_ic": 1.0,
+        # "u_data": 1.0,
+        # "v_data": 1.0,
+        # "p_data": 1.0,
+        # "s_data": 1.0,
+        # "u_ic": 1.0,
+        # "v_ic": 1.0,
+        # "p_ic": 1.0,
+        # "s_ic": 1.0,
         "ru": 1.0,
         "rv": 1.0,
         "rc": 1.0,
@@ -101,11 +101,17 @@ def get_config():
     saving.num_keep_ckpts = 10
 
     # Input shape for initializing Flax models
+    # config.input_dim = 4
+    # config.input_branch = 3
+    # # config.input_branch = 2
+    # config.input_trunk = 1
+    
     config.input_dim = 4
-    config.input_branch = 3
-    # config.input_branch = 2
-    config.input_trunk = 1
+    config.input_branch = 1   # t
+    config.input_branch2 = 52 # xy v(xy)
+    config.input_trunk = 1    # mu 
 
+    
     # Integer for PRNG random seed.
     config.seed = 42
     

@@ -278,20 +278,20 @@ class TimeSpaceSampler_mu_res(BaseSampler):
     # def __iter__(self):
     #     return TimeSpaceSamplerIterator(self)
     
-class TimeSpaceSamplerIterator:
-    def __init__(self, sampler):
-        self.sampler = sampler
+# class TimeSpaceSamplerIterator:
+#     def __init__(self, sampler):
+#         self.sampler = sampler
 
-    def __iter__(self):
-        return self
+#     def __iter__(self):
+#         return self
 
-    def __next__(self):
-        if self.sampler.probs is None:
-            raise StopIteration("You must call `update_RAD` before iteration.")
+#     def __next__(self):
+#         if self.sampler.probs is None:
+#             raise StopIteration("You must call `update_RAD` before iteration.")
 
-        self.sampler.rng_key, subkey = random.split(self.sampler.rng_key)
-        subkey = random.split(self.sampler.rng_key, 1)
-        return self.sampler.data_generation(subkey)
+#         self.sampler.rng_key, subkey = random.split(self.sampler.rng_key)
+#         subkey = random.split(self.sampler.rng_key, 1)
+#         return self.sampler.data_generation(subkey)
     
 # def update_batch(step, samplers, batch):
 #     def update_conditionally(_):
