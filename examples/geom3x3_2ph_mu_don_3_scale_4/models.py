@@ -168,21 +168,7 @@ class NavierStokes2DwSat(ForwardIVP):
 
         return ru, rv, rc, rs
 
-    def ru_net(self, params, t, x, y, mu):
-        ru, _, _, _ = self.r_net(params, t, x, y, mu)
-        return ru
 
-    def rv_net(self, params, t, x, y, mu):
-        _, rv, _, _ = self.r_net(params, t, x, y, mu)
-        return rv
-
-    def rc_net(self, params, t, x, y, mu):
-        _, _, rc, _ = self.r_net(params, t, x, y, mu)
-        return rc
-
-    def rs_net(self, params, t, x, y, mu):
-        _, _, _, rs = self.r_net(params, t, x, y, mu)
-        return rs
 
 
     @partial(jit, static_argnums=(0,))

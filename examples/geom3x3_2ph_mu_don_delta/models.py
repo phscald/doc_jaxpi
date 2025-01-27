@@ -33,23 +33,23 @@ class NavierStokes2DwSat(ForwardIVP):
         self.delta_matrices = None
 
         # Predict functions over batch
-        # self.u0_pred_fn = vmap(self.u_net, (None, None, 0, 0, 0))
-        # self.v0_pred_fn = vmap(self.v_net, (None, None, 0, 0, 0))
-        # self.p0_pred_fn = vmap(self.p_net, (None, None, 0, 0, 0))
-        # self.s0_pred_fn = vmap(self.s_net, (None, None, 0, 0, 0))
+        self.u0_pred_fn = vmap(self.u_net, (None, None, 0, 0))
+        self.v0_pred_fn = vmap(self.v_net, (None, None, 0, 0))
+        self.p0_pred_fn = vmap(self.p_net, (None, None, 0, 0))
+        self.s0_pred_fn = vmap(self.s_net, (None, None, 0, 0))
               
         # self.u_pred_1_fn = vmap(self.u_net, (None, 0, 0, 0, None))
         # self.v_pred_1_fn = vmap(self.v_net, (None, 0, 0, 0, None))
         
-        # self.ufem_pred_fn = vmap(self.u_net, (None, 0, 0, 0, None))
-        # self.vfem_pred_fn = vmap(self.v_net, (None, 0, 0, 0, None))
-        # self.pfem_pred_fn = vmap(self.p_net, (None, 0, 0, 0, None))
-        # self.sfem_pred_fn = vmap(self.s_net, (None, 0, 0, 0, None))
+        self.ufem_pred_fn = vmap(self.u_net, (None, 0, 0, None))
+        self.vfem_pred_fn = vmap(self.v_net, (None, 0, 0, None))
+        self.pfem_pred_fn = vmap(self.p_net, (None, 0, 0, None))
+        self.sfem_pred_fn = vmap(self.s_net, (None, 0, 0, None))
 
-        # self.u_pred_fn = vmap(self.u_net, (None, 0, 0, 0, 0))
-        # self.v_pred_fn = vmap(self.v_net, (None, 0, 0, 0, 0))
-        # self.p_pred_fn = vmap(self.p_net, (None, 0, 0, 0, 0))
-        # self.s_pred_fn = vmap(self.s_net, (None, 0, 0, 0, 0))
+        self.u_pred_fn = vmap(self.u_net, (None, 0, 0, 0))
+        self.v_pred_fn = vmap(self.v_net, (None, 0, 0, 0))
+        self.p_pred_fn = vmap(self.p_net, (None, 0, 0, 0))
+        self.s_pred_fn = vmap(self.s_net, (None, 0, 0, 0))
         self.r_pred_fn = vmap(self.r_net, (None,  0, 0, 0, 0, 0, 0, 0 ))
         self.r_pred_fn_mu = vmap(self.r_net, (None,  0, 0, None, 0, 0, 0, 0 ))
         self.r_pred_fn_t = vmap(self.r_net, (None,  None, 0, 0, 0, 0, 0, 0 ))
@@ -97,21 +97,10 @@ class NavierStokes2DwSat(ForwardIVP):
         _, _, _, s, _ = self.neural_net(params, t, X, mu)
         return s
     
-    def D_net(self, params, t, X, mu):
-        _, _, _, _, D = self.neural_net(params, t, X, mu)
-        return D
 
     def r_net(self, params, t, eigenvecs_element, mu0, B, A, M, N):
         # Re = jnp.ones(x.shape)
         ( _, mu1, rho0, rho1) = self.fluid_params
-        
-        ( _, N0, B0, A0, M0) = self.delta_matrices
-        
-
-        # B = jnp.take(B0, sort_idx, axis=0)     #  (2x3)  
-        # A = jnp.take(A0, sort_idx, axis=0)     #  (3x3)   
-        # M = jnp.take(M0, sort_idx, axis=0)     #  (3x3)  
-        # N = jnp.take(N0, sort_idx, axis=0).mT  #  (1x3)  
         
         Minv = invert(M)
                
@@ -176,22 +165,21 @@ class NavierStokes2DwSat(ForwardIVP):
 
         return ru, rv, rc, rs
 
-    def ru_net(self, params, t, eigs, mu):
-        ru, _, _, _ = self.r_net(params, t, eigs, mu)
+    def ru_net(self, params, t, X, mu):
+        ru, _, _, _ = self.r_net(params, t, X, mu)
         return ru
 
-    def rv_net(self, params, t, eigs, mu):
-        _, rv, _, _ = self.r_net(params, t, eigs, mu)
+    def rv_net(self, params, t, X, mu):
+        _, rv, _, _ = self.r_net(params, t, X, mu)
         return rv
 
-    def rc_net(self, params, t, eigs, mu):
-        _, _, rc, _ = self.r_net(params, t, eigs, mu)
+    def rc_net(self, params, t, X, mu):
+        _, _, rc, _ = self.r_net(params, t, X, mu)
         return rc
 
-    def rs_net(self, params, t, eigs, mu):
-        _, _, _, rs = self.r_net(params, t, eigs, mu)
+    def rs_net(self, params, t, x, y, mu):
+        _, _, _, rs = self.r_net(params, t, X, mu)
         return rs
-
 
     @partial(jit, static_argnums=(0,))
     def res_and_w(self, params, batch):
@@ -227,35 +215,42 @@ class NavierStokes2DwSat(ForwardIVP):
         # Unpack batch
         res_batch = batch["res"]
         
-        (t, X, mu_batch, delta_matrices, fields, fields_ic) = res_batch
+        (t, X, X_bc, mu_batch, delta_matrices, _, _) = res_batch
+        Xin, Xout, Xnoslip, mu_inlet, t_inlet, mu_noslip, t_noslip = X_bc
         ( _, N, B, A, M) = delta_matrices
-        
-        (u_fem_q, v_fem_q, p_fem_q, s_fem_q, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = fields
-        (u_ic, v_ic, p_ic, s_ic) = fields_ic
 
-        # u_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
-        #     self.u_net, params, t, X, .0025)
-        # v_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
-        #     self.v_net, params, t, X, .0025)
-        # p_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
-        #     self.p_net, params, t, X, .0025)
-        # s_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
-        #     self.s_net, params, t, X, .0025)
+        u_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
+            self.u_net, params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .0025)
+        v_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
+            self.v_net, params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .0025)
+        p_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
+            self.p_net, params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .0025)
+        s_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, None))(
+            self.s_net, params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .0025)
         
 
-        # u_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0, 0))(
-        #     self.u_net, params, 0.0, X, mu_batch
-        # )
-        # v_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0, 0))(
-        #     self.v_net, params, 0.0, X, mu_batch
-        # )
-        # p_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0, 0))(
-        #     self.p_net, params, 0.0, X, mu_batch
-        # )
-        # s_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0, 0))(
-        #     self.s_net, params, 0.0, X, mu_batch
-        # )
+        u_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0))(
+            self.u_net, params, 0.0, jnp.reshape(X, (-1,52)), jnp.repeat(mu_batch, 3)
+        )
+        v_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0))(
+            self.v_net, params, 0.0, jnp.reshape(X, (-1,52)), jnp.repeat(mu_batch, 3)
+        )
+        p_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0))(
+            self.p_net, params, 0.0, jnp.reshape(X, (-1,52)), jnp.repeat(mu_batch, 3)
+        )
+        s_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0))(
+            self.s_net, params, 0.0, jnp.reshape(X, (-1,52)), jnp.repeat(mu_batch, 3)
+        )
 
+        noslip_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
+            self.u_net, params, t_noslip, Xnoslip, mu_noslip
+        )
+        sin_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
+            self.s_net, params, t_inlet, Xin, mu_inlet
+        )
+        dp_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
+            self.p_net, params, t_inlet, Xin, mu_inlet
+        )
 
         ru_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0, 0, 0))(
             self.ru_net, params, t, X, mu_batch, B, A, M, N 
@@ -271,14 +266,17 @@ class NavierStokes2DwSat(ForwardIVP):
         )
 
         ntk_dict = {
-            # "u_data": u_data_ntk,
-            # "v_data": v_data_ntk,
-            # "p_data": p_data_ntk,
-            # "s_data": s_data_ntk,
-            # "u_ic": u_ic_ntk,
-            # "v_ic": v_ic_ntk,
-            # "p_ic": p_ic_ntk,
-            # "s_ic": s_ic_ntk,
+            "u_data": u_data_ntk,
+            "v_data": v_data_ntk,
+            "p_data": p_data_ntk,
+            "s_data": s_data_ntk,
+            "u_ic": u_ic_ntk,
+            "v_ic": v_ic_ntk,
+            "p_ic": p_ic_ntk,
+            "s_ic": s_ic_ntk,
+            "noslip": noslip_ntk,
+            "sin": sin_ntk,
+            "dp": dp_ntk,
             "ru": ru_ntk, #
             "rv": rv_ntk, #
             "rc": rc_ntk,
@@ -293,35 +291,52 @@ class NavierStokes2DwSat(ForwardIVP):
 
         res_batch = batch["res"]
         
-        (t, X, mu_batch, delta_matrices, fields, fields_ic) = res_batch
+        (t, X, X_bc, mu_batch, delta_matrices, fields, fields_ic) = res_batch
+        Xin, Xout, Xnoslip, mu_inlet, t_inlet, mu_noslip, t_noslip = X_bc
         ( _, N, B, A, M) = delta_matrices
         (u_fem_q, v_fem_q, p_fem_q, s_fem_q, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = fields
         (u_ic, v_ic, p_ic, s_ic) = fields_ic
         
-        # u_fem_q_pred = self.ufem_pred_fn(params, t, X, .0025)
-        # v_fem_q_pred = self.vfem_pred_fn(params, t, X, .0025)
-        # p_fem_q_pred = self.pfem_pred_fn(params, t, X, .0025)
-        # s_fem_q_pred = self.sfem_pred_fn(params, t, X, .0025)
+        u_fem_q_pred = self.ufem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .0025)
+        v_fem_q_pred = self.vfem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .0025)
+        p_fem_q_pred = self.pfem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .0025)
+        s_fem_q_pred = self.sfem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .0025)
         
-        # u_fem_s_pred = self.ufem_pred_fn(params, t, X, .1)
-        # v_fem_s_pred = self.vfem_pred_fn(params, t, X, .1)
-        # p_fem_s_pred = self.pfem_pred_fn(params, t, X, .1)
-        # s_fem_s_pred = self.sfem_pred_fn(params, t, X, .1)
+        u_fem_s_pred = self.ufem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .1)
+        v_fem_s_pred = self.vfem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .1)
+        p_fem_s_pred = self.pfem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .1)
+        s_fem_s_pred = self.sfem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .1)
         
-        # u_data = jnp.mean( jnp.mean((u_fem_q_pred - u_fem_q) ** 2) + jnp.mean((u_fem_s_pred - u_fem_s) ** 2) ) 
-        # v_data = jnp.mean( jnp.mean((v_fem_q_pred - v_fem_q) ** 2) + jnp.mean((v_fem_s_pred - v_fem_s) ** 2) ) 
-        # p_data = jnp.mean( jnp.mean((p_fem_q_pred - p_fem_q) ** 2) + jnp.mean((p_fem_s_pred - p_fem_s) ** 2) ) 
-        # s_data = jnp.mean( jnp.mean((s_fem_q_pred - s_fem_q) ** 2) + jnp.mean((s_fem_s_pred - s_fem_s) ** 2) ) 
+        u_data = jnp.mean( jnp.mean((u_fem_q_pred -  jnp.reshape(u_fem_q, (-1,)) ) ** 2) + jnp.mean((u_fem_s_pred -  jnp.reshape(u_fem_s, (-1,)) ) ** 2) ) 
+        v_data = jnp.mean( jnp.mean((v_fem_q_pred -  jnp.reshape(v_fem_q, (-1,)) ) ** 2) + jnp.mean((v_fem_s_pred -  jnp.reshape(v_fem_s, (-1,)) ) ** 2) ) 
+        p_data = jnp.mean( jnp.mean((p_fem_q_pred -  jnp.reshape(p_fem_q, (-1,)) ) ** 2) + jnp.mean((p_fem_s_pred -  jnp.reshape(p_fem_s, (-1,)) ) ** 2) ) 
+        s_data = jnp.mean( jnp.mean((s_fem_q_pred -  jnp.reshape(s_fem_q, (-1,)) ) ** 2) + jnp.mean((s_fem_s_pred -  jnp.reshape(s_fem_s, (-1,)) ) ** 2) ) 
         
-        # # Initial condition loss
-        # u_ic_pred = self.u0_pred_fn(params, 0.0, X, mu_batch)
-        # v_ic_pred = self.v0_pred_fn(params, 0.0, X, mu_batch)
-        # p_ic_pred = self.p0_pred_fn(params, 0.0, X, mu_batch)
-        # s_ic_pred = self.s0_pred_fn(params, 0.0, X, mu_batch)
-        # u_ic_loss = jnp.mean((u_ic_pred - u_ic) ** 2)
-        # v_ic_loss = jnp.mean((v_ic_pred - v_ic) ** 2)
-        # p_ic_loss = jnp.mean((p_ic_pred - p_ic) ** 2)
-        # s_ic_loss = jnp.mean((s_ic_pred - s_ic) ** 2)
+        # print(X.shape)  (512, 3, 52)
+        # print(t.shape)  (512,)
+        # print(u_fem_q.shape) (512, 3)
+        # print(u0.shape)      (512, 3)
+        
+        # Initial condition loss
+        u_ic_pred = self.u0_pred_fn(params, 0.0, jnp.reshape(X, (-1,52)), jnp.repeat(mu_batch, 3))
+        v_ic_pred = self.v0_pred_fn(params, 0.0, jnp.reshape(X, (-1,52)), jnp.repeat(mu_batch, 3))
+        p_ic_pred = self.p0_pred_fn(params, 0.0, jnp.reshape(X, (-1,52)), jnp.repeat(mu_batch, 3))
+        s_ic_pred = self.s0_pred_fn(params, 0.0, jnp.reshape(X, (-1,52)), jnp.repeat(mu_batch, 3))
+        u_ic_loss = jnp.mean((u_ic_pred - jnp.reshape(u_ic, (-1,)) ) ** 2)
+        v_ic_loss = jnp.mean((v_ic_pred - jnp.reshape(v_ic, (-1,)) ) ** 2)
+        p_ic_loss = jnp.mean((p_ic_pred - jnp.reshape(p_ic, (-1,)) ) ** 2)
+        s_ic_loss = jnp.mean((s_ic_pred - jnp.reshape(s_ic, (-1,)) ) ** 2)
+        
+        sin_pred = self.s_pred_fn( params, t_inlet, Xin, mu_inlet)
+        sin_loss = jnp.mean((1.0 - sin_pred)**2)
+        
+        pin_pred = self.p_pred_fn( params, t_inlet, Xin, mu_inlet)
+        pout_pred = self.p_pred_fn( params, t_inlet, Xout, mu_inlet)
+        dp_loss = jnp.mean(jnp.mean((self.p_in - pin_pred)**2) + jnp.mean((0 - pout_pred)**2))
+        
+        u_nos_pred = self.u_pred_fn( params, t_noslip, Xnoslip, mu_noslip)
+        v_nos_pred = self.v_pred_fn( params, t_noslip, Xnoslip, mu_noslip)
+        noslip_loss = jnp.mean(jnp.mean((0 - u_nos_pred)**2) + jnp.mean((0 - v_nos_pred)**2))
 
         ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn( params, t, X, mu_batch, B, A, M, N )
         ru1 =  jnp.mean(ru_pred**2)
@@ -356,14 +371,18 @@ class NavierStokes2DwSat(ForwardIVP):
         rs_loss = jnp.mean( rs1 + rs2 + rs3 + rs4 )
 
         loss_dict = {
-            # "u_data": u_data,
-            # "v_data": v_data,
-            # "p_data": p_data,
-            # "s_data": s_data,
-            # "u_ic": u_ic_loss,
-            # "v_ic": v_ic_loss,
-            # "p_ic": p_ic_loss,
-            # "s_ic": s_ic_loss,
+            
+            "u_data": u_data,
+            "v_data": v_data,
+            "p_data": p_data,
+            "s_data": s_data,
+            "u_ic": u_ic_loss,
+            "v_ic": v_ic_loss,
+            "p_ic": p_ic_loss,
+            "s_ic": s_ic_loss,
+            "noslip": noslip_loss,
+            "sin": sin_loss,
+            "dp": dp_loss,
             "ru": ru_loss,
             "rv": rv_loss,
             "rc": rc_loss,

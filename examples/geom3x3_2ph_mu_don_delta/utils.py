@@ -196,13 +196,8 @@ def relationship_element_vertex(delta_matrices):
     idx_top = jnp.where(mesh_vertices[:,1]==jnp.max(mesh_vertices[:,1]))[0]
     idx_inwalls = get_noslip(subdomain_id, vertices, mesh_vertices)
     
-    print(idx_inlet.shape)
-    print(idx_outlet.shape)
-    print(idx_bottom.shape)
-    print(idx_top.shape)
-    print(idx_inwalls.shape)
-    print(dssad)
-    
+    idx_noslip = jnp.concatenate([idx_bottom, idx_top, idx_bottom, idx_top, idx_inwalls])
+    idx_bcs = (idx_inlet, idx_outlet, idx_noslip)
        
     if False:
         map_elements_vertexes = []
@@ -227,7 +222,7 @@ def relationship_element_vertex(delta_matrices):
         map_elements_vertexes = arquivos['map_elements_vertexes']
         del arquivos
     
-    delta_matrices = (subdomain_id, eigvecs, vertices, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices)
+    delta_matrices = (idx_bcs, eigvecs, vertices, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices)
     return delta_matrices
 
 def get_dataset():

@@ -54,7 +54,7 @@ class resSampler(BaseSampler):
               u_fem_s,   v_fem_s,   p_fem_s,   s_fem_s,   t_fem,  coords_fem,
               u_fem_q,   v_fem_q,   p_fem_q,   s_fem_q) = self.initial
         
-        (subdomain_id, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices) = self.delta_matrices
+        (idx_bcs, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices) = self.delta_matrices
         
         #1st step: sample of elements to be considered by the loss terms
         
@@ -65,7 +65,17 @@ class resSampler(BaseSampler):
         idx_fem = jnp.reshape(idx_fem, (-1,))
         eigvecs_elem = jnp.reshape(eigvecs[idx_fem][jnp.newaxis, :, :], (self.batch_size, 3, 52))
         
-        sort_idx = jnp.arange(self.batch_size).astype(int)
+        (idx_inlet, idx_outlet, idx_noslip) = idx_bcs
+        key1, key = random.split(key, 2)
+        idx_idxnos = random.choice(key1, idx_noslip.shape[0], shape=(256,) )
+
+        key1, key = random.split(key, 2)
+        idx_idxnos = random.choice(key1, idx_noslip.shape[0], shape=(256,) )
+        mu_inlet = random.uniform(key1, shape=(idx_inlet.shape[0],), minval = self.mu[0], maxval = self.mu[1]) 
+        t_inlet = random.choice(key1, t_fem.shape[0], shape=(idx_inlet.shape[0],) )
+        mu_noslip = random.uniform(key1, shape=(idx_idxnos.shape[0],), minval = self.mu[0], maxval = self.mu[1]) 
+        t_noslip = random.choice(key1, t_fem.shape[0], shape=(idx_idxnos.shape[0],) )
+        X_bc = (eigvecs[idx_inlet], eigvecs[idx_outlet], eigvecs[idx_noslip[idx_idxnos]], mu_inlet, t_inlet, mu_noslip, t_noslip)        
 
         X = eigvecs_elem 
         matrices = (eigvecs_elem,  
@@ -108,8 +118,9 @@ class resSampler(BaseSampler):
         
         fields = (u_fem_q, v_fem_q, p_fem_q, s_fem_q, u_fem_s, v_fem_s, p_fem_s, s_fem_s)
         fields_ic = (u0, v0, p0, s0) 
+        
 
-        batch = (t, X, mu_batch, matrices, fields, fields_ic)
+        batch = (t, X, X_bc, mu_batch, matrices, fields, fields_ic)
 
         return batch
 
@@ -158,7 +169,7 @@ def train_one_window(config, workdir, model, samplers, idx):
             #     batch[key] = next(sampler)
             
             
-        model.update_delta_matrices(batch["res"][3])
+        # model.update_delta_matrices(batch["res"][3])
         
         # for _ in range(10):   
         model.state = model.step(model.state, batch)
@@ -253,10 +264,10 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
             u_fem_s, v_fem_s, p_fem_s, s_fem_s, t_fem, coords_fem,
             u_fem_q, v_fem_q, p_fem_q, s_fem_q)
     
-    subdomain_id, eigvecs, vertices, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices  = delta_matrices
+    idx_bcs, eigvecs, vertices, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices  = delta_matrices
     # vertices = vertices / L_max
     # centroid = centroid / L_max
-    delta_matrices = (subdomain_id, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices )
+    delta_matrices = (idx_bcs, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices )
 
     # Temporal domain of each time window
     t0 = 0.0
