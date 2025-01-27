@@ -4,6 +4,7 @@ import numpy as np
 import pickle
 import scipy.io
 import matplotlib.pyplot as plt
+from jax.numpy.linalg import norm as distance
 
           
 def get_coords():
@@ -149,15 +150,59 @@ def get_delta_matrices():
         M_matrices, 
         N_matrices
     )
+    
+def get_noslip(subdomain_id, vertices, mesh_vertices):
+    gap_btw_sides = .001
+    sq_side = .0015
+    side_gap = sq_side + gap_btw_sides
+    radius = sq_side/2
+    num_sqrs_x = 4
+    num_sqrs_y = 4
+    centers = jnp.arange(4) * side_gap + radius
+    centers = jnp.concatenate([
+                               jnp.concatenate([centers[:,jnp.newaxis] , jnp.ones((4,1)) *centers[0] ], axis=1),
+                               jnp.concatenate([centers[:,jnp.newaxis] , jnp.ones((4,1)) *centers[1] ], axis=1),
+                               jnp.concatenate([centers[:,jnp.newaxis] , jnp.ones((4,1)) *centers[2] ], axis=1),
+                               jnp.concatenate([centers[:,jnp.newaxis] , jnp.ones((4,1)) *centers[3] ], axis=1),
+    ], axis =0)
+
+    idx_innerwalls = jnp.where(subdomain_id==1)[0]
+
+    idx_mesh_col = []
+    for i in idx_innerwalls:
+        verts = vertices[i]
+        dist = distance(centers-verts[0]*jnp.ones(centers.shape), axis=1) 
+        dist = jnp.abs(dist)      
+        min_dist_idx = jnp.where(dist==jnp.min(dist))[0]
+        center = jnp.squeeze(centers[min_dist_idx])
+        dist = distance(verts-center*jnp.ones(verts.shape), axis=1) 
+        dist = jnp.abs(dist)     
+        min_dist_idx = jnp.where(dist==jnp.min(dist))[0][0]
+        idx_mesh = jnp.where((mesh_vertices[:,0]==verts[min_dist_idx,0])&(mesh_vertices[:,1]==verts[min_dist_idx,1]))[0][0]
+        idx_mesh_col.append(idx_mesh)
+    
+    idx_mesh_col = jnp.stack(idx_mesh_col) 
+    return idx_mesh_col
+
        
 def relationship_element_vertex(delta_matrices):
     
     subdomain_id, eigvecs, vertices, mesh_vertices, centroid, B_matrices, A_matrices, M_matrices, N_matrices = delta_matrices
     
     eigvecs = jnp.concatenate([mesh_vertices, eigvecs], axis=1)
+    idx_inlet = jnp.where(mesh_vertices[:,0]==jnp.min(mesh_vertices[:,0]))[0]
+    idx_outlet = jnp.where(mesh_vertices[:,0]==jnp.max(mesh_vertices[:,0]))[0]
+    idx_bottom = jnp.where(mesh_vertices[:,1]==jnp.min(mesh_vertices[:,1]))[0]
+    idx_top = jnp.where(mesh_vertices[:,1]==jnp.max(mesh_vertices[:,1]))[0]
+    idx_inwalls = get_noslip(subdomain_id, vertices, mesh_vertices)
     
-    # mesh_vertices have all the coordinates 
-    # iterate over the elements to find the indexes of their vertices
+    print(idx_inlet.shape)
+    print(idx_outlet.shape)
+    print(idx_bottom.shape)
+    print(idx_top.shape)
+    print(idx_inwalls.shape)
+    print(dssad)
+    
        
     if False:
         map_elements_vertexes = []
@@ -181,13 +226,6 @@ def relationship_element_vertex(delta_matrices):
             arquivos = pickle.load(filepath)
         map_elements_vertexes = arquivos['map_elements_vertexes']
         del arquivos
-        
-    # print(jnp.where(subdomain_id==0)[0].shape) # fluid
-    # print(jnp.where(subdomain_id==1)[0].shape) # InnerWalls
-    # print(jnp.where(subdomain_id==2)[0].shape) # Inlet
-    # print(jnp.where(subdomain_id==3)[0].shape) # Outlet
-    # print(jnp.where(subdomain_id==4)[0].shape) # TopWall
-    # print(jnp.where(subdomain_id==5)[0].shape) # BottomWall
     
     delta_matrices = (subdomain_id, eigvecs, vertices, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices)
     return delta_matrices
@@ -219,3 +257,10 @@ def get_dataset():
         delta_matrices,
         mu0, mu1, rho0, rho1
     )
+
+    # print(jnp.where(subdomain_id==0)[0].shape) # fluid
+    # print(jnp.where(subdomain_id==1)[0].shape) # InnerWalls
+    # print(jnp.where(subdomain_id==2)[0].shape) # Inlet
+    # print(jnp.where(subdomain_id==3)[0].shape) # Outlet
+    # print(jnp.where(subdomain_id==4)[0].shape) # TopWall
+    # print(jnp.where(subdomain_id==5)[0].shape) # BottomWall
