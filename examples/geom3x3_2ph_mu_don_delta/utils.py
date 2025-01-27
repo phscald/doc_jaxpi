@@ -235,7 +235,8 @@ def get_dataset():
                                                                 outflow_coords*scale, 
                                                                 wall_coords*scale)
     
-    mu0 = [.0025, .1]
+    # mu0 = [.0025, .1]
+    mu0 = [.0025, .005]
 
     mu1 = .05
     rho0 = 1000; rho1 = 1000

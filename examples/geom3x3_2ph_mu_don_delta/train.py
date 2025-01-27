@@ -148,7 +148,8 @@ def train_one_window(config, workdir, model, samplers, idx):
     #     else:
     #         batch[key] = next(sampler)
     print("Waiting for JIT...")
-    for step in range(config.training.max_steps):
+    step = 0
+    while step < config.training.max_steps:
         start_time = time.time()
 
         # if step % 1000 ==0:
@@ -171,8 +172,9 @@ def train_one_window(config, workdir, model, samplers, idx):
             
         # model.update_delta_matrices(batch["res"][3])
         
-        # for _ in range(10):   
-        model.state = model.step(model.state, batch)
+        for _ in range(100):   
+            model.state = model.step(model.state, batch)
+            step +=1
 
         # Update weights if necessary
         if config.weighting.scheme in ["grad_norm", "ntk"]:
