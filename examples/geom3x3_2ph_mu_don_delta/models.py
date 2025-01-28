@@ -139,18 +139,18 @@ class NavierStokes2DwSat(ForwardIVP):
         p_x = B @ p_e
         s_x = B @ s_e
 
-        u_y = u_x[1][0] ; u_x = u_x[0][0]
-        v_y = v_x[1][0] ; v_x = v_x[0][0]
-        p_y = p_x[1][0] ; p_x = p_x[0][0]
-        s_y = s_x[1][0] ; s_x = s_x[0][0]
+        u_y = u_x[1][0] *self.L_max ; u_x = u_x[0][0] *self.L_max 
+        v_y = v_x[1][0] *self.L_max ; v_x = v_x[0][0] *self.L_max 
+        p_y = p_x[1][0] *self.L_max ; p_x = p_x[0][0] *self.L_max 
+        s_y = s_x[1][0] *self.L_max ; s_x = s_x[0][0] *self.L_max 
         
         u_xx = Minv @ A @ u_e
         v_xx = Minv @ A @ v_e
         s_xx = Minv @ A @ s_e
 
-        u_yy = u_xx[2][0] ; u_xx = u_xx[0][0]
-        v_yy = v_xx[2][0] ; v_xx = v_xx[0][0]
-        s_yy = s_xx[2][0] ; s_xx = s_xx[0][0]
+        u_yy = u_xx[2][0] *(self.L_max**2) ; u_xx = u_xx[0][0] *(self.L_max**2) 
+        v_yy = v_xx[2][0] *(self.L_max**2) ; v_xx = v_xx[0][0] *(self.L_max**2) 
+        s_yy = s_xx[2][0] *(self.L_max**2) ; s_xx = s_xx[0][0] *(self.L_max**2) 
 
         Re = rho0*self.U_max*(self.L_max)/mu1  
         # Re = 1
