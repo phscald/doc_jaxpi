@@ -189,7 +189,8 @@ def relationship_element_vertex(delta_matrices):
     
     subdomain_id, eigvecs, vertices, mesh_vertices, centroid, B_matrices, A_matrices, M_matrices, N_matrices = delta_matrices
     
-    eigvecs = jnp.concatenate([mesh_vertices, eigvecs], axis=1)
+    L_max = 50/1000/100
+    eigvecs = jnp.concatenate([mesh_vertices/L_max, eigvecs], axis=1)
     idx_inlet = jnp.where(mesh_vertices[:,0]==jnp.min(mesh_vertices[:,0]))[0]
     idx_outlet = jnp.where(mesh_vertices[:,0]==jnp.max(mesh_vertices[:,0]))[0]
     idx_bottom = jnp.where(mesh_vertices[:,1]==jnp.min(mesh_vertices[:,1]))[0]
@@ -229,7 +230,7 @@ def get_dataset():
 
     
     # mu0 = [.0025, .1]
-    mu0 = [.0025, .005]
+    mu0 = [.0025, .0026]
 
     mu1 = .05
     rho0 = 1000; rho1 = 1000
@@ -238,10 +239,6 @@ def get_dataset():
     delta_matrices = relationship_element_vertex(delta_matrices)
         
     return (
-        # coords,
-        # inflow_coords,
-        # outflow_coords,
-        # wall_coords,
         initial,
         delta_matrices,
         mu0, mu1, rho0, rho1

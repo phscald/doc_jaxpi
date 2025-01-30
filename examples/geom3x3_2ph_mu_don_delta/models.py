@@ -277,7 +277,7 @@ class NavierStokes2DwSat(ForwardIVP):
             # "u_ic": u_ic_ntk,
             # "v_ic": v_ic_ntk,
             # "p_ic": p_ic_ntk,
-            # "s_ic": s_ic_ntk,
+            # # "s_ic": s_ic_ntk,
             "noslip": noslip_ntk,
             "sin": sin_ntk,
             "dp": dp_ntk,

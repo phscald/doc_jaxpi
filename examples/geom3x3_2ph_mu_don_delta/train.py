@@ -135,7 +135,7 @@ class resSampler(BaseSampler):
                 
         fields = (X_fem, t_fem, mu_fem, u_fem_q_b, v_fem_q_b, p_fem_q_b, s_fem_q_b, u_fem_s_b, v_fem_s_b, p_fem_s_b, s_fem_s_b)
         fields_ic = (u0_b, v0_b, p0_b, s0_b)  
-        
+
         batch = (t, X, X_bc, mu_batch, matrices, fields, fields_ic)
 
         return batch
@@ -154,39 +154,14 @@ def train_one_window(config, workdir, model, samplers, idx):
     step_offset = idx * config.training.max_steps
 
     # jit warm up
-    # batch = {}
-    # samplers["res"].update_RAD(model, 0, config.training.max_steps, k=1, c=1)
-    # samplers["res"]._iterator = iter(samplers["res"])
-
-    # for key, sampler in samplers.items():
-    #     if key == "res": #and step % 50 ==0:
-    #         batch[key] = next(sampler._iterator)
-    #     else:
-    #         batch[key] = next(sampler)
     print("Waiting for JIT...")
     step = 0
     while step < config.training.max_steps:
-        start_time = time.time()
-
-        # if step % 1000 ==0:
-        #     samplers["res"].update_RAD(model, step, config.training.max_steps, k=1, c=1)
-        #     samplers["res"]._iterator = iter(samplers["res"])
-        # samplers["res"].update_step(step)
-        
-        
-        # batch = update_batch(step, samplers, batch)
-        # Sample mini-batch        
+        start_time = time.time() 
         batch = {}
 
         for key, sampler in samplers.items():
             batch[key] = next(sampler)
-            # if key == "res": #and step % 50 ==0:
-            #     batch[key] = next(sampler._iterator)
-            # else:
-            #     batch[key] = next(sampler)
-            
-            
-        # model.update_delta_matrices(batch["res"][3])
         
         for _ in range(100):   
             model.state = model.step(model.state, batch)
@@ -258,13 +233,13 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'max_Steps: {config.training.max_steps}')
 
     t1 = 400
-
+    
 
     coords_fem = coords_fem / L_max
     
     dt_fem = dt_fem / (mu1/dp)
     t_fem = jnp.cumsum(dt_fem)
-    idx = jnp.where(t_fem<=t1)[0]
+    idx = jnp.where(t_fem<=20)[0]
     
     (u0, v0, p0) = (u0/U_max , v0/U_max , p0/pmax)
     u_fem_s = u_fem_s[idx] / U_max 
@@ -310,7 +285,14 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         samplers = {
             "res": res_sampler,
         }
-
+        batch = {}
+        for key, sampler in samplers.items():
+            batch[key] = next(sampler)       
+        # plt.scatter(batch["res"][5][0][1, :,0], batch["res"][5][0][1,:,1], s=1, c=jnp.squeeze(batch["res"][5][3][:]), cmap='jet')
+        # plt.savefig('ufem.jpg', format='jpg')
+        # print(batch["res"][5][0].shape)
+        # print(batch["res"][5][3].shape)
+        # print(das)
         
         # if config.training.fine_tune:
         #     ckpt_path = os.path.join(".", "ckpt", config.wandb.name, "time_window_1")

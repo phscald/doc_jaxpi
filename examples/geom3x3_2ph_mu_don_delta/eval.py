@@ -42,8 +42,6 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
             u_fem_q, v_fem_q, p_fem_q, s_fem_q) = initial
     
     _, eigvecs, _, _, _, _, _, _, _  = delta_matrices
-    
-
 
     fluid_params = (mu0, mu1, rho0, rho1)
     pin = 50
@@ -133,8 +131,17 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     x = eigvecs[:, 0]
     y = eigvecs[:, 1]
     
-    # x = coord_intial[:, 0]
-    # y = coord_intial[:, 1]
+    # print(jnp.mean(u0))
+    # print(jnp.std(u0))
+    # print(jnp.mean(v0))
+    # print(jnp.std(v0))
+    
+    # print(jnp.mean(u_pred_list[0]))
+    # print(jnp.std(u_pred_list[0]))
+    # print(jnp.mean(v_pred_list[0]))
+    # print(jnp.std(v_pred_list[0]))    
+    
+
 
     from matplotlib.animation import FuncAnimation
     from functools import partial  # Import partial to pass extra arguments to the update function
@@ -154,12 +161,11 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     def update_u(frames, idx):
         axu.cla()  # Clear the current axis
-        axu.scatter(x, y, s=1, c=u_pred_list[idx][frames], cmap='jet', vmin=jnp.min(u0), vmax=jnp.max(u0))
+        axu.scatter(x, y, s=1, c=u_pred_list[idx][frames], cmap='jet' )#, vmin=jnp.mean(u0)-2*jnp.std(u0), vmax=jnp.mean(u0)+2*jnp.std(u0))
 
     def update_v(frames, idx):
         axv.cla()  # Clear the current axis
-        axv.scatter(x, y, s=1, c=v_pred_list[idx][frames], cmap='jet', vmin=jnp.min(v0), vmax=jnp.max(v0))
-
+        axv.scatter(x, y, s=1, c=v_pred_list[idx][frames], cmap='jet' )#, vmin=jnp.mean(v0)-2*jnp.std(v0), vmax=jnp.mean(v0)+2*jnp.std(v0))
 
     def update_p(frames, idx):
         axp.cla()  # Clear the current axis
