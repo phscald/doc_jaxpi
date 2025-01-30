@@ -31,76 +31,55 @@ import matplotlib.tri as tri
 def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Load dataset
     
-    pin = 50
-    (
-        coords,
-        inflow_coords,
-        outflow_coords,
-        wall_coords,
-        initial,
-        mu0, mu1, rho0, rho1
-    ) = get_dataset(pin=pin)
-    noslip_coords = wall_coords
-    
+    (   initial,
+        delta_matrices,
+        mu0, mu1, rho0, rho1) = get_dataset()
+
+    fluid_params = (mu0, mu1, rho0, rho1)    
+        
     (u0, v0, p0, s0, coords_initial,
             u_fem_s, v_fem_s, p_fem_s, s_fem_s, dt_fem, coords_fem,
-            u_fem_q, v_fem_q, p_fem_q, s_fem_q,
-            coords_middle, t_middle) = initial
+            u_fem_q, v_fem_q, p_fem_q, s_fem_q) = initial
     
-    print(jnp.max(coords[:,0]))
-    print(jnp.max(coords[:,1]))
+    _, eigvecs, _, _, _, _, _, _, _  = delta_matrices
+    
 
-
-    print(f'coords shape:{coords.shape}')
-    print(f'inflow coords shape:{inflow_coords.shape}')
 
     fluid_params = (mu0, mu1, rho0, rho1)
-    dp = pin; pmax =dp
-    
+    pin = 50
+    dp = pin
+    pmax = dp
     L_max = 50/1000/100
     U_max = dp*L_max/mu1
-    u_maxs = jnp.max(u_fem_s)/U_max
-    v_maxs = jnp.max(v_fem_s)/U_max
-    u_maxq = jnp.max(u_fem_q)/U_max
-    v_maxq = jnp.max(v_fem_q)/U_max
-    
-    uv_max = (u_maxq, v_maxq, u_maxs, v_maxs)
-    print(f"U_max: {U_max}")
-    print(f"u_fem_s/U_max: {jnp.max(u_fem_s)/U_max}")
-    print(f"v_fem_s/U_max: {jnp.max(v_fem_s)/U_max}")
 
-    mu = .0058#.0056 # mu0 = [.0025, .01]
+    mu = .0025#.0056 # mu0 = [.0025, .01]
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time
-
-    # Nondimensionalization
-    if config.nondim == True:
-        # Nondimensionalize coordinates and inflow velocity
-        inflow_coords = inflow_coords / L_max
-        outflow_coords = outflow_coords / L_max
-        noslip_coords = noslip_coords / L_max
-        coords = coords / L_max    
-        
-        u0, v0, p0 = u0/U_max, v0/U_max, p0/dp   
     
-        ind_coords = random.choice(
-            random.PRNGKey(1234),
-            coords.shape[0],
-            shape=(int(coords.shape[0]/6),),
-            replace=True,
-        )
-        coords = coords[ind_coords]
-
-        p_inflow = (pin / pmax) * jnp.ones((inflow_coords.shape[0]))
+    coords_fem = coords_fem / L_max
     
+    dt_fem = dt_fem / (mu1/dp)
+    t_fem = jnp.cumsum(dt_fem)
+    idx = jnp.where(t_fem<=t1)[0]
+    
+    (u0, v0, p0) = (u0/U_max , v0/U_max , p0/pmax)
+    u_fem_s = u_fem_s[idx] / U_max 
+    v_fem_s = v_fem_s[idx] / U_max 
+    p_fem_s = p_fem_s[idx] / pmax
+    s_fem_s = s_fem_s[idx]
+    u_fem_q = u_fem_q[idx] / U_max 
+    v_fem_q = v_fem_q[idx] / U_max 
+    p_fem_q = p_fem_q[idx] / pmax
+    s_fem_q = s_fem_q[idx]
+
     t0 = 0.0
 
     temporal_dom = jnp.array([t0, t1 * (1 + 0.05)]) # Must be same as the one used in training
 
     # Initialize model
     # model = models.NavierStokes2D(config, inflow_fn, temporal_dom, coords, Re)
-    model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, coords, U_max, L_max, fluid_params, uv_max) #  no 1
+    model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, U_max, L_max, fluid_params) #  no 1
 
     # Restore checkpoint
     ckpt_path = os.path.join(".", "ckpt", config.wandb.name)
@@ -108,17 +87,22 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     model.state = restore_checkpoint(model.state, ckpt_path)
     params = model.state.params
     
+    X = eigvecs[:,:2]
+    
     # Predict
-    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, 0, None)), (None, 0, None, None, None))) # shape t by xy
-    v_pred_fn = jit(vmap(vmap(model.v_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
-    p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
-    s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
-    D_pred_fn = jit(vmap(vmap(model.D_net, (None, None, 0, 0, None)), (None, 0, None, None, None)))
+    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, None)), (None, 0, None, None))) # shape t by xy
+    v_pred_fn = jit(vmap(vmap(model.v_net, (None, None, 0, None)), (None, 0, None, None)))
+    p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, None)), (None, 0, None, None)))
+    s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, None)), (None, 0, None, None)))
+    D_pred_fn = jit(vmap(vmap(model.D_net, (None, None, 0, None)), (None, 0, None, None)))
 
-    # t_coords = jnp.linspace(0, t1, 20)[:-1]
-    # t_coords = jnp.linspace(0, t1, 4)[:-1]
-    t_coords = jnp.array([0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1.])*t1*.5#
-    # t_coords = jnp.array([0,])
+    tmax = 400
+    
+    num_t = 10  # Desired number of points
+    idx_t = jnp.linspace(0, t_fem.shape[0] - 1, num_t, dtype=int)
+    idx_t = 0
+    t_coords = jnp.array([t_fem[idx_t]/tmax])
+    # t_coords = t_fem[idx_t]/tmax
 
     u_pred_list = []
     v_pred_list = []
@@ -134,20 +118,20 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         
         print(f'mu = {mu}')
 
-        u_pred = u_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
-        v_pred = v_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
-        s_pred = s_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)
-        p_pred = p_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)      
+        u_pred = u_pred_fn(params, t_coords, X, mu)
+        v_pred = v_pred_fn(params, t_coords, X, mu)
+        s_pred = s_pred_fn(params, t_coords, X, mu)
+        p_pred = p_pred_fn(params, t_coords, X, mu)      
 
         u_pred_list.append(u_pred)
         v_pred_list.append(v_pred)
         s_pred_list.append(s_pred)
         p_pred_list.append(p_pred)    
 
-    print(f"D: {D_pred_fn(params, t_coords, coords[:, 0], coords[:, 1], mu)[0,0]}")    
+    print(f"D: {D_pred_fn(params, t_coords, X, mu)[0,0]}")    
 
-    x = coords[:, 0]
-    y = coords[:, 1]
+    x = eigvecs[:, 0]
+    y = eigvecs[:, 1]
     
     # x = coord_intial[:, 0]
     # y = coord_intial[:, 1]

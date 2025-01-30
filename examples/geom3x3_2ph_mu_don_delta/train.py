@@ -56,6 +56,7 @@ class resSampler(BaseSampler):
         
         (idx_bcs, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices) = self.delta_matrices
         
+        
         #1st step: sample of elements to be considered by the loss terms
         
         key1, key = random.split(key, 2)
@@ -64,6 +65,8 @@ class resSampler(BaseSampler):
         idx_fem = map_elements_vertexes[idx_elem]
         idx_fem = jnp.reshape(idx_fem, (-1,))
         eigvecs_elem = jnp.reshape(eigvecs[idx_fem][jnp.newaxis, :, :], (self.batch_size, 3, 52))
+        eigvecs_elem = eigvecs_elem[:,:,:2]
+        eigvecs = eigvecs[:,:2]
         
         (idx_inlet, idx_outlet, idx_noslip) = idx_bcs
         key1, key = random.split(key, 2)
@@ -78,6 +81,7 @@ class resSampler(BaseSampler):
         X_bc = (eigvecs[idx_inlet], eigvecs[idx_outlet], eigvecs[idx_noslip[idx_idxnos]], mu_inlet, t_inlet, mu_noslip, t_noslip)        
 
         X = eigvecs_elem 
+        
         matrices = (eigvecs_elem,  
                     N_matrices[idx_elem],
                     B_matrices[idx_elem], 
@@ -91,35 +95,47 @@ class resSampler(BaseSampler):
         idx_t = random.choice(key1, t_fem.shape[0], shape=(self.batch_size,) )
         
         idx_fem = map_elements_vertexes[idx_elem]
-        idx_fem = jnp.reshape(idx_fem, (-1,))
+        # idx_fem = jnp.reshape(idx_fem, (-1,))
                
         t = t_fem[idx_t]
-        idx_t = jnp.repeat(idx_t, 3)
-        u0, v0, p0, s0 = u0[idx_fem], v0[idx_fem], p0[idx_fem], s0[idx_fem]
-        u_fem_s, v_fem_s, p_fem_s, s_fem_s = u_fem_s[idx_t, idx_fem], v_fem_s[idx_t, idx_fem], p_fem_s[idx_t, idx_fem], s_fem_s[idx_t, idx_fem]
-        u_fem_q, v_fem_q, p_fem_q, s_fem_q = u_fem_q[idx_t, idx_fem], v_fem_q[idx_t, idx_fem], p_fem_q[idx_t, idx_fem], s_fem_q[idx_t, idx_fem]
-
-        u0 = jnp.reshape(u0, (-1,3))
-        v0 = jnp.reshape(v0, (-1,3))
-        p0 = jnp.reshape(p0, (-1,3))
-        s0 = jnp.reshape(s0, (-1,3))
-        u_fem_s = jnp.reshape(u_fem_s, (-1,3))
-        v_fem_s = jnp.reshape(v_fem_s, (-1,3))
-        p_fem_s = jnp.reshape(p_fem_s, (-1,3))
-        s_fem_s = jnp.reshape(s_fem_s, (-1,3))
-        u_fem_q = jnp.reshape(u_fem_q, (-1,3))
-        v_fem_q = jnp.reshape(v_fem_q, (-1,3))
-        p_fem_q = jnp.reshape(p_fem_q, (-1,3))
-        s_fem_q = jnp.reshape(s_fem_q, (-1,3))
         
+        # idx_t = jnp.repeat(idx_t, 3)
+        u0_b, v0_b, p0_b, s0_b = [], [], [], []
+        u_fem_s_b, v_fem_s_b, p_fem_s_b, s_fem_s_b = [], [], [], []
+        u_fem_q_b, v_fem_q_b, p_fem_q_b, s_fem_q_b = [], [], [], []
+        X_fem = []
         
+        for i in range(3):
+            X_fem.append(eigvecs[idx_fem[:,i]])
+            
+            u0_b.append(u0[idx_fem[:,i]])
+            v0_b.append(v0[idx_fem[:,i]])
+            p0_b.append(p0[idx_fem[:,i]])
+            s0_b.append(s0[idx_fem[:,i]])
+            
+            u_fem_s_b.append(u_fem_s[idx_t, idx_fem[:,i]])
+            v_fem_s_b.append(v_fem_s[idx_t, idx_fem[:,i]])
+            p_fem_s_b.append(p_fem_s[idx_t, idx_fem[:,i]])
+            s_fem_s_b.append(s_fem_s[idx_t, idx_fem[:,i]])
+            
+            u_fem_q_b.append(u_fem_q[idx_t, idx_fem[:,i]])
+            v_fem_q_b.append(v_fem_q[idx_t, idx_fem[:,i]])
+            p_fem_q_b.append(p_fem_q[idx_t, idx_fem[:,i]])
+            s_fem_q_b.append(s_fem_q[idx_t, idx_fem[:,i]])
+                     
+        X_fem = jnp.concatenate(X_fem, axis=0)
+        t_fem = jnp.concatenate((t,t,t), axis=0)
+        u0_b, v0_b, p0_b, s0_b = jnp.concatenate(u0_b, axis=0), jnp.concatenate(v0_b, axis=0), jnp.concatenate(p0_b, axis=0), jnp.concatenate(s0_b, axis=0)
+        u_fem_s_b, v_fem_s_b, p_fem_s_b, s_fem_s_b = jnp.concatenate(u_fem_s_b, axis=0), jnp.concatenate(v_fem_s_b, axis=0), jnp.concatenate(p_fem_s_b, axis=0), jnp.concatenate(s_fem_s_b, axis=0)
+        u_fem_q_b, v_fem_q_b, p_fem_q_b, s_fem_q_b = jnp.concatenate(u_fem_q_b, axis=0), jnp.concatenate(v_fem_q_b, axis=0), jnp.concatenate(p_fem_q_b, axis=0), jnp.concatenate(s_fem_q_b, axis=0)
         key1, key = random.split(key, 2)
-        mu_batch = random.uniform(key1, shape=(self.batch_size,), minval = self.mu[0], maxval = self.mu[1])     
+        mu_batch = random.uniform(key1, shape=(self.batch_size,), minval = self.mu[0], maxval = self.mu[1])  
+        mu_fem = jnp.concatenate((mu_batch,mu_batch,mu_batch), axis=0)
         
-        fields = (u_fem_q, v_fem_q, p_fem_q, s_fem_q, u_fem_s, v_fem_s, p_fem_s, s_fem_s)
-        fields_ic = (u0, v0, p0, s0) 
+                
+        fields = (X_fem, t_fem, mu_fem, u_fem_q_b, v_fem_q_b, p_fem_q_b, s_fem_q_b, u_fem_s_b, v_fem_s_b, p_fem_s_b, s_fem_s_b)
+        fields_ic = (u0_b, v0_b, p0_b, s0_b)  
         
-
         batch = (t, X, X_bc, mu_batch, matrices, fields, fields_ic)
 
         return batch
@@ -197,8 +213,8 @@ def train_one_window(config, workdir, model, samplers, idx):
 
         # Save checkpoint
         if config.saving.save_every_steps is not None:
-            if (step + 1) % config.saving.save_every_steps == 0 or (
-                step + 1
+            if (step ) % config.saving.save_every_steps == 0 or (
+                step 
             ) == config.training.max_steps:
                 path = os.path.join(
                     workdir, "ckpt", config.wandb.name, "time_window_{}".format(idx + 1)
@@ -243,8 +259,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     t1 = 400
 
-    # noslip_coords = jnp.vstack((wall_coords, cyl_coords))
-    # noslip_coords = wall_coords
 
     coords_fem = coords_fem / L_max
     
@@ -294,13 +308,9 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
             )
                     
         samplers = {
-            # "ic": ic_sampler,
-            # "ic_qs": ic_sampler_qs,
             "res": res_sampler,
         }
-        batch = {}
-        for key, sampler in samplers.items():
-            batch[key] = next(sampler)
+
         
         # if config.training.fine_tune:
         #     ckpt_path = os.path.join(".", "ckpt", config.wandb.name, "time_window_1")

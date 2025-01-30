@@ -69,7 +69,7 @@ def initial_fields():
     del arquivos
     
     
-    print(f"medio: {np.max(u0)}")
+    # print(f"medio: {np.max(u0)}")
         
     filepath = './chip3x3_inv0.pkl'
     with open(filepath, 'rb') as filepath:
@@ -82,7 +82,7 @@ def initial_fields():
     dt_fem_s = arquivos['dt_data']
     del arquivos
     
-    print(f"slow: {np.max(u_fem_s[-1])}")
+    # print(f"slow: {np.max(u_fem_s[-1])}")
 
     filepath = './chip3x3_inv20.pkl'
     with open(filepath, 'rb') as filepath:
@@ -95,7 +95,7 @@ def initial_fields():
     dt_fem_q = arquivos['dt_data']
     del arquivos
     
-    print(f"quick: {np.max(u_fem_q[-1])}")
+    # print(f"quick: {np.max(u_fem_q[-1])}")
 
     
     coords_fem = jax.device_put(coords_fem)
@@ -227,13 +227,6 @@ def relationship_element_vertex(delta_matrices):
 
 def get_dataset():
 
-    coords, inflow_coords, outflow_coords, wall_coords = get_coords()
-    scale = 1/1000/100
-    (coords, inflow_coords, outflow_coords, wall_coords) = (
-                                                                coords*scale, 
-                                                                inflow_coords*scale, 
-                                                                outflow_coords*scale, 
-                                                                wall_coords*scale)
     
     # mu0 = [.0025, .1]
     mu0 = [.0025, .005]

@@ -563,6 +563,7 @@ class DeepONetwDssep(nn.Module):
 class DeepONet3wD(nn.Module):
     arch_name: Optional[str] = "DeepONet3wD"
     num_branch_layers: int = 4
+    num_branch_layers2: int = 4
     num_trunk_layers: int = 4 # (u, x) : u é o branch, x é o trunk
     hidden_dim: int = 256
     out_dim: int = 1
@@ -582,15 +583,8 @@ class DeepONet3wD(nn.Module):
         #  x: mu              - trunk
         pde_param = Dense(features=1)(pde_param)         
         
-        # pde_param = ModifiedMlp(#MlpBlock(
-        #     num_layers=1,
-        #     hidden_dim=3,
-        #     out_dim=1,
-        #     activation=self.activation,
-        # )(pde_param)
         
         pde_param = Dense(features=1)(pde_param)
-        u0 =u1
         
         u1 = ModifiedMlp(#MlpBlock(
             num_layers=self.num_branch_layers,
@@ -604,7 +598,7 @@ class DeepONet3wD(nn.Module):
         )(u1)
         
         u2 = ModifiedMlp(#Mlp(
-            num_layers=self.num_branch_layers,
+            num_layers=self.num_branch_layers2,
             hidden_dim=self.hidden_dim,
             out_dim=self.hidden_dim,
             activation=self.activation,
