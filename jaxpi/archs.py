@@ -583,8 +583,9 @@ class DeepONet3wD(nn.Module):
         #  x: mu              - trunk
         pde_param = Dense(features=1)(pde_param)   
         
+        # x = jnp.concatenate([x, u1])
+        # u1=u2    
         u1 = jnp.concatenate([u1, u2])
-      
         
         u1 = ModifiedMlp(#MlpBlock(
             num_layers=self.num_branch_layers,

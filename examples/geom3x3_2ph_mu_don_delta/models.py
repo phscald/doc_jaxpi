@@ -300,21 +300,6 @@ class NavierStokes2DwSat(ForwardIVP):
         ( _, N, B, A, M) = delta_matrices
         (X_fem, t_fem, mu_fem, u_fem_q, v_fem_q, p_fem_q, s_fem_q, u_fem_s, v_fem_s, p_fem_s, s_fem_s) = fields
         (u_ic, v_ic, p_ic, s_ic) = fields_ic
-        
-        # u_fem_q_pred = self.ufem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .0025)
-        # v_fem_q_pred = self.vfem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .0025)
-        # p_fem_q_pred = self.pfem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .0025)
-        # s_fem_q_pred = self.sfem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .0025)
-        
-        # u_fem_s_pred = self.ufem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .1)
-        # v_fem_s_pred = self.vfem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .1)
-        # p_fem_s_pred = self.pfem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .1)
-        # s_fem_s_pred = self.sfem_pred_fn(params, jnp.repeat(t, 3), jnp.reshape(X, (-1,52)), .1)
-        
-        # u_data = jnp.mean( jnp.mean((u_fem_q_pred -  jnp.reshape(u_fem_q, (-1,)) ) ** 2) + jnp.mean((u_fem_s_pred -  jnp.reshape(u_fem_s, (-1,)) ) ** 2) ) 
-        # v_data = jnp.mean( jnp.mean((v_fem_q_pred -  jnp.reshape(v_fem_q, (-1,)) ) ** 2) + jnp.mean((v_fem_s_pred -  jnp.reshape(v_fem_s, (-1,)) ) ** 2) ) 
-        # p_data = jnp.mean( jnp.mean((p_fem_q_pred -  jnp.reshape(p_fem_q, (-1,)) ) ** 2) + jnp.mean((p_fem_s_pred -  jnp.reshape(p_fem_s, (-1,)) ) ** 2) ) 
-        # s_data = jnp.mean( jnp.mean((s_fem_q_pred -  jnp.reshape(s_fem_q, (-1,)) ) ** 2) + jnp.mean((s_fem_s_pred -  jnp.reshape(s_fem_s, (-1,)) ) ** 2) ) 
 
         u_fem_q_pred = self.ufem_pred_fn(params, t_fem, X_fem, .0025)
         v_fem_q_pred = self.vfem_pred_fn(params, t_fem, X_fem, .0025)

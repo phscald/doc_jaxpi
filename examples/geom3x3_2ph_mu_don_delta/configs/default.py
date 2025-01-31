@@ -57,7 +57,7 @@ def get_config():
     training.outflow_batch_size = 32 #int(2048/div)
     training.noslip_batch_size = 128 #512int(2048/div)
     training.ic_batch_size = 512  #512 #int(2048/div)
-    training.res_batch_size = 2048 #512 #+512#int(2*2048/div)
+    training.res_batch_size = 2048 + 1024#512 #+512#int(2*2048/div)
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()

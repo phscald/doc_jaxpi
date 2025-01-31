@@ -233,7 +233,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'max_Steps: {config.training.max_steps}')
 
     t1 = 400
-    
 
     coords_fem = coords_fem / L_max
     
@@ -250,6 +249,8 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     v_fem_q = v_fem_q[idx] / U_max 
     p_fem_q = p_fem_q[idx] / pmax
     s_fem_q = s_fem_q[idx]
+    
+    t_fem = t_fem[idx]
     
     initial = (u0, v0, p0, s0, coords_initial,
             u_fem_s, v_fem_s, p_fem_s, s_fem_s, t_fem, coords_fem,
@@ -287,7 +288,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         }
         batch = {}
         for key, sampler in samplers.items():
-            batch[key] = next(sampler)       
+            batch[key] = next(sampler)    
         
         # if config.training.fine_tune:
         #     ckpt_path = os.path.join(".", "ckpt", config.wandb.name, "time_window_1")
