@@ -65,8 +65,8 @@ class resSampler(BaseSampler):
         idx_fem = map_elements_vertexes[idx_elem]
         idx_fem = jnp.reshape(idx_fem, (-1,))
         eigvecs_elem = jnp.reshape(eigvecs[idx_fem][jnp.newaxis, :, :], (self.batch_size, 3, 52))
-        eigvecs_elem = eigvecs_elem[:,:,2:52]
-        eigvecs = eigvecs[:,2:52]
+        eigvecs_elem = eigvecs_elem[:,:,:]
+        eigvecs = eigvecs[:,:]
         
         (idx_inlet, idx_outlet, idx_noslip) = idx_bcs
         key1, key = random.split(key, 2)
@@ -163,7 +163,7 @@ def train_one_window(config, workdir, model, samplers, idx):
         for key, sampler in samplers.items():
             batch[key] = next(sampler)
         
-        for _ in range(1000):   
+        for _ in range(500):   
             model.state = model.step(model.state, batch)
             step +=1
 
@@ -239,7 +239,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     
     dt_fem = dt_fem / (mu1/dp)
     t_fem = jnp.cumsum(dt_fem)
-    idx = jnp.where(t_fem<=20)[0]
+    idx = jnp.where(t_fem<=t1)[0]
     
     (u0, v0, p0) = (u0/U_max , v0/U_max , p0/pmax)
     u_fem_s = u_fem_s[idx] / U_max 

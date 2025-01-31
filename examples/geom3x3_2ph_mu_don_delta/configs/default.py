@@ -24,8 +24,8 @@ def get_config():
     arch.arch_name = "DeepONet3wD"
     # arch.num_layers = 8
     arch.num_trunk_layers = 4 # mu 2
-    arch.num_branch_layers = 4 # t 6
-    arch.num_branch_layers2 = 7 # xy v(xy)
+    arch.num_branch_layers = 7 # t 6
+    # arch.num_branch_layers2 = 7 # xy v(xy)
     arch.hidden_dim = 100
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
@@ -48,7 +48,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 100000#int(2*10**(5)/upd_stp*2)
+    training.max_steps = 200000#int(2*10**(5)/upd_stp*2)
     training.fine_tune = True
     training.num_time_windows = 1
 
@@ -111,7 +111,7 @@ def get_config():
     
     config.input_dim = 4
     config.input_branch = 1   # t
-    config.input_branch2 = 50 # xy v(xy)
+    config.input_branch2 = 52 # xy v(xy)
     config.input_trunk = 1    # mu 
 
     

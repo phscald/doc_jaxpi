@@ -116,7 +116,7 @@ def get_delta_matrices():
     eigvecs = np.squeeze(arquivos['eigvecs'])
     del arquivos
     eigvecs /= np.linalg.norm(eigvecs, axis=1, keepdims=True)
-    
+       
     filepath = './matrices2.pkl'
     with open(filepath, 'rb') as filepath:
         arquivos = pickle.load(filepath)

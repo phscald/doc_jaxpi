@@ -73,8 +73,8 @@ class NavierStokes2DwSat(ForwardIVP):
         p = outputs[2]
         s = outputs[3] # nn.softplus( outputs[3] )
         D = nn.sigmoid(outputs[4]) *5*10**(-3)
-        u_scaler = 0.04 #0.00174
-        v_scaler = 0.007 # 0.00027
+        u_scaler = 0.00174 # 0.04
+        v_scaler = 0.00027 # 0.007 
         
         u = u *u_scaler
         v = v *v_scaler

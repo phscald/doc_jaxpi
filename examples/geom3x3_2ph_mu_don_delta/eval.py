@@ -85,7 +85,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     model.state = restore_checkpoint(model.state, ckpt_path)
     params = model.state.params
     
-    X = eigvecs[:,2:52]
+    print("oi")
+    X = eigvecs[:,:]
     
     # Predict
     u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, None)), (None, 0, None, None))) # shape t by xy

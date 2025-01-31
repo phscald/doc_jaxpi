@@ -563,7 +563,7 @@ class DeepONetwDssep(nn.Module):
 class DeepONet3wD(nn.Module):
     arch_name: Optional[str] = "DeepONet3wD"
     num_branch_layers: int = 4
-    num_branch_layers2: int = 4
+    # num_branch_layers2: int = 4
     num_trunk_layers: int = 4 # (u, x) : u é o branch, x é o trunk
     hidden_dim: int = 256
     out_dim: int = 1
@@ -581,7 +581,10 @@ class DeepONet3wD(nn.Module):
         #  u1: t              - branch1
         #  u2: x, y, v(x,y)   - branch2
         #  x: mu              - trunk
-        pde_param = Dense(features=1)(pde_param)         
+        pde_param = Dense(features=1)(pde_param)   
+        
+        u1 = jnp.concatenate([u1, u2])
+      
         
         u1 = ModifiedMlp(#MlpBlock(
             num_layers=self.num_branch_layers,
@@ -594,15 +597,15 @@ class DeepONet3wD(nn.Module):
             fourier_emb=self.fourier_emb,
         )(u1)
         
-        u2 = ModifiedMlp(#Mlp(
-            num_layers=self.num_branch_layers2,
-            hidden_dim=self.hidden_dim,
-            out_dim=self.hidden_dim,
-            activation=self.activation,
-            periodicity=self.periodicity,
-            fourier_emb=self.fourier_emb,
-            reparam=self.reparam,
-        )(u2)
+        # u2 = ModifiedMlp(#Mlp(
+        #     num_layers=self.num_branch_layers2,
+        #     hidden_dim=self.hidden_dim,
+        #     out_dim=self.hidden_dim,
+        #     activation=self.activation,
+        #     periodicity=self.periodicity,
+        #     fourier_emb=self.fourier_emb,
+        #     reparam=self.reparam,
+        # )(u2)
 
         x = ModifiedMlp(#Mlp(
             num_layers=self.num_trunk_layers,
@@ -615,7 +618,7 @@ class DeepONet3wD(nn.Module):
         )(x)
    
         # u2 = jnp.squeeze(u2)
-        u1 = u1 * u2
+        # u1 = u1 * u2
         u1 = self.activation_fn(u1)
         y = u1 * x
         
