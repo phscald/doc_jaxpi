@@ -85,7 +85,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     model.state = restore_checkpoint(model.state, ckpt_path)
     params = model.state.params
     
-    X = eigvecs[:,:2]
+    X = eigvecs[:,2:52]
     
     # Predict
     u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, None)), (None, 0, None, None))) # shape t by xy
@@ -101,6 +101,10 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     idx_t = 0
     t_coords = jnp.array([t_fem[idx_t]/tmax])
     # t_coords = t_fem[idx_t]/tmax
+    
+    # print(jnp.mean(v0)+4*jnp.std(v0))
+    # print(jnp.mean(v0)-4*jnp.std(v0))
+    # print(jda)
 
     u_pred_list = []
     v_pred_list = []

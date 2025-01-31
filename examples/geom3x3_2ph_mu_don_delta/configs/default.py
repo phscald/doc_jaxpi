@@ -25,7 +25,7 @@ def get_config():
     # arch.num_layers = 8
     arch.num_trunk_layers = 4 # mu 2
     arch.num_branch_layers = 4 # t 6
-    arch.num_branch_layers2 = 4 # xy v(xy)
+    arch.num_branch_layers2 = 7 # xy v(xy)
     arch.hidden_dim = 100
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
@@ -57,7 +57,7 @@ def get_config():
     training.outflow_batch_size = 32 #int(2048/div)
     training.noslip_batch_size = 128 #512int(2048/div)
     training.ic_batch_size = 512  #512 #int(2048/div)
-    training.res_batch_size = 1024 #512 #+512#int(2*2048/div)
+    training.res_batch_size = 2048 #512 #+512#int(2*2048/div)
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
@@ -111,7 +111,7 @@ def get_config():
     
     config.input_dim = 4
     config.input_branch = 1   # t
-    config.input_branch2 = 2 # xy v(xy)
+    config.input_branch2 = 50 # xy v(xy)
     config.input_trunk = 1    # mu 
 
     

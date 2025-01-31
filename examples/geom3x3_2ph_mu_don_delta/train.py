@@ -65,8 +65,8 @@ class resSampler(BaseSampler):
         idx_fem = map_elements_vertexes[idx_elem]
         idx_fem = jnp.reshape(idx_fem, (-1,))
         eigvecs_elem = jnp.reshape(eigvecs[idx_fem][jnp.newaxis, :, :], (self.batch_size, 3, 52))
-        eigvecs_elem = eigvecs_elem[:,:,:2]
-        eigvecs = eigvecs[:,:2]
+        eigvecs_elem = eigvecs_elem[:,:,2:52]
+        eigvecs = eigvecs[:,2:52]
         
         (idx_inlet, idx_outlet, idx_noslip) = idx_bcs
         key1, key = random.split(key, 2)
@@ -163,7 +163,7 @@ def train_one_window(config, workdir, model, samplers, idx):
         for key, sampler in samplers.items():
             batch[key] = next(sampler)
         
-        for _ in range(100):   
+        for _ in range(1000):   
             model.state = model.step(model.state, batch)
             step +=1
 
@@ -288,11 +288,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         batch = {}
         for key, sampler in samplers.items():
             batch[key] = next(sampler)       
-        # plt.scatter(batch["res"][5][0][1, :,0], batch["res"][5][0][1,:,1], s=1, c=jnp.squeeze(batch["res"][5][3][:]), cmap='jet')
-        # plt.savefig('ufem.jpg', format='jpg')
-        # print(batch["res"][5][0].shape)
-        # print(batch["res"][5][3].shape)
-        # print(das)
         
         # if config.training.fine_tune:
         #     ckpt_path = os.path.join(".", "ckpt", config.wandb.name, "time_window_1")
