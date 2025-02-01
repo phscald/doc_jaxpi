@@ -8,7 +8,7 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     config.mode = "train"
-    # config.mode = "eval"
+    config.mode = "eval"
     # ver o coeficiente do causal depois
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -68,10 +68,10 @@ def get_config():
         "v_data": 1.0,
         "p_data": 1.0,
         "s_data": 1.0,
-        # "u_ic": 1.0,
-        # "v_ic": 1.0,
-        # "p_ic": 1.0,
-        # "s_ic": 1.0,
+        "u_ic": 1.0,
+        "v_ic": 1.0,
+        "p_ic": 1.0,
+        "s_ic": 1.0,
         "noslip": 1.0,
         "sin": 1.0,
         "dp": 1.0,

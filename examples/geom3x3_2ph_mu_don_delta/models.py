@@ -274,17 +274,17 @@ class NavierStokes2DwSat(ForwardIVP):
             "v_data": v_data_ntk,
             "p_data": p_data_ntk,
             "s_data": s_data_ntk,
-            # "u_ic": u_ic_ntk,
-            # "v_ic": v_ic_ntk,
-            # "p_ic": p_ic_ntk,
-            # # "s_ic": s_ic_ntk,
+            "u_ic": u_ic_ntk,
+            "v_ic": v_ic_ntk,
+            "p_ic": p_ic_ntk,
+            "s_ic": s_ic_ntk,
             "noslip": noslip_ntk,
             "sin": sin_ntk,
             "dp": dp_ntk,
-            # "ru": ru_ntk, #
-            # "rv": rv_ntk, #
-            # "rc": rc_ntk,
-            # "rs": rs_ntk,
+            "ru": ru_ntk, #
+            "rv": rv_ntk, #
+            "rc": rc_ntk,
+            "rs": rs_ntk,
         }
 
         return ntk_dict
@@ -385,17 +385,17 @@ class NavierStokes2DwSat(ForwardIVP):
             "v_data": v_data,
             "p_data": p_data,
             "s_data": s_data,
-            # "u_ic": u_ic_loss,
-            # "v_ic": v_ic_loss,
-            # "p_ic": p_ic_loss,
-            # "s_ic": s_ic_loss,
+            "u_ic": u_ic_loss,
+            "v_ic": v_ic_loss,
+            "p_ic": p_ic_loss,
+            "s_ic": s_ic_loss,
             "noslip": noslip_loss,
             "sin": sin_loss,
             "dp": dp_loss,
-            # "ru": ru_loss,
-            # "rv": rv_loss,
-            # "rc": rc_loss,
-            # "rs": rs_loss,
+            "ru": ru_loss,
+            "rv": rv_loss,
+            "rc": rc_loss,
+            "rs": rs_loss,
         }
 
         return loss_dict
