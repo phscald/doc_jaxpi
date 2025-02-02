@@ -54,12 +54,13 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time
+    tmax =400
     
     coords_fem = coords_fem / L_max
     
     dt_fem = dt_fem / (mu1/dp)
     t_fem = jnp.cumsum(dt_fem)
-    idx = jnp.where(t_fem<=t1)[0]
+    idx = jnp.where(t_fem<=tmax)[0]
     
     (u0, v0, p0) = (u0/U_max , v0/U_max , p0/pmax)
     u_fem_s = u_fem_s[idx] / U_max 
@@ -70,6 +71,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     v_fem_q = v_fem_q[idx] / U_max 
     p_fem_q = p_fem_q[idx] / pmax
     s_fem_q = s_fem_q[idx]
+    
+    t_fem = t_fem[idx]
 
     t0 = 0.0
 
@@ -94,15 +97,14 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, None)), (None, 0, None, None)))
     s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, None)), (None, 0, None, None)))
     D_pred_fn = jit(vmap(vmap(model.D_net, (None, None, 0, None)), (None, 0, None, None)))
-
-    tmax = 400
     
     num_t = 10  # Desired number of points
     idx_t = jnp.linspace(0, t_fem.shape[0] - 1, num_t, dtype=int)
-    idx_t = 0
-    t_coords = jnp.array([t_fem[idx_t]/tmax])
-    # t_coords = t_fem[idx_t]/tmax
-    
+    t_coords = t_fem[idx_t]/tmax    
+
+    # idx_t = 0
+    # t_coords = jnp.array([t_fem[idx_t]/tmax])
+
     # print(jnp.mean(v0)+4*jnp.std(v0))
     # print(jnp.mean(v0)-4*jnp.std(v0))
     # print(jda)

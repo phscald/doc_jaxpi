@@ -563,7 +563,7 @@ class DeepONetwDssep(nn.Module):
 class DeepONet3wD(nn.Module):
     arch_name: Optional[str] = "DeepONet3wD"
     num_branch_layers: int = 4
-    # num_branch_layers2: int = 4
+    num_branch_layers2: int = 4
     num_trunk_layers: int = 4 # (u, x) : u é o branch, x é o trunk
     hidden_dim: int = 256
     out_dim: int = 1
