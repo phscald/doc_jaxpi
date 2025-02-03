@@ -5,6 +5,7 @@ import pickle
 import scipy.io
 import matplotlib.pyplot as plt
 from jax.numpy.linalg import norm as distance
+from jax.numpy.linalg import inv as invert
 
           
 def get_coords():
@@ -224,6 +225,11 @@ def relationship_element_vertex(delta_matrices):
         map_elements_vertexes = arquivos['map_elements_vertexes']
         del arquivos
     
+    print("Starting inverting Ms")
+    for i in range(M_matrices.shape[0]):
+        M_matrices = M_matrices.at[i].set(M_matrices[i])
+    print("Inverting done")
+        
     delta_matrices = (idx_bcs, eigvecs, vertices, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices)
     return delta_matrices
 

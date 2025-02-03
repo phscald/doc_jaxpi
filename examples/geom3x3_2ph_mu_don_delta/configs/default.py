@@ -48,12 +48,12 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 600000#int(2*10**(5)/upd_stp*2)
+    training.max_steps = 10**6  #int(2*10**(5)/upd_stp*2)
     training.fine_tune = True
     training.num_time_windows = 1
 
     div = 2
-    training.res_batch_size = 5*2048
+    training.res_batch_size = 2*2048
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
@@ -71,10 +71,10 @@ def get_config():
         "noslip": 1.0,
         "sin": 1.0,
         "dp": 1.0,
-        # "ru": 1.0,
-        # "rv": 1.0,
-        # "rc": 1.0,
-        # "rs": 1.0,
+        "ru": 1.0,
+        "rv": 1.0,
+        "rc": 1.0,
+        "rs": 1.0,
     }
 
     weighting.momentum = 0.9

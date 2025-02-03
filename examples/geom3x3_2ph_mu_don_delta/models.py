@@ -96,11 +96,11 @@ class NavierStokes2DwSat(ForwardIVP):
         _, _, _, _, D = self.neural_net(params, t, X, mu)
         return D
 
-    def r_net(self, params, t, eigenvecs_element, mu0, B, A, M, N):
+    def r_net(self, params, t, eigenvecs_element, mu0, B, A, Minv, N):
         # Re = jnp.ones(x.shape)
         ( _, mu1, rho0, rho1) = self.fluid_params
         
-        Minv = invert(M)
+        # Minv = invert(M)
                
         u1 , v1 , p1, s1, D = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([0]), axis=0)) , mu0)
         u2 , v2 , p2, s2, _ = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([1]), axis=0)) , mu0)
@@ -275,10 +275,10 @@ class NavierStokes2DwSat(ForwardIVP):
             "noslip": noslip_ntk,
             "sin": sin_ntk,
             "dp": dp_ntk,
-            # "ru": ru_ntk, #
-            # "rv": rv_ntk, #
-            # "rc": rc_ntk,
-            # "rs": rs_ntk,
+            "ru": ru_ntk, #
+            "rv": rv_ntk, #
+            "rc": rc_ntk,
+            "rs": rs_ntk,
         }
 
         return ntk_dict
@@ -371,10 +371,10 @@ class NavierStokes2DwSat(ForwardIVP):
             "noslip": noslip_loss,
             "sin": sin_loss,
             "dp": dp_loss,
-            # "ru": ru_loss,
-            # "rv": rv_loss,
-            # "rc": rc_loss,
-            # "rs": rs_loss,
+            "ru": ru_loss,
+            "rv": rv_loss,
+            "rc": rc_loss,
+            "rs": rs_loss,
         }
 
         return loss_dict
