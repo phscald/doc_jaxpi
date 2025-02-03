@@ -34,16 +34,30 @@ from utils import get_dataset#, get_fine_mesh, parabolic_inflow
     
 
 class resSampler(BaseSampler):
-    def __init__(self, delta_matrices, mu, initial, batch_size, rng_key=random.PRNGKey(1234)):
+    def __init__(self, delta_matrices, mu, initial, batch_size, max_steps=None, rng_key=random.PRNGKey(1234)):
         super().__init__(batch_size, rng_key)
         
         self.delta_matrices = delta_matrices
         self.mu = mu
         self.initial = initial
-    #     self.step = 0
+        self.step = 0
+        self.max_steps = max_steps
         
-    # def update_step(self, step):
-    #     self.step = step
+    def update_step(self, step):
+        self.step = step
+        
+    def _generate_mu_batch(self, key1, key2):
+
+        step_ratio = 2*self.step / self.max_steps
+        step_ratio = jnp.max(jnp.array([step_ratio, .05]))
+        step_ratio = jnp.min(jnp.array([step_ratio, 1  ]))
+        mu_span0_max = self.mu[0] + (self.mu[1] - self.mu[0])/2 * step_ratio
+        mu_batch0 = random.uniform(key1, shape=(int(self.batch_size/2),), minval = self.mu[0], maxval = mu_span0_max) 
+        mu_span1_min = self.mu[1] - (self.mu[1] - self.mu[0])/2 * step_ratio
+        mu_batch1 = random.uniform(key2, shape=(self.batch_size-int(self.batch_size/2),), minval = mu_span1_min, maxval = self.mu[1]) 
+        
+        return  jnp.concatenate([mu_batch0, mu_batch1])
+        
         
     @partial(pmap, static_broadcasted_argnums=(0,))
     def data_generation(self, key):
@@ -128,8 +142,9 @@ class resSampler(BaseSampler):
         u0_b, v0_b, p0_b, s0_b = jnp.concatenate(u0_b, axis=0), jnp.concatenate(v0_b, axis=0), jnp.concatenate(p0_b, axis=0), jnp.concatenate(s0_b, axis=0)
         u_fem_s_b, v_fem_s_b, p_fem_s_b, s_fem_s_b = jnp.concatenate(u_fem_s_b, axis=0), jnp.concatenate(v_fem_s_b, axis=0), jnp.concatenate(p_fem_s_b, axis=0), jnp.concatenate(s_fem_s_b, axis=0)
         u_fem_q_b, v_fem_q_b, p_fem_q_b, s_fem_q_b = jnp.concatenate(u_fem_q_b, axis=0), jnp.concatenate(v_fem_q_b, axis=0), jnp.concatenate(p_fem_q_b, axis=0), jnp.concatenate(s_fem_q_b, axis=0)
-        key1, key = random.split(key, 2)
-        mu_batch = random.uniform(key1, shape=(self.batch_size,), minval = self.mu[0], maxval = self.mu[1])  
+        key1, key2, key = random.split(key, 3)
+        # mu_batch = random.uniform(key1, shape=(self.batch_size,), minval = self.mu[0], maxval = self.mu[1])  
+        mu_batch = self._generate_mu_batch(key1, key2)
         mu_fem = jnp.concatenate((mu_batch,mu_batch,mu_batch), axis=0)
         
                 
@@ -156,21 +171,23 @@ def train_one_window(config, workdir, model, samplers, idx):
     # jit warm up
     print("Waiting for JIT...")
     step = 0
+    start_time = time.time() 
+    batch = {}
     while step < config.training.max_steps:
-        start_time = time.time() 
-        batch = {}
 
         for key, sampler in samplers.items():
             batch[key] = next(sampler)
-        
-        for _ in range(500):   
-            model.state = model.step(model.state, batch)
-            step +=1
-
+            
         # Update weights if necessary
         if config.weighting.scheme in ["grad_norm", "ntk"]:
             if step % config.weighting.update_every_steps == 0:
                 model.state = model.update_weights(model.state, batch)
+        
+        for _ in range(500):   
+            model.state = model.step(model.state, batch)
+            step +=1
+            
+        samplers["res"].update_step(step)
 
         # Log training metrics, only use host 0 to record results
         if jax.process_index() == 0:
@@ -280,21 +297,22 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
                 mu0,
                 initial,
                 config.training.res_batch_size,
-                # rng_key=keys,
-            )
+                config.training.max_steps,
+                rng_key=keys,
+            ) 
                     
         samplers = {
             "res": res_sampler,
         }
-        batch = {}
-        for key, sampler in samplers.items():
-            batch[key] = next(sampler)    
+        # batch = {}
+        # for key, sampler in samplers.items():
+        #     batch[key] = next(sampler)    
         
-        # if config.training.fine_tune:
-        #     ckpt_path = os.path.join(".", "ckpt", config.wandb.name, "time_window_1")
-        #     ckpt_path = os.path.abspath(ckpt_path)
-        #     state = restore_checkpoint(model.state, ckpt_path)
-        #     model.state =  replicate(state)
+        if config.training.fine_tune:
+            ckpt_path = os.path.join(".", "ckpt", config.wandb.name, "time_window_1")
+            ckpt_path = os.path.abspath(ckpt_path)
+            state = restore_checkpoint(model.state, ckpt_path)
+            model.state =  replicate(state)
         
         # Train model for the current time window
         model = train_one_window(config, workdir, model, samplers, idx)
