@@ -50,7 +50,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     U_max = dp*L_max/mu1
 
     mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .075, .0875, .1]
-    mu = mu_list[-1]
+    mu = mu_list[-3]
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time

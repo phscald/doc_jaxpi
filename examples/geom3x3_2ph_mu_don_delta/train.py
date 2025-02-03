@@ -48,9 +48,11 @@ class resSampler(BaseSampler):
         
     def _generate_mu_batch(self, key1, key2):
 
-        step_ratio = 2*self.step / self.max_steps
-        step_ratio = jnp.max(jnp.array([step_ratio, .05]))
-        step_ratio = jnp.min(jnp.array([step_ratio, 1  ]))
+        step_ratio =1
+
+        # step_ratio = 2*self.step / self.max_steps
+        # step_ratio = jnp.max(jnp.array([step_ratio, .05]))
+        # step_ratio = jnp.min(jnp.array([step_ratio, 1  ]))
         mu_span0_max = self.mu[0] + (self.mu[1] - self.mu[0])/2 * step_ratio
         mu_batch0 = random.uniform(key1, shape=(int(self.batch_size/2),), minval = self.mu[0], maxval = mu_span0_max) 
         mu_span1_min = self.mu[1] - (self.mu[1] - self.mu[0])/2 * step_ratio
@@ -183,7 +185,7 @@ def train_one_window(config, workdir, model, samplers, idx):
             if step % config.weighting.update_every_steps == 0:
                 model.state = model.update_weights(model.state, batch)
         
-        for _ in range(500):   
+        for _ in range(200):   
             model.state = model.step(model.state, batch)
             step +=1
             
@@ -235,15 +237,8 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     dp = pin
     L_max = 50/1000/100
     U_max = dp*L_max/mu1
-    u_maxs = jnp.max(u_fem_s)/U_max
-    v_maxs = jnp.max(v_fem_s)/U_max
-    u_maxq = jnp.max(u_fem_q)/U_max
-    v_maxq = jnp.max(v_fem_q)/U_max
-
     print(f"U_max: {U_max}")
-    print(f"u_fem_s/U_max: {jnp.max(u_fem_s)/U_max}")
-    print(f"v_fem_s/U_max: {jnp.max(v_fem_s)/U_max}")
-    
+
     pmax = dp
     Re = rho0*dp*(L_max**2)/(mu1**2)
     print(f'Re={Re}')
@@ -273,9 +268,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
             u_fem_s, v_fem_s, p_fem_s, s_fem_s, t_fem, coords_fem,
             u_fem_q, v_fem_q, p_fem_q, s_fem_q)
     
-    idx_bcs, eigvecs, vertices, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices  = delta_matrices
-    # vertices = vertices / L_max
-    # centroid = centroid / L_max
+    idx_bcs, eigvecs, _, map_elements_vertexes, _, B_matrices, A_matrices, M_matrices, N_matrices  = delta_matrices
     delta_matrices = (idx_bcs, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices )
 
     # Temporal domain of each time window
