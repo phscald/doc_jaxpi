@@ -1,4 +1,3 @@
-
 from functools import partial
 import time
 import os
@@ -33,7 +32,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     
     (   initial,
         delta_matrices,
-        mu0, mu1, rho0, rho1) = get_dataset()
+        mu0, mu1, rho0, rho1) = get_dataset(config)
 
     fluid_params = (mu0, mu1, rho0, rho1)    
         
@@ -87,8 +86,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     ckpt_path = os.path.abspath(ckpt_path)
     model.state = restore_checkpoint(model.state, ckpt_path)
     params = model.state.params
+
     
-    print("oi")
     X = eigvecs[:,:]
     
     # Predict
@@ -105,9 +104,6 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # idx_t = 0
     # t_coords = jnp.array([t_fem[idx_t]/tmax])
 
-    # print(jnp.mean(v0)+4*jnp.std(v0))
-    # print(jnp.mean(v0)-4*jnp.std(v0))
-    # print(jda)
 
     u_pred_list = []
     v_pred_list = []
@@ -137,17 +133,6 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     x = eigvecs[:, 0]
     y = eigvecs[:, 1]
-    
-    # print(jnp.mean(u0))
-    # print(jnp.std(u0))
-    # print(jnp.mean(v0))
-    # print(jnp.std(v0))
-    
-    # print(jnp.mean(u_pred_list[0]))
-    # print(jnp.std(u_pred_list[0]))
-    # print(jnp.mean(v_pred_list[0]))
-    # print(jnp.std(v_pred_list[0]))    
-    
 
 
     from matplotlib.animation import FuncAnimation

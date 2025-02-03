@@ -8,7 +8,7 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     config.mode = "train"
-    # config.mode = "eval"
+    config.mode = "eval"
     # ver o coeficiente do causal depois
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -100,10 +100,6 @@ def get_config():
     saving.num_keep_ckpts = 10
 
     # Input shape for initializing Flax models
-    # config.input_dim = 4
-    # config.input_branch = 3
-    # # config.input_branch = 2
-    # config.input_trunk = 1
     
     config.input_dim = 4
     config.input_branch = 1   # t

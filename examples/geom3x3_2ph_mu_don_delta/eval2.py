@@ -289,10 +289,6 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         os.makedirs(save_dir)
     fig1 = plt.figure(figsize=(18, 12))
     
-# u_fem = arquivos['u_data']
-# v_fem = arquivos['v_data']
-# p_fem = arquivos['p_data']
-# s_fem = arquivos['c_data']
 
 
     plt.subplot(4, 1, 1)

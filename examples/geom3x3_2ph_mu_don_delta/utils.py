@@ -187,7 +187,7 @@ def get_noslip(subdomain_id, vertices, mesh_vertices):
     return idx_mesh_col
 
        
-def relationship_element_vertex(delta_matrices):
+def relationship_element_vertex(delta_matrices, config):
     
     subdomain_id, eigvecs, vertices, mesh_vertices, centroid, B_matrices, A_matrices, M_matrices, N_matrices = delta_matrices
     
@@ -225,15 +225,18 @@ def relationship_element_vertex(delta_matrices):
         map_elements_vertexes = arquivos['map_elements_vertexes']
         del arquivos
     
-    print("Starting inverting Ms")
-    for i in range(M_matrices.shape[0]):
-        M_matrices = M_matrices.at[i].set(M_matrices[i])
-    print("Inverting done")
+    if config is None:
+        print("Starting inverting Ms")
+        for i in range(M_matrices.shape[0]):
+            M_matrices = M_matrices.at[i].set(M_matrices[i])
+        print("Inverting done")
+    elif config.mode == "eval":
+        print(" ")
         
     delta_matrices = (idx_bcs, eigvecs, vertices, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices)
     return delta_matrices
 
-def get_dataset():
+def get_dataset(config=None):
 
     
     # mu0 = [.0025, .1]
@@ -243,7 +246,7 @@ def get_dataset():
     rho0 = 1000; rho1 = 1000
     initial = initial_fields()
     delta_matrices = get_delta_matrices()
-    delta_matrices = relationship_element_vertex(delta_matrices)
+    delta_matrices = relationship_element_vertex(delta_matrices, config)
         
     return (
         initial,
