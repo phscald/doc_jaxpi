@@ -27,6 +27,7 @@ from jaxpi.utils import save_checkpoint
 
 from jaxpi.utils import restore_checkpoint
 from flax.jax_utils import replicate
+from flax import linen as nn
 
 
 from utils import get_dataset#, get_fine_mesh, parabolic_inflow
@@ -48,14 +49,14 @@ class resSampler(BaseSampler):
         
     def _generate_mu_batch(self, key1, key2):
 
-        step_ratio =1
+        # step_ratio =1
 
-        # step_ratio = 2*self.step / self.max_steps
-        # step_ratio = jnp.max(jnp.array([step_ratio, .05]))
-        # step_ratio = jnp.min(jnp.array([step_ratio, 1  ]))
-        mu_span0_max = self.mu[0] + (self.mu[1] - self.mu[0])/2 * step_ratio
+        step_ratio = 2*(self.step-10**5) / self.max_steps
+        step_ratio = jnp.max(jnp.array([step_ratio, .05]))
+        step_ratio = jnp.min(jnp.array([step_ratio, 1  ]))
+        mu_span0_max = self.mu[0] + (.02 - self.mu[0])/2 * step_ratio
         mu_batch0 = random.uniform(key1, shape=(int(self.batch_size/2),), minval = self.mu[0], maxval = mu_span0_max) 
-        mu_span1_min = self.mu[1] - (self.mu[1] - self.mu[0])/2 * step_ratio
+        mu_span1_min = self.mu[1] - (self.mu[1] - .02)/2 * step_ratio
         mu_batch1 = random.uniform(key2, shape=(self.batch_size-int(self.batch_size/2),), minval = mu_span1_min, maxval = self.mu[1]) 
         
         return  jnp.concatenate([mu_batch0, mu_batch1])
@@ -176,7 +177,7 @@ def train_one_window(config, workdir, model, samplers, idx):
     start_time = time.time() 
     batch = {}
     while step < config.training.max_steps:
-
+                
         for key, sampler in samplers.items():
             batch[key] = next(sampler)
             
@@ -184,9 +185,15 @@ def train_one_window(config, workdir, model, samplers, idx):
         if config.weighting.scheme in ["grad_norm", "ntk"]:
             if step % config.weighting.update_every_steps == 0:
                 model.state = model.update_weights(model.state, batch)
+                
+        if step>300000:
+            config.optim.learning_rate = 5*10**(-5)
+        elif step>800000:
+            config.optim.learning_rate = 10**(-5)
         
-        for _ in range(200):   
+        for _ in range(100):   
             model.state = model.step(model.state, batch)
+            model.update_epoch()
             step +=1
             
         samplers["res"].update_step(step)

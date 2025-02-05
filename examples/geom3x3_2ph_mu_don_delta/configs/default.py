@@ -23,8 +23,8 @@ def get_config():
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "DeepONet3wD"
     # arch.num_layers = 8
-    arch.num_trunk_layers = 4 # mu 2
-    arch.num_branch_layers = 7 # t 6
+    arch.num_trunk_layers = 5 # mu 2
+    arch.num_branch_layers = 5 # t 6
     # arch.num_branch_layers2 = 7 # xy v(xy)
     arch.hidden_dim = 100
     arch.out_dim = 4
@@ -48,12 +48,12 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = 10**6  #int(2*10**(5)/upd_stp*2)
+    training.max_steps = 1.2*10**6  #int(2*10**(5)/upd_stp*2)
     training.fine_tune = True
     training.num_time_windows = 1
 
     div = 2
-    training.res_batch_size = 2*2048
+    training.res_batch_size = 2048*2
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()

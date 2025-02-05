@@ -29,6 +29,7 @@ class NavierStokes2DwSat(ForwardIVP):
         self.fluid_params = fluid_params
 
         self.delta_matrices = None
+        self.epoch = 0
 
         # Predict functions over batch
         self.u0_pred_fn = vmap(self.u_net, (None, None, 0, 0))
@@ -51,6 +52,9 @@ class NavierStokes2DwSat(ForwardIVP):
         
     def update_delta_matrices(self, delta_matrices):
         self.delta_matrices = delta_matrices
+        
+    def update_epoch(self):
+        self.epoch = self.epoch+1
 
     def neural_net(self, params, t, X, mu):
                 
@@ -67,7 +71,7 @@ class NavierStokes2DwSat(ForwardIVP):
         v = outputs[1]
         p = outputs[2]
         s = outputs[3] # nn.softplus( outputs[3] )
-        D = nn.sigmoid(outputs[4]) *5*10**(-3)
+        D = nn.sigmoid(outputs[4]) *5*10**(-4)
         u_scaler = 0.00174 # 0.04
         v_scaler = 0.00027 # 0.007 
         
@@ -159,8 +163,11 @@ class NavierStokes2DwSat(ForwardIVP):
         rv = v_t + u * v_x + v * v_y + (p_y - mu_ratio*(v_xx + v_yy)) / Re #
         rc = u_x + v_y
         rs = s_t + u * s_x + v * s_y - D*(s_xx + s_yy)
-
-        return ru, rv, rc, rs
+        
+        trigger = nn.relu(self.epoch-(10**5-1))
+        trigger = jnp.min(jnp.array([trigger, 1]))
+        
+        return ru*trigger, rv*trigger, rc*trigger, rs*trigger
 
     def ru_net(self, params, t, X, mu):
         ru, _, _, _ = self.r_net(params, t, X, mu)
