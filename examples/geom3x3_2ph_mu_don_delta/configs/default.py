@@ -53,7 +53,7 @@ def get_config():
     training.num_time_windows = 1
 
     div = 2
-    training.res_batch_size = 2048*2
+    training.res_batch_size = 2048
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()

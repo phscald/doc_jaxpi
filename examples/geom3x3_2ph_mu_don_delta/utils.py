@@ -226,7 +226,7 @@ def relationship_element_vertex(delta_matrices, config):
         del arquivos
     
     if config is None:
-        print("Starting inverting Ms")
+        print("Inverting Ms")
         for i in range(M_matrices.shape[0]):
             M_matrices = M_matrices.at[i].set(M_matrices[i])
         print("Inverting done")
@@ -238,9 +238,7 @@ def relationship_element_vertex(delta_matrices, config):
 
 def get_dataset(config=None):
 
-    
-    # mu0 = [.0025, .1]
-    mu0 = [.0025, .0026]
+    mu0 = [.0025, .1]
 
     mu1 = .05
     rho0 = 1000; rho1 = 1000
