@@ -164,10 +164,7 @@ class NavierStokes2DwSat(ForwardIVP):
         rc = u_x + v_y
         rs = s_t + u * s_x + v * s_y - D*(s_xx + s_yy)
         
-        trigger = nn.relu(self.epoch-(10**5-1))
-        trigger = jnp.min(jnp.array([trigger, 1]))
-        
-        return ru*trigger, rv*trigger, rc*trigger, rs*trigger
+        return ru, rv, rc, rs
 
     def ru_net(self, params, t, X, mu):
         ru, _, _, _ = self.r_net(params, t, X, mu)
