@@ -41,6 +41,7 @@ class NavierStokes2DwSat(ForwardIVP):
         self.vfem_pred_fn = vmap(self.v_net, (None, 0, 0, None))
         self.pfem_pred_fn = vmap(self.p_net, (None, 0, 0, None))
         self.sfem_pred_fn = vmap(self.s_net, (None, 0, 0, None))
+        self.sfemic_pred_fn = vmap(self.s_net, (None, None, 0, None))
 
         self.u_pred_fn = vmap(self.u_net, (None, 0, 0, 0))
         self.v_pred_fn = vmap(self.v_net, (None, 0, 0, 0))
@@ -318,24 +319,32 @@ class NavierStokes2DwSat(ForwardIVP):
         v_ic_pred = self.v0_pred_fn(params, 0.0, X_fem, mu_fem)
         p_ic_pred = self.p0_pred_fn(params, 0.0, X_fem, mu_fem)
         s_ic_pred = self.s0_pred_fn(params, 0.0, X_fem, mu_fem)
-        u_ic_pred2 = self.ufem_pred_fn(params,  t_fem, X_fem, .05)
-        v_ic_pred2 = self.vfem_pred_fn(params,  t_fem, X_fem, .05)
-        p_ic_pred2 = self.pfem_pred_fn(params,  t_fem, X_fem, .05)
-        u_ic_loss = jnp.mean( jnp.mean((u_ic_pred - u_ic ) ** 2) + jnp.mean((u_ic_pred2 - u_ic ) ** 2) )
-        v_ic_loss = jnp.mean( jnp.mean((v_ic_pred - v_ic ) ** 2) + jnp.mean((v_ic_pred2 - v_ic ) ** 2) )
-        p_ic_loss = jnp.mean( jnp.mean((p_ic_pred - p_ic ) ** 2) + jnp.mean((p_ic_pred2 - p_ic ) ** 2) )
+        u_ic_pred2 = self.ufem_pred_fn(params, t_fem, X_fem, .05)
+        v_ic_pred2 = self.vfem_pred_fn(params, t_fem, X_fem, .05)
+        p_ic_pred2 = self.pfem_pred_fn(params, t_fem, X_fem, .05)
+        u_ic_loss = jnp.mean( jnp.array([jnp.mean((u_ic_pred - u_ic ) ** 2), jnp.mean((u_ic_pred2 - u_ic ) ** 2)]) )
+        v_ic_loss = jnp.mean( jnp.array([jnp.mean((v_ic_pred - v_ic ) ** 2), jnp.mean((v_ic_pred2 - v_ic ) ** 2)]) )
+        p_ic_loss = jnp.mean( jnp.array([jnp.mean((p_ic_pred - p_ic ) ** 2), jnp.mean((p_ic_pred2 - p_ic ) ** 2)]) )
         s_ic_loss = jnp.mean((s_ic_pred - s_ic ) ** 2)
+        
+        mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .075, .0875, .1]
+        
+        s_ic_loss = [s_ic_loss]
+        for i in range(6):
+            s_ic_pred2 = self.sfemic_pred_fn(params, 0, X_fem, mu_batch[i])
+            s_ic_loss.append(jnp.mean((s_ic_pred2 - s_ic ) ** 2))
+        s_ic_loss = jnp.mean(jnp.array(s_ic_loss))
         
         sin_pred = self.s_pred_fn( params, t_inlet, Xin, mu_inlet)
         sin_loss = jnp.mean((1.0 - sin_pred)**2)
         
         pin_pred = self.p_pred_fn( params, t_inlet, Xin, mu_inlet)
         pout_pred = self.p_pred_fn( params, t_inlet, Xout, mu_inlet)
-        dp_loss = jnp.mean(jnp.mean((self.p_in - pin_pred)**2) + jnp.mean((0 - pout_pred)**2))
+        dp_loss = jnp.mean( jnp.array([jnp.mean((self.p_in - pin_pred)**2), jnp.mean((0 - pout_pred)**2)]))
         
         u_nos_pred = self.u_pred_fn( params, t_noslip, Xnoslip, mu_noslip)
         v_nos_pred = self.v_pred_fn( params, t_noslip, Xnoslip, mu_noslip)
-        noslip_loss = jnp.mean(jnp.mean((0 - u_nos_pred)**2) + jnp.mean((0 - v_nos_pred)**2))
+        noslip_loss = jnp.mean( jnp.array([jnp.mean((0 - u_nos_pred)**2), jnp.mean((0 - v_nos_pred)**2)]))
 
         ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn( params, t, X, mu_batch, B, A, M, N )
         ru1 =  jnp.mean(ru_pred**2)
@@ -361,10 +370,16 @@ class NavierStokes2DwSat(ForwardIVP):
         rc4 =  jnp.mean(rc_pred**2)
         rs4 =  jnp.mean(rs_pred**2)
 
-        ru_loss = jnp.mean( ru1 + ru2 + ru3 + ru4 ) 
-        rv_loss = jnp.mean( rv1 + rv2 + rv3 + rv4 )
-        rc_loss = jnp.mean( rc1 + rc2 + rc3 + rc4 )
-        rs_loss = jnp.mean( rs1 + rs2 + rs3 + rs4 )
+        ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn_mu( params, t, X, .05, B, A, M, N )
+        ru5 =  jnp.mean(ru_pred**2)
+        rv5 =  jnp.mean(rv_pred**2)
+        rc5 =  jnp.mean(rc_pred**2)
+        rs5 =  jnp.mean(rs_pred**2)
+        
+        ru_loss = jnp.mean( jnp.array([ ru1 , ru2 , ru3 , ru4 , ru5 ] )) 
+        rv_loss = jnp.mean( jnp.array([ rv1 , rv2 , rv3 , rv4 , rv5 ] ))
+        rc_loss = jnp.mean( jnp.array([ rc1 , rc2 , rc3 , rc4 , rc5 ] ))
+        rs_loss = jnp.mean( jnp.array([ rs1 , rs2 , rs3 , rs4 , rs5 ] ))
 
         loss_dict = {
             "u_data": u_data,

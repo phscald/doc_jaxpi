@@ -48,7 +48,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     pmax = dp
     L_max = 50/1000/100
     U_max = dp*L_max/mu1
-
+    
+            #    0      1        2       3        4    5      6     7     8
     mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .075, .0875, .1]
     mu = mu_list[1]
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
@@ -206,102 +207,3 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Generate GIFs for each time window
     for idx in range(1, config.training.num_time_windows + 1):
         make_gif(idx)
-
-    # # Plot
-    # # Save dir
-    # save_dir = os.path.join(workdir, "figures", config.wandb.name)
-    # if not os.path.isdir(save_dir):
-    #     os.makedirs(save_dir)
-    # for i in range(len(u_pred)):
-    #     fig1 = plt.figure(figsize=(18, 12))
-        
-
-    #     plt.subplot(4, 1, 1)
-    #     plt.scatter(x, y, s=1, c=u_pred[i], cmap="jet")#, levels=100)
-    #     plt.colorbar()
-    #     plt.xlabel("x")
-    #     plt.ylabel("y")
-    #     plt.title("Predicted u(x, y)")
-    #     plt.tight_layout()
-
-    #     plt.subplot(4, 1, 2)
-    #     plt.scatter(x, y, s=1, c=v_pred[i], cmap="jet")#, levels=100)
-    #     plt.colorbar()
-    #     plt.xlabel("x")
-    #     plt.ylabel("y")
-    #     plt.title("Predicted v(x, y)")
-    #     plt.tight_layout()
-
-    #     plt.subplot(4, 1, 3)
-    #     plt.scatter(x, y, s=1, c=p_pred[i], cmap="jet")#, levels=100)
-    #     plt.colorbar()
-    #     plt.xlabel("x")
-    #     plt.ylabel("y")
-    #     plt.title("Predicted p(x, y)")
-    #     plt.tight_layout()
-
-    #     plt.subplot(4, 1, 4)
-    #     plt.scatter(x, y, s=1, c=s_pred[i], cmap="jet")#, levels=100)
-    #     plt.colorbar()
-    #     plt.xlabel("x")
-    #     plt.ylabel("y")
-    #     plt.title("Predicted s(x, y)")
-    #     plt.tight_layout()
-
-    #     save_path = os.path.join(save_dir, 'ns_geomII.png')
-    #     fig1.savefig(save_path, bbox_inches="tight", dpi=300)
-
-    #     plt.close()
-
-
-    # x = coords_fem[:,0]
-    # y = coords_fem[:,1]
-    
-    # # Plot
-    # # Save dir
-    # i = 11
-    # save_dir = os.path.join(workdir, "figures", config.wandb.name)
-    # if not os.path.isdir(save_dir):
-    #     os.makedirs(save_dir)
-    # fig1 = plt.figure(figsize=(18, 12))
-    
-    
-
-
-
-    # plt.subplot(4, 1, 1)
-    # plt.scatter(x, y, s=1, c=u_fem[i], cmap="jet")#, levels=100)
-    # plt.colorbar()
-    # plt.xlabel("x")
-    # plt.ylabel("y")
-    # plt.title("Predicted u(x, y)")
-    # plt.tight_layout()
-
-    # plt.subplot(4, 1, 2)
-    # plt.scatter(x, y, s=1, c=v_fem[i], cmap="jet")#, levels=100)
-    # plt.colorbar()
-    # plt.xlabel("x")
-    # plt.ylabel("y")
-    # plt.title("Predicted v(x, y)")
-    # plt.tight_layout()
-
-    # plt.subplot(4, 1, 3)
-    # plt.scatter(x, y, s=1, c=p_fem[i], cmap="jet")#, levels=100)
-    # plt.colorbar()
-    # plt.xlabel("x")
-    # plt.ylabel("y")
-    # plt.title("Predicted p(x, y)")
-    # plt.tight_layout()
-
-    # plt.subplot(4, 1, 4)
-    # plt.scatter(x, y, s=1, c=s_fem[i], cmap="jet")#, levels=100)
-    # plt.colorbar()
-    # plt.xlabel("x")
-    # plt.ylabel("y")
-    # plt.title("Predicted s(x, y)")
-    # plt.tight_layout()
-
-    # save_path = os.path.join(save_dir, 'fem.png')
-    # fig1.savefig(save_path, bbox_inches="tight", dpi=300)
-
-    # plt.close()
