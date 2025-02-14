@@ -7,59 +7,55 @@ import matplotlib.pyplot as plt
 from jax.numpy.linalg import norm as distance
 from jax.numpy.linalg import inv as invert
 
-          
-def get_coords():
-    filepath = '3x3.pkl'
+def nondimensionalize(data, mu1, dp, L_max):
+    U_max = dp*L_max/mu1
+    coords = data[1]
+    coords = coords/L_max
+    t = data[2]
+    t = t / (mu1/dp)
+    u = data[0][0] / U_max
+    v = data[0][1] / U_max
+    p = data[0][2] / dp
+    s = data[0][3]
+        
+    umax = np.max(u)
+    vmax = np.max(v)
+    tmax = np.max(t)
+
+    return ([u, v, p, s], coords, t, [umax, vmax, tmax])
+
+def load_dataset(filepath):
     with open(filepath, 'rb') as filepath:
         arquivos = pickle.load(filepath)
+    coords_fem = arquivos['coord']
+    u_fem = arquivos['u_data']
+    v_fem = arquivos['v_data']
+    p_fem = arquivos['p_data']
+    s_fem = arquivos['c_data']
+    dt_fem = arquivos['dt_data']
+    t_fem = np.cumsum(dt_fem)
+    del arquivos
+    
+    return ((u_fem, v_fem, p_fem, s_fem), coords_fem, t_fem)
 
-    contour_points = arquivos['contour_points']
-    X = arquivos['outside_points']
-       
-    inflow_coords = np.arange(0, np.max(contour_points[:,1])+.1)[:,np.newaxis]
-    inflow_coords = np.concatenate((np.zeros(inflow_coords.shape), inflow_coords), axis=1)
-    
-    outflow_coords = np.arange(0, np.max(contour_points[:,1])+.1)[:,np.newaxis]
-    outflow_coords = np.concatenate((np.ones(outflow_coords.shape)*np.max(contour_points[:,0]), outflow_coords), axis=1)
-    
-    bot_coords = np.arange(0, np.max(contour_points[:,0])+.1)[:,np.newaxis]
-    bot_coords = np.concatenate((bot_coords, np.zeros(bot_coords.shape)), axis=1)
-    
-    top_coords = np.arange(0, np.max(contour_points[:,0])+.1)[:,np.newaxis]
-    top_coords = np.concatenate((top_coords, np.ones(top_coords.shape)*np.max(contour_points[:,1])), axis=1)
-    
-    wall_coords = np.concatenate((bot_coords, top_coords, contour_points), axis=0)
-    
-    x_out = np.where((wall_coords[:,0]>=0) & (wall_coords[:,0]<=150) & ((wall_coords[:,1]==0) | (wall_coords[:,1]==900)))[0]
-    wall_coords = np.delete(wall_coords, x_out, axis=0)
-    x_out = np.where((wall_coords[:,0]>=250) & (wall_coords[:,0]<=400) & ((wall_coords[:,1]==0) | (wall_coords[:,1]==900)))[0]
-    wall_coords = np.delete(wall_coords, x_out, axis=0)
-    x_out = np.where((wall_coords[:,0]>=500) & (wall_coords[:,0]<=650) & ((wall_coords[:,1]==0) | (wall_coords[:,1]==900)))[0]
-    wall_coords = np.delete(wall_coords, x_out, axis=0)
-    x_out = np.where((wall_coords[:,0]>=750) & (wall_coords[:,0]<=900) & ((wall_coords[:,1]==0) | (wall_coords[:,1]==900)))[0]
-    wall_coords = np.delete(wall_coords, x_out, axis=0)
-    
-    # plt.scatter(wall_coords[:,0], wall_coords[:,1])
-    # plt.savefig("asa.jpeg")
-    
-    h = np.max(X[:,1])
-    
-    X[:,1] = -1*X[:,1] + h
-    inflow_coords[:,1] = -1*inflow_coords[:,1] + h
-    outflow_coords[:,1] = -1*outflow_coords[:,1] + h
-    wall_coords[:,1] = -1*wall_coords[:,1] + h
-    # contour_points[:,1] = -1*contour_points[:,1] + h
-    
-    # plt.scatter(wall_coords[:,0], wall_coords[:,1])
-    # plt.savefig("asa.jpeg")
 
-    return jax.device_put(X), \
-            jax.device_put(inflow_coords), \
-            jax.device_put(outflow_coords), \
-            jax.device_put(wall_coords) #, \
-            # jax.device_put(contour_points)    
+def get_fem(filepath_list, mu_list, mu1=.05, dp=50, L_max=50/1000/100):
+    data_all = []
+    flag_umax = 0
+    
+    for file in filepath_list:
+        data = load_dataset(file)
+        data = nondimensionalize(data, mu1, dp, L_max)
+        if flag_umax == 0: 
+            umax = data[3]
+            flag_umax = 1
+        data_all.append(data[0])
+    coords = data[1]
+    t = data[2]
+        
+    return data_all, coords, t, mu_list, umax
             
-def initial_fields():
+def initial_fields(config):
 
     filepath = './chip3x3_steady_mu_50cp.pkl'
     with open(filepath, 'rb') as filepath:
@@ -69,35 +65,69 @@ def initial_fields():
     p0 = np.squeeze(arquivos['p_data'])
     del arquivos
     
+    if config is None:
+        file_list = [
+            "data/chip3x3_mu0_0.0025_mu1_0.05.pkl",
+            "data/chip3x3_mu0_0.02625_mu1_0.05.pkl",
+            "data/chip3x3_mu0_0.05_mu1_0.05.pkl",
+            "data/chip3x3_mu0_0.075_mu1_0.05.pkl",
+            "data/chip3x3_mu0_0.1_mu1_0.05.pkl",
+        ]
+        mu_list = [.0025, .02625, .05, .075, .1]
+    elif config.mode == "eval":
+        file_list = [
+            "data/chip3x3_mu0_0.0025_mu1_0.05.pkl",
+            "data/chip3x3_mu0_0.014375_mu1_0.05.pkl",
+            "data/chip3x3_mu0_0.02625_mu1_0.05.pkl",
+            "data/chip3x3_mu0_0.038125_mu1_0.05.pkl",
+            "data/chip3x3_mu0_0.05_mu1_0.05.pkl",
+            "data/chip3x3_mu0_0.0625_mu1_0.05.pkl",
+            "data/chip3x3_mu0_0.075_mu1_0.05.pkl",
+            "data/chip3x3_mu0_0.0875_mu1_0.05.pkl",
+            "data/chip3x3_mu0_0.1_mu1_0.05.pkl",
+        ]
+        mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .0875, .1]
     
-    # print(f"medio: {np.max(u0)}")
-        
-    filepath = './chip3x3_inv0.pkl'
-    with open(filepath, 'rb') as filepath:
-        arquivos = pickle.load(filepath)
-    coords_fem = arquivos['coord']
-    u_fem_s = arquivos['u_data']
-    v_fem_s = arquivos['v_data']
-    p_fem_s = arquivos['p_data']
-    s_fem_s = arquivos['c_data']
-    dt_fem_s = arquivos['dt_data']
-    del arquivos
-    
-    # print(f"slow: {np.max(u_fem_s[-1])}")
+    (data_fem, coords_fem, t_fem, _, _) = get_fem(file_list, mu_list, mu1=.05, dp=50, L_max=50/1000/100)
+    pmax = 50
+    dp = pmax
+    L_max = 50/1000/100
+    mu1 = .05
+    U_max = dp*L_max/mu1
+    u0, v0, p0 = u0 / U_max, v0 / U_max, p0 / pmax 
 
-    filepath = './chip3x3_inv20.pkl'
-    with open(filepath, 'rb') as filepath:
-        arquivos = pickle.load(filepath)
-    coords_fem = arquivos['coord']
-    u_fem_q = arquivos['u_data']
-    v_fem_q = arquivos['v_data']
-    p_fem_q = arquivos['p_data']
-    s_fem_q = arquivos['c_data']
-    dt_fem_q = arquivos['dt_data']
-    del arquivos
-    
-    # print(f"quick: {np.max(u_fem_q[-1])}")
-
+    i=0
+    u_fem = np.concatenate(
+        (data_fem[0][i][np.newaxis,:,:],
+         data_fem[1][i][np.newaxis,:,:],
+         data_fem[2][i][np.newaxis,:,:],
+         data_fem[3][i][np.newaxis,:,:],
+         data_fem[4][i][np.newaxis,:,:])
+    , axis=0)
+    i=1
+    v_fem = np.concatenate(
+        (data_fem[0][i][np.newaxis,:,:],
+         data_fem[1][i][np.newaxis,:,:],
+         data_fem[2][i][np.newaxis,:,:],
+         data_fem[3][i][np.newaxis,:,:],
+         data_fem[4][i][np.newaxis,:,:])
+    , axis=0) 
+    i=2
+    p_fem = np.concatenate(
+        (data_fem[0][i][np.newaxis,:,:],
+         data_fem[1][i][np.newaxis,:,:],
+         data_fem[2][i][np.newaxis,:,:],
+         data_fem[3][i][np.newaxis,:,:],
+         data_fem[4][i][np.newaxis,:,:])
+    , axis=0)
+    i=3
+    s_fem = np.concatenate(
+        (data_fem[0][i][np.newaxis,:,:],
+         data_fem[1][i][np.newaxis,:,:],
+         data_fem[2][i][np.newaxis,:,:],
+         data_fem[3][i][np.newaxis,:,:],
+         data_fem[4][i][np.newaxis,:,:])
+    , axis=0)
     
     coords_fem = jax.device_put(coords_fem)
     s0 = jnp.zeros(coords_fem.shape[0])  # Initialize with zeros
@@ -105,8 +135,8 @@ def initial_fields():
     s0 = s0.at[condition].set(1.0)  # Assign the result back to s0
     coords_initial = coords_fem
     return (jax.device_put(u0), jax.device_put(v0), jax.device_put(p0), jax.device_put(s0), jax.device_put(coords_initial),
-            jax.device_put(u_fem_s), jax.device_put(v_fem_s), jax.device_put(p_fem_s), jax.device_put(s_fem_s), jax.device_put(dt_fem_s), coords_fem,
-            jax.device_put(u_fem_q), jax.device_put(v_fem_q), jax.device_put(p_fem_q), jax.device_put(s_fem_q))
+            jax.device_put(u_fem), jax.device_put(v_fem), jax.device_put(p_fem), jax.device_put(s_fem), jax.device_put(t_fem), 
+            coords_fem, jnp.array(mu_list))
     
     
 def get_delta_matrices():
@@ -238,18 +268,16 @@ def relationship_element_vertex(delta_matrices, config):
 
 def get_dataset(config=None):
 
-    mu0 = [.0025, .00251]
-
     mu1 = .05
     rho0 = 1000; rho1 = 1000
-    initial = initial_fields()
+    initial = initial_fields(config)
     delta_matrices = get_delta_matrices()
     delta_matrices = relationship_element_vertex(delta_matrices, config)
         
     return (
         initial,
         delta_matrices,
-        mu0, mu1, rho0, rho1
+        mu1, rho0, rho1
     )
 
     # print(jnp.where(subdomain_id==0)[0].shape) # fluid

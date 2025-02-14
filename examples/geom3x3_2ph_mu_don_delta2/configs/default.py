@@ -8,7 +8,7 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     config.mode = "train"
-    config.mode = "eval" 
+    # config.mode = "eval" 
     # ver o coeficiente do causal depois
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -48,7 +48,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = .2*10**6 
+    training.max_steps = .05*10**6 
     training.fine_tune = True
     training.num_time_windows = 1
 
@@ -60,17 +60,14 @@ def get_config():
     weighting.scheme = "grad_norm"
     
     weighting.init_weights = {
-        # "u_data": 1.0,
-        # "v_data": 1.0,
-        # "p_data": 1.0,
-        # "s_data": 1.0,
+        "u_data": 1.0,
+        "v_data": 1.0,
+        "p_data": 1.0,
+        "s_data": 1.0,
         "u_ic": 1.0,
         "v_ic": 1.0,
         "p_ic": 1.0,
         "s_ic": 1.0,
-        "noslip": 1.0,
-        "sin": 1.0,
-        "dp": 1.0,
         "ru": 1.0,
         "rv": 1.0,
         "rc": 1.0,

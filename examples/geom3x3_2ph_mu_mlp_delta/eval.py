@@ -25,7 +25,7 @@ from utils import get_dataset#, parabolic_inflow
 
 import matplotlib.pyplot as plt
 import matplotlib.tri as tri
-import pickle
+
 
 def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Load dataset
@@ -48,10 +48,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     pmax = dp
     L_max = 50/1000/100
     U_max = dp*L_max/mu1
-    
-            #    0      1        2       3        4    5      6     7     8
-    mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .075, .0875, .1]
-    mu = mu_list[0]
+
+    mu = .0025#.0056 # mu0 = [.0025, .01]
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time
@@ -88,6 +86,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     ckpt_path = os.path.abspath(ckpt_path)
     model.state = restore_checkpoint(model.state, ckpt_path)
     params = model.state.params
+
     
     X = eigvecs[:,:]
     
@@ -102,18 +101,22 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     idx_t = jnp.linspace(0, t_fem.shape[0] - 1, num_t, dtype=int)
     t_coords = t_fem[idx_t]/tmax    
 
+    # idx_t = 0
+    # t_coords = jnp.array([t_fem[idx_t]/tmax])
+
+
     u_pred_list = []
     v_pred_list = []
     p_pred_list = []
     s_pred_list = []
 
-    for indx in range(config.training.num_time_windows):
-        print(f'{indx+1} / {config.training.num_time_windows}' )
+    for idx in range(config.training.num_time_windows):
+        print(f'{idx+1} / {config.training.num_time_windows}' )
         # Restore the checkpoint
-        ckpt_path = os.path.join('.', 'ckpt', config.wandb.name, 'time_window_{}'.format(indx + 1))
+        ckpt_path = os.path.join('.', 'ckpt', config.wandb.name, 'time_window_{}'.format(idx + 1))
         model.state = restore_checkpoint(model.state, ckpt_path)
         params = model.state.params
-
+        
         print(f'mu = {mu}')
 
         u_pred = u_pred_fn(params, t_coords, X, mu)
@@ -124,86 +127,57 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         u_pred_list.append(u_pred)
         v_pred_list.append(v_pred)
         s_pred_list.append(s_pred)
-        p_pred_list.append(p_pred)     
+        p_pred_list.append(p_pred)    
 
     print(f"D: {D_pred_fn(params, t_coords, X, mu)[0,0]}")    
 
     x = eigvecs[:, 0]
     y = eigvecs[:, 1]
-    
-    
-    filepath = "./data/chip3x3_mu0_" + str(mu) + "_mu1_0.05.pkl"
-    with open(filepath, 'rb') as filepath:
-        arquivos = pickle.load(filepath)
-    coords_fem = arquivos['coord']
-    u_fem = arquivos['u_data'][idx_t] / U_max 
-    v_fem = arquivos['v_data'][idx_t] / U_max 
-    p_fem = arquivos['p_data'][idx_t] / pmax
-    s_fem = arquivos['c_data'][idx_t]
-    del arquivos
-    
+
+
     from matplotlib.animation import FuncAnimation
     from functools import partial  # Import partial to pass extra arguments to the update function
 
     # Create figures and axes once
-    figs, axs = plt.subplots(2, 1, figsize=(6, 10))
-    figu, axu = plt.subplots(2, 1, figsize=(6, 10))
-    figv, axv = plt.subplots(2, 1, figsize=(6, 10))
-    figp, axp = plt.subplots(2, 1, figsize=(6, 10))
+    figs, axs = plt.subplots()
+    figu, axu = plt.subplots()
+    figv, axv = plt.subplots()
+    figp, axp = plt.subplots()
 
     m = len(u_pred)  # Assuming u_pred and others are defined
 
     # Update function for each frame
-    def update_s(frames, indx):
-        axs[0].cla()  # Clear the current axis
-        axs[0].scatter(x, y, s=1, c=s_pred_list[indx][frames], cmap='jet', vmin=0, vmax=1)
-        
-        axs[1].cla()  # Clear the current axis
-        axs[1].scatter(x, y, s=1, c=s_fem[frames], cmap='jet', vmin=0, vmax=1)
-        
-        plt.tight_layout() 
+    def update_s(frames, idx):
+        axs.cla()  # Clear the current axis
+        axs.scatter(x, y, s=1, c=s_pred_list[idx][frames], cmap='jet' , vmin=0, vmax=1)
 
-    def update_u(frames, indx):
-        axu[0].cla()  # Clear the current axis
-        axu[0].scatter(x, y, s=1, c=u_pred_list[indx][frames], cmap='jet', vmin=jnp.min(u0), vmax=jnp.max(u0))
-        
-        axu[1].cla()  # Clear the current axis
-        axu[1].scatter(x, y, s=1, c=u_fem[frames], cmap='jet', vmin=jnp.min(u0), vmax=jnp.max(u0))
-                
-        plt.tight_layout() 
+    def update_u(frames, idx):
+        axu.cla()  # Clear the current axis
+        axu.scatter(x, y, s=1, c=u_pred_list[idx][frames], cmap='jet' )#, vmin=jnp.mean(u0)-2*jnp.std(u0), vmax=jnp.mean(u0)+2*jnp.std(u0))
 
-    def update_v(frames, indx):
-        axv[0].cla()  # Clear the current axis
-        axv[0].scatter(x, y, s=1, c=v_pred_list[indx][frames], cmap='jet', vmin=jnp.min(v0), vmax=jnp.max(v0))
-        
-        axv[1].cla()  # Clear the current axis
-        axv[1].scatter(x, y, s=1, c=v_fem[frames], cmap='jet', vmin=jnp.min(v0), vmax=jnp.max(v0))
-           
-        plt.tight_layout() 
+    def update_v(frames, idx):
+        axv.cla()  # Clear the current axis
+        axv.scatter(x, y, s=1, c=v_pred_list[idx][frames], cmap='jet' )#, vmin=jnp.mean(v0)-2*jnp.std(v0), vmax=jnp.mean(v0)+2*jnp.std(v0))
 
-    def update_p(frames, indx):
-        axp[0].cla()  # Clear the current axis
-        axp[0].scatter(x, y, s=1, c=p_pred_list[indx][frames], cmap='jet', vmin=0, vmax=1)
-                
-        axp[1].cla()  # Clear the current axis
-        axp[1].scatter(x, y, s=1, c=p_fem[frames], cmap='jet', vmin=0, vmax=1)
-                
-        plt.tight_layout() 
+    def update_p(frames, idx):
+        axp.cla()  # Clear the current axis
+        axp.scatter(x, y, s=1, c=p_pred_list[idx][frames], cmap='jet', vmin=0, vmax=1)
 
     # Function to generate GIFs
-    def make_gif(indx):
-        ani_s = FuncAnimation(figs, partial(update_s, indx=indx-1), frames=m, interval=200)
-        ani_s.save(f'./video_s_p5_{indx}.gif', writer='pillow')
+    def make_gif(idx):
+        ani_s = FuncAnimation(figs, partial(update_s, idx=idx-1), frames=m, interval=200)
+        ani_s.save(f'./video_s_p5_{idx}.gif', writer='pillow')
         
-        ani_u = FuncAnimation(figu, partial(update_u, indx=indx-1), frames=m, interval=200)
-        ani_u.save(f'./video_u_p5_{indx}.gif', writer='pillow')
+        ani_u = FuncAnimation(figu, partial(update_u, idx=idx-1), frames=m, interval=200)
+        ani_u.save(f'./video_u_p5_{idx}.gif', writer='pillow')
         
-        ani_v = FuncAnimation(figv, partial(update_v, indx=indx-1), frames=m, interval=200)
-        ani_v.save(f'./video_v_p5_{indx}.gif', writer='pillow')
+        ani_v = FuncAnimation(figv, partial(update_v, idx=idx-1), frames=m, interval=200)
+        ani_v.save(f'./video_v_p5_{idx}.gif', writer='pillow')
         
-        ani_p = FuncAnimation(figp, partial(update_p, indx=indx-1), frames=m, interval=200)
-        ani_p.save(f'./video_p_p5_{indx}.gif', writer='pillow')
+        ani_p = FuncAnimation(figp, partial(update_p, idx=idx-1), frames=m, interval=200)
+        ani_p.save(f'./video_p_p5_{idx}.gif', writer='pillow')
 
     # Generate GIFs for each time window
     for idx in range(1, config.training.num_time_windows + 1):
         make_gif(idx)
+

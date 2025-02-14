@@ -32,46 +32,36 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     
     (   initial,
         delta_matrices,
-        mu0, mu1, rho0, rho1) = get_dataset(config)
+        mu1, rho0, rho1) = get_dataset(config)
 
-    fluid_params = (mu0, mu1, rho0, rho1)    
+    fluid_params = (0, mu1, rho0, rho1)    
         
     (u0, v0, p0, s0, coords_initial,
-            u_fem_s, v_fem_s, p_fem_s, s_fem_s, dt_fem, coords_fem,
-            u_fem_q, v_fem_q, p_fem_q, s_fem_q) = initial
+     u_fem, v_fem, p_fem, s_fem, t_fem, 
+     coords_fem, mu_list) = initial
     
     _, eigvecs, _, _, _, _, _, _, _  = delta_matrices
 
-    fluid_params = (mu0, mu1, rho0, rho1)
     pin = 50
     dp = pin
     pmax = dp
     L_max = 50/1000/100
     U_max = dp*L_max/mu1
+
+    mu = .05 #mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .0875, .1]
+    ind_mu = jnp.where(mu_list==mu)[0]
     
-            #    0      1        2       3        4    5      6     7     8
-    mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .075, .0875, .1]
-    mu = mu_list[0]
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time
     tmax =400
     
-    coords_fem = coords_fem / L_max
-    
-    dt_fem = dt_fem / (mu1/dp)
-    t_fem = jnp.cumsum(dt_fem)
     idx = jnp.where(t_fem<=tmax)[0]
     
-    (u0, v0, p0) = (u0/U_max , v0/U_max , p0/pmax)
-    u_fem_s = u_fem_s[idx] / U_max 
-    v_fem_s = v_fem_s[idx] / U_max 
-    p_fem_s = p_fem_s[idx] / pmax
-    s_fem_s = s_fem_s[idx]
-    u_fem_q = u_fem_q[idx] / U_max 
-    v_fem_q = v_fem_q[idx] / U_max 
-    p_fem_q = p_fem_q[idx] / pmax
-    s_fem_q = s_fem_q[idx]
+    u_fem = jnp.squeeze( u_fem[ind_mu, idx] )
+    v_fem = jnp.squeeze( v_fem[ind_mu, idx] )
+    p_fem = jnp.squeeze( p_fem[ind_mu, idx] )
+    s_fem = jnp.squeeze( s_fem[ind_mu, idx] )
     
     t_fem = t_fem[idx]
 
@@ -92,15 +82,18 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     X = eigvecs[:,:]
     
     # Predict
-    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, None)), (None, 0, None, None))) # shape t by xy
-    v_pred_fn = jit(vmap(vmap(model.v_net, (None, None, 0, None)), (None, 0, None, None)))
-    p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, None)), (None, 0, None, None)))
-    s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, None)), (None, 0, None, None)))
-    D_pred_fn = jit(vmap(vmap(model.D_net, (None, None, 0, None)), (None, 0, None, None)))
+    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, 0, 0, None)), (None, 0, None, None, None, None))) # shape t by xy
+    v_pred_fn = jit(vmap(vmap(model.v_net, (None, None, 0, 0, 0, None)), (None, 0, None, None, None, None))) 
+    p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, 0, 0, None)), (None, 0, None, None, None, None))) 
+    s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, 0, 0, None)), (None, 0, None, None, None, None))) 
     
     num_t = 10  # Desired number of points
     idx_t = jnp.linspace(0, t_fem.shape[0] - 1, num_t, dtype=int)
-    t_coords = t_fem[idx_t]/tmax    
+    t_coords = t_fem[idx_t]/tmax 
+    u_fem = u_fem[idx_t]
+    v_fem = v_fem[idx_t]
+    p_fem = p_fem[idx_t]
+    s_fem = s_fem[idx_t]
 
     u_pred_list = []
     v_pred_list = []
@@ -116,31 +109,18 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
         print(f'mu = {mu}')
 
-        u_pred = u_pred_fn(params, t_coords, X, mu)
-        v_pred = v_pred_fn(params, t_coords, X, mu)
-        s_pred = s_pred_fn(params, t_coords, X, mu)
-        p_pred = p_pred_fn(params, t_coords, X, mu)      
+        u_pred = u_pred_fn(params, t_coords, X[:,0], X[:,1], X[:,2:], mu)
+        v_pred = v_pred_fn(params, t_coords, X[:,0], X[:,1], X[:,2:], mu)
+        s_pred = s_pred_fn(params, t_coords, X[:,0], X[:,1], X[:,2:], mu)
+        p_pred = p_pred_fn(params, t_coords, X[:,0], X[:,1], X[:,2:], mu)      
 
         u_pred_list.append(u_pred)
         v_pred_list.append(v_pred)
         s_pred_list.append(s_pred)
         p_pred_list.append(p_pred)     
 
-    print(f"D: {D_pred_fn(params, t_coords, X, mu)[0,0]}")    
-
     x = eigvecs[:, 0]
     y = eigvecs[:, 1]
-    
-    
-    filepath = "./data/chip3x3_mu0_" + str(mu) + "_mu1_0.05.pkl"
-    with open(filepath, 'rb') as filepath:
-        arquivos = pickle.load(filepath)
-    coords_fem = arquivos['coord']
-    u_fem = arquivos['u_data'][idx_t] / U_max 
-    v_fem = arquivos['v_data'][idx_t] / U_max 
-    p_fem = arquivos['p_data'][idx_t] / pmax
-    s_fem = arquivos['c_data'][idx_t]
-    del arquivos
     
     from matplotlib.animation import FuncAnimation
     from functools import partial  # Import partial to pass extra arguments to the update function

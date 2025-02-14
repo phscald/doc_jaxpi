@@ -35,42 +35,26 @@ from utils import get_dataset#, get_fine_mesh, parabolic_inflow
     
 
 class resSampler(BaseSampler):
-    def __init__(self, delta_matrices, mu, initial, batch_size, max_steps=None, rng_key=random.PRNGKey(1234)):
-        super().__init__(batch_size, rng_key)
+    def __init__(self, delta_matrices, initial, batch_size, max_steps=None, rng_key=random.PRNGKey(1234)):
+        super().__init__(batch_size, rng_key)       
         
         self.delta_matrices = delta_matrices
-        self.mu = mu
         self.initial = initial
         self.step = 0
         self.max_steps = max_steps
         
     def update_step(self, step):
-        self.step = step
-        
-    def _generate_mu_batch(self, key1, key2):
-
-        step_ratio = 2*(self.step) / self.max_steps
-        step_ratio = jnp.max(jnp.array([step_ratio, .05]))
-        step_ratio = jnp.min(jnp.array([step_ratio, 1  ]))
-        mu_span0_max = self.mu[0] + (.02 - self.mu[0]) * step_ratio
-        mu_batch0 = random.uniform(key1, shape=(int(self.batch_size/2),), minval = self.mu[0], maxval = mu_span0_max) 
-        mu_span1_min = self.mu[1] - (self.mu[1] - .02) * step_ratio
-        mu_batch1 = random.uniform(key2, shape=(self.batch_size-int(self.batch_size/2),), minval = mu_span1_min, maxval = self.mu[1]) 
-        
-        return  jnp.concatenate([mu_batch0, mu_batch1])
-        
+        self.step = step       
         
     @partial(pmap, static_broadcasted_argnums=(0,))
     def data_generation(self, key):
         "Generates data containing batch_size samples"
 
         
-        (  u0,   v0,   p0,   s0,   coords_initial,
-              u_fem_s,   v_fem_s,   p_fem_s,   s_fem_s,   t_fem,  coords_fem,
-              u_fem_q,   v_fem_q,   p_fem_q,   s_fem_q) = self.initial
+        (  u0, v0, p0, s0, coords_initial,
+              u_fem, v_fem, p_fem, s_fem, t_fem, coords_fem, mu_list) = self.initial
         
         (idx_bcs, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices) = self.delta_matrices
-        
         
         #1st step: sample of elements to be considered by the loss terms
         
@@ -83,17 +67,7 @@ class resSampler(BaseSampler):
         eigvecs_elem = eigvecs_elem[:,:,:]
         eigvecs = eigvecs[:,:]
         
-        (idx_inlet, idx_outlet, idx_noslip) = idx_bcs
-        key1, key = random.split(key, 2)
-        idx_idxnos = random.choice(key1, idx_noslip.shape[0], shape=(256,) )
-
-        key1, key = random.split(key, 2)
-        idx_idxnos = random.choice(key1, idx_noslip.shape[0], shape=(256,) )
-        mu_inlet = random.uniform(key1, shape=(idx_inlet.shape[0],), minval = self.mu[0], maxval = self.mu[1]) 
-        t_inlet = random.choice(key1, t_fem.shape[0], shape=(idx_inlet.shape[0],) )
-        mu_noslip = random.uniform(key1, shape=(idx_idxnos.shape[0],), minval = self.mu[0], maxval = self.mu[1]) 
-        t_noslip = random.choice(key1, t_fem.shape[0], shape=(idx_idxnos.shape[0],) )
-        X_bc = (eigvecs[idx_inlet], eigvecs[idx_outlet], eigvecs[idx_noslip[idx_idxnos]], mu_inlet, t_inlet, mu_noslip, t_noslip)        
+        (idx_inlet, idx_outlet, idx_noslip) = idx_bcs     
 
         X = eigvecs_elem 
         
@@ -106,8 +80,10 @@ class resSampler(BaseSampler):
 
         #2nd step: sample of time points
 
-        key1, key = random.split(key, 2)
+        key1, key2, key = random.split(key, 3)
         idx_t = random.choice(key1, t_fem.shape[0], shape=(self.batch_size,) )
+        idx_mu = random.choice(key2, mu_list.shape[0], shape=(self.batch_size,) )
+        
         
         idx_fem = map_elements_vertexes[idx_elem]
         # idx_fem = jnp.reshape(idx_fem, (-1,))
@@ -116,8 +92,7 @@ class resSampler(BaseSampler):
         
         # idx_t = jnp.repeat(idx_t, 3)
         u0_b, v0_b, p0_b, s0_b = [], [], [], []
-        u_fem_s_b, v_fem_s_b, p_fem_s_b, s_fem_s_b = [], [], [], []
-        u_fem_q_b, v_fem_q_b, p_fem_q_b, s_fem_q_b = [], [], [], []
+        u_fem_b, v_fem_b, p_fem_b, s_fem_b = [], [], [], []
         X_fem = []
         
         for i in range(3):
@@ -128,35 +103,26 @@ class resSampler(BaseSampler):
             p0_b.append(p0[idx_fem[:,i]])
             s0_b.append(s0[idx_fem[:,i]])
             
-            u_fem_s_b.append(u_fem_s[idx_t, idx_fem[:,i]])
-            v_fem_s_b.append(v_fem_s[idx_t, idx_fem[:,i]])
-            p_fem_s_b.append(p_fem_s[idx_t, idx_fem[:,i]])
-            s_fem_s_b.append(s_fem_s[idx_t, idx_fem[:,i]])
+            u_fem_b.append(u_fem[idx_mu, idx_t, idx_fem[:,i]])
+            v_fem_b.append(v_fem[idx_mu, idx_t, idx_fem[:,i]])
+            p_fem_b.append(p_fem[idx_mu, idx_t, idx_fem[:,i]])
+            s_fem_b.append(s_fem[idx_mu, idx_t, idx_fem[:,i]])
             
-            u_fem_q_b.append(u_fem_q[idx_t, idx_fem[:,i]])
-            v_fem_q_b.append(v_fem_q[idx_t, idx_fem[:,i]])
-            p_fem_q_b.append(p_fem_q[idx_t, idx_fem[:,i]])
-            s_fem_q_b.append(s_fem_q[idx_t, idx_fem[:,i]])
                      
         X_fem = jnp.concatenate(X_fem, axis=0)
         t_fem = jnp.concatenate((t,t,t), axis=0)
         u0_b, v0_b, p0_b, s0_b = jnp.concatenate(u0_b, axis=0), jnp.concatenate(v0_b, axis=0), jnp.concatenate(p0_b, axis=0), jnp.concatenate(s0_b, axis=0)
-        u_fem_s_b, v_fem_s_b, p_fem_s_b, s_fem_s_b = jnp.concatenate(u_fem_s_b, axis=0), jnp.concatenate(v_fem_s_b, axis=0), jnp.concatenate(p_fem_s_b, axis=0), jnp.concatenate(s_fem_s_b, axis=0)
-        u_fem_q_b, v_fem_q_b, p_fem_q_b, s_fem_q_b = jnp.concatenate(u_fem_q_b, axis=0), jnp.concatenate(v_fem_q_b, axis=0), jnp.concatenate(p_fem_q_b, axis=0), jnp.concatenate(s_fem_q_b, axis=0)
-        key1, key2, key = random.split(key, 3)
-        mu_batch = random.uniform(key1, shape=(self.batch_size,), minval = self.mu[0], maxval = self.mu[1])  
-        # mu_batch = self._generate_mu_batch(key1, key2)
+        u_fem_b, v_fem_b, p_fem_b, s_fem_b = jnp.concatenate(u_fem_b, axis=0), jnp.concatenate(v_fem_b, axis=0), jnp.concatenate(p_fem_b, axis=0), jnp.concatenate(s_fem_b, axis=0)
+
+        mu_batch = mu_list[idx_mu]
         mu_fem = jnp.concatenate((mu_batch,mu_batch,mu_batch), axis=0)
-        
                 
-        fields = (X_fem, t_fem, mu_fem, u_fem_q_b, v_fem_q_b, p_fem_q_b, s_fem_q_b, u_fem_s_b, v_fem_s_b, p_fem_s_b, s_fem_s_b)
+        fields = (X_fem, t_fem, mu_fem, u_fem_b, v_fem_b, p_fem_b, s_fem_b)
         fields_ic = (u0_b, v0_b, p0_b, s0_b)  
 
-        batch = (t, X, X_bc, mu_batch, matrices, fields, fields_ic)
+        batch = (t, X, mu_batch, matrices, fields, fields_ic)
 
         return batch
-
-        
 
 def train_one_window(config, workdir, model, samplers, idx):
     
@@ -230,13 +196,10 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     
     (   initial,
         delta_matrices,
-        mu0, mu1, rho0, rho1) = get_dataset()
+        mu1, rho0, rho1) = get_dataset()
 
-    fluid_params = (mu0, mu1, rho0, rho1)    
+    fluid_params = (0, mu1, rho0, rho1)    
         
-    (u0, v0, p0, s0, coords_initial,
-            u_fem_s, v_fem_s, p_fem_s, s_fem_s, dt_fem, coords_fem,
-            u_fem_q, v_fem_q, p_fem_q, s_fem_q) = initial
     
     pin = 50
     dp = pin
@@ -251,27 +214,22 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     t1 = 400
 
-    coords_fem = coords_fem / L_max
+    (u0, v0, p0, s0, coords_initial,
+     u_fem, v_fem, p_fem, s_fem, t_fem, 
+     coords_fem, mu_list) = initial
     
-    dt_fem = dt_fem / (mu1/dp)
-    t_fem = jnp.cumsum(dt_fem)
     idx = jnp.where(t_fem<=t1)[0]
     
-    (u0, v0, p0) = (u0/U_max , v0/U_max , p0/pmax)
-    u_fem_s = u_fem_s[idx] / U_max 
-    v_fem_s = v_fem_s[idx] / U_max 
-    p_fem_s = p_fem_s[idx] / pmax
-    s_fem_s = s_fem_s[idx]
-    u_fem_q = u_fem_q[idx] / U_max 
-    v_fem_q = v_fem_q[idx] / U_max 
-    p_fem_q = p_fem_q[idx] / pmax
-    s_fem_q = s_fem_q[idx]
+    u_fem = u_fem[:, idx]
+    v_fem = v_fem[:, idx]
+    p_fem = p_fem[:, idx]
+    s_fem = s_fem[:, idx]
     
     t_fem = t_fem[idx]
-    
+
     initial = (u0, v0, p0, s0, coords_initial,
-            u_fem_s, v_fem_s, p_fem_s, s_fem_s, t_fem, coords_fem,
-            u_fem_q, v_fem_q, p_fem_q, s_fem_q)
+            u_fem, v_fem, p_fem, s_fem, t_fem, 
+            coords_fem, mu_list)
     
     idx_bcs, eigvecs, _, map_elements_vertexes, _, B_matrices, A_matrices, M_matrices, N_matrices  = delta_matrices
     delta_matrices = (idx_bcs, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices )
@@ -292,7 +250,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         
         res_sampler = resSampler(
                 delta_matrices,
-                mu0,
                 initial,
                 config.training.res_batch_size,
                 config.training.max_steps,

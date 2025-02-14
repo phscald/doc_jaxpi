@@ -3,7 +3,6 @@ import jax.numpy as jnp
 
 def get_config():
     
-    upd_stp = 1
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
@@ -21,7 +20,7 @@ def get_config():
 
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
-    arch.arch_name = "DeepONet3wD"
+    arch.arch_name = "DeepONet3wD_"
     # arch.num_layers = 8
     arch.num_trunk_layers = 5 # mu 2
     arch.num_branch_layers = 5 # t 6
@@ -48,29 +47,26 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = .2*10**6 
+    training.max_steps = .05*10**6 
     training.fine_tune = True
     training.num_time_windows = 1
 
     div = 2
-    training.res_batch_size = 2048
+    training.res_batch_size = 1024
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
     weighting.scheme = "grad_norm"
     
     weighting.init_weights = {
-        # "u_data": 1.0,
-        # "v_data": 1.0,
-        # "p_data": 1.0,
-        # "s_data": 1.0,
+        "u_data": 1.0,
+        "v_data": 1.0,
+        "p_data": 1.0,
+        "s_data": 1.0,
         "u_ic": 1.0,
         "v_ic": 1.0,
         "p_ic": 1.0,
         "s_ic": 1.0,
-        "noslip": 1.0,
-        "sin": 1.0,
-        "dp": 1.0,
         "ru": 1.0,
         "rv": 1.0,
         "rc": 1.0,
@@ -102,8 +98,8 @@ def get_config():
     # Input shape for initializing Flax models
     
     config.input_dim = 4
-    config.input_branch = 1   # t
-    config.input_branch2 = 52 # xy v(xy)
+    config.input_branch = 3   # t
+    config.input_branch2 = 50 # xy v(xy)
     config.input_trunk = 1    # mu 
 
     
