@@ -48,7 +48,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     L_max = 50/1000/100
     U_max = dp*L_max/mu1
 
-    mu = .1 #mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .0875, .1]
+    mu = .0875 #mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .0875, .1]
     ind_mu = jnp.where(mu_list==mu)[0]
     
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
@@ -82,10 +82,10 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     X = eigvecs[:,:]
     
     # Predict
-    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, None)), (None, 0, None, None))) # shape t by xy
-    v_pred_fn = jit(vmap(vmap(model.v_net, (None, None, 0, None)), (None, 0, None, None)))
-    p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, None)), (None, 0, None, None)))
-    s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, None)), (None, 0, None, None)))
+    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, 0, 0, None)), (None, 0, None, None, None, None))) # shape t by xy
+    v_pred_fn = jit(vmap(vmap(model.v_net, (None, None, 0, 0, 0, None)), (None, 0, None, None, None, None))) 
+    p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, 0, 0, None)), (None, 0, None, None, None, None))) 
+    s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, 0, 0, None)), (None, 0, None, None, None, None))) 
     
     num_t = 10  # Desired number of points
     idx_t = jnp.linspace(0, t_fem.shape[0] - 1, num_t, dtype=int)
@@ -109,20 +109,18 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
         print(f'mu = {mu}')
 
-        u_pred = u_pred_fn(params, t_coords, X, mu)
-        v_pred = v_pred_fn(params, t_coords, X, mu)
-        s_pred = s_pred_fn(params, t_coords, X, mu)
-        p_pred = p_pred_fn(params, t_coords, X, mu)      
+        u_pred = u_pred_fn(params, t_coords, X[:,0], X[:,1], X[:,2:], mu)
+        v_pred = v_pred_fn(params, t_coords, X[:,0], X[:,1], X[:,2:], mu)
+        s_pred = s_pred_fn(params, t_coords, X[:,0], X[:,1], X[:,2:], mu)
+        p_pred = p_pred_fn(params, t_coords, X[:,0], X[:,1], X[:,2:], mu)      
 
         u_pred_list.append(u_pred)
         v_pred_list.append(v_pred)
         s_pred_list.append(s_pred)
         p_pred_list.append(p_pred)     
 
-
     x = eigvecs[:, 0]
     y = eigvecs[:, 1]
-    
     
     from matplotlib.animation import FuncAnimation
     from functools import partial  # Import partial to pass extra arguments to the update function

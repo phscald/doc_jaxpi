@@ -797,3 +797,120 @@ class DeepONet3wD_(nn.Module):
         
         y = jnp.concatenate( [y_u, y_v, y_p, y_s], axis=-1 )
         return y
+
+class MLP3wD_(nn.Module):
+    arch_name: Optional[str] = "MLP3wD_"
+    num_branch_layers: int = 4
+    num_branch_layers2: int = 4
+    num_trunk_layers: int = 4 # (u, x) : u é o branch, x é o trunk
+    hidden_dim: int = 256
+    out_dim: int = 1
+    activation: str = "tanh"
+    periodicity: Union[None, Dict] = None
+    fourier_emb: Union[None, Dict] = None
+    reparam: Union[None, Dict] = None
+
+    def setup(self):
+        self.activation_fn = _get_activation(self.activation)
+
+    @nn.compact
+    def __call__(self, u1, u2, x):
+ 
+        u1 = jnp.concatenate([u1, u2, x])
+        
+        u1 = ModifiedMlp(#MlpBlock(
+            num_layers=self.num_branch_layers,
+            hidden_dim=self.hidden_dim,
+            out_dim=self.hidden_dim,
+            activation=self.activation,
+            #final_activation=False,
+            reparam=self.reparam,
+            periodicity=self.periodicity,
+            fourier_emb=self.fourier_emb,
+        )(u1)
+
+        y = u1
+        
+        y_p = self.activation_fn(y)
+        y_u = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
+        y_v = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
+        y_p = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
+        y_u = Dense(features=1, reparam=self.reparam)(y_u)
+        y_v = Dense(features=1, reparam=self.reparam)(y_v)
+        y_p = Dense(features=1, reparam=self.reparam)(y_p)
+        
+        y_s = nn.sigmoid(y)
+        y_s = nn.sigmoid(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_s))
+        y_s = Dense(features=1, reparam=self.reparam)(y_s)
+        
+        y = jnp.concatenate( [y_u, y_v, y_p, y_s], axis=-1 )
+        return y
+
+
+class MLP3wD(nn.Module):
+    arch_name: Optional[str] = "MLP3wD"
+    num_branch_layers: int = 4
+    num_branch_layers2: int = 4
+    num_trunk_layers: int = 4 # (u, x) : u é o branch, x é o trunk
+    hidden_dim: int = 256
+    out_dim: int = 1
+    activation: str = "tanh"
+    periodicity: Union[None, Dict] = None
+    fourier_emb: Union[None, Dict] = None
+    reparam: Union[None, Dict] = None
+
+    def setup(self):
+        self.activation_fn = _get_activation(self.activation)
+
+    @nn.compact
+    def __call__(self, u1, u2, x):
+        # (u, x) : u é o branch, x é o trunk
+        #  u1: t              - branch1
+        #  u2: x, y, v(x,y)   - branch2
+        #  x: mu              - trunk   
+        
+        # x = jnp.concatenate([x, u1])
+        # u1=u2    
+        u1 = jnp.concatenate([u1, u2, x])
+        
+        u1 = ModifiedMlp(#MlpBlock(
+            num_layers=self.num_branch_layers,
+            hidden_dim=self.hidden_dim,
+            out_dim=self.hidden_dim,
+            activation=self.activation,
+            #final_activation=False,
+            reparam=self.reparam,
+            periodicity=self.periodicity,
+            fourier_emb=self.fourier_emb,
+        )(u1)
+        
+        # u2 = ModifiedMlp(#Mlp(
+        #     num_layers=self.num_branch_layers2,
+        #     hidden_dim=self.hidden_dim,
+        #     out_dim=self.hidden_dim,
+        #     activation=self.activation,
+        #     periodicity=self.periodicity,
+        #     fourier_emb=self.fourier_emb,
+        #     reparam=self.reparam,
+        # )(u2)
+
+   
+        # u2 = jnp.squeeze(u2)
+        # u1 = u1 * u2
+        y = u1
+        
+        y_p = self.activation_fn(y)
+        y_u = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
+        y_v = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
+        y_p = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
+        y_u = Dense(features=1, reparam=self.reparam)(y_u)
+        y_v = Dense(features=1, reparam=self.reparam)(y_v)
+        y_p = Dense(features=1, reparam=self.reparam)(y_p)
+        
+        y_s = nn.sigmoid(y)
+        y_s = nn.sigmoid(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_s))
+        y_s = Dense(features=1, reparam=self.reparam)(y_s)
+        
+        y = jnp.concatenate( [y_u, y_v, y_p, y_s], axis=-1 )
+        return y
+    

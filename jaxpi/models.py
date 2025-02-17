@@ -73,6 +73,12 @@ def _create_arch(config):
     elif config.arch_name == "DeepONet3wD_":
         arch = archs.DeepONet3wD_(**config)
         
+    elif config.arch_name == "MLP3wD":
+        arch = archs.MLP3wD(**config)
+                
+    elif config.arch_name == "MLP3wD_":
+        arch = archs.MLP3wD_(**config)
+        
     elif config.arch_name == "DeepONetwD":
         arch = archs.DeepONetwD(**config)
         
@@ -111,7 +117,7 @@ def _create_optimizer(config):
 def _create_train_state(config):
     # Initialize network
     arch = _create_arch(config.arch)
-    if config.arch.arch_name == "DeepONet3wD" or config.arch.arch_name == "ModifiedMlpwD": 
+    if config.arch.arch_name == "DeepONet3wD" or config.arch.arch_name == "ModifiedMlpwD" or config.arch.arch_name == "MLP3wD": 
         # (u, x) : u é o branch, x é o trunk
         #  u1: t              - branch1
         #  u2: x, y, v(x,y)   - branch2
@@ -120,7 +126,7 @@ def _create_train_state(config):
         u2 = jnp.ones(config.input_branch2)
         x = jnp.ones(config.input_trunk)
         params = arch.init(random.PRNGKey(config.seed), u1, u2, x)
-    elif config.arch.arch_name == "DeepONet3wD_": 
+    elif config.arch.arch_name == "DeepONet3wD_" or config.arch.arch_name == "MLP3wD_" : 
         # (u, x) : u é o branch, x é o trunk
         #  u1: t              - branch1
         #  u2: x, y, v(x,y)   - branch2
