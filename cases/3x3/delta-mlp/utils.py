@@ -57,7 +57,7 @@ def get_fem(filepath_list, mu_list, mu1=.05, dp=50, L_max=50/1000/100):
             
 def initial_fields(config):
 
-    filepath = './chip3x3_steady_mu_50cp.pkl'
+    filepath = '../data/chip3x3_steady_mu_50cp.pkl'
     with open(filepath, 'rb') as filepath:
         arquivos = pickle.load(filepath)
     u0 = np.squeeze(arquivos['u_data'])
@@ -67,24 +67,24 @@ def initial_fields(config):
     
     if config is None:
         file_list = [
-            "data/chip3x3_mu0_0.0025_mu1_0.05.pkl",
-            "data/chip3x3_mu0_0.02625_mu1_0.05.pkl",
-            "data/chip3x3_mu0_0.05_mu1_0.05.pkl",
-            "data/chip3x3_mu0_0.075_mu1_0.05.pkl",
-            "data/chip3x3_mu0_0.1_mu1_0.05.pkl",
+            "../data/chip3x3_mu0_0.0025_mu1_0.05.pkl",
+            "../data/chip3x3_mu0_0.02625_mu1_0.05.pkl",
+            "../data/chip3x3_mu0_0.05_mu1_0.05.pkl",
+            "../data/chip3x3_mu0_0.075_mu1_0.05.pkl",
+            "../data/chip3x3_mu0_0.1_mu1_0.05.pkl",
         ]
         mu_list = [.0025, .02625, .05, .075, .1]
     elif config.mode == "eval":
         file_list = [
-            "data/chip3x3_mu0_0.0025_mu1_0.05.pkl",
-            "data/chip3x3_mu0_0.014375_mu1_0.05.pkl",
-            "data/chip3x3_mu0_0.02625_mu1_0.05.pkl",
-            "data/chip3x3_mu0_0.038125_mu1_0.05.pkl",
-            "data/chip3x3_mu0_0.05_mu1_0.05.pkl",
-            "data/chip3x3_mu0_0.0625_mu1_0.05.pkl",
-            "data/chip3x3_mu0_0.075_mu1_0.05.pkl",
-            "data/chip3x3_mu0_0.0875_mu1_0.05.pkl",
-            "data/chip3x3_mu0_0.1_mu1_0.05.pkl",
+            "../data/chip3x3_mu0_0.0025_mu1_0.05.pkl",
+            "../data/chip3x3_mu0_0.014375_mu1_0.05.pkl",
+            "../data/chip3x3_mu0_0.02625_mu1_0.05.pkl",
+            "../data/chip3x3_mu0_0.038125_mu1_0.05.pkl",
+            "../data/chip3x3_mu0_0.05_mu1_0.05.pkl",
+            "../data/chip3x3_mu0_0.0625_mu1_0.05.pkl",
+            "../data/chip3x3_mu0_0.075_mu1_0.05.pkl",
+            "../data/chip3x3_mu0_0.0875_mu1_0.05.pkl",
+            "../data/chip3x3_mu0_0.1_mu1_0.05.pkl",
         ]
         mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .0875, .1]
     
@@ -263,7 +263,7 @@ def relationship_element_vertex(delta_matrices, config):
     elif config.mode == "eval":
         print(" ")
         
-    delta_matrices = (idx_bcs, eigvecs, vertices, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices)
+    delta_matrices = (idx_bcs, eigvecs, vertices/L_max, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices)
     return delta_matrices
 
 def get_dataset(config=None):
