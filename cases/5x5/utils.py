@@ -39,7 +39,7 @@ def load_dataset(filepath):
     return ((u_fem, v_fem, p_fem, s_fem), coords_fem, t_fem)
 
 
-def get_fem(filepath_list, mu_list, mu1=.05, dp=50, L_max=50/1000/100):
+def get_fem(filepath_list, mu_list, mu1, dp, L_max):
     data_all = []
     flag_umax = 0
     
@@ -55,7 +55,7 @@ def get_fem(filepath_list, mu_list, mu1=.05, dp=50, L_max=50/1000/100):
         
     return data_all, coords, t, mu_list, umax
             
-def initial_fields(config):
+def initial_fields(L_max, config):
 
     filepath = '../data/chip3x3_steady_mu_50cp.pkl'
     with open(filepath, 'rb') as filepath:
@@ -67,31 +67,32 @@ def initial_fields(config):
     
     if config is None:
         file_list = [
-            "../data/chip3x3_mu0_0.0025_mu1_0.05.pkl",
-            "../data/chip3x3_mu0_0.02625_mu1_0.05.pkl",
-            "../data/chip3x3_mu0_0.05_mu1_0.05.pkl",
-            "../data/chip3x3_mu0_0.075_mu1_0.05.pkl",
-            "../data/chip3x3_mu0_0.1_mu1_0.05.pkl",
+            "../data/chip3x3_new_mu0_0.0025_mu1_0.05.pkl",
+            "../data/chip3x3_new_mu0_0.02625_mu1_0.05.pkl",
+            "../data/chip3x3_new_mu0_0.05_mu1_0.05.pkl",
+            "../data/chip3x3_new_mu0_0.075_mu1_0.05.pkl",
+            "../data/chip3x3_new_mu0_0.1_mu1_0.05.pkl",
         ]
         mu_list = [.0025, .02625, .05, .075, .1]
+        # mu_list = [ .05, .1]
     elif config.mode == "eval":
         file_list = [
-            "../data/chip3x3_mu0_0.0025_mu1_0.05.pkl",
-            "../data/chip3x3_mu0_0.014375_mu1_0.05.pkl",
-            "../data/chip3x3_mu0_0.02625_mu1_0.05.pkl",
-            "../data/chip3x3_mu0_0.038125_mu1_0.05.pkl",
-            "../data/chip3x3_mu0_0.05_mu1_0.05.pkl",
-            "../data/chip3x3_mu0_0.0625_mu1_0.05.pkl",
-            "../data/chip3x3_mu0_0.075_mu1_0.05.pkl",
-            "../data/chip3x3_mu0_0.0875_mu1_0.05.pkl",
-            "../data/chip3x3_mu0_0.1_mu1_0.05.pkl",
+            "../data/chip3x3_new_mu0_0.0025_mu1_0.05.pkl",
+            "../data/chip3x3_new_mu0_0.014375_mu1_0.05.pkl",
+            "../data/chip3x3_new_mu0_0.02625_mu1_0.05.pkl",
+            "../data/chip3x3_new_mu0_0.038125_mu1_0.05.pkl",
+            "../data/chip3x3_new_mu0_0.05_mu1_0.05.pkl",
+            "../data/chip3x3_new_mu0_0.0625_mu1_0.05.pkl",
+            "../data/chip3x3_new_mu0_0.075_mu1_0.05.pkl",
+            "../data/chip3x3_new_mu0_0.0875_mu1_0.05.pkl",
+            "../data/chip3x3_new_mu0_0.1_mu1_0.05.pkl",
         ]
-        mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .0875, .1]
+        mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .075, .0875, .1]
+        # mu_list = [ .05, .1]
     
-    (data_fem, coords_fem, t_fem, _, _) = get_fem(file_list, mu_list, mu1=.05, dp=50, L_max=50/1000/100)
-    pmax = 50
+    (data_fem, coords_fem, t_fem, _, _) = get_fem(file_list, mu_list, mu1=.05, dp=100, L_max=L_max)
+    pmax = 100
     dp = pmax
-    L_max = 50/1000/100
     mu1 = .05
     U_max = dp*L_max/mu1
     u0, v0, p0 = u0 / U_max, v0 / U_max, p0 / pmax 
@@ -99,34 +100,34 @@ def initial_fields(config):
     i=0
     u_fem = np.concatenate(
         (data_fem[0][i][np.newaxis,:,:],
-         data_fem[1][i][np.newaxis,:,:],
-         data_fem[2][i][np.newaxis,:,:],
-         data_fem[3][i][np.newaxis,:,:],
-         data_fem[4][i][np.newaxis,:,:])
+         data_fem[1][i][np.newaxis,:,:],)
+        #  data_fem[2][i][np.newaxis,:,:],
+        #  data_fem[3][i][np.newaxis,:,:],
+        #  data_fem[4][i][np.newaxis,:,:])
     , axis=0)
     i=1
     v_fem = np.concatenate(
         (data_fem[0][i][np.newaxis,:,:],
-         data_fem[1][i][np.newaxis,:,:],
-         data_fem[2][i][np.newaxis,:,:],
-         data_fem[3][i][np.newaxis,:,:],
-         data_fem[4][i][np.newaxis,:,:])
+         data_fem[1][i][np.newaxis,:,:],)
+        #  data_fem[2][i][np.newaxis,:,:],
+        #  data_fem[3][i][np.newaxis,:,:],
+        #  data_fem[4][i][np.newaxis,:,:])
     , axis=0) 
     i=2
     p_fem = np.concatenate(
         (data_fem[0][i][np.newaxis,:,:],
-         data_fem[1][i][np.newaxis,:,:],
-         data_fem[2][i][np.newaxis,:,:],
-         data_fem[3][i][np.newaxis,:,:],
-         data_fem[4][i][np.newaxis,:,:])
+         data_fem[1][i][np.newaxis,:,:],)
+        #  data_fem[2][i][np.newaxis,:,:],
+        #  data_fem[3][i][np.newaxis,:,:],
+        #  data_fem[4][i][np.newaxis,:,:])
     , axis=0)
     i=3
     s_fem = np.concatenate(
         (data_fem[0][i][np.newaxis,:,:],
-         data_fem[1][i][np.newaxis,:,:],
-         data_fem[2][i][np.newaxis,:,:],
-         data_fem[3][i][np.newaxis,:,:],
-         data_fem[4][i][np.newaxis,:,:])
+         data_fem[1][i][np.newaxis,:,:],)
+        #  data_fem[2][i][np.newaxis,:,:],
+        #  data_fem[3][i][np.newaxis,:,:],
+        #  data_fem[4][i][np.newaxis,:,:])
     , axis=0)
     
     coords_fem = jax.device_put(coords_fem)
@@ -141,14 +142,14 @@ def initial_fields(config):
     
 def get_delta_matrices():
     
-    filepath = './matrices_delta.pkl'
+    filepath = '../data/matrices.pkl'
     with open(filepath, 'rb') as filepath:
         arquivos = pickle.load(filepath)
     eigvecs = np.squeeze(arquivos['eigvecs'])
     del arquivos
     eigvecs /= np.linalg.norm(eigvecs, axis=1, keepdims=True)
        
-    filepath = './matrices2.pkl'
+    filepath = '../data/matrices2.pkl'
     with open(filepath, 'rb') as filepath:
         arquivos = pickle.load(filepath)
     subdomain_id = np.squeeze(arquivos['subdomain_id'])
@@ -217,11 +218,10 @@ def get_noslip(subdomain_id, vertices, mesh_vertices):
     return idx_mesh_col
 
        
-def relationship_element_vertex(delta_matrices, config):
+def relationship_element_vertex(L_max, delta_matrices, config):
     
     subdomain_id, eigvecs, vertices, mesh_vertices, centroid, B_matrices, A_matrices, M_matrices, N_matrices = delta_matrices
-    
-    L_max = 50/1000/100
+
     eigvecs = jnp.concatenate([mesh_vertices/L_max, eigvecs], axis=1)
     idx_inlet = jnp.where(mesh_vertices[:,0]==jnp.min(mesh_vertices[:,0]))[0]
     idx_outlet = jnp.where(mesh_vertices[:,0]==jnp.max(mesh_vertices[:,0]))[0]
@@ -243,17 +243,18 @@ def relationship_element_vertex(delta_matrices, config):
             map_elements_vertexes.append(idxs)
         map_elements_vertexes = jnp.stack(map_elements_vertexes)
             
-        filepath = './map_elements_vertexes.pkl'
+        filepath = '../data/map_elements_vertexes.pkl'
         with open(filepath,"wb") as filepath:
             pickle.dump({
                         "map_elements_vertexes": map_elements_vertexes,
                     }, filepath)
     else:
-        filepath = './map_elements_vertexes.pkl'
+        filepath = '../data/map_elements_vertexes.pkl'
         with open(filepath, 'rb') as filepath:
             arquivos = pickle.load(filepath)
         map_elements_vertexes = arquivos['map_elements_vertexes']
         del arquivos
+
     
     if config is None:
         print("Inverting Ms")
@@ -266,13 +267,13 @@ def relationship_element_vertex(delta_matrices, config):
     delta_matrices = (idx_bcs, eigvecs, vertices/L_max, map_elements_vertexes, centroid, B_matrices, A_matrices, M_matrices, N_matrices)
     return delta_matrices
 
-def get_dataset(config=None):
+def get_dataset(L_max, config=None):
 
     mu1 = .05
     rho0 = 1000; rho1 = 1000
-    initial = initial_fields(config)
+    initial = initial_fields(L_max, config)
     delta_matrices = get_delta_matrices()
-    delta_matrices = relationship_element_vertex(delta_matrices, config)
+    delta_matrices = relationship_element_vertex(L_max, delta_matrices, config)
         
     return (
         initial,

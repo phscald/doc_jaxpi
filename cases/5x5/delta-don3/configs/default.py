@@ -9,7 +9,6 @@ def get_config():
 
     config.mode = "train"
     config.mode = "eval" 
-    # config.mode = "evalcurves" 
     # ver o coeficiente do causal depois
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -22,7 +21,7 @@ def get_config():
 
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
-    arch.arch_name = "MLP3wD_"
+    arch.arch_name = "DeepONet3wD"
     # arch.num_layers = 8
     arch.num_trunk_layers = 5 # mu 2
     arch.num_branch_layers = 5 # t 6
@@ -49,7 +48,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = .1*10**6 
+    training.max_steps = 1*10**6 
     training.fine_tune = True
     training.num_time_windows = 1
 
@@ -69,10 +68,10 @@ def get_config():
         "v_ic": 1.0,
         "p_ic": 1.0,
         "s_ic": 1.0,
-        # "ru": 1.0,
-        # "rv": 1.0,
+        "ru": 1.0,
+        "rv": 1.0,
         "rc": 1.0,
-        "rs": 1.0,
+        # "rs": 1.0,
     }
 
     weighting.momentum = 0.9

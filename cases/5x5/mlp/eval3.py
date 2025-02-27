@@ -21,7 +21,9 @@ import models
 
 from jaxpi.utils import restore_checkpoint
 
-from utils import get_dataset#, parabolic_inflow
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from utils import get_dataset
 
 import matplotlib.pyplot as plt
 import matplotlib.tri as tri
@@ -30,9 +32,10 @@ import pickle
 def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Load dataset
     
+    L_max = 50/1000/100
     (   initial,
         delta_matrices,
-        mu1, rho0, rho1) = get_dataset(config)
+        mu1, rho0, rho1) = get_dataset(L_max, config)
 
     fluid_params = (0, mu1, rho0, rho1)    
         
@@ -42,19 +45,18 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     
     _, eigvecs, _, _, _, _, _, _, _  = delta_matrices
 
-    pin = 50
+    pin = 100
     dp = pin
     pmax = dp
-    L_max = 50/1000/100
     U_max = dp*L_max/mu1
 
-    mu = .0875 #mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .0875, .1]
+    mu = .0025 #mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .0875, .1]
     ind_mu = jnp.where(mu_list==mu)[0]
     
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time
-    tmax =400
+    tmax =6000
     
     idx = jnp.where(t_fem<=tmax)[0]
     
@@ -99,6 +101,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     v_pred_list = []
     p_pred_list = []
     s_pred_list = []
+    
 
     for indx in range(config.training.num_time_windows):
         print(f'{indx+1} / {config.training.num_time_windows}' )
@@ -132,6 +135,16 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     figp, axp = plt.subplots(2, 1, figsize=(6, 10))
 
     m = len(u_pred)  # Assuming u_pred and others are defined
+    
+    matrix1 = [s_pred, u_pred, v_pred, p_pred]
+    matrix2 = [s_fem, u_fem, v_fem, p_fem]
+    label   = ["s", "u", "v", "p"]
+    for i in range(4):
+        print(f'==={label[i]}===')
+        mse = jnp.mean((matrix1[i] - matrix2[i]) ** 2)   
+        l1_relative_error = jnp.sum(jnp.abs(matrix1[i] - matrix2[i])) / jnp.sum(jnp.abs(matrix1[i]))
+        print(f"MSE: {mse}")
+        print(f"L1-relative error: {l1_relative_error}")
 
     # Update function for each frame
     def update_s(frames, indx):
@@ -173,17 +186,17 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Function to generate GIFs
     def make_gif(indx):
         ani_s = FuncAnimation(figs, partial(update_s, indx=indx-1), frames=m, interval=200)
-        ani_s.save(f'./video_s_p5_{indx}.gif', writer='pillow')
+        ani_s.save(f'./video_s_{mu}_.gif', writer='pillow')
         
         ani_u = FuncAnimation(figu, partial(update_u, indx=indx-1), frames=m, interval=200)
-        ani_u.save(f'./video_u_p5_{indx}.gif', writer='pillow')
+        ani_u.save(f'./video_u_{mu}_.gif', writer='pillow')
         
         ani_v = FuncAnimation(figv, partial(update_v, indx=indx-1), frames=m, interval=200)
-        ani_v.save(f'./video_v_p5_{indx}.gif', writer='pillow')
+        ani_v.save(f'./video_v_{mu}_.gif', writer='pillow')
         
         ani_p = FuncAnimation(figp, partial(update_p, indx=indx-1), frames=m, interval=200)
-        ani_p.save(f'./video_p_p5_{indx}.gif', writer='pillow')
+        ani_p.save(f'./video_p_{mu}_.gif', writer='pillow')
 
     # Generate GIFs for each time window
-    for idx in range(1, config.training.num_time_windows + 1):
-        make_gif(idx)
+    # for idx in range(1, config.training.num_time_windows + 1):
+    #     make_gif(idx)

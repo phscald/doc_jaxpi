@@ -816,6 +816,8 @@ class MLP3wD_(nn.Module):
     @nn.compact
     def __call__(self, u1, u2, x):
  
+ 
+        # scaler = Dense(features=2)(self.activation_fn(Dense(features=5)(x)))
         u1 = jnp.concatenate([u1, u2, x])
         
         u1 = ModifiedMlp(#MlpBlock(

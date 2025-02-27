@@ -31,7 +31,7 @@ def compute_saturation_curve(s_pred):
     sat_curve = jnp.mean(s_pred, axis=1)
     return sat_curve
     
-def compute_outlet_flow_ratios(u_pred, s_pred, vertices, map_elements_vertexes, xmax):
+def compute_outlet_flow_ratios(u_pred, s_pred, vertices, map_elements_vertexes, xmax, xmin):
     out_flow_ratio_w = [] # 1 é água
     out_flow_ratio_o = [] # 0 é óleo
     for i in range(vertices.shape[0]):
@@ -46,7 +46,10 @@ def compute_outlet_flow_ratios(u_pred, s_pred, vertices, map_elements_vertexes, 
     out_flow_ratio_o = jnp.stack(out_flow_ratio_o)
     out_flow_ratio_w = jnp.sum(out_flow_ratio_w, axis=0)
     out_flow_ratio_o = jnp.sum(out_flow_ratio_o, axis=0)
-    return out_flow_ratio_w, out_flow_ratio_o
+    in_flow_ratio = compute_inlet_flow_ratio(u_pred, vertices, map_elements_vertexes, xmin)
+    krw = out_flow_ratio_w / in_flow_ratio
+    kro = out_flow_ratio_o / in_flow_ratio
+    return out_flow_ratio_w, out_flow_ratio_o, krw, kro
 
 
 def compute_inlet_flow_ratio(u_pred, vertices, map_elements_vertexes, xmin):
@@ -153,7 +156,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     x = eigvecs[:, 0]
     y = eigvecs[:, 1]   
 
-    out_flow_ratio_w, out_flow_ratio_o = compute_outlet_flow_ratios(u_pred, s_pred, vertices, map_elements_vertexes, x.max())
+    out_flow_ratio_w, out_flow_ratio_o, krw, kro = compute_outlet_flow_ratios(u_pred, s_pred, vertices, map_elements_vertexes, x.max(), x.min())
     in_flow_ratio = compute_inlet_flow_ratio(u_pred, vertices, map_elements_vertexes, x.min())
     sat_curve = compute_saturation_curve(s_pred)
     
@@ -164,3 +167,9 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     plt.legend()
     plt.xlabel("time")
     plt.savefig('curves.jpg', format='jpg')
+    
+    plt.plot(t_coords*tmax, krw, label="krw")
+    plt.plot(t_coords*tmax, kro, label="kro")
+    plt.legend()
+    plt.xlabel("time")
+    plt.savefig('k_curves.jpg', format='jpg')

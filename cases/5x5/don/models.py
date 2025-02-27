@@ -65,8 +65,10 @@ class NavierStokes2DwSat(ForwardIVP):
         v = outputs[1]
         p = outputs[2]
         s = outputs[3] # nn.softplus( outputs[3] )
-        u_scaler = 0.00174 # 0.04
-        v_scaler = 0.00027 # 0.007 
+        # u_scaler = 0.00174 # 0.04
+        # v_scaler = 0.00027 # 0.007 
+        u_scaler = .01669+.0249*.45
+        v_scaler = .000908+.00699*.5
         
         u = u *u_scaler
         v = v *v_scaler
@@ -205,18 +207,18 @@ class NavierStokes2DwSat(ForwardIVP):
             self.s_net, params, 0.0, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem
         )
 
-        ru_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0))(
-            self.ru_net, params, t_fem, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem
-        )
-        rv_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0))(
-            self.rv_net, params, t_fem, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem
-        )
-        rc_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0))(
-            self.rc_net, params, t_fem, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem
-        )
-        rs_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0))(
-            self.rs_net, params, t_fem, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem
-        )
+        # ru_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0))(
+        #     self.ru_net, params, t_fem, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem
+        # )
+        # rv_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0))(
+        #     self.rv_net, params, t_fem, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem
+        # )
+        # rc_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0))(
+        #     self.rc_net, params, t_fem, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem
+        # )
+        # rs_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0))(
+        #     self.rs_net, params, t_fem, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem
+        # )
 
         ntk_dict = {
             "u_data": u_data_ntk,
@@ -227,10 +229,10 @@ class NavierStokes2DwSat(ForwardIVP):
             "v_ic": v_ic_ntk,
             "p_ic": p_ic_ntk,
             "s_ic": s_ic_ntk,
-            "ru": ru_ntk, #
-            "rv": rv_ntk, #
-            "rc": rc_ntk,
-            "rs": rs_ntk,
+            # "ru": ru_ntk, #
+            # "rv": rv_ntk, #
+            # "rc": rc_ntk,
+            # "rs": rs_ntk,
         }
 
         return ntk_dict
@@ -250,40 +252,40 @@ class NavierStokes2DwSat(ForwardIVP):
         p_fem_q_pred = self.pfem_pred_fn(params, t_fem, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem)
         s_fem_q_pred = self.sfem_pred_fn(params, t_fem, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem)
         
-        u_data = jnp.mean((u_fem_q_pred - u_fem_q  ) ** 2)
-        v_data = jnp.mean((v_fem_q_pred - v_fem_q  ) ** 2)
-        p_data = jnp.mean((p_fem_q_pred - p_fem_q  ) ** 2)
-        s_data = jnp.mean((s_fem_q_pred - s_fem_q  ) ** 2)
+        u_data = jnp.mean(jnp.abs(u_fem_q_pred - u_fem_q  ) ** 1) 
+        v_data = jnp.mean(jnp.abs(v_fem_q_pred - v_fem_q  ) ** 1) 
+        p_data = jnp.mean(jnp.abs(p_fem_q_pred - p_fem_q  ) ** 1) 
+        s_data = jnp.mean(jnp.abs(s_fem_q_pred - s_fem_q  ) ** 1) 
         
         u_ic_pred = self.u0_pred_fn(params, 0.0, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem)
         v_ic_pred = self.v0_pred_fn(params, 0.0, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem)
         p_ic_pred = self.p0_pred_fn(params, 0.0, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem)
         s_ic_pred = self.s0_pred_fn(params, 0.0, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem)
-        u_ic_loss = jnp.mean((u_ic_pred - u_ic ) ** 2) 
-        v_ic_loss = jnp.mean((v_ic_pred - v_ic ) ** 2) 
-        p_ic_loss = jnp.mean((p_ic_pred - p_ic ) ** 2) 
-        s_ic_loss = jnp.mean((s_ic_pred - s_ic ) ** 2)
+        u_ic_loss = jnp.mean(jnp.abs(u_ic_pred - u_ic ) ** 1) 
+        v_ic_loss = jnp.mean(jnp.abs(v_ic_pred - v_ic ) ** 1) 
+        p_ic_loss = jnp.mean(jnp.abs(p_ic_pred - p_ic ) ** 1) 
+        s_ic_loss = jnp.mean(jnp.abs(s_ic_pred - s_ic ) ** 1) 
         
-        ru = 0
-        rv = 0
-        rc = 0
-        rs = 0
-        ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn( params, t_fem, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem)
-        ru += jnp.mean(ru_pred**2)
-        rv += jnp.mean(rv_pred**2)
-        rc += jnp.mean(rc_pred**2)
-        rs += jnp.mean(rs_pred**2)  
+        # ru = 0
+        # rv = 0
+        # rc = 0
+        # rs = 0
+        # ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn( params, t_fem, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem)
+        # ru += jnp.mean(ru_pred**2)
+        # rv += jnp.mean(rv_pred**2)
+        # rc += jnp.mean(rc_pred**2)
+        # rs += jnp.mean(rs_pred**2)  
 
-        ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn_t( params, 0.0, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem)
-        ru += jnp.mean(ru_pred**2)
-        rv += jnp.mean(rv_pred**2)
-        rc += jnp.mean(rc_pred**2)
-        rs += jnp.mean(rs_pred**2)
+        # ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn_t( params, 0.0, X_fem[:,0], X_fem[:,1], X_fem[:,2:], mu_fem)
+        # ru += jnp.mean(ru_pred**2)
+        # rv += jnp.mean(rv_pred**2)
+        # rc += jnp.mean(rc_pred**2)
+        # rs += jnp.mean(rs_pred**2)
         
-        ru_loss = jnp.mean( jnp.array(ru)) 
-        rv_loss = jnp.mean( jnp.array(rv))
-        rc_loss = jnp.mean( jnp.array(rc))
-        rs_loss = jnp.mean( jnp.array(rs))
+        # ru_loss = jnp.mean( jnp.array(ru)) 
+        # rv_loss = jnp.mean( jnp.array(rv))
+        # rc_loss = jnp.mean( jnp.array(rc))
+        # rs_loss = jnp.mean( jnp.array(rs))
 
         loss_dict = {
             "u_data": u_data,
@@ -294,10 +296,10 @@ class NavierStokes2DwSat(ForwardIVP):
             "v_ic": v_ic_loss,
             "p_ic": p_ic_loss,
             "s_ic": s_ic_loss,
-            "ru": ru_loss,
-            "rv": rv_loss,
-            "rc": rc_loss,
-            "rs": rs_loss,
+            # "ru": ru_loss,
+            # "rv": rv_loss,
+            # "rc": rc_loss,
+            # "rs": rs_loss,
         }
 
         return loss_dict

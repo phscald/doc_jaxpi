@@ -29,7 +29,6 @@ from jaxpi.utils import restore_checkpoint
 from flax.jax_utils import replicate
 from flax import linen as nn
 
-
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils import get_dataset
@@ -68,6 +67,17 @@ class resSampler(BaseSampler):
         eigvecs_elem = jnp.reshape(eigvecs[idx_fem][jnp.newaxis, :, :], (self.batch_size, 3, 22))
         eigvecs_elem = eigvecs_elem[:,:,:]
         eigvecs = eigvecs[:,:]
+        
+        (idx_inlet, idx_outlet, idx_noslip) = idx_bcs     
+
+        X = eigvecs_elem 
+        
+        matrices = (eigvecs_elem,  
+                    N_matrices[idx_elem],
+                    B_matrices[idx_elem], 
+                    A_matrices[idx_elem],
+                    M_matrices[idx_elem])
+        
 
         #2nd step: sample of time points
 
@@ -111,7 +121,7 @@ class resSampler(BaseSampler):
         fields = (X_fem, t_fem, mu_fem, u_fem_b, v_fem_b, p_fem_b, s_fem_b)
         fields_ic = (u0_b, v0_b, p0_b, s0_b)  
 
-        batch = (fields, fields_ic)
+        batch = (t, X, mu_batch, matrices, fields, fields_ic)
 
         return batch
 
@@ -195,6 +205,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     
     pin = 100
     dp = pin
+
     U_max = dp*L_max/mu1
     print(f"U_max: {U_max}")
 

@@ -2,6 +2,7 @@ import functools
 from functools import partial
 import time
 import os
+os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"] = "false"
 
 from absl import logging
 
@@ -30,7 +31,9 @@ from flax.jax_utils import replicate
 from flax import linen as nn
 
 
-from utils import get_dataset#, get_fine_mesh, parabolic_inflow
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from utils import get_dataset
 
     
 
@@ -55,7 +58,7 @@ class resSampler(BaseSampler):
               u_fem, v_fem, p_fem, s_fem, t_fem, coords_fem, mu_list) = self.initial
         
         (idx_bcs, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices) = self.delta_matrices
-        
+                
         #1st step: sample of elements to be considered by the loss terms
         
         key1, key = random.split(key, 2)
@@ -63,7 +66,7 @@ class resSampler(BaseSampler):
         
         idx_fem = map_elements_vertexes[idx_elem]
         idx_fem = jnp.reshape(idx_fem, (-1,))
-        eigvecs_elem = jnp.reshape(eigvecs[idx_fem][jnp.newaxis, :, :], (self.batch_size, 3, 52))
+        eigvecs_elem = jnp.reshape(eigvecs[idx_fem][jnp.newaxis, :, :], (self.batch_size, 3, 22))
         eigvecs_elem = eigvecs_elem[:,:,:]
         eigvecs = eigvecs[:,:]
         
@@ -194,16 +197,18 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     wandb_config = config.wandb
     wandb.init(project=wandb_config.project, name=wandb_config.name)
     
+    
+    L_max = 50/1000/100
     (   initial,
         delta_matrices,
-        mu1, rho0, rho1) = get_dataset()
+        mu1, rho0, rho1) = get_dataset(L_max)
 
     fluid_params = (0, mu1, rho0, rho1)    
         
     
-    pin = 50
+    pin = 100
     dp = pin
-    L_max = 50/1000/100
+    
     U_max = dp*L_max/mu1
     print(f"U_max: {U_max}")
 
@@ -212,11 +217,14 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'Re={Re}')
     print(f'max_Steps: {config.training.max_steps}')
 
-    t1 = 400
+
 
     (u0, v0, p0, s0, coords_initial,
      u_fem, v_fem, p_fem, s_fem, t_fem, 
      coords_fem, mu_list) = initial
+    
+    print( t_fem.max())
+    t1 =6000
     
     idx = jnp.where(t_fem<=t1)[0]
     
