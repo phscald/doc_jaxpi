@@ -57,7 +57,7 @@ def get_fem(filepath_list, mu_list, mu1, dp, L_max):
             
 def initial_fields(L_max, config):
 
-    filepath = '../data/chip3x3_steady_mu_50cp.pkl'
+    filepath = '../data2/chip3x3_steady_mu_50cp.pkl'
     with open(filepath, 'rb') as filepath:
         arquivos = pickle.load(filepath)
     u0 = np.squeeze(arquivos['u_data'])
@@ -67,28 +67,28 @@ def initial_fields(L_max, config):
     
     if config is None:
         file_list = [
-            "../data/chip3x3_new_mu0_0.0025_mu1_0.05.pkl",
-            "../data/chip3x3_new_mu0_0.02625_mu1_0.05.pkl",
-            "../data/chip3x3_new_mu0_0.05_mu1_0.05.pkl",
-            "../data/chip3x3_new_mu0_0.075_mu1_0.05.pkl",
-            "../data/chip3x3_new_mu0_0.1_mu1_0.05.pkl",
+            # "../data2/chip3x3_new_mu0_0.0025_mu1_0.05.pkl",
+            # "../data2/chip3x3_new_mu0_0.02625_mu1_0.05.pkl",
+            # "../data2/chip3x3_new_mu0_0.05_mu1_0.05.pkl",
+            # "../data2/chip3x3_new_mu0_0.075_mu1_0.05.pkl",
+            "../data2/chip3x3_new_mu0_0.1_mu1_0.05.pkl",
         ]
-        mu_list = [.0025, .02625, .05, .075, .1]
-        # mu_list = [ .05, .1]
+        # mu_list = [.0025, .02625, .05, .075, .1]
+        mu_list = [ .1]
     elif config.mode == "eval":
         file_list = [
-            "../data/chip3x3_new_mu0_0.0025_mu1_0.05.pkl",
-            "../data/chip3x3_new_mu0_0.014375_mu1_0.05.pkl",
-            "../data/chip3x3_new_mu0_0.02625_mu1_0.05.pkl",
-            "../data/chip3x3_new_mu0_0.038125_mu1_0.05.pkl",
-            "../data/chip3x3_new_mu0_0.05_mu1_0.05.pkl",
-            "../data/chip3x3_new_mu0_0.0625_mu1_0.05.pkl",
-            "../data/chip3x3_new_mu0_0.075_mu1_0.05.pkl",
-            "../data/chip3x3_new_mu0_0.0875_mu1_0.05.pkl",
-            "../data/chip3x3_new_mu0_0.1_mu1_0.05.pkl",
+            # "../data2/chip3x3_new_mu0_0.0025_mu1_0.05.pkl",
+            # "../data2/chip3x3_new_mu0_0.014375_mu1_0.05.pkl",
+            # "../data2/chip3x3_new_mu0_0.02625_mu1_0.05.pkl",
+            # "../data2/chip3x3_new_mu0_0.038125_mu1_0.05.pkl",
+            # "../data2/chip3x3_new_mu0_0.05_mu1_0.05.pkl",
+            # "../data2/chip3x3_new_mu0_0.0625_mu1_0.05.pkl",
+            # "../data2/chip3x3_new_mu0_0.075_mu1_0.05.pkl",
+            # "../data2/chip3x3_new_mu0_0.0875_mu1_0.05.pkl",
+            "../data2/chip3x3_new_mu0_0.1_mu1_0.05.pkl",
         ]
-        mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .075, .0875, .1]
-        # mu_list = [ .05, .1]
+        # mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .075, .0875, .1]
+        mu_list = [ .1]
     
     (data_fem, coords_fem, t_fem, _, _) = get_fem(file_list, mu_list, mu1=.05, dp=100, L_max=L_max)
     pmax = 100
@@ -99,36 +99,52 @@ def initial_fields(L_max, config):
 
     i=0
     u_fem = np.concatenate(
-        (data_fem[0][i][np.newaxis,:,:],
-         data_fem[1][i][np.newaxis,:,:],)
-        #  data_fem[2][i][np.newaxis,:,:],
-        #  data_fem[3][i][np.newaxis,:,:],
-        #  data_fem[4][i][np.newaxis,:,:])
-    , axis=0)
+        [data_fem[j][i][np.newaxis, :, :] for j in range(len(data_fem))], 
+        axis=0
+    )
+    # u_fem = np.concatenate(
+    #     (data_fem[0][i][np.newaxis,:,:],)
+    #     #  data_fem[1][i][np.newaxis,:,:],)
+    #     #  data_fem[2][i][np.newaxis,:,:],
+    #     #  data_fem[3][i][np.newaxis,:,:],
+    #     #  data_fem[4][i][np.newaxis,:,:])
+    # , axis=0)
     i=1
     v_fem = np.concatenate(
-        (data_fem[0][i][np.newaxis,:,:],
-         data_fem[1][i][np.newaxis,:,:],)
-        #  data_fem[2][i][np.newaxis,:,:],
-        #  data_fem[3][i][np.newaxis,:,:],
-        #  data_fem[4][i][np.newaxis,:,:])
-    , axis=0) 
+        [data_fem[j][i][np.newaxis, :, :] for j in range(len(data_fem))], 
+        axis=0
+    )
+    # v_fem = np.concatenate(
+    #     (data_fem[0][i][np.newaxis,:,:],)
+    #     #  data_fem[1][i][np.newaxis,:,:],)
+    #     #  data_fem[2][i][np.newaxis,:,:],
+    #     #  data_fem[3][i][np.newaxis,:,:],
+    #     #  data_fem[4][i][np.newaxis,:,:])
+    # , axis=0) 
     i=2
     p_fem = np.concatenate(
-        (data_fem[0][i][np.newaxis,:,:],
-         data_fem[1][i][np.newaxis,:,:],)
-        #  data_fem[2][i][np.newaxis,:,:],
-        #  data_fem[3][i][np.newaxis,:,:],
-        #  data_fem[4][i][np.newaxis,:,:])
-    , axis=0)
+        [data_fem[j][i][np.newaxis, :, :] for j in range(len(data_fem))], 
+        axis=0
+    )
+    # p_fem = np.concatenate(
+    #     (data_fem[0][i][np.newaxis,:,:],)
+    #     #  data_fem[1][i][np.newaxis,:,:],)
+    #     #  data_fem[2][i][np.newaxis,:,:],
+    #     #  data_fem[3][i][np.newaxis,:,:],
+    #     #  data_fem[4][i][np.newaxis,:,:])
+    # , axis=0)
     i=3
     s_fem = np.concatenate(
-        (data_fem[0][i][np.newaxis,:,:],
-         data_fem[1][i][np.newaxis,:,:],)
-        #  data_fem[2][i][np.newaxis,:,:],
-        #  data_fem[3][i][np.newaxis,:,:],
-        #  data_fem[4][i][np.newaxis,:,:])
-    , axis=0)
+        [data_fem[j][i][np.newaxis, :, :] for j in range(len(data_fem))], 
+        axis=0
+    )
+    # s_fem = np.concatenate(
+    #     (data_fem[0][i][np.newaxis,:,:],)
+    #     #  data_fem[1][i][np.newaxis,:,:],
+    #     #  data_fem[2][i][np.newaxis,:,:],
+    #     #  data_fem[3][i][np.newaxis,:,:],
+    #     #  data_fem[4][i][np.newaxis,:,:])
+    # , axis=0)
     
     coords_fem = jax.device_put(coords_fem)
     s0 = jnp.zeros(coords_fem.shape[0])  # Initialize with zeros

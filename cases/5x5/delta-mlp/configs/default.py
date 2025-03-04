@@ -8,13 +8,13 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     config.mode = "train"
-    config.mode = "eval" 
-    # config.mode = "evalcurves" 
+    # config.mode = "eval" 
+    config.mode = "evalcurves" 
     # ver o coeficiente do causal depois
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
     wandb.project = "geom1x2-unsteady"
-    wandb.name = "default"
+    wandb.name = "default-data"
     wandb.tag = None
 
     # Nondimensionalization
@@ -27,7 +27,7 @@ def get_config():
     arch.num_trunk_layers = 5 # mu 2
     arch.num_branch_layers = 5 # t 6
     # arch.num_branch_layers2 = 7 # xy v(xy)
-    arch.hidden_dim = 100
+    arch.hidden_dim = 200
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
@@ -49,7 +49,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = .1*10**6 
+    training.max_steps = .2*10**6 
     training.fine_tune = True
     training.num_time_windows = 1
 
@@ -69,8 +69,8 @@ def get_config():
         "v_ic": 1.0,
         "p_ic": 1.0,
         "s_ic": 1.0,
-        # "ru": 1.0,
-        # "rv": 1.0,
+        "ru": 1.0,
+        "rv": 1.0,
         "rc": 1.0,
         "rs": 1.0,
     }

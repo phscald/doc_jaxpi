@@ -903,7 +903,9 @@ class MLP3wD(nn.Module):
         
         y_p = self.activation_fn(y)
         y_u = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
+        # y_u = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_u))
         y_v = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
+        # y_v = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_v))
         y_p = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
         y_u = Dense(features=1, reparam=self.reparam)(y_u)
         y_v = Dense(features=1, reparam=self.reparam)(y_v)

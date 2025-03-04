@@ -26,7 +26,8 @@ class NavierStokes2DwSat(ForwardIVP):
         self.temporal_dom = temporal_dom
         self.U_max = U_max
         self.L_max = L_max
-        self.fluid_params = fluid_params
+        self.u_stats = fluid_params[1]
+        self.fluid_params = fluid_params[0]
 
         self.delta_matrices = None
         self.epoch = 0
@@ -72,8 +73,8 @@ class NavierStokes2DwSat(ForwardIVP):
   
         # u_scaler = 0.00174 # 0.04
         # v_scaler = 0.00027 # 0.007 
-        u_scaler = .01669+.0249*.45
-        v_scaler = .000908+.00699*.5
+        u_scaler = 1#.01669+.0249*.45
+        v_scaler = 1#.000908+.00699*.5
         
         u = u *u_scaler
         v = v *v_scaler
@@ -101,11 +102,23 @@ class NavierStokes2DwSat(ForwardIVP):
         # Re = jnp.ones(x.shape)
         ( _, mu1, rho0, rho1) = self.fluid_params
         
+        (u_mean, u_std, v_mean, v_std) = self.u_stats
+        
+        def denormalize_mustd(u, umean, ustd):
+            return u*ustd+umean
+        
         # Minv = invert(M)
                
         u1 , v1 , p1, s1 = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([0]), axis=0)) , mu0)
         u2 , v2 , p2, s2 = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([1]), axis=0)) , mu0)
         u3 , v3 , p3, s3 = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([2]), axis=0)) , mu0)
+        
+        u1 = denormalize_mustd(u1, u_mean, u_std)
+        v1 = denormalize_mustd(v1, v_mean, v_std)
+        u2 = denormalize_mustd(u2, u_mean, u_std)
+        v2 = denormalize_mustd(v2, v_mean, v_std)
+        u3 = denormalize_mustd(u3, u_mean, u_std)
+        v3 = denormalize_mustd(v3, v_mean, v_std)
         
         u_e = jnp.array([u1, u2, u3])[:, jnp.newaxis]
         v_e = jnp.array([v1, v2, v3])[:, jnp.newaxis]
@@ -157,10 +170,10 @@ class NavierStokes2DwSat(ForwardIVP):
         mu_ratio = mu/mu1
                 
         # PDE residual
-        # ru = u_t + u * u_x + v * u_y + (p_x - mu_ratio*(u_xx + u_yy)) / Re #  
-        # rv = v_t + u * v_x + v * v_y + (p_y - mu_ratio*(v_xx + v_yy)) / Re #
-        ru = u_t + (p_x - mu_ratio*(u_xx + u_yy)) / Re #  
-        rv = v_t + (p_y - mu_ratio*(v_xx + v_yy)) / Re #
+        ru = u_t + u * u_x + v * u_y + alpha*(p_x - mu_ratio*(u_xx + u_yy)) / Re #  
+        rv = v_t + u * v_x + v * v_y + alpha*(p_y - mu_ratio*(v_xx + v_yy)) / Re #
+        # ru = u_t + (p_x - mu_ratio*(u_xx + u_yy)) / Re #  
+        # rv = v_t + (p_y - mu_ratio*(v_xx + v_yy)) / Re #
         rc = u_x + v_y
         rs = s_t + u * s_x + v * s_y 
         
@@ -178,7 +191,7 @@ class NavierStokes2DwSat(ForwardIVP):
         _, _, rc, _ = self.r_net(params, t, X, mu)
         return rc
 
-    def rs_net(self, params, t, x, y, mu):
+    def rs_net(self, params, t, X, mu):
         _, _, _, rs = self.r_net(params, t, X, mu)
         return rs
 
@@ -265,8 +278,8 @@ class NavierStokes2DwSat(ForwardIVP):
             "v_ic": v_ic_ntk,
             "p_ic": p_ic_ntk,
             "s_ic": s_ic_ntk,
-            # "ru": ru_ntk, #
-            # "rv": rv_ntk, #
+            "ru": ru_ntk, #
+            "rv": rv_ntk, #
             "rc": rc_ntk,
             "rs": rs_ntk,
         }
@@ -288,28 +301,27 @@ class NavierStokes2DwSat(ForwardIVP):
         v_fem_q_pred = self.vfem_pred_fn(params, t_fem, X_fem, mu_fem)
         p_fem_q_pred = self.pfem_pred_fn(params, t_fem, X_fem, mu_fem)
         s_fem_q_pred = self.sfem_pred_fn(params, t_fem, X_fem, mu_fem)
-        
-        u_data = jnp.mean(jnp.abs(u_fem_q_pred - u_fem_q  ) ** 1)
-        v_data = jnp.mean(jnp.abs(v_fem_q_pred - v_fem_q  ) ** 1)
-        p_data = jnp.mean(jnp.abs(p_fem_q_pred - p_fem_q  ) ** 1)
-        s_data = jnp.mean(jnp.abs(s_fem_q_pred - s_fem_q  ) ** 1)
-        # u_data = jnp.mean((u_fem_q_pred - u_fem_q ) ** 2) 
-        # v_data = jnp.mean((v_fem_q_pred - v_fem_q ) ** 2) 
-        # p_data = jnp.mean((p_fem_q_pred - p_fem_q ) ** 2) 
-        # s_data = jnp.mean((s_fem_q_pred - s_fem_q ) ** 2) 
+        # u_data = jnp.mean(jnp.abs(u_fem_q_pred - u_fem_q  ) ** 1)
+        # v_data = jnp.mean(jnp.abs(v_fem_q_pred - v_fem_q  ) ** 1)
+        # p_data = jnp.mean(jnp.abs(p_fem_q_pred - p_fem_q  ) ** 1)
+        # s_data = jnp.mean(jnp.abs(s_fem_q_pred - s_fem_q  ) ** 1)
+        u_data = jnp.mean((u_fem_q_pred - u_fem_q ) ** 2) 
+        v_data = jnp.mean((v_fem_q_pred - v_fem_q ) ** 2) 
+        p_data = jnp.mean((p_fem_q_pred - p_fem_q ) ** 2) 
+        s_data = jnp.mean((s_fem_q_pred - s_fem_q ) ** 2) 
         
         u_ic_pred = self.u0_pred_fn(params, 0.0, X_fem, mu_fem)
         v_ic_pred = self.v0_pred_fn(params, 0.0, X_fem, mu_fem)
         p_ic_pred = self.p0_pred_fn(params, 0.0, X_fem, mu_fem)
         s_ic_pred = self.s0_pred_fn(params, 0.0, X_fem, mu_fem)
-        u_ic_loss = jnp.mean(jnp.abs(u_ic_pred - u_ic ) ** 1) 
-        v_ic_loss = jnp.mean(jnp.abs(v_ic_pred - v_ic ) ** 1)
-        p_ic_loss = jnp.mean(jnp.abs(p_ic_pred - p_ic ) ** 1) 
-        s_ic_loss = jnp.mean(jnp.abs(s_ic_pred - s_ic ) ** 1)
-        # u_ic_loss = jnp.mean((u_ic_pred - u_ic ) ** 2) 
-        # v_ic_loss = jnp.mean((v_ic_pred - v_ic ) ** 2) 
-        # p_ic_loss = jnp.mean((p_ic_pred - p_ic ) ** 2) 
-        # s_ic_loss = jnp.mean((s_ic_pred - s_ic ) ** 2) 
+        # u_ic_loss = jnp.mean(jnp.abs(u_ic_pred - u_ic ) ** 1) 
+        # v_ic_loss = jnp.mean(jnp.abs(v_ic_pred - v_ic ) ** 1)
+        # p_ic_loss = jnp.mean(jnp.abs(p_ic_pred - p_ic ) ** 1) 
+        # s_ic_loss = jnp.mean(jnp.abs(s_ic_pred - s_ic ) ** 1)
+        u_ic_loss = jnp.mean((u_ic_pred - u_ic ) ** 2) 
+        v_ic_loss = jnp.mean((v_ic_pred - v_ic ) ** 2) 
+        p_ic_loss = jnp.mean((p_ic_pred - p_ic ) ** 2) 
+        s_ic_loss = jnp.mean((s_ic_pred - s_ic ) ** 2) 
         
         ru = 0
         rv = 0
@@ -349,8 +361,8 @@ class NavierStokes2DwSat(ForwardIVP):
             "v_ic": v_ic_loss,
             "p_ic": p_ic_loss,
             "s_ic": s_ic_loss,
-            # "ru": ru_loss,
-            # "rv": rv_loss,
+            "ru": ru_loss,
+            "rv": rv_loss,
             "rc": rc_loss,
             "rs": rs_loss,
         }
