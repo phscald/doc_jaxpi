@@ -155,9 +155,10 @@ def train_one_window(config, workdir, model, samplers, idx, initial):
     while step < config.training.max_steps:
         
         ind = np.random.choice(initial[9].shape[0], int(initial[9].shape[0]/6))
-        initial_ = initial.copy()
-        for i in range(5, 10):
-            initial_[i] = jax.device_put(initial[i][ind])
+        initial_ = list(initial)
+        for i in range(5, 9):
+            initial_[i] = jax.device_put(initial[i][:, ind])
+        initial_[9] = jax.device_put(initial[9][ind])
         samplers["res"].update_initial(initial_)
                 
         for key, sampler in samplers.items():
@@ -269,11 +270,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     s_fem = s_fem[:, idx]
     
     t_fem = t_fem[idx]
-
-    initial = (u0, v0, p0, s0, coords_initial,
-            np.array(u_fem), np.array(v_fem), np.array(p_fem), np.array(s_fem), np.array(t_fem), 
-            coords_fem, mu_list)
-    
+   
     
     idx_bcs, eigvecs, vertices, map_elements_vertexes, _, B_matrices, A_matrices, M_matrices, N_matrices  = delta_matrices
     

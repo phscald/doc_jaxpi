@@ -129,7 +129,8 @@ def initial_fields(L_max, config):
     s0 = s0.at[condition].set(1.0)  # Assign the result back to s0
     coords_initial = coords_fem
     return (jax.device_put(u0), jax.device_put(v0), jax.device_put(p0), jax.device_put(s0), jax.device_put(coords_initial),
-            jax.device_put(u_fem), jax.device_put(v_fem), jax.device_put(p_fem), jax.device_put(s_fem), jax.device_put(t_fem), 
+            u_fem, v_fem, p_fem, s_fem, t_fem, 
+            # jax.device_put(u_fem), jax.device_put(v_fem), jax.device_put(p_fem), jax.device_put(s_fem), jax.device_put(t_fem), 
             coords_fem, jnp.array(mu_list))
     
     
