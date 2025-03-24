@@ -8,13 +8,14 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     config.mode = "train"
-    # config.mode = "eval" 
-    config.mode = "evalcurves" 
-    # ver o coeficiente do causal depois
+    config.mode = "eval" 
+    
+    # config.mode = "evalcurves" 
+
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
     wandb.project = "geom1x2-unsteady"
-    wandb.name = "default-data"
+    wandb.name = "default"
     wandb.tag = None
 
     # Nondimensionalization
@@ -24,7 +25,7 @@ def get_config():
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "MLP3wD_"
     # arch.num_layers = 8
-    arch.num_trunk_layers = 5 # mu 2
+    arch.num_trunk_layers = 5# mu 2
     arch.num_branch_layers = 5 # t 6
     # arch.num_branch_layers2 = 7 # xy v(xy)
     arch.hidden_dim = 200
@@ -49,7 +50,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = .2*10**6 
+    training.max_steps = .25*10**6 
     training.fine_tune = True
     training.num_time_windows = 1
 
@@ -65,10 +66,10 @@ def get_config():
         "v_data": 1.0,
         "p_data": 1.0,
         "s_data": 1.0,
-        "u_ic": 1.0,
-        "v_ic": 1.0,
-        "p_ic": 1.0,
-        "s_ic": 1.0,
+        # "u_ic": 1.0,
+        # "v_ic": 1.0,
+        # "p_ic": 1.0,
+        # "s_ic": 1.0,
         "ru": 1.0,
         "rv": 1.0,
         "rc": 1.0,

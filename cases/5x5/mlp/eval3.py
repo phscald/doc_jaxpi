@@ -136,6 +136,19 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     m = len(u_pred)  # Assuming u_pred and others are defined
     
+    
+    u_mean = 0
+    u_std = u_fem.std()*3
+    v_mean = 0
+    v_std = v_fem.std()*3
+    
+    def denormalize_mustd(u, umean, ustd):
+        return u*ustd+umean
+    def normalize_mustd(u, umean, ustd):
+        return (u-umean)/ustd
+    u_pred = denormalize_mustd(u_pred, u_mean, u_std)
+    v_pred = denormalize_mustd(v_pred, v_mean, v_std)
+    
     matrix1 = [s_pred, u_pred, v_pred, p_pred]
     matrix2 = [s_fem, u_fem, v_fem, p_fem]
     label   = ["s", "u", "v", "p"]

@@ -57,11 +57,12 @@ class NavierStokes2DwSat(ForwardIVP):
         self.epoch = self.epoch+1
 
     def neural_net(self, params, t, X, mu):
-                
+     
         t = t / (self.temporal_dom[1])  # rescale t into [0, 1]
         mu = 2* ((mu - .0025) / (.1 - .0025)) -1
         # X = jnp.stack([X]) # branch
         t = jnp.stack([ t ] )
+        # ones = jnp.ones(t.shape)
         mu = jnp.stack([ mu ] )
         outputs = self.state.apply_fn(params, t, X, mu)
 
@@ -70,31 +71,25 @@ class NavierStokes2DwSat(ForwardIVP):
         v = outputs[1]
         p = outputs[2]
         s = outputs[3] # nn.softplus( outputs[3] )
-  
-        # u_scaler = 0.00174 # 0.04
-        # v_scaler = 0.00027 # 0.007 
-        u_scaler = 1#.01669+.0249*.45
-        v_scaler = 1#.000908+.00699*.5
+        alpha = outputs[4]
+        beta = outputs[5]
         
-        u = u *u_scaler
-        v = v *v_scaler
-
-        return u, v, p, s
+        return u, v, p, s, alpha, beta
 
     def u_net(self, params, t, X, mu):
-        u, _, _, _ = self.neural_net(params, t, X, mu)
+        u, _, _, _, _, _ = self.neural_net(params, t, X, mu)
         return u
 
     def v_net(self, params, t, X, mu):
-        _, v, _, _ = self.neural_net(params, t, X, mu)
+        _, v, _, _, _, _ = self.neural_net(params, t, X, mu)
         return v
 
     def p_net(self, params, t, X, mu):
-        _, _, p, _ = self.neural_net(params, t, X, mu)
+        _, _, p, _, _, _ = self.neural_net(params, t, X, mu)
         return p
 
     def s_net(self, params, t, X, mu):
-        _, _, _, s = self.neural_net(params, t, X, mu)
+        _, _, _, s, _, _ = self.neural_net(params, t, X, mu)
         return s
     
 
@@ -109,9 +104,9 @@ class NavierStokes2DwSat(ForwardIVP):
         
         # Minv = invert(M)
                
-        u1 , v1 , p1, s1 = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([0]), axis=0)) , mu0)
-        u2 , v2 , p2, s2 = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([1]), axis=0)) , mu0)
-        u3 , v3 , p3, s3 = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([2]), axis=0)) , mu0)
+        u1 , v1 , p1, s1, alpha, beta = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([0]), axis=0)) , mu0)
+        u2 , v2 , p2, s2, _, _ = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([1]), axis=0)) , mu0)
+        u3 , v3 , p3, s3, _, _ = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([2]), axis=0)) , mu0)
         
         u1 = denormalize_mustd(u1, u_mean, u_std)
         v1 = denormalize_mustd(v1, v_mean, v_std)
@@ -137,15 +132,15 @@ class NavierStokes2DwSat(ForwardIVP):
         u_t1 = grad(self.u_net, argnums=1)(params, t, eigenvecs_element[0], mu0) 
         u_t2 = grad(self.u_net, argnums=1)(params, t, eigenvecs_element[1], mu0) 
         u_t3 = grad(self.u_net, argnums=1)(params, t, eigenvecs_element[2], mu0) 
-        u_t  = N @ jnp.array([u_t1, u_t2, u_t3])[:, jnp.newaxis]
+        u_t  = N @ jnp.array([u_t1, u_t2, u_t3])[:, jnp.newaxis] 
         v_t1 = grad(self.v_net, argnums=1)(params, t, eigenvecs_element[0], mu0)
         v_t2 = grad(self.v_net, argnums=1)(params, t, eigenvecs_element[1], mu0)
         v_t3 = grad(self.v_net, argnums=1)(params, t, eigenvecs_element[2], mu0)
-        v_t  = N @ jnp.array([v_t1, v_t2, v_t3])[:, jnp.newaxis]
+        v_t  = N @ jnp.array([v_t1, v_t2, v_t3])[:, jnp.newaxis] 
         s_t1 = grad(self.s_net, argnums=1)(params, t, eigenvecs_element[0], mu0)
         s_t2 = grad(self.s_net, argnums=1)(params, t, eigenvecs_element[1], mu0)
         s_t3 = grad(self.s_net, argnums=1)(params, t, eigenvecs_element[2], mu0)
-        s_t  = N @ jnp.array([s_t1, s_t2, s_t3])[:, jnp.newaxis]
+        s_t  = N @ jnp.array([s_t1, s_t2, s_t3])[:, jnp.newaxis] 
 
         u_x = B @ u_e
         v_x = B @ v_e
@@ -159,23 +154,23 @@ class NavierStokes2DwSat(ForwardIVP):
         
         u_xx = Minv @ A @ u_e
         v_xx = Minv @ A @ v_e
-        # s_xx = Minv @ A @ s_e
+        s_xx = Minv @ A @ s_e
 
         u_yy = u_xx[2][0] *(self.L_max**2) ; u_xx = u_xx[0][0] *(self.L_max**2) 
         v_yy = v_xx[2][0] *(self.L_max**2) ; v_xx = v_xx[0][0] *(self.L_max**2) 
-        # s_yy = s_xx[2][0] *(self.L_max**2) ; s_xx = s_xx[0][0] *(self.L_max**2) 
+        s_yy = s_xx[2][0] *(self.L_max**2) ; s_xx = s_xx[0][0] *(self.L_max**2) 
 
-        Re = rho0*self.U_max*(self.L_max)/mu1  
+        Re = rho0*self.U_max*(self.L_max)/mu1 
         mu = (1-s)*mu1 + s*mu0
         mu_ratio = mu/mu1
                 
         # PDE residual
-        ru = u_t + u * u_x + v * u_y + alpha*(p_x - mu_ratio*(u_xx + u_yy)) / Re #  
-        rv = v_t + u * v_x + v * v_y + alpha*(p_y - mu_ratio*(v_xx + v_yy)) / Re #
-        # ru = u_t + (p_x - mu_ratio*(u_xx + u_yy)) / Re #  
-        # rv = v_t + (p_y - mu_ratio*(v_xx + v_yy)) / Re #
+        # ru = u_t + u * u_x + v * u_y + (p_x - mu_ratio*(u_xx + u_yy)) / Re #  
+        # rv = v_t + u * v_x + v * v_y + (p_y - mu_ratio*(v_xx + v_yy)) / Re #
+        ru = (p_x - mu_ratio*(u_xx + u_yy)) / Re #  
+        rv = (p_y - mu_ratio*(v_xx + v_yy)) / Re #
         rc = u_x + v_y
-        rs = s_t + u * s_x + v * s_y 
+        rs = s_t + u * s_x + v * s_y - 0*beta*10**(-4)*(s_xx + s_yy)
         
         return ru, rv, rc, rs
 
@@ -337,15 +332,15 @@ class NavierStokes2DwSat(ForwardIVP):
         rc += jnp.mean((rc_pred)** 2) 
         rs += jnp.mean((rs_pred)** 2) 
 
-        ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn_t( params, 0.0, X, mu_batch, B, A, M, N )
-        # ru += jnp.mean(jnp.abs(ru_pred))
-        # rv += jnp.mean(jnp.abs(rv_pred))
-        # rc += jnp.mean(jnp.abs(rc_pred))
-        # rs += jnp.mean(jnp.abs(rs_pred))
-        ru += jnp.mean((ru_pred)** 2) 
-        rv += jnp.mean((rv_pred)** 2) 
-        rc += jnp.mean((rc_pred)** 2) 
-        rs += jnp.mean((rs_pred)** 2)
+        # ru_pred, rv_pred, rc_pred, rs_pred = self.r_pred_fn_t( params, 0.0, X, mu_batch, B, A, M, N )
+        # # ru += jnp.mean(jnp.abs(ru_pred))
+        # # rv += jnp.mean(jnp.abs(rv_pred))
+        # # rc += jnp.mean(jnp.abs(rc_pred))
+        # # rs += jnp.mean(jnp.abs(rs_pred))
+        # ru += jnp.mean((ru_pred)** 2) 
+        # rv += jnp.mean((rv_pred)** 2) 
+        # rc += jnp.mean((rc_pred)** 2) 
+        # rs += jnp.mean((rs_pred)** 2)
         
         ru_loss = jnp.mean( jnp.array(ru)) 
         rv_loss = jnp.mean( jnp.array(rv))
@@ -357,10 +352,10 @@ class NavierStokes2DwSat(ForwardIVP):
             "v_data": v_data,
             "p_data": p_data,
             "s_data": s_data,
-            "u_ic": u_ic_loss,
-            "v_ic": v_ic_loss,
-            "p_ic": p_ic_loss,
-            "s_ic": s_ic_loss,
+            # "u_ic": u_ic_loss,
+            # "v_ic": v_ic_loss,
+            # "p_ic": p_ic_loss,
+            # "s_ic": s_ic_loss,
             "ru": ru_loss,
             "rv": rv_loss,
             "rc": rc_loss,

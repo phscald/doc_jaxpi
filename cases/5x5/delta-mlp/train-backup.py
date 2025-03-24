@@ -47,9 +47,6 @@ class resSampler(BaseSampler):
         self.step = 0
         self.max_steps = max_steps
         
-    def update_initial(self, initial):
-        self.initial = initial 
-        
     def update_step(self, step):
         self.step = step       
         
@@ -136,7 +133,7 @@ class resSampler(BaseSampler):
 
         return batch
 
-def train_one_window(config, workdir, model, samplers, idx, initial):
+def train_one_window(config, workdir, model, samplers, idx):
     
     # upd_stp = 100
     # Initialize evaluator
@@ -153,12 +150,6 @@ def train_one_window(config, workdir, model, samplers, idx, initial):
     start_time = time.time() 
     batch = {}
     while step < config.training.max_steps:
-        
-        ind = np.random.choice(initial[9].shape[0], int(initial[9].shape[0]/6))
-        initial_ = initial.copy()
-        for i in range(5, 10):
-            initial_[i] = jax.device_put(initial[i][ind])
-        samplers["res"].update_initial(initial_)
                 
         for key, sampler in samplers.items():
             batch[key] = next(sampler)
@@ -271,7 +262,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     t_fem = t_fem[idx]
 
     initial = (u0, v0, p0, s0, coords_initial,
-            np.array(u_fem), np.array(v_fem), np.array(p_fem), np.array(s_fem), np.array(t_fem), 
+            u_fem, v_fem, p_fem, s_fem, t_fem, 
             coords_fem, mu_list)
     
     
@@ -331,7 +322,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
             model.state =  replicate(state)
         
         # Train model for the current time window
-        model = train_one_window(config, workdir, model, samplers, idx, initial)
+        model = train_one_window(config, workdir, model, samplers, idx)
 
         # # Update the initial condition for the next time window
         # if config.training.num_time_windows > 1:

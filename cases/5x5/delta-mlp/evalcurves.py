@@ -71,29 +71,29 @@ def get_curves(u_pred, s_pred, vertices, map_elements_vertexes, xmax, xmin):
     sat_curve = compute_saturation_curve(s_pred)
     return out_flow_ratio_w, out_flow_ratio_o, krw, kro, in_flow_ratio, sat_curve
 
-# def predict(model, t_coords, X, mu, label, config):
-#     # Predict
-#         # Restore checkpoint
-#     # ckpt_path = os.path.join(".", "ckpt", config.wandb.name)
-#     # ckpt_path = os.path.abspath(ckpt_path)
-#     # model.state = restore_checkpoint(model.state, ckpt_path)
-#     # params = model.state.params
+def predict(model, t_coords, X, mu, label, config):
+    # Predict
+        # Restore checkpoint
+    # ckpt_path = os.path.join(".", "ckpt", config.wandb.name)
+    # ckpt_path = os.path.abspath(ckpt_path)
+    # model.state = restore_checkpoint(model.state, ckpt_path)
+    # params = model.state.params
     
-#     u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, None)), (None, 0, None, None))) # shape t by xy
-#     s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, None)), (None, 0, None, None)))
-#     for indx in range(config.training.num_time_windows):
-#         print(f'{indx+1} / {config.training.num_time_windows}' )
-#         # Restore the checkpoint
-#         ckpt_path = os.path.join('.', 'ckpt', label, 'time_window_{}'.format(indx + 1))
-#         model.state = restore_checkpoint(model.state, ckpt_path)
-#         params = model.state.params
+    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, None)), (None, 0, None, None))) # shape t by xy
+    s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, None)), (None, 0, None, None)))
+    for indx in range(config.training.num_time_windows):
+        print(f'{indx+1} / {config.training.num_time_windows}' )
+        # Restore the checkpoint
+        ckpt_path = os.path.join('.', 'ckpt', label, 'time_window_{}'.format(indx + 1))
+        model.state = restore_checkpoint(model.state, ckpt_path)
+        params = model.state.params
 
-#         print(f'mu = {mu}')
+        print(f'mu = {mu}')
 
-#         u_pred = u_pred_fn(params, t_coords, X, mu)
-#         s_pred = s_pred_fn(params, t_coords, X, mu)  
+        u_pred = u_pred_fn(params, t_coords, X, mu)
+        s_pred = s_pred_fn(params, t_coords, X, mu)  
         
-#     return u_pred, s_pred
+    return u_pred, s_pred
             
 def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # Load dataset
@@ -124,7 +124,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time
-    tmax =6000
+    tmax = 6000
     
     idx = jnp.where(t_fem<=tmax)[0]
     
@@ -194,9 +194,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     y = eigvecs[:, 1]
     
     u_mean = 0
-    u_std = u_fem.std()*2
-    v_mean = 0
-    v_std = v_fem.std()
+    u_std = u_fem.std()*3
     
     def denormalize_mustd(u, umean, ustd):
         return u*ustd+umean
@@ -227,44 +225,3 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
                      "t_coords": t_coords,
                      "tmax": tmax,
                      }, filepath)
-    # x = eigvecs[:, 0]
-    # y = eigvecs[:, 1]   
-    # # curves_data = get_curves(pred_data[0], pred_data[1], vertices, map_elements_vertexes, x.max(), x.min())
-    # print("oi")
-    # # curves_pinn = get_curves(pred_pinn[0], pred_pinn[1], vertices, map_elements_vertexes, x.max(), x.min())
-    # # curves_fem  = get_curves(u_fem       , s_fem       , vertices, map_elements_vertexes, x.max(), x.min())
-    # #                        0                 1    2    3              4          5
-    # #curves = out_flow_ratio_w, out_flow_ratio_o, krw, kro, in_flow_ratio, sat_curve
-    # colors = ['#D81B60', '#1E88E5', '#FFC107', '#004D40']
-    
-    # sns.lineplot(x= t_coords*tmax, y= curves_data[5], color=colors[0], linestyle=':', label="saturation", )
-    # sns.lineplot(x= t_coords*tmax, y= curves_data[0], color=colors[1], linestyle=':', label="Vw_out(t)", )
-    # sns.lineplot(x= t_coords*tmax, y= curves_data[1], color=colors[2], linestyle=':', label="Vo_out(t)", )
-    # sns.lineplot(x= t_coords*tmax, y= curves_data[4], color=colors[3], linestyle=':', label="Vw_in(t)", )
-    
-    # sns.lineplot(x= t_coords*tmax, y= curves_pinn[5], color=colors[0], linestyle='--', label="saturation", )
-    # sns.lineplot(x= t_coords*tmax, y= curves_pinn[0], color=colors[1], linestyle='--', label="Vw_out(t)", )
-    # sns.lineplot(x= t_coords*tmax, y= curves_pinn[1], color=colors[2], linestyle='--', label="Vo_out(t)", )
-    # sns.lineplot(x= t_coords*tmax, y= curves_pinn[4], color=colors[3], linestyle='--', label="Vw_in(t)", )
-    
-    # sns.lineplot(x= t_coords*tmax, y= curves_fem[5], color=colors[0], linestyle='-', label="saturation", )
-    # sns.lineplot(x= t_coords*tmax, y= curves_fem[0], color=colors[1], linestyle='-', label="Vw_out(t)", )
-    # sns.lineplot(x= t_coords*tmax, y= curves_fem[1], color=colors[2], linestyle='-', label="Vo_out(t)", )
-    # sns.lineplot(x= t_coords*tmax, y= curves_fem[4], color=colors[3], linestyle='-', label="Vw_in(t)", )
-    
-    # plt.legend()
-    # plt.xlabel("time")
-    # plt.savefig('curves.jpg', format='jpg')
-    
-    # sns.lineplot(x= t_coords*tmax, y= curves_data[2], color=colors[0], linestyle=':', label="krw")
-    # sns.lineplot(x= t_coords*tmax, y= curves_data[3], color=colors[1], linestyle=':', label="kro")
-    
-    # sns.lineplot(x= t_coords*tmax, y= curves_pinn[2], color=colors[0], linestyle='--', label="krw")
-    # sns.lineplot(x= t_coords*tmax, y= curves_pinn[3], color=colors[1], linestyle='--', label="kro")
-    
-    # sns.lineplot(x= t_coords*tmax, y= curves_fem[2], color=colors[0], linestyle='-', label="krw")
-    # sns.lineplot(x= t_coords*tmax, y= curves_fem[3], color=colors[1], linestyle='-', label="kro")
-    
-    # plt.legend()
-    # plt.xlabel("time")
-    # plt.savefig('k_curves.jpg', format='jpg')

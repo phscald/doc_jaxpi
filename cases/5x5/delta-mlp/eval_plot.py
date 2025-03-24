@@ -60,6 +60,8 @@ def load_data(filepath):
     t_coords = arquivos['t_coords']
     tmax = arquivos['tmax']
     del arquivos
+    s_pred = jnp.clip(s_pred, 0, 1)
+    s_pred = jnp.round(s_pred)
     return [u_pred, s_pred], vertices, map_elements_vertexes, xmax, xmin, t_coords, tmax
 
 pred_data, vertices, map_elements_vertexes, xmax, xmin, _, _ = load_data('pred.pkl')
