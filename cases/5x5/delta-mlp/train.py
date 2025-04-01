@@ -154,12 +154,13 @@ def train_one_window(config, workdir, model, samplers, idx, initial):
     batch = {}
     while step < config.training.max_steps:
         
-        ind = np.random.choice(initial[9].shape[0], int(initial[9].shape[0]/6))
-        initial_ = list(initial)
-        for i in range(5, 9):
-            initial_[i] = jax.device_put(initial[i][:, ind])
-        initial_[9] = jax.device_put(initial[9][ind])
-        samplers["res"].update_initial(initial_)
+        if step%2500==0:
+            ind = np.random.choice(initial[9].shape[0], int(initial[9].shape[0]/6))
+            initial_ = list(initial)
+            for i in range(5, 9):
+                initial_[i] = jax.device_put(initial[i][:, ind])
+            initial_[9] = jax.device_put(initial[9][ind])
+            samplers["res"].update_initial(initial_)
                 
         for key, sampler in samplers.items():
             batch[key] = next(sampler)
@@ -260,7 +261,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     v0    = normalize_mustd(v0, v_mean, v_std)
       
     print(f't_fem max fem {t_fem.max()}')
-    t1 =  16000/8*12
+    t1 =  24000
     
     idx = jnp.where(t_fem<=t1)[0]
     

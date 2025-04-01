@@ -220,68 +220,6 @@ class NavierStokes2DwSat(ForwardIVP):
         return ru_l, rv_l, rc_l, rs_l, gamma
 
     @partial(jit, static_argnums=(0,))
-    def compute_diag_ntk(self, params, batch):
-        # Unpack batch
-        res_batch = batch["res"]
-        
-        (t, X, mu_batch, delta_matrices, fields, _) = res_batch
-        ( _, N, B, A, M) = delta_matrices
-        (X_fem, t_fem, mu_fem, _, _, _, _) = fields
-
-        u_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
-            self.u_net, params, t_fem, X_fem, mu_batch)
-        v_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
-            self.v_net, params, t_fem, X_fem, mu_batch)
-        p_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
-            self.p_net, params, t_fem, X_fem, mu_batch)
-        s_data_ntk = vmap(ntk_fn, (None, None, 0, 0, 0))(
-            self.s_net, params, t_fem, X_fem, mu_batch)
-        
-
-        u_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0))(
-            self.u_net, params, 0.0, X_fem, mu_fem
-        )
-        v_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0))(
-            self.v_net, params, 0.0, X_fem, mu_fem
-        )
-        p_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0))(
-            self.p_net, params, 0.0, X_fem, mu_fem
-        )
-        s_ic_ntk = vmap(ntk_fn, (None, None, None, 0, 0))(
-            self.s_net, params, 0.0, X_fem, mu_fem
-        )
-
-        ru_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0, 0, 0))(
-            self.ru_net, params, t, X, mu_batch, B, A, M, N 
-        )
-        rv_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0, 0, 0))(
-            self.rv_net, params, t, X, mu_batch, B, A, M, N 
-        )
-        rc_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0, 0, 0))(
-            self.rc_net, params, t, X, mu_batch, B, A, M, N 
-        )
-        rs_ntk = vmap(ntk_fn, (None, None, 0, 0, 0, 0, 0, 0, 0))(
-            self.rs_net, params, t, X, mu_batch, B, A, M, N 
-        )
-
-        ntk_dict = {
-            "u_data": u_data_ntk,
-            "v_data": v_data_ntk,
-            "p_data": p_data_ntk,
-            "s_data": s_data_ntk,
-            "u_ic": u_ic_ntk,
-            "v_ic": v_ic_ntk,
-            "p_ic": p_ic_ntk,
-            "s_ic": s_ic_ntk,
-            "ru": ru_ntk, #
-            "rv": rv_ntk, #
-            "rc": rc_ntk,
-            "rs": rs_ntk,
-        }
-
-        return ntk_dict
-    
-    @partial(jit, static_argnums=(0,))
     def losses(self, params, batch):
         # Unpack batch
 
@@ -356,10 +294,10 @@ class NavierStokes2DwSat(ForwardIVP):
             # "v_ic": v_ic_loss,
             # "p_ic": p_ic_loss,
             # "s_ic": s_ic_loss,
-            "ru": ru_loss,
-            "rv": rv_loss,
-            "rc": rc_loss,
-            "rs": rs_loss,
+            # "ru": ru_loss,
+            # "rv": rv_loss,
+            # "rc": rc_loss,
+            # "rs": rs_loss,
         }
 
         return loss_dict
