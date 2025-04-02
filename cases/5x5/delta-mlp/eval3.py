@@ -50,7 +50,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     pmax = dp
     U_max = dp*L_max/mu1
 
-    mu = .1  #mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .0875, .1]
+    # mu_list = [.0025, .0033333333333333335, .005, .01, .05, .0625, .075, .0875, .1]
+    mu = .0875
     ind_mu = jnp.where(mu_list==mu)[0]
     
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
@@ -231,5 +232,5 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         ani_p.save(f'./video_p_{mu}_.gif', writer='pillow')
 
     #Generate GIFs for each time window
-    for idx in range(1, config.training.num_time_windows + 1):
-        make_gif(idx)
+    # for idx in range(1, config.training.num_time_windows + 1):
+    #     make_gif(idx)

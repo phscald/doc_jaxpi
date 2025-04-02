@@ -156,21 +156,26 @@ class NavierStokes2DwSat(ForwardIVP):
         v_xx = Minv @ A @ v_e
         s_xx = Minv @ A @ s_e
 
-        u_yy = u_xx[2][0] *(self.L_max**2) ; u_xx = u_xx[0][0] *(self.L_max**2) 
-        v_yy = v_xx[2][0] *(self.L_max**2) ; v_xx = v_xx[0][0] *(self.L_max**2) 
+        u_yy = u_xx[2][0] *(self.L_max**2) ; u_xy = u_xx[1][0] *(self.L_max**2) ; u_xx = u_xx[0][0] *(self.L_max**2) 
+        v_yy = v_xx[2][0] *(self.L_max**2) ; v_xy = v_xx[1][0] *(self.L_max**2) ; v_xx = v_xx[0][0] *(self.L_max**2) 
         s_yy = s_xx[2][0] *(self.L_max**2) ; s_xx = s_xx[0][0] *(self.L_max**2) 
 
         Re = rho0*self.U_max*(self.L_max)/mu1 
         mu = (1-s)*mu1 + s*mu0
         mu_ratio = mu/mu1
+        mu_s = mu0-mu1
+        mu_x = mu_s * s_x
+        mu_y = mu_s * s_y
                 
         # PDE residual
         # ru = u_t + u * u_x + v * u_y + (p_x - mu_ratio*(u_xx + u_yy)) / Re #  
         # rv = v_t + u * v_x + v * v_y + (p_y - mu_ratio*(v_xx + v_yy)) / Re #
-        ru = (p_x - mu_ratio*(u_xx + u_yy)) / Re #  
-        rv = (p_y - mu_ratio*(v_xx + v_yy)) / Re #
+        # ru = (p_x - mu_ratio*(u_xx + u_yy)) / Re #  
+        # rv = (p_y - mu_ratio*(v_xx + v_yy)) / Re #
+        ru = (-p_x + 2*mu_x/mu1*u_x + 2*mu/mu1*u_xx + mu_y/mu1*(u_y+v_x) + mu/mu1*(u_yy+v_xy)) / Re
+        rv = (-p_y + 2*mu_y/mu1*v_y + 2*mu/mu1*v_yy + mu_x/mu1*(u_y+v_x) + mu/mu1*(u_xy+v_yy)) / Re
         rc = u_x + v_y
-        rs = s_t + u * s_x + v * s_y - 0*beta*10**(-4)*(s_xx + s_yy)
+        rs = s_t + u * s_x + v * s_y # - 0*beta*10**(-4)*(s_xx + s_yy)
         
         return ru, rv, rc, rs
 
@@ -294,10 +299,10 @@ class NavierStokes2DwSat(ForwardIVP):
             # "v_ic": v_ic_loss,
             # "p_ic": p_ic_loss,
             # "s_ic": s_ic_loss,
-            # "ru": ru_loss,
-            # "rv": rv_loss,
-            # "rc": rc_loss,
-            # "rs": rs_loss,
+            "ru": ru_loss,
+            "rv": rv_loss,
+            "rc": rc_loss,
+            "rs": rs_loss,
         }
 
         return loss_dict

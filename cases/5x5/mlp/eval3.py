@@ -50,13 +50,14 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     pmax = dp
     U_max = dp*L_max/mu1
 
-    mu = .0025 #mu_list = [.0025, .014375, .02625, .038125, .05, .0625, .0875, .1]
+    # mu_list = [.0025, .0033333333333333335, .005, .01, .05, .0625, .075, .0875, .1]
+    mu = .0875
     ind_mu = jnp.where(mu_list==mu)[0]
     
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time
-    tmax =6000
+    tmax = 24000
     
     idx = jnp.where(t_fem<=tmax)[0]
     
@@ -70,10 +71,20 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     t0 = 0.0
 
     temporal_dom = jnp.array([t0, t1 * (1 + 0.05)]) # Must be same as the one used in training
+    
+    # u_mean = u_fem.mean()
+    u_mean = 0
+    u_std = u0.std()*3
+    # v_mean = v_fem.mean()
+    v_mean = 0
+    v_std = v0.std()*3
+    print(f"ustd: {u_std}")
+    print(f"vstd: {v_std}")
+    u_stats = (u_mean, u_std, v_mean, v_std)
 
     # Initialize model
     # model = models.NavierStokes2D(config, inflow_fn, temporal_dom, coords, Re)
-    model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, U_max, L_max, fluid_params) #  no 1
+    model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, U_max, L_max, (fluid_params, u_stats)) #  no 1
 
     # Restore checkpoint
     ckpt_path = os.path.join(".", "ckpt", config.wandb.name)
@@ -81,13 +92,23 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     model.state = restore_checkpoint(model.state, ckpt_path)
     params = model.state.params
     
+    # print(f"ufem shape: {u_fem.shape}")
+    # print(f"eig shape: {eigvecs.shape}")
+    # print(da)
+    
     X = eigvecs[:,:]
+    ind = random.choice(random.PRNGKey(1234), eigvecs.shape[0], shape=(int(eigvecs.shape[0]*.6),) )
+    X = X[ind]
+    u_fem = u_fem[:,ind]
+    v_fem = v_fem[:,ind]
+    p_fem = p_fem[:,ind]
+    s_fem = s_fem[:,ind]
     
     # Predict
-    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, 0, 0, None)), (None, 0, None, None, None, None))) # shape t by xy
-    v_pred_fn = jit(vmap(vmap(model.v_net, (None, None, 0, 0, 0, None)), (None, 0, None, None, None, None))) 
-    p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, 0, 0, None)), (None, 0, None, None, None, None))) 
-    s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, 0, 0, None)), (None, 0, None, None, None, None))) 
+    u_pred_fn = jit(vmap(vmap(model.u_net, (None, None, 0, None)), (None, 0, None, None))) # shape t by xy
+    v_pred_fn = jit(vmap(vmap(model.v_net, (None, None, 0, None)), (None, 0, None, None))) 
+    p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, None)), (None, 0, None, None))) 
+    s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, None)), (None, 0, None, None))) 
     
     num_t = 10  # Desired number of points
     idx_t = jnp.linspace(0, t_fem.shape[0] - 1, num_t, dtype=int)
@@ -111,19 +132,19 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         params = model.state.params
 
         print(f'mu = {mu}')
-
-        u_pred = u_pred_fn(params, t_coords, X[:,0], X[:,1], X[:,2:], mu)
-        v_pred = v_pred_fn(params, t_coords, X[:,0], X[:,1], X[:,2:], mu)
-        s_pred = s_pred_fn(params, t_coords, X[:,0], X[:,1], X[:,2:], mu)
-        p_pred = p_pred_fn(params, t_coords, X[:,0], X[:,1], X[:,2:], mu)      
+        
+        u_pred = u_pred_fn(params, t_coords, X, mu)
+        v_pred = v_pred_fn(params, t_coords, X, mu)
+        s_pred = s_pred_fn(params, t_coords, X, mu)
+        p_pred = p_pred_fn(params, t_coords, X, mu)    
 
         u_pred_list.append(u_pred)
         v_pred_list.append(v_pred)
         s_pred_list.append(s_pred)
         p_pred_list.append(p_pred)     
 
-    x = eigvecs[:, 0]
-    y = eigvecs[:, 1]
+    x = eigvecs[ind, 0]
+    y = eigvecs[ind, 1]
     
     from matplotlib.animation import FuncAnimation
     from functools import partial  # Import partial to pass extra arguments to the update function
@@ -136,28 +157,28 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     m = len(u_pred)  # Assuming u_pred and others are defined
     
-    
-    u_mean = 0
-    u_std = u_fem.std()*3
-    v_mean = 0
-    v_std = v_fem.std()*3
-    
     def denormalize_mustd(u, umean, ustd):
         return u*ustd+umean
     def normalize_mustd(u, umean, ustd):
         return (u-umean)/ustd
-    u_pred = denormalize_mustd(u_pred, u_mean, u_std)
-    v_pred = denormalize_mustd(v_pred, v_mean, v_std)
+    # u_pred = denormalize_mustd(u_pred, u_mean, u_std)
+    # v_pred = denormalize_mustd(v_pred, v_mean, v_std)
+    u_fem = normalize_mustd(u_fem, u_mean, u_std)
+    v_fem = normalize_mustd(v_fem, v_mean, v_std)
+    u0 = normalize_mustd(u0, u_mean, u_std)
+    v0 = normalize_mustd(v0, v_mean, v_std)
     
-    matrix1 = [s_pred, u_pred, v_pred, p_pred]
+    print(f"u - max: {u_fem.max()} - min: {u_fem.min()}")
+    
+    matrix1 = [jnp.clip(s_pred, 0, 1), u_pred, v_pred, p_pred]
     matrix2 = [s_fem, u_fem, v_fem, p_fem]
     label   = ["s", "u", "v", "p"]
     for i in range(4):
         print(f'==={label[i]}===')
         mse = jnp.mean((matrix1[i] - matrix2[i]) ** 2)   
-        l1_relative_error = jnp.sum(jnp.abs(matrix1[i] - matrix2[i])) / jnp.sum(jnp.abs(matrix1[i]))
+        l2_relative_error = jnp.sum((matrix1[i] - matrix2[i])**2) / jnp.sum((matrix2[i])**2)
         print(f"MSE: {mse}")
-        print(f"L1-relative error: {l1_relative_error}")
+        print(f"L2-relative error: {l2_relative_error*100:.2f}%")
 
     # Update function for each frame
     def update_s(frames, indx):
@@ -210,6 +231,6 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         ani_p = FuncAnimation(figp, partial(update_p, indx=indx-1), frames=m, interval=200)
         ani_p.save(f'./video_p_{mu}_.gif', writer='pillow')
 
-    # Generate GIFs for each time window
+    #Generate GIFs for each time window
     # for idx in range(1, config.training.num_time_windows + 1):
     #     make_gif(idx)

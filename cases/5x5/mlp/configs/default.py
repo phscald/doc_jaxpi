@@ -3,12 +3,15 @@ import jax.numpy as jnp
 
 def get_config():
     
+    upd_stp = 1
     """Get the default hyperparameter configuration."""
     config = ml_collections.ConfigDict()
 
     config.mode = "train"
     config.mode = "eval" 
-    # ver o coeficiente do causal depois
+    
+    # config.mode = "evalcurves" 
+
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
     wandb.project = "geom1x2-unsteady"
@@ -22,10 +25,10 @@ def get_config():
     config.arch = arch = ml_collections.ConfigDict()
     arch.arch_name = "MLP3wD_"
     # arch.num_layers = 8
-    arch.num_trunk_layers = 5 # mu 2
+    arch.num_trunk_layers = 5# mu 2
     arch.num_branch_layers = 5 # t 6
     # arch.num_branch_layers2 = 7 # xy v(xy)
-    arch.hidden_dim = 100
+    arch.hidden_dim = 200
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
@@ -52,7 +55,7 @@ def get_config():
     training.num_time_windows = 1
 
     div = 2
-    training.res_batch_size = 2048
+    training.res_batch_size = 2048#048
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
@@ -63,10 +66,10 @@ def get_config():
         "v_data": 1.0,
         "p_data": 1.0,
         "s_data": 1.0,
-        "u_ic": 1.0,
-        "v_ic": 1.0,
-        "p_ic": 1.0,
-        "s_ic": 1.0,
+        # "u_ic": 1.0,
+        # "v_ic": 1.0,
+        # "p_ic": 1.0,
+        # "s_ic": 1.0,
         # "ru": 1.0,
         # "rv": 1.0,
         # "rc": 1.0,
@@ -98,8 +101,8 @@ def get_config():
     # Input shape for initializing Flax models
     
     config.input_dim = 4
-    config.input_branch = 3   # t
-    config.input_branch2 = 20 # xy v(xy)
+    config.input_branch = 1   # t
+    config.input_branch2 = 22 # xy v(xy)
     config.input_trunk = 1    # mu 
 
     

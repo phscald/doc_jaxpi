@@ -2,6 +2,7 @@ import functools
 from functools import partial
 import time
 import os
+os.environ["XLA_PYTHON_CLIENT_PREALLOCATE"] = "false"
 
 from absl import logging
 
@@ -30,16 +31,19 @@ from flax.jax_utils import replicate
 from flax import linen as nn
 
 
-from utils import get_dataset#, get_fine_mesh, parabolic_inflow
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from utils import get_dataset
 
     
 
 class resSampler(BaseSampler):
-    def __init__(self, delta_matrices, initial, batch_size, max_steps=None, rng_key=random.PRNGKey(1234)):
+    def __init__(self, delta_matrices, initial, indx_extremes, batch_size, max_steps=None, rng_key=random.PRNGKey(1234)):
         super().__init__(batch_size, rng_key)       
         
         self.delta_matrices = delta_matrices
         self.initial = initial
+        self.indx_extremes = indx_extremes
         self.step = 0
         self.max_steps = max_steps
         
@@ -54,16 +58,18 @@ class resSampler(BaseSampler):
         (  u0, v0, p0, s0, coords_initial,
               u_fem, v_fem, p_fem, s_fem, t_fem, coords_fem, mu_list) = self.initial
         
-        (idx_bcs, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices) = self.delta_matrices
         
+        (idx_bcs, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices) = self.delta_matrices
+                
         #1st step: sample of elements to be considered by the loss terms
         
         key1, key = random.split(key, 2)
         idx_elem = random.choice(key1, map_elements_vertexes.shape[0], shape=(self.batch_size,) )
+        idx_elem = jnp.concatenate((idx_elem, self.indx_extremes))
         
         idx_fem = map_elements_vertexes[idx_elem]
         idx_fem = jnp.reshape(idx_fem, (-1,))
-        eigvecs_elem = jnp.reshape(eigvecs[idx_fem][jnp.newaxis, :, :], (self.batch_size, 3, 52))
+        eigvecs_elem = jnp.reshape(eigvecs[idx_fem][jnp.newaxis, :, :], (-1, 3, 22))
         eigvecs_elem = eigvecs_elem[:,:,:]
         eigvecs = eigvecs[:,:]
         
@@ -81,8 +87,8 @@ class resSampler(BaseSampler):
         #2nd step: sample of time points
 
         key1, key2, key = random.split(key, 3)
-        idx_t = random.choice(key1, t_fem.shape[0], shape=(self.batch_size,) )
-        idx_mu = random.choice(key2, mu_list.shape[0], shape=(self.batch_size,) )
+        idx_t = random.choice(key1, t_fem.shape[0], shape=(self.batch_size+self.indx_extremes.shape[0],) )
+        idx_mu = random.choice(key2, mu_list.shape[0], shape=(self.batch_size+self.indx_extremes.shape[0],) )
         
         
         idx_fem = map_elements_vertexes[idx_elem]
@@ -116,6 +122,9 @@ class resSampler(BaseSampler):
 
         mu_batch = mu_list[idx_mu]
         mu_fem = jnp.concatenate((mu_batch,mu_batch,mu_batch), axis=0)
+        mu_batch2 =  jnp.array([.0033333333333333335, .01, .0625, .0875])
+        mu_batch2 = mu_batch2[random.choice(key1, mu_batch2.shape[0], shape=(1024,) )]
+        mu_batch = jnp.concatenate((mu_batch[:mu_batch.shape[0]-1024],mu_batch2), axis=0)
                 
         fields = (X_fem, t_fem, mu_fem, u_fem_b, v_fem_b, p_fem_b, s_fem_b)
         fields_ic = (u0_b, v0_b, p0_b, s0_b)  
@@ -149,11 +158,6 @@ def train_one_window(config, workdir, model, samplers, idx):
         if config.weighting.scheme in ["grad_norm", "ntk"]:
             if step % config.weighting.update_every_steps == 0:
                 model.state = model.update_weights(model.state, batch)
-                
-        # if step>300000:
-        #     config.optim.learning_rate = 5*10**(-5)
-        # elif step>800000:
-        #     config.optim.learning_rate = 10**(-5)
         
         for _ in range(100):   
             model.state = model.step(model.state, batch)
@@ -194,16 +198,18 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     wandb_config = config.wandb
     wandb.init(project=wandb_config.project, name=wandb_config.name)
     
+    
+    L_max = 50/1000/100
     (   initial,
         delta_matrices,
-        mu1, rho0, rho1) = get_dataset()
+        mu1, rho0, rho1) = get_dataset(L_max)
 
     fluid_params = (0, mu1, rho0, rho1)    
         
     
-    pin = 50
+    pin = 100
     dp = pin
-    L_max = 50/1000/100
+    
     U_max = dp*L_max/mu1
     print(f"U_max: {U_max}")
 
@@ -212,11 +218,39 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     print(f'Re={Re}')
     print(f'max_Steps: {config.training.max_steps}')
 
-    t1 = 400
 
     (u0, v0, p0, s0, coords_initial,
      u_fem, v_fem, p_fem, s_fem, t_fem, 
      coords_fem, mu_list) = initial
+    
+    # print(f'coord_max:{coords_fem.max()}') = 180
+    # print(dsa)
+    
+        
+    print('u')
+    print(f'mean: {u_fem.mean()}')
+    print(f'std: {u_fem.std()}')
+    print('v')
+    print(f'mean: {v_fem.mean()}')
+    print(f'std: {v_fem.std()}')
+    
+    # u_mean = u_fem.mean()
+    u_mean = 0
+    u_std = u0.std()*3
+    # v_mean = v_fem.mean()
+    v_mean = 0
+    v_std = v0.std()*3
+    u_stats = (u_mean, u_std, v_mean, v_std)
+    
+    def normalize_mustd(u, umean, ustd):
+        return (u-umean)/ustd
+    u_fem = normalize_mustd(u_fem, u_mean, u_std)
+    v_fem = normalize_mustd(v_fem, v_mean, v_std)
+    u0    = normalize_mustd(u0, u_mean, u_std)
+    v0    = normalize_mustd(v0, v_mean, v_std)
+      
+    print(f't_fem max fem {t_fem.max()}')
+    t1 =  16000/8*12
     
     idx = jnp.where(t_fem<=t1)[0]
     
@@ -231,9 +265,26 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
             u_fem, v_fem, p_fem, s_fem, t_fem, 
             coords_fem, mu_list)
     
-    idx_bcs, eigvecs, _, map_elements_vertexes, _, B_matrices, A_matrices, M_matrices, N_matrices  = delta_matrices
-    delta_matrices = (idx_bcs, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices )
+    
+    idx_bcs, eigvecs, vertices, map_elements_vertexes, _, B_matrices, A_matrices, M_matrices, N_matrices  = delta_matrices
+    
+    # print(f'vertices shape {vertices.shape}')
+    # print(f'map_elements_vertexes shape {map_elements_vertexes.shape}')
+    # print(f'coords_fem shape {coords_fem.shape}')
+    # print(dsa)
 
+    indx_extremes = []
+    for i in range(vertices.shape[0]):
+        ind = jnp.where(vertices[i,:,0]==coords_fem[:,0].min())[0]
+        if ind.shape[0] >= 1:
+            indx_extremes.append(i)
+        ind = jnp.where(vertices[i,:,0]==coords_fem[:,0].max())[0]
+        if ind.shape[0] >= 1:
+            indx_extremes.append(i)
+    indx_extremes = jnp.array(indx_extremes)
+    
+    delta_matrices = (idx_bcs, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices )
+    
     # Temporal domain of each time window
     t0 = 0.0
 
@@ -243,18 +294,19 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         logging.info("Training time window {}".format(idx + 1))
         
         # Initialize model 
-        model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, U_max, L_max, fluid_params) #  no 1
+        model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, U_max, L_max, (fluid_params, u_stats)) #  no 1
         
         # Initialize Sampler
         keys = random.PRNGKey(0)
         
         res_sampler = resSampler(
-                delta_matrices,
-                initial,
-                config.training.res_batch_size,
-                config.training.max_steps,
-                rng_key=keys,
-            ) 
+            delta_matrices,
+            initial,
+            indx_extremes,
+            config.training.res_batch_size,
+            config.training.max_steps,
+            rng_key=keys,
+        ) 
                     
         samplers = {
             "res": res_sampler,

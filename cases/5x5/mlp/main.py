@@ -13,6 +13,7 @@ from ml_collections import config_flags
 
 import train
 import eval3 as eval
+import evalcurves
 
 FLAGS = flags.FLAGS
 
@@ -32,6 +33,9 @@ def main(argv):
 
     elif FLAGS.config.mode == "eval":
         eval.evaluate(FLAGS.config, FLAGS.workdir)
+        
+    elif FLAGS.config.mode == "evalcurves":
+        evalcurves.evaluate(FLAGS.config, FLAGS.workdir)
 
 
 if __name__ == "__main__":

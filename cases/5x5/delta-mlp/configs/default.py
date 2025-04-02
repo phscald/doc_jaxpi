@@ -8,7 +8,7 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     config.mode = "train"
-    config.mode = "eval" 
+    # config.mode = "eval" 
     
     # config.mode = "evalcurves" 
 
@@ -55,7 +55,7 @@ def get_config():
     training.num_time_windows = 1
 
     div = 2
-    training.res_batch_size = 1024#048
+    training.res_batch_size = 2048#048
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()
@@ -70,10 +70,10 @@ def get_config():
         # "v_ic": 1.0,
         # "p_ic": 1.0,
         # "s_ic": 1.0,
-        # "ru": 1.0,
-        # "rv": 1.0,
-        # "rc": 1.0,
-        # "rs": 1.0,
+        "ru": 1.0,
+        "rv": 1.0,
+        "rc": 1.0,
+        "rs": 1.0,
     }
 
     weighting.momentum = 0.9
