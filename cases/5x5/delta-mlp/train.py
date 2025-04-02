@@ -35,14 +35,16 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils import get_dataset
 
-    
+def normalize_mustd(u, umean, ustd):
+    return (u-umean)/ustd     
 
 class resSampler(BaseSampler):
-    def __init__(self, delta_matrices, initial, indx_extremes, batch_size, max_steps=None, rng_key=random.PRNGKey(1234)):
+    def __init__(self, delta_matrices, initial, u_stats, indx_extremes, batch_size, max_steps=None, rng_key=random.PRNGKey(1234)):
         super().__init__(batch_size, rng_key)       
         
         self.delta_matrices = delta_matrices
         self.initial = initial
+        self.u_stats = u_stats
         self.indx_extremes = indx_extremes
         self.step = 0
         self.max_steps = max_steps
@@ -51,16 +53,21 @@ class resSampler(BaseSampler):
         self.initial = initial 
         
     def update_step(self, step):
-        self.step = step       
+        self.step = step     
         
     @partial(pmap, static_broadcasted_argnums=(0,))
     def data_generation(self, key):
         "Generates data containing batch_size samples"
-
         
         (  u0, v0, p0, s0, coords_initial,
               u_fem, v_fem, p_fem, s_fem, t_fem, coords_fem, mu_list) = self.initial
         
+        u_mean, u_std, v_mean, v_std = self.u_stats
+        
+        u_fem = normalize_mustd(u_fem, u_mean, u_std)
+        v_fem = normalize_mustd(v_fem, v_mean, v_std)
+        u0    = normalize_mustd(u0, u_mean, u_std)
+        v0    = normalize_mustd(v0, v_mean, v_std)
         
         (idx_bcs, eigvecs, map_elements_vertexes, B_matrices, A_matrices, M_matrices, N_matrices) = self.delta_matrices
                 
@@ -85,7 +92,6 @@ class resSampler(BaseSampler):
                     B_matrices[idx_elem], 
                     A_matrices[idx_elem],
                     M_matrices[idx_elem])
-        
 
         #2nd step: sample of time points
 
@@ -252,13 +258,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     v_mean = 0
     v_std = v0.std()*3
     u_stats = (u_mean, u_std, v_mean, v_std)
-    
-    def normalize_mustd(u, umean, ustd):
-        return (u-umean)/ustd
-    u_fem = normalize_mustd(u_fem, u_mean, u_std)
-    v_fem = normalize_mustd(v_fem, v_mean, v_std)
-    u0    = normalize_mustd(u0, u_mean, u_std)
-    v0    = normalize_mustd(v0, v_mean, v_std)
+        
       
     print(f't_fem max fem {t_fem.max()}')
     t1 =  24000
@@ -309,6 +309,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         res_sampler = resSampler(
             delta_matrices,
             initial,
+            u_stats,
             indx_extremes,
             config.training.res_batch_size,
             config.training.max_steps,

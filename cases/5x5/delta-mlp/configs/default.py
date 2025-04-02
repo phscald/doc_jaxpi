@@ -8,7 +8,7 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     config.mode = "train"
-    # config.mode = "eval" 
+    config.mode = "eval" 
     
     # config.mode = "evalcurves" 
 
@@ -55,7 +55,7 @@ def get_config():
     training.num_time_windows = 1
 
     div = 2
-    training.res_batch_size = 2048
+    training.res_batch_size = 1024#048
 
     # Weighting
     config.weighting = weighting = ml_collections.ConfigDict()

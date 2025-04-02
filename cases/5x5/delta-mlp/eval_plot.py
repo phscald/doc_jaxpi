@@ -67,7 +67,14 @@ def load_data(filepath):
 pred_data, vertices, map_elements_vertexes, xmax, xmin, _, _ = load_data('pred.pkl')
 # pred_pinn, _, _, _, _, _, _                                  = load_data('pred_pinn.pkl')
 pred_fem , _, _, _, _, t_coords, tmax                        = load_data('pred_fem.pkl')
-u_fem       , s_fem = pred_fem
+u_fem, s_fem = pred_fem
+
+print("======")
+print(u_fem.mean())
+print(u_fem.std())
+print(pred_data[0].mean())
+print(pred_data[0].std())
+print(dsa)
 
 curves_data = get_curves(pred_data[0], pred_data[1], vertices, map_elements_vertexes, xmax, xmin)
 # curves_pinn = get_curves(pred_pinn[0], pred_pinn[1], vertices, map_elements_vertexes, xmax, xmin)

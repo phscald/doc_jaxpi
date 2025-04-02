@@ -124,7 +124,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
 
     T = 1.0  # final time
-    tmax = 6000
+    tmax = 24000
     
     idx = jnp.where(t_fem<=tmax)[0]
     
@@ -138,10 +138,16 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     t0 = 0.0
 
     temporal_dom = jnp.array([t0, t1 * (1 + 0.05)]) # Must be same as the one used in training
-
+    
+    u_mean = 0
+    u_std = u0.std()*3
+    v_mean = 0
+    v_std = v0.std()*3
+    u_stats = (u_mean, u_std, v_mean, v_std)
+    
     # Initialize model
     # model = models.NavierStokes2D(config, inflow_fn, temporal_dom, coords, Re)
-    model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, U_max, L_max, fluid_params) #  no 1
+    model = models.NavierStokes2DwSat(config, pin/pmax, temporal_dom, U_max, L_max, (fluid_params, u_stats))  #  no 1
 
     # Restore checkpoint
     ckpt_path = os.path.join(".", "ckpt", config.wandb.name)
@@ -157,7 +163,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, None)), (None, 0, None, None)))
     s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, None)), (None, 0, None, None)))
     
-    num_t = 10  # Desired number of points
+    num_t = 25  # Desired number of points
     idx_t = jnp.linspace(0, t_fem.shape[0] - 1, num_t, dtype=int)
     t_coords = t_fem[idx_t]/tmax 
     u_fem = u_fem[idx_t]
@@ -192,15 +198,15 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     x = eigvecs[:, 0]
     y = eigvecs[:, 1]
-    
-    u_mean = 0
-    u_std = u_fem.std()*3
+
     
     def denormalize_mustd(u, umean, ustd):
         return u*ustd+umean
     def normalize_mustd(u, umean, ustd):
         return (u-umean)/ustd
-    u_pred = denormalize_mustd(u_pred, u_mean, u_std)
+    # u_pred = denormalize_mustd(u_pred, u_mean, u_std)
+    u_fem = normalize_mustd(u_fem, u_mean, u_std)
+    v_fem = normalize_mustd(v_fem, v_mean, v_std)
     
     filepath = './pred.pkl'
     with open(filepath,"wb") as filepath:
