@@ -51,7 +51,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     U_max = dp*L_max/mu1
 
     # mu_list = [.0025, .0033333333333333335, .005, .01, .05, .0625, .075, .0875, .1]
-    mu = .0875
+    mu = .01
     ind_mu = jnp.where(mu_list==mu)[0]
     
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
@@ -91,11 +91,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     ckpt_path = os.path.abspath(ckpt_path)
     model.state = restore_checkpoint(model.state, ckpt_path)
     params = model.state.params
-    
-    # print(f"ufem shape: {u_fem.shape}")
-    # print(f"eig shape: {eigvecs.shape}")
-    # print(da)
-    
+
     X = eigvecs[:,:]
     ind = random.choice(random.PRNGKey(1234), eigvecs.shape[0], shape=(int(eigvecs.shape[0]*.6),) )
     X = X[ind]

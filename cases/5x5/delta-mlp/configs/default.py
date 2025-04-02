@@ -8,7 +8,7 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     config.mode = "train"
-    # config.mode = "eval" 
+    config.mode = "eval" 
     
     # config.mode = "evalcurves" 
 

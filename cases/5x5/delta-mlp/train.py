@@ -223,7 +223,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     fluid_params = (0, mu1, rho0, rho1)    
         
-    
     pin = 100
     dp = pin
     
@@ -240,10 +239,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
      u_fem, v_fem, p_fem, s_fem, t_fem, 
      coords_fem, mu_list) = initial
     
-    # print(f'coord_max:{coords_fem.max()}') = 180
-    # print(dsa)
-    
-        
     print('u')
     print(f'mean: {u_fem.mean()}')
     print(f'std: {u_fem.std()}')
@@ -271,15 +266,9 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     s_fem = s_fem[:, idx]
     
     t_fem = t_fem[idx]
-   
     
     idx_bcs, eigvecs, vertices, map_elements_vertexes, _, B_matrices, A_matrices, M_matrices, N_matrices  = delta_matrices
-    
-    # print(f'vertices shape {vertices.shape}')
-    # print(f'map_elements_vertexes shape {map_elements_vertexes.shape}')
-    # print(f'coords_fem shape {coords_fem.shape}')
-    # print(dsa)
-
+ 
     indx_extremes = []
     for i in range(vertices.shape[0]):
         ind = jnp.where(vertices[i,:,0]==coords_fem[:,0].min())[0]
