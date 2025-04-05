@@ -26,7 +26,7 @@ def get_config():
     arch.num_trunk_layers = 5 # mu 2
     arch.num_branch_layers = 5 # t 6
     # arch.num_branch_layers2 = 7 # xy v(xy)
-    arch.hidden_dim = 100
+    arch.hidden_dim = 200
     arch.out_dim = 4
     arch.activation = "tanh"  # gelu works better than tanh for this problem
     arch.periodicity = False
@@ -48,7 +48,7 @@ def get_config():
 
     # Training
     config.training = training = ml_collections.ConfigDict()
-    training.max_steps = .05*10**6 
+    training.max_steps = 1*10**6 
     training.fine_tune = True
     training.num_time_windows = 1
 

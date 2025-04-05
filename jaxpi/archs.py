@@ -584,6 +584,10 @@ class DeepONet3wD(nn.Module):
         
         # x = jnp.concatenate([x, u1])
         # u1=u2    
+         
+        alpha = jnp.ones(x.shape)
+        alpha = Mlp(num_layers=2, hidden_dim=5, out_dim=3)(alpha)
+        
         u1 = jnp.concatenate([u1, u2])
         
         u1 = ModifiedMlp(#MlpBlock(
@@ -634,7 +638,7 @@ class DeepONet3wD(nn.Module):
         y_s = nn.sigmoid(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_s))
         y_s = Dense(features=1, reparam=self.reparam)(y_s)
         
-        y = jnp.concatenate( [y_u, y_v, y_p, y_s], axis=-1 )
+        y = jnp.concatenate( [y_u, y_v, y_p, y_s, alpha], axis=-1 )
         return y
     
  
@@ -815,6 +819,9 @@ class MLP3wD_(nn.Module):
 
     @nn.compact
     def __call__(self, u1, u2, x):
+        
+        alpha = jnp.ones(x.shape)
+        alpha = Mlp(num_layers=2, hidden_dim=5, out_dim=3)(alpha)
  
         u1 = jnp.concatenate([u1, u2, x])
         
@@ -843,7 +850,7 @@ class MLP3wD_(nn.Module):
         y_s = nn.sigmoid(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_s))
         y_s = Dense(features=1, reparam=self.reparam)(y_s)
         
-        y = jnp.concatenate( [y_u, y_v, y_p, y_s], axis=-1 )
+        y = jnp.concatenate( [y_u, y_v, y_p, y_s, alpha], axis=-1 )
         return y
 
 

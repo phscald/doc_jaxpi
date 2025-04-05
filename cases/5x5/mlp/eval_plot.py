@@ -76,42 +76,59 @@ curves_fem  = get_curves(u_fem       , s_fem       , vertices, map_elements_vert
 #curves = out_flow_ratio_w, out_flow_ratio_o, krw, kro, in_flow_ratio, sat_curve
 colors = ['#D81B60', '#1E88E5', '#FFC107', '#004D40']
 
-plt.figure()
-sns.lineplot(x= t_coords*tmax, y= curves_data[5], color=colors[0], linestyle=':', label="saturation", )
-sns.lineplot(x= t_coords*tmax, y= curves_fem[5], color=colors[0], linestyle='-', label="saturation", )
-plt.legend(loc="best")
-plt.xlabel("time")
-plt.savefig('saturation.jpg', format='jpg')
+# plt.figure()
+# sns.lineplot(x= t_coords*tmax, y= curves_data[5], color=colors[0], linestyle=':', label="saturation", )
+# sns.lineplot(x= t_coords*tmax, y= curves_fem[5], color=colors[0], linestyle='-', label="saturation", )
+# plt.legend(loc="best")
+# plt.xlabel("time")
+# plt.savefig('saturation.jpg', format='jpg')
+
+# plt.figure()
+# sns.lineplot(x= t_coords*tmax, y= curves_data[0], color=colors[1], linestyle=':', label="Vw_out(t)", )
+# sns.lineplot(x= t_coords*tmax, y= curves_data[1], color=colors[2], linestyle=':', label="Vo_out(t)", )
+# sns.lineplot(x= t_coords*tmax, y= curves_data[4], color=colors[3], linestyle=':', label="Vw_in(t)", )
+
+# # sns.lineplot(x= t_coords*tmax, y= curves_pinn[5], color=colors[0], linestyle='--', label="saturation", )
+# # sns.lineplot(x= t_coords*tmax, y= curves_pinn[0], color=colors[1], linestyle='--', label="Vw_out(t)", )
+# # sns.lineplot(x= t_coords*tmax, y= curves_pinn[1], color=colors[2], linestyle='--', label="Vo_out(t)", )
+# # sns.lineplot(x= t_coords*tmax, y= curves_pinn[4], color=colors[3], linestyle='--', label="Vw_in(t)", )
+
+
+# sns.lineplot(x= t_coords*tmax, y= curves_fem[0], color=colors[1], linestyle='-', label="Vw_out(t)", )
+# sns.lineplot(x= t_coords*tmax, y= curves_fem[1], color=colors[2], linestyle='-', label="Vo_out(t)", )
+# sns.lineplot(x= t_coords*tmax, y= curves_fem[4], color=colors[3], linestyle='-', label="Vw_in(t)", )
+
+# plt.legend(loc="best")
+# plt.xlabel("time")
+# plt.savefig('curves.jpg', format='jpg')
+
+# plt.figure()
+# sns.lineplot(x= t_coords*tmax, y= curves_data[2], color=colors[0], linestyle=':', label="krw")
+# sns.lineplot(x= t_coords*tmax, y= curves_data[3], color=colors[1], linestyle=':', label="kro")
+
+# # sns.lineplot(x= t_coords*tmax, y= curves_pinn[2], color=colors[0], linestyle='--', label="krw")
+# # sns.lineplot(x= t_coords*tmax, y= curves_pinn[3], color=colors[1], linestyle='--', label="kro")
+
+# sns.lineplot(x= t_coords*tmax, y= curves_fem[2], color=colors[0], linestyle='-', label="krw")
+# sns.lineplot(x= t_coords*tmax, y= curves_fem[3], color=colors[1], linestyle='-', label="kro")
+
+# plt.legend(loc="best")
+# plt.xlabel("time")
+# plt.savefig('k_curves.jpg', format='jpg')
 
 plt.figure()
-sns.lineplot(x= t_coords*tmax, y= curves_data[0], color=colors[1], linestyle=':', label="Vw_out(t)", )
-sns.lineplot(x= t_coords*tmax, y= curves_data[1], color=colors[2], linestyle=':', label="Vo_out(t)", )
-sns.lineplot(x= t_coords*tmax, y= curves_data[4], color=colors[3], linestyle=':', label="Vw_in(t)", )
 
-# sns.lineplot(x= t_coords*tmax, y= curves_pinn[5], color=colors[0], linestyle='--', label="saturation", )
-# sns.lineplot(x= t_coords*tmax, y= curves_pinn[0], color=colors[1], linestyle='--', label="Vw_out(t)", )
-# sns.lineplot(x= t_coords*tmax, y= curves_pinn[1], color=colors[2], linestyle='--', label="Vo_out(t)", )
-# sns.lineplot(x= t_coords*tmax, y= curves_pinn[4], color=colors[3], linestyle='--', label="Vw_in(t)", )
+def reescale(y):
+    min_y = jnp.min(y)
+    return (y-min_y)/(1-min_y)
+
+sns.lineplot(x= curves_data[5], y= curves_data[2], color=colors[0], linestyle=':', label="krw")
+sns.lineplot(x= curves_data[5], y= reescale(curves_data[3]), color=colors[1], linestyle=':', label="kro")
 
 
-sns.lineplot(x= t_coords*tmax, y= curves_fem[0], color=colors[1], linestyle='-', label="Vw_out(t)", )
-sns.lineplot(x= t_coords*tmax, y= curves_fem[1], color=colors[2], linestyle='-', label="Vo_out(t)", )
-sns.lineplot(x= t_coords*tmax, y= curves_fem[4], color=colors[3], linestyle='-', label="Vw_in(t)", )
+sns.lineplot(x= curves_fem[5], y= curves_fem[2], color=colors[0], linestyle='-', label="krw")
+sns.lineplot(x= curves_fem[5], y= reescale(curves_fem[3]), color=colors[1], linestyle='-', label="kro")
 
 plt.legend(loc="best")
-plt.xlabel("time")
-plt.savefig('curves.jpg', format='jpg')
-
-plt.figure()
-sns.lineplot(x= t_coords*tmax, y= curves_data[2], color=colors[0], linestyle=':', label="krw")
-sns.lineplot(x= t_coords*tmax, y= curves_data[3], color=colors[1], linestyle=':', label="kro")
-
-# sns.lineplot(x= t_coords*tmax, y= curves_pinn[2], color=colors[0], linestyle='--', label="krw")
-# sns.lineplot(x= t_coords*tmax, y= curves_pinn[3], color=colors[1], linestyle='--', label="kro")
-
-sns.lineplot(x= t_coords*tmax, y= curves_fem[2], color=colors[0], linestyle='-', label="krw")
-sns.lineplot(x= t_coords*tmax, y= curves_fem[3], color=colors[1], linestyle='-', label="kro")
-
-plt.legend(loc="best")
-plt.xlabel("time")
+plt.xlabel("saturação")
 plt.savefig('k_curves.jpg', format='jpg')

@@ -72,22 +72,26 @@ class NavierStokes2DwSat(ForwardIVP):
         p = outputs[2]
         s = outputs[3] # nn.softplus( outputs[3] )
         
-        return u, v, p, s
+        a = outputs[4]
+        b = outputs[5]
+        c = outputs[6]
+        
+        return u, v, p, s, a, b, c
 
     def u_net(self, params, t, X, mu):
-        u, _, _, _ = self.neural_net(params, t, X, mu)
+        u, _, _, _, _, _, _ = self.neural_net(params, t, X, mu)
         return u
 
     def v_net(self, params, t, X, mu):
-        _, v, _, _ = self.neural_net(params, t, X, mu)
+        _, v, _, _, _, _, _ = self.neural_net(params, t, X, mu)
         return v
 
     def p_net(self, params, t, X, mu):
-        _, _, p, _ = self.neural_net(params, t, X, mu)
+        _, _, p, _, _, _, _ = self.neural_net(params, t, X, mu)
         return p
 
     def s_net(self, params, t, X, mu):
-        _, _, _, s = self.neural_net(params, t, X, mu)
+        _, _, _, s, _, _, _ = self.neural_net(params, t, X, mu)
         return s
     
 
@@ -99,12 +103,10 @@ class NavierStokes2DwSat(ForwardIVP):
         
         def denormalize_mustd(u, umean, ustd):
             return u*ustd+umean
-        
-        # Minv = invert(M)
                
-        u1 , v1 , p1, s1 = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([0]), axis=0)) , mu0)
-        u2 , v2 , p2, s2 = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([1]), axis=0)) , mu0)
-        u3 , v3 , p3, s3 = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([2]), axis=0)) , mu0)
+        u1 , v1 , p1, s1, a, b, c = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([0]), axis=0)) , mu0)
+        u2 , v2 , p2, s2, _, _, _ = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([1]), axis=0)) , mu0)
+        u3 , v3 , p3, s3, _, _, _ = self.neural_net(params, t, jnp.squeeze(jnp.take(eigenvecs_element, jnp.array([2]), axis=0)) , mu0)
     
         u1 = denormalize_mustd(u1, u_mean, u_std)
         v1 = denormalize_mustd(v1, v_mean, v_std)
@@ -154,26 +156,24 @@ class NavierStokes2DwSat(ForwardIVP):
         v_xx = Minv @ A @ v_e
         s_xx = Minv @ A @ s_e
 
-        u_yy = u_xx[2][0] *(self.L_max**2) ; u_xy = u_xx[1][0] *(self.L_max**2) ; u_xx = u_xx[0][0] *(self.L_max**2) 
-        v_yy = v_xx[2][0] *(self.L_max**2) 
-        # v_xy = v_xx[1][0] *(self.L_max**2) ; 
-        v_xx = v_xx[0][0] *(self.L_max**2) 
+        u_yy = u_xx[2][0] *(self.L_max**2) ; u_xx = u_xx[0][0] *(self.L_max**2) 
+        v_yy = v_xx[2][0] *(self.L_max**2) ; v_xx = v_xx[0][0] *(self.L_max**2) 
         # s_yy = s_xx[2][0] *(self.L_max**2) ; s_xx = s_xx[0][0] *(self.L_max**2) 
 
         Re = rho0*self.U_max*(self.L_max)/mu1 
         mu = (1-s)*mu1 + s*mu0
-        mu_ratio = mu/mu1
-        # mu_s = mu0-mu1
-        # mu_x = mu_s * s_x
-        # mu_y = mu_s * s_y
+        # mu_ratio = mu/mu1
+        mu_s = mu0-mu1
+        mu_x = mu_s * s_x
+        mu_y = mu_s * s_y
                 
         # PDE residual
         # ru = u_t + u * u_x + v * u_y + (p_x - mu_ratio*(u_xx + u_yy)) / Re #  
         # rv = v_t + u * v_x + v * v_y + (p_y - mu_ratio*(v_xx + v_yy)) / Re #
-        ru = (p_x - mu_ratio*(u_xx + u_yy)) / Re #  
-        rv = (p_y - mu_ratio*(v_xx + v_yy)) / Re #
-        # ru = (-p_x + 2*mu_x/mu1*u_x + 2*mu/mu1*u_xx + mu_y/mu1*(u_y+v_x) + mu/mu1*(u_yy+v_xy)) / Re
-        # rv = (-p_y + 2*mu_y/mu1*v_y + 2*mu/mu1*v_yy + mu_x/mu1*(u_y+v_x) + mu/mu1*(u_xy+v_yy)) / Re
+        # ru = (p_x - (a*mu_ratio+b*mu_x/mu1+c*mu_y/mu1)*(u_xx + u_yy)) / Re #  
+        # rv = (p_y - mu_ratio*(v_xx + v_yy)) / Re #
+        ru = (-p_x + 2*a*mu_x/mu1*u_x + b*mu_y/mu1*(u_y+v_x) + c*mu/mu1*(u_yy+u_xx)) / Re
+        rv = (-p_y + 2*a*mu_y/mu1*v_y + b*mu_x/mu1*(u_y+v_x) + c*mu/mu1*(v_xx+v_yy)) / Re
         rc = u_x + v_y
         rs = s_t + u * s_x + v * s_y # - 0*beta*10**(-4)*(s_xx + s_yy)
         
