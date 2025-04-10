@@ -10,7 +10,7 @@ def get_config():
     config.mode = "train"
     config.mode = "eval" 
     
-    # config.mode = "evalcurves" 
+    config.mode = "evalcurves" 
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()

@@ -3,6 +3,7 @@
 **/__pycache__/*
 **/ks_chaotic/*
 **/*.gif
+**/*.jpg
 **/*.png
 **/*.pdf
 **/*.pkl

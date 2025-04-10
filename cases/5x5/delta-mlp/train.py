@@ -29,7 +29,8 @@ from jaxpi.utils import save_checkpoint
 from jaxpi.utils import restore_checkpoint
 from flax.jax_utils import replicate
 from flax import linen as nn
-
+import time
+import pickle
 
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -215,6 +216,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     wandb_config = config.wandb
     wandb.init(project=wandb_config.project, name=wandb_config.name)
     
+    start_time = time.time()
     
     L_max = 50/1000/100
     (   initial,
@@ -320,6 +322,11 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         
         # Train model for the current time window
         model = train_one_window(config, workdir, model, samplers, idx, initial)
+        
+        total_time = time.time() - start_time 
+        filepath = './training_time.pkl'
+        with open(filepath,"wb") as filepath:
+            pickle.dump({"total_time": total_time}, filepath)
 
         # # Update the initial condition for the next time window
         # if config.training.num_time_windows > 1:

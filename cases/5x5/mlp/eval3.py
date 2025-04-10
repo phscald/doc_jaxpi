@@ -51,7 +51,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     U_max = dp*L_max/mu1
 
     # mu_list = [.0025, .0033333333333333335, .005, .01, .05, .0625, .075, .0875, .1]
-    mu = .0033333333333333335
+    # mu_list = [.0033333333333333335, .01, .0625, .0875]
+    mu = .0875
     ind_mu = jnp.where(mu_list==mu)[0]
     
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
@@ -91,11 +92,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     ckpt_path = os.path.abspath(ckpt_path)
     model.state = restore_checkpoint(model.state, ckpt_path)
     params = model.state.params
-    
-    # print(f"ufem shape: {u_fem.shape}")
-    # print(f"eig shape: {eigvecs.shape}")
-    # print(da)
-    
+
     X = eigvecs[:,:]
     ind = random.choice(random.PRNGKey(1234), eigvecs.shape[0], shape=(int(eigvecs.shape[0]*.6),) )
     X = X[ind]
@@ -177,8 +174,18 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         print(f'==={label[i]}===')
         mse = jnp.mean((matrix1[i] - matrix2[i]) ** 2)   
         l2_relative_error = jnp.sum((matrix1[i] - matrix2[i])**2) / jnp.sum((matrix2[i])**2)
+        # R2 Score
+        ss_res = jnp.sum((matrix2[i] - matrix1[i]) ** 2)
+        ss_tot = jnp.sum((matrix2[i] - jnp.mean(matrix2[i])) ** 2)
+        r2 = 1 - ss_res / ss_tot
+        print(f"R² score: {r2:.4f}")
         print(f"MSE: {mse}")
         print(f"L2-relative error: {l2_relative_error*100:.2f}%")
+        
+    filepath = './matrices_' + str(mu) + '.pkl'
+    with open(filepath,"wb") as filepath:
+        pickle.dump({"matrix1": matrix1,
+                     "matrix2": matrix2}, filepath)
 
     # Update function for each frame
     def update_s(frames, indx):

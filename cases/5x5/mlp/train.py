@@ -29,7 +29,8 @@ from jaxpi.utils import save_checkpoint
 from jaxpi.utils import restore_checkpoint
 from flax.jax_utils import replicate
 from flax import linen as nn
-
+import time
+import pickle
 
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -215,6 +216,7 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     wandb_config = config.wandb
     wandb.init(project=wandb_config.project, name=wandb_config.name)
     
+    start_time = time.time()
     
     L_max = 50/1000/100
     (   initial,
@@ -223,7 +225,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     fluid_params = (0, mu1, rho0, rho1)    
         
-    
     pin = 100
     dp = pin
     
@@ -240,10 +241,6 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
      u_fem, v_fem, p_fem, s_fem, t_fem, 
      coords_fem, mu_list) = initial
     
-    # print(f'coord_max:{coords_fem.max()}') = 180
-    # print(dsa)
-    
-        
     print('u')
     print(f'mean: {u_fem.mean()}')
     print(f'std: {u_fem.std()}')
@@ -271,15 +268,9 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
     s_fem = s_fem[:, idx]
     
     t_fem = t_fem[idx]
-   
     
     idx_bcs, eigvecs, vertices, map_elements_vertexes, _, B_matrices, A_matrices, M_matrices, N_matrices  = delta_matrices
-    
-    # print(f'vertices shape {vertices.shape}')
-    # print(f'map_elements_vertexes shape {map_elements_vertexes.shape}')
-    # print(f'coords_fem shape {coords_fem.shape}')
-    # print(dsa)
-
+ 
     indx_extremes = []
     for i in range(vertices.shape[0]):
         ind = jnp.where(vertices[i,:,0]==coords_fem[:,0].min())[0]
@@ -331,7 +322,13 @@ def train_and_evaluate(config: ml_collections.ConfigDict, workdir: str):
         
         # Train model for the current time window
         model = train_one_window(config, workdir, model, samplers, idx, initial)
-
+        
+        total_time = time.time() - start_time 
+        filepath = './training_time.pkl'
+        with open(filepath,"wb") as filepath:
+            pickle.dump({"total_time": total_time}, filepath)
+            
+            
         # # Update the initial condition for the next time window
         # if config.training.num_time_windows > 1:
         #     state = jax.device_get(jax.tree_util.tree_map(lambda x: x[0], model.state))

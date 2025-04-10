@@ -8,7 +8,6 @@ from flax.training import checkpoints
 
 import jax
 import jax.numpy as jnp
-import numpy as np
 from jax import random, jit, vmap, pmap
 from jax.tree_util import tree_map
 
@@ -200,6 +199,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     x = eigvecs[:, 0]
     y = eigvecs[:, 1]
 
+    
     def denormalize_mustd(u, umean, ustd):
         return u*ustd+umean
     def normalize_mustd(u, umean, ustd):
@@ -207,7 +207,6 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     # u_pred = denormalize_mustd(u_pred, u_mean, u_std)
     u_fem = normalize_mustd(u_fem, u_mean, u_std)
     v_fem = normalize_mustd(v_fem, v_mean, v_std)
-    u0 = normalize_mustd(u0, u_mean, u_std)
     
     filepath = './pred.pkl'
     with open(filepath,"wb") as filepath:
@@ -224,7 +223,6 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     filepath = './pred_fem.pkl'
     with open(filepath,"wb") as filepath:
         pickle.dump({"u_pred": u_fem,
-                     "u0": u0,
                      "s_pred": s_fem,
                      "vertices": vertices,
                      "map_elements_vertexes": map_elements_vertexes,
