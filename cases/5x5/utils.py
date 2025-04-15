@@ -32,8 +32,8 @@ def load_dataset(filepath):
     v_fem = arquivos['v_data'][1:]
     p_fem = arquivos['p_data'][1:]
     s_fem = arquivos['c_data'][1:]
-    s_fem[s_fem > 0.01] = 1 # s_fem[s_fem > 0.49] = 1
-    s_fem[s_fem < 0.01] = 0 # s_fem[s_fem < 0.49] = 0
+    s_fem[s_fem > 0.49] = 1 # s_fem[s_fem > 0.49] = 1
+    s_fem[s_fem < 0.49] = 0 # s_fem[s_fem < 0.49] = 0
     dt_fem = arquivos['dt_data'][1:]
     t_fem = np.cumsum(dt_fem)
     del arquivos

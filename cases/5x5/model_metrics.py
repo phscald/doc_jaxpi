@@ -32,6 +32,7 @@ def load_data(folder, mu):
 def get_metrics(folder):  
 
     mu_list = [.0033333333333333335, .01, .0625, .0875]
+    # mu_list = [.0033333333333333335, .0625, .0875]
     matrix1, matrix2, metrics = load_data(folder, mu_list[0])
     metrics_dict = {}
     metrics_dict[str(mu_list[0])] = metrics

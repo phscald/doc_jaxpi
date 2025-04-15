@@ -8,9 +8,9 @@ def get_config():
     config = ml_collections.ConfigDict()
 
     config.mode = "train"
-    # config.mode = "eval" 
+    config.mode = "eval" 
     
-    # config.mode = "evalcurves" 
+    config.mode = "evalcurves" 
 
     # Weights & Biases
     config.wandb = wandb = ml_collections.ConfigDict()
@@ -23,7 +23,7 @@ def get_config():
 
     # Arch
     config.arch = arch = ml_collections.ConfigDict()
-    arch.arch_name = "MLP3wD_"
+    arch.arch_name = "MLP3wD"
     # arch.num_layers = 8
     arch.num_trunk_layers = 5# mu 2
     arch.num_branch_layers = 5 # t 6

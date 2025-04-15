@@ -821,7 +821,7 @@ class MLP3wD_(nn.Module):
     def __call__(self, u1, u2, x):
         
         alpha = jnp.ones(x.shape)
-        alpha = Mlp(num_layers=2, hidden_dim=5, out_dim=3)(alpha)
+        alpha = Mlp(num_layers=2, hidden_dim=5, out_dim=4)(alpha)
  
         u1 = jnp.concatenate([u1, u2, x])
         
@@ -871,16 +871,10 @@ class MLP3wD(nn.Module):
 
     @nn.compact
     def __call__(self, u1, u2, x):
-        # (u, x) : u é o branch, x é o trunk
-        #  u1: t              - branch1
-        #  u2: x, y, v(x,y)   - branch2
-        #  x: mu              - trunk   
         
-        # x = jnp.concatenate([x, u1])
-        # u1=u2    
-        # alpha = jnp.ones(x.shape)
-        # alpha = Mlp(num_layers=2, hidden_dim=5, out_dim=2)(alpha)
-        
+        alpha = jnp.ones(x.shape)
+        alpha = Mlp(num_layers=2, hidden_dim=5, out_dim=3)(alpha)
+ 
         u1 = jnp.concatenate([u1, u2, x])
         
         u1 = ModifiedMlp(#MlpBlock(
@@ -893,27 +887,12 @@ class MLP3wD(nn.Module):
             periodicity=self.periodicity,
             fourier_emb=self.fourier_emb,
         )(u1)
-        
-        # u2 = ModifiedMlp(#Mlp(
-        #     num_layers=self.num_branch_layers2,
-        #     hidden_dim=self.hidden_dim,
-        #     out_dim=self.hidden_dim,
-        #     activation=self.activation,
-        #     periodicity=self.periodicity,
-        #     fourier_emb=self.fourier_emb,
-        #     reparam=self.reparam,
-        # )(u2)
 
-   
-        # u2 = jnp.squeeze(u2)
-        # u1 = u1 * u2
         y = u1
         
         y_p = self.activation_fn(y)
         y_u = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
-        # y_u = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_u))
         y_v = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
-        # y_v = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_v))
         y_p = self.activation_fn(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_p))
         y_u = Dense(features=1, reparam=self.reparam)(y_u)
         y_v = Dense(features=1, reparam=self.reparam)(y_v)
@@ -923,6 +902,6 @@ class MLP3wD(nn.Module):
         y_s = nn.sigmoid(Dense(features=int(self.hidden_dim/self.out_dim), reparam=self.reparam)(y_s))
         y_s = Dense(features=1, reparam=self.reparam)(y_s)
         
-        y = jnp.concatenate( [y_u, y_v, y_p, y_s], axis=-1 )
+        y = jnp.concatenate( [y_u, y_v, y_p, y_s, alpha], axis=-1 )
         return y
     

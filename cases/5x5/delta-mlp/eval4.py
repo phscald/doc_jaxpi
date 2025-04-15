@@ -52,7 +52,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # mu_list = [.0025, .0033333333333333335, .005, .01, .05, .0625, .075, .0875, .1]
     # mu_list = [.0033333333333333335, .01, .0625, .0875]
-    mu = .01
+    mu = .025
     ind_mu = jnp.where(mu_list==mu)[0]
     
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
@@ -60,7 +60,11 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     T = 1.0  # final time
     tmax = 24000
     
-    idx = jnp.where(t_fem<=tmax)[0]
+    # idx = jnp.where(t_fem<=tmax)[0]
+    idx = jnp.where(t_fem<=2466)[0]
+    
+    # print(t_fem[idx[-1]])
+    # print(fsf)
     
     u_fem = jnp.squeeze( u_fem[ind_mu, idx] )
     v_fem = jnp.squeeze( v_fem[ind_mu, idx] )
@@ -92,12 +96,8 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     ckpt_path = os.path.abspath(ckpt_path)
     model.state = restore_checkpoint(model.state, ckpt_path)
     params = model.state.params
-    
-    # print(f"ufem shape: {u_fem.shape}")
-    # print(f"eig shape: {eigvecs.shape}")
-    # print(da)
-    
-    X = eigvecs[:,:2]
+
+    X = eigvecs[:,:]
     ind = random.choice(random.PRNGKey(1234), eigvecs.shape[0], shape=(int(eigvecs.shape[0]*.6),) )
     X = X[ind]
     u_fem = u_fem[:,ind]
@@ -186,10 +186,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         print(f"MSE: {mse}")
         print(f"L2-relative error: {l2_relative_error*100:.2f}%")
         
-    filepath = './matrices_' + str(mu) + '.pkl'
-    with open(filepath,"wb") as filepath:
-        pickle.dump({"matrix1": matrix1,
-                     "matrix2": matrix2}, filepath)
+
 
     # Update function for each frame
     def update_s(frames, indx):

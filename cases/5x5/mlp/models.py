@@ -75,6 +75,7 @@ class NavierStokes2DwSat(ForwardIVP):
         a = outputs[4]
         b = outputs[5]
         c = outputs[6]
+        d = outputs[7]
         
         return u, v, p, s, a, b, c
 
@@ -172,7 +173,7 @@ class NavierStokes2DwSat(ForwardIVP):
         # rv = v_t + u * v_x + v * v_y + (p_y - mu_ratio*(v_xx + v_yy)) / Re #
         # ru = (p_x - (a*mu_ratio+b*mu_x/mu1+c*mu_y/mu1)*(u_xx + u_yy)) / Re #  
         # rv = (p_y - mu_ratio*(v_xx + v_yy)) / Re #
-        ru = (-p_x + 2*a*mu_x/mu1*u_x + b*mu_y/mu1*(u_y+v_x) + c*mu/mu1*(u_yy+u_xx)) / Re
+        ru = (-p_x + 2*a*mu_x/mu1*u_x + b*mu_y/mu1*(u_y+v_x) + c*mu/mu1*(u_yy+u_xx)) / Re # a b c 
         rv = (-p_y + 2*a*mu_y/mu1*v_y + b*mu_x/mu1*(u_y+v_x) + c*mu/mu1*(v_xx+v_yy)) / Re
         rc = u_x + v_y
         rs = s_t + u * s_x + v * s_y # - 0*beta*10**(-4)*(s_xx + s_yy)
