@@ -52,7 +52,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
 
     # mu_list = [.0025, .0033333333333333335, .005, .01, .05, .0625, .075, .0875, .1]
     # mu_list = [.0033333333333333335, .01, .0625, .0875]
-    mu = .025
+    mu = .0025
     ind_mu = jnp.where(mu_list==mu)[0]
     
     t1 = 1 # it is better to change the time in the t_coords array. There it is possible to select the desired percentages of total time solved
@@ -61,11 +61,10 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     tmax = 24000
     
     # idx = jnp.where(t_fem<=tmax)[0]
-    idx = jnp.where(t_fem<=2466)[0]
-    
-    # print(t_fem[idx[-1]])
-    # print(fsf)
-    
+    time = 4825
+    idx = jnp.where(t_fem<time)[0]
+    idx = jnp.array([idx[-1], idx[-1]+1])
+
     u_fem = jnp.squeeze( u_fem[ind_mu, idx] )
     v_fem = jnp.squeeze( v_fem[ind_mu, idx] )
     p_fem = jnp.squeeze( p_fem[ind_mu, idx] )
@@ -98,7 +97,7 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     params = model.state.params
 
     X = eigvecs[:,:]
-    ind = random.choice(random.PRNGKey(1234), eigvecs.shape[0], shape=(int(eigvecs.shape[0]*.6),) )
+    ind = random.choice(random.PRNGKey(1234), eigvecs.shape[0], shape=(int(eigvecs.shape[0]),) )
     X = X[ind]
     u_fem = u_fem[:,ind]
     v_fem = v_fem[:,ind]
@@ -111,19 +110,16 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     p_pred_fn = jit(vmap(vmap(model.p_net, (None, None, 0, None)), (None, 0, None, None))) 
     s_pred_fn = jit(vmap(vmap(model.s_net, (None, None, 0, None)), (None, 0, None, None))) 
     
-    num_t = 10  # Desired number of points
-    idx_t = jnp.linspace(0, t_fem.shape[0] - 1, num_t, dtype=int)
-    t_coords = t_fem[idx_t]/tmax 
-    u_fem = u_fem[idx_t]
-    v_fem = v_fem[idx_t]
-    p_fem = p_fem[idx_t]
-    s_fem = s_fem[idx_t]
+    t_coords = t_fem/tmax 
+    # u_fem = u_fem[idx_t]
+    # v_fem = v_fem[idx_t]
+    # p_fem = p_fem[idx_t]
+    # s_fem = s_fem[idx_t]
 
     u_pred_list = []
     v_pred_list = []
     p_pred_list = []
     s_pred_list = []
-    
 
     for indx in range(config.training.num_time_windows):
         print(f'{indx+1} / {config.training.num_time_windows}' )
@@ -142,19 +138,13 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
         u_pred_list.append(u_pred)
         v_pred_list.append(v_pred)
         s_pred_list.append(s_pred)
-        p_pred_list.append(p_pred)     
-
+        p_pred_list.append(p_pred) 
+        
     x = eigvecs[ind, 0]
     y = eigvecs[ind, 1]
     
     from matplotlib.animation import FuncAnimation
     from functools import partial  # Import partial to pass extra arguments to the update function
-
-    # Create figures and axes once
-    figs, axs = plt.subplots(2, 1, figsize=(6, 10))
-    figu, axu = plt.subplots(2, 1, figsize=(6, 10))
-    figv, axv = plt.subplots(2, 1, figsize=(6, 10))
-    figp, axp = plt.subplots(2, 1, figsize=(6, 10))
 
     m = len(u_pred)  # Assuming u_pred and others are defined
     
@@ -168,77 +158,78 @@ def evaluate(config: ml_collections.ConfigDict, workdir: str):
     v_fem = normalize_mustd(v_fem, v_mean, v_std)
     u0 = normalize_mustd(u0, u_mean, u_std)
     v0 = normalize_mustd(v0, v_mean, v_std)
+
+    plt.rcParams['font.family'] = 'DeJavu Serif'
+    plt.rcParams['font.serif'] = ['Times New Roman']
+    plt.rcParams['font.size'] = 12  
     
-    print(f"u - max: {u_fem.max()} - min: {u_fem.min()}")
-    
-    matrix1 = [jnp.clip(s_pred, 0, 1), u_pred, v_pred, p_pred]
-    matrix2 = [s_fem, u_fem, v_fem, p_fem]
-    label   = ["s", "u", "v", "p"]
-    for i in range(4):
-        print(f'==={label[i]}===')
-        mse = jnp.mean((matrix1[i] - matrix2[i]) ** 2)   
-        l2_relative_error = jnp.sum((matrix1[i] - matrix2[i])**2) / jnp.sum((matrix2[i])**2)
-        # R2 Score
-        ss_res = jnp.sum((matrix2[i] - matrix1[i]) ** 2)
-        ss_tot = jnp.sum((matrix2[i] - jnp.mean(matrix2[i])) ** 2)
-        r2 = 1 - ss_res / ss_tot
-        print(f"R² score: {r2:.4f}")
-        print(f"MSE: {mse}")
-        print(f"L2-relative error: {l2_relative_error*100:.2f}%")
-        
+    indx = 0
 
+    # --- Scalar Field (s) ---
+    plt.figure()
+    plt.scatter(x, y, s=1, c=s_pred[indx], cmap='jet', vmin=0, vmax=1)
+    ax = plt.gca()
+    ax.set_xticks([])
+    ax.set_yticks([])
+    plt.tight_layout()
+    plt.savefig(f'field_delta_s_{mu}_{time}.jpg', format='jpg')
 
-    # Update function for each frame
-    def update_s(frames, indx):
-        axs[0].cla()  # Clear the current axis
-        axs[0].scatter(x, y, s=1, c=s_pred_list[indx][frames], cmap='jet', vmin=0, vmax=1)
-        
-        axs[1].cla()  # Clear the current axis
-        axs[1].scatter(x, y, s=1, c=s_fem[frames], cmap='jet', vmin=0, vmax=1)
-        
-        plt.tight_layout() 
+    plt.figure()
+    plt.scatter(x, y, s=1, c=s_fem[indx], cmap='jet', vmin=0, vmax=1)
+    ax = plt.gca()
+    ax.set_xticks([])
+    ax.set_yticks([])
+    plt.tight_layout()
+    plt.savefig(f'field_fem_s_{mu}_{time}.jpg', format='jpg')
 
-    def update_u(frames, indx):
-        axu[0].cla()  # Clear the current axis
-        axu[0].scatter(x, y, s=1, c=u_pred_list[indx][frames], cmap='jet', vmin=jnp.min(u0), vmax=jnp.max(u0))
-        
-        axu[1].cla()  # Clear the current axis
-        axu[1].scatter(x, y, s=1, c=u_fem[frames], cmap='jet', vmin=jnp.min(u0), vmax=jnp.max(u0))
-                
-        plt.tight_layout() 
+    # --- U Field ---
+    plt.figure()
+    plt.scatter(x, y, s=1, c=u_pred[indx], cmap='jet', vmin=-3, vmax=3)
+    ax = plt.gca()
+    ax.set_xticks([])
+    ax.set_yticks([])  
+    plt.tight_layout()
+    plt.savefig(f'field_delta_u_{mu}_{time}.jpg', format='jpg')
 
-    def update_v(frames, indx):
-        axv[0].cla()  # Clear the current axis
-        axv[0].scatter(x, y, s=1, c=v_pred_list[indx][frames], cmap='jet', vmin=jnp.min(v0), vmax=jnp.max(v0))
-        
-        axv[1].cla()  # Clear the current axis
-        axv[1].scatter(x, y, s=1, c=v_fem[frames], cmap='jet', vmin=jnp.min(v0), vmax=jnp.max(v0))
-           
-        plt.tight_layout() 
+    plt.figure()
+    plt.scatter(x, y, s=1, c=u_fem[indx], cmap='jet', vmin=-3, vmax=3)
+    ax = plt.gca()
+    ax.set_xticks([])
+    ax.set_yticks([])
+    plt.tight_layout()
+    plt.savefig(f'field_fem_u_{mu}_{time}.jpg', format='jpg')
 
-    def update_p(frames, indx):
-        axp[0].cla()  # Clear the current axis
-        axp[0].scatter(x, y, s=1, c=p_pred_list[indx][frames], cmap='jet', vmin=0, vmax=1)
-                
-        axp[1].cla()  # Clear the current axis
-        axp[1].scatter(x, y, s=1, c=p_fem[frames], cmap='jet', vmin=0, vmax=1)
-                
-        plt.tight_layout() 
+    # --- V Field ---
+    plt.figure()
+    plt.scatter(x, y, s=1, c=v_pred[indx], cmap='jet', vmin=-3, vmax=3)
+    ax = plt.gca()
+    ax.set_xticks([])
+    ax.set_yticks([])
+    plt.tight_layout()
+    plt.savefig(f'field_delta_v_{mu}_{time}.jpg', format='jpg') 
 
-    # Function to generate GIFs
-    def make_gif(indx):
-        ani_s = FuncAnimation(figs, partial(update_s, indx=indx-1), frames=m, interval=200)
-        ani_s.save(f'./video_s_{mu}_.gif', writer='pillow')
-        
-        ani_u = FuncAnimation(figu, partial(update_u, indx=indx-1), frames=m, interval=200)
-        ani_u.save(f'./video_u_{mu}_.gif', writer='pillow')
-        
-        ani_v = FuncAnimation(figv, partial(update_v, indx=indx-1), frames=m, interval=200)
-        ani_v.save(f'./video_v_{mu}_.gif', writer='pillow')
-        
-        ani_p = FuncAnimation(figp, partial(update_p, indx=indx-1), frames=m, interval=200)
-        ani_p.save(f'./video_p_{mu}_.gif', writer='pillow')
+    plt.figure()
+    plt.scatter(x, y, s=1, c=v_fem[indx], cmap='jet', vmin=-3, vmax=3)
+    ax = plt.gca()
+    ax.set_xticks([])
+    ax.set_yticks([])
+    plt.tight_layout()
+    plt.savefig(f'field_fem_v_{mu}_{time}.jpg', format='jpg')
 
-    #Generate GIFs for each time window
-    # for idx in range(1, config.training.num_time_windows + 1):
-    #     make_gif(idx)
+    # --- Pressure Field (p) ---
+    plt.figure()
+    plt.scatter(x, y, s=1, c=p_pred[indx], cmap='jet', vmin=0, vmax=1)
+    ax = plt.gca()
+    ax.set_xticks([])
+    ax.set_yticks([])
+    plt.tight_layout()
+    plt.savefig(f'field_delta_p_{mu}_{time}.jpg', format='jpg')
+
+    plt.figure()
+    plt.scatter(x, y, s=1, c=p_fem[indx], cmap='jet', vmin=0, vmax=1)
+    ax = plt.gca()
+    ax.set_xticks([])
+    ax.set_yticks([])
+    plt.tight_layout()
+    plt.savefig(f'field_fem_p_{mu}_{time}.jpg', format='jpg')
+
